@@ -6,7 +6,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import filters, loader, report
+from . import filters, links, loader, report
 from .discovery import mine, to_candidates
 from .discovery import reddit
 from .scoring import rank
@@ -99,6 +99,25 @@ def _cmd_discover(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_links(args: argparse.Namespace) -> int:
+    terms = list(args.terms)
+    if args.input:
+        terms += [c.term for c in loader.load(args.input)]
+    if not terms:
+        print("Nurodyk terminą arba --input failą.", file=sys.stderr)
+        return 1
+
+    chunks = [links.render(t, geo=args.geo, markdown=args.format == "markdown")
+              for t in terms]
+    out = "\n\n".join(chunks)
+    if args.output:
+        Path(args.output).write_text(out + "\n", encoding="utf-8")
+        print(f"Įrašyta: {args.output}", file=sys.stderr)
+    else:
+        print(out)
+    return 0
+
+
 def _cmd_tags(_: argparse.Namespace) -> int:
     print("Žinomos žymos (naudok kandidatų faile 'attributes'):\n")
     for rule in filters.RULES:
@@ -150,6 +169,14 @@ def build_parser() -> argparse.ArgumentParser:
     disc.add_argument("--limit", type=int, default=25, help="kiek rašyti į failą")
     disc.add_argument("--out", "-o", help="rašyti candidates.yaml")
     disc.set_defaults(func=_cmd_discover)
+
+    lnk = sub.add_parser("links", help="sugeneruoti tyrimo nuorodas terminui")
+    lnk.add_argument("terms", nargs="*", help="produkto terminai")
+    lnk.add_argument("--input", "-i", help="imti terminus iš candidates failo")
+    lnk.add_argument("--geo", default="LT")
+    lnk.add_argument("--format", "-f", choices=["text", "markdown"], default="text")
+    lnk.add_argument("--output", "-o")
+    lnk.set_defaults(func=_cmd_links)
 
     tags = sub.add_parser("tags", help="parodyti atitikties žymas")
     tags.set_defaults(func=_cmd_tags)

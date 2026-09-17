@@ -67,6 +67,21 @@ python -m productscout discover -c BuyItForLife,pets,organization -o kandidatai.
 python -m productscout discover --dump issaugotas.json -o kandidatai.yaml
 ```
 
+### Nuorodos konkurencijos skaičiams (`links`)
+
+Kad rankinis žingsnis būtų paspaudimai, o ne paieška:
+
+```bash
+python -m productscout links -i kandidatai.yaml --geo LT -f markdown -o nuorodos.md
+python -m productscout links "cat water fountain"
+```
+
+Kiekviena nuoroda pasako, kurį `competition` lauką ji užpildo. Svarbiausia iš
+jų — **eBay parduotų prekių paieška**: tai realiai nupirkti vienetai, o ne
+paieškos, todėl tai stipriausias paklausos įrodymas iš visų nemokamų šaltinių.
+
+Tai sugeneruotos paieškos užklausos, ne patikrintų produktų puslapiai.
+
 Toliau — užpildai `competition` skaičius (~2 min vienam) ir:
 
 ```bash
