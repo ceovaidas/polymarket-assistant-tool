@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 
 from . import filters, loader, report
+from .discovery import mine, to_candidates
+from .discovery import reddit
 from .scoring import rank
 from .sources import csv_source, trends, wikipedia
 
@@ -46,6 +48,54 @@ def _cmd_scan(args: argparse.Namespace) -> int:
         print(f"Įrašyta: {args.output}", file=sys.stderr)
     else:
         print(out)
+    return 0
+
+
+def _cmd_discover(args: argparse.Namespace) -> int:
+    posts, errors = [], []
+    if args.dump:
+        outcome = reddit.load_dump(args.dump)
+        posts, errors = outcome.posts, outcome.errors
+    else:
+        communities = [c.strip() for c in (args.communities or "").split(",") if c.strip()]
+        for community in communities or [""]:
+            label = community or "visas Reddit"
+            print(f"Ieškoma: {label}...", file=sys.stderr)
+            outcome = reddit.search(subreddit=community, period=args.period)
+            posts.extend(outcome.posts)
+            errors.extend(f"{label}: {e}" for e in outcome.errors)
+
+    for error in errors:
+        print(f"  {error}", file=sys.stderr)
+    if not posts:
+        print("Įrašų nerasta. Naudok --dump su išsaugotu JSON, jei Reddit blokuoja.",
+              file=sys.stderr)
+        return 1
+
+    print(f"Išanalizuota {len(posts)} įrašų.", file=sys.stderr)
+    hypotheses = mine(posts, min_mentions=args.min_mentions)
+    if not hypotheses:
+        print("Paklausos išraiškų nerasta.", file=sys.stderr)
+        return 1
+
+    width = 36
+    print(f"{'HIPOTEZĖ':<{width}} {'BALAS':>6} {'PAM':>4} {'UNMET':>6}  BENDRUOMENĖS")
+    print("-" * (width + 40))
+    for h in hypotheses[: args.top]:
+        print(f"{h.term[:width - 1]:<{width}} {h.score:>6.3f} {h.mentions:>4d} "
+              f"{h.unmet_share * 100:>5.0f}%  {', '.join(h.communities[:3])}")
+
+    if args.out:
+        payload = to_candidates(hypotheses, limit=args.limit)
+        try:
+            import yaml
+            text = yaml.safe_dump(payload, allow_unicode=True, sort_keys=False, width=120)
+        except ImportError:
+            text = json.dumps(payload, ensure_ascii=False, indent=2)
+        Path(args.out).write_text(text, encoding="utf-8")
+        print(f"\nKandidatai įrašyti: {args.out}", file=sys.stderr)
+        print("Užpildyk 'competition' skaičius, tada: "
+              f"python -m productscout scan -i {args.out} --fetch", file=sys.stderr)
     return 0
 
 
@@ -89,6 +139,17 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--min-score", type=float, default=0.0)
     scan.add_argument("--verbose", "-v", action="store_true")
     scan.set_defaults(func=_cmd_scan)
+
+    disc = sub.add_parser("discover", help="rasti produktų hipotezes iš neišpildytos paklausos")
+    disc.add_argument("--communities", "-c", default="",
+                      help="kableliais atskirti subredditai, pvz. BuyItForLife,pets")
+    disc.add_argument("--dump", help="vietinis JSON failas vietoj gyvo Reddit")
+    disc.add_argument("--period", default="year", choices=["month", "year", "all"])
+    disc.add_argument("--min-mentions", type=int, default=1)
+    disc.add_argument("--top", type=int, default=25, help="kiek rodyti ekrane")
+    disc.add_argument("--limit", type=int, default=25, help="kiek rašyti į failą")
+    disc.add_argument("--out", "-o", help="rašyti candidates.yaml")
+    disc.set_defaults(func=_cmd_discover)
 
     tags = sub.add_parser("tags", help="parodyti atitikties žymas")
     tags.set_defaults(func=_cmd_tags)

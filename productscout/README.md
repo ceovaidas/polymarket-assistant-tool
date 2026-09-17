@@ -40,6 +40,42 @@ visą balą, o ne būti suvidurkintas.
 **Patikimumas rodomas atskirai nuo balo** — kad matytum, kada aukštas balas
 remiasi plonais duomenimis.
 
+## Iš kur gauti kandidatus (`discover`)
+
+Skenavimas reikalauja hipotezių. Jas generuoja `discover`: ieško vietų, kur
+žmonės **garsiai sako, kad kažko negali rasti**. Tai tiesioginė „produktų,
+kurių niekas neparduoda" realizacija — tik remiantis paklausos įrodymu, o ne
+konkurentų nebuvimu.
+
+Frazės sveria skirtingai pagal tai, kiek paklausa neišpildyta:
+
+| Frazė | Svoris | Reikšmė |
+|---|---|---|
+| „why doesn't anyone make X" | 1.00 | pasiūlos tiesiog nėra |
+| „does anyone make X" | 0.95 | pasiūlos tiesiog nėra |
+| „can't find a X" | 0.85 | ieškojo ir nerado |
+| „where can I buy X" | 0.60 | yra, bet sunku rasti |
+| „recommendations for X" | 0.30 | įprastas apsipirkimas |
+
+Pagrindinis signalas — **pasikartojimas tarp nepriklausomų žmonių**. Vienas
+žmogus, besiskundžiantis trūkstamu daiktu, yra anekdotas; devyni žmonės
+keturiose bendruomenėse per pusmetį yra rinka. Todėl vienas viralus postas
+(900 balsų) rikiuojasi žemiau nei trys kuklūs postai skirtinguose subredituose.
+
+```bash
+python -m productscout discover -c BuyItForLife,pets,organization -o kandidatai.yaml
+python -m productscout discover --dump issaugotas.json -o kandidatai.yaml
+```
+
+Toliau — užpildai `competition` skaičius (~2 min vienam) ir:
+
+```bash
+python -m productscout scan -i kandidatai.yaml --fetch --geo LT
+```
+
+Kol `competition` neužpildyta, `scan` rodys patikimumą **0.00** — tai sąmoninga:
+balas be duomenų nieko nereiškia.
+
 ## Paleidimas
 
 ```bash
