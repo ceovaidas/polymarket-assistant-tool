@@ -1,0 +1,4 @@
+# Core scoring runs on the standard library alone.
+# These are only needed for live data pulls and YAML candidate files.
+pyyaml>=6.0
+pytrends>=4.9.2   # Google Trends (unofficial, rate limited)
