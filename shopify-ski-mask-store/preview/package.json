@@ -1,0 +1,7 @@
+{
+  "name": "gnarhead-preview",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "liquidjs": "^10.16.0" }
+}

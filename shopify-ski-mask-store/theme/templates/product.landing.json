@@ -6,130 +6,145 @@
         "char_1": {
           "type": "character",
           "settings": {
-            "name": "Grumpy Gramps",
-            "emoji": "👴",
-            "color": "#ffd60a",
-            "vibe": "Wrinkles, 'stache, zero patience for slow skiers."
+            "name": "Gramps",
+            "line": "Wrinkles, moustache, zero patience for slow skiers."
           }
         },
         "char_2": {
           "type": "character",
           "settings": {
-            "name": "Purrfect Powder",
-            "emoji": "🐱",
-            "color": "#ffc9de",
-            "vibe": "Nine lives. Uses all of them in the terrain park."
+            "name": "The Cat",
+            "line": "Nine lives. Spends most of them in the terrain park."
           }
         },
         "char_3": {
           "type": "character",
           "settings": {
-            "name": "Tiger Mode",
-            "emoji": "🐯",
-            "color": "#ffb35c",
-            "vibe": "Apex predator of the bunny slope."
+            "name": "Tiger",
+            "line": "Apex predator of the beginner slope."
           }
         },
         "char_4": {
           "type": "character",
           "settings": {
-            "name": "Corgi Shred",
-            "emoji": "🐶",
-            "color": "#ffe1a8",
-            "vibe": "Short legs. Big send energy."
+            "name": "Corgi",
+            "line": "Short legs. Big send energy."
           }
         },
         "char_5": {
           "type": "character",
           "settings": {
-            "name": "Elf on the Shelf-ie",
-            "emoji": "🧝",
-            "color": "#a8e6b8",
-            "vibe": "Santa's most reckless helper. Seasonal drop."
+            "name": "The Elf",
+            "line": "Seasonal release. Santa didn't approve this."
+          }
+        },
+        "spec_1": {
+          "type": "spec",
+          "settings": {
+            "label": "Shell",
+            "value": "Double-layer acrylic knit"
+          }
+        },
+        "spec_2": {
+          "type": "spec",
+          "settings": {
+            "label": "Face lining",
+            "value": "Brushed fleece panel"
+          }
+        },
+        "spec_3": {
+          "type": "spec",
+          "settings": {
+            "label": "Eye port",
+            "value": "Wide cut, fits most goggles"
+          }
+        },
+        "spec_4": {
+          "type": "spec",
+          "settings": {
+            "label": "Fit",
+            "value": "One size — head 54–62 cm"
+          }
+        },
+        "spec_5": {
+          "type": "spec",
+          "settings": {
+            "label": "Helmet",
+            "value": "Low-profile crown, fits under most helmets"
+          }
+        },
+        "spec_6": {
+          "type": "spec",
+          "settings": {
+            "label": "Care",
+            "value": "Hand wash cold, dry flat"
           }
         },
         "feat_1": {
           "type": "feature",
           "settings": {
-            "icon": "❄️",
+            "icon": "thermo",
             "title": "Actually warm",
-            "text": "Thick double-layer knit with a fleece face panel. Built for −15 °C chairlifts, not just photos."
+            "text": "Made for cold chairlifts, not just for photos."
           }
         },
         "feat_2": {
           "type": "feature",
           "settings": {
-            "icon": "🥽",
-            "title": "Goggle-friendly",
-            "text": "Wide eye opening sits flush with any goggle. No gaps, no fogging, no wind burn."
+            "icon": "goggles",
+            "title": "Goggle-ready",
+            "text": "The eye port sits flush with goggles. No gaps, no wind burn."
           }
         },
         "feat_3": {
           "type": "feature",
           "settings": {
-            "icon": "🌬️",
-            "title": "Breathes easy",
-            "text": "Open mouth zone with breathable knit so you can talk, laugh and yell 'SEND IT'."
+            "icon": "breath",
+            "title": "Breathable",
+            "text": "Open-knit mouth zone, so you can talk, laugh and breathe."
           }
         },
         "feat_4": {
           "type": "feature",
           "settings": {
-            "icon": "🎁",
+            "icon": "gift",
             "title": "Gift-ready",
-            "text": "Arrives in a branded drawstring pouch. The funniest stocking stuffer they'll actually use."
+            "text": "Ships in a drawstring pouch, ready to wrap."
           }
         },
         "video_1": {
           "type": "video",
           "settings": {
-            "caption": "POV: Gramps shreds harder than you"
+            "caption": "Gramps drops in",
+            "tag": "Gramps"
           }
         },
         "video_2": {
           "type": "video",
           "settings": {
-            "caption": "The lift line had questions"
+            "caption": "The lift line had questions",
+            "tag": "The Cat"
           }
         },
         "video_3": {
           "type": "video",
           "settings": {
-            "caption": "Squad goals, but make it feline"
+            "caption": "Tiger on the T-bar",
+            "tag": "Tiger"
           }
         },
         "video_4": {
           "type": "video",
           "settings": {
-            "caption": "When the corgi hits the rail"
-          }
-        },
-        "step_1": {
-          "type": "step",
-          "settings": {
-            "title": "Pick your face",
-            "text": "Choose your alter ego — or grab a crew bundle and save up to 25%."
-          }
-        },
-        "step_2": {
-          "type": "step",
-          "settings": {
-            "title": "We ship it fast",
-            "text": "Packed within 1–3 business days with tracking straight to your door."
-          }
-        },
-        "step_3": {
-          "type": "step",
-          "settings": {
-            "title": "Become a legend",
-            "text": "Pull it on, hit the slopes, and watch your phone blow up with tags."
+            "caption": "Corgi meets the rail",
+            "tag": "Corgi"
           }
         },
         "faq_1": {
           "type": "faq",
           "settings": {
             "question": "Does it fit under a helmet?",
-            "answer": "<p>Yes — the crown is thin enough to sit comfortably under most ski and snowboard helmets.</p>"
+            "answer": "<p>Yes. The crown is low-profile and sits comfortably under most ski and snowboard helmets.</p>"
           }
         },
         "faq_2": {
@@ -142,36 +157,36 @@
         "faq_3": {
           "type": "faq",
           "settings": {
-            "question": "Is it really warm enough for skiing?",
-            "answer": "<p>Yes. It's a full balaclava with a fleece-lined face panel — it's a real ski mask that happens to be hilarious.</p>"
+            "question": "Is it warm enough for real skiing?",
+            "answer": "<p>Yes. It's a full balaclava with a fleece-lined face panel — proper ski kit that happens to have a face on it.</p>"
           }
         },
         "faq_4": {
           "type": "faq",
           "settings": {
-            "question": "Can I see through it with goggles on?",
-            "answer": "<p>The eye opening is cut wide for goggles, so your field of view stays clear.</p>"
+            "question": "Can I wear it with goggles?",
+            "answer": "<p>Yes. The eye port is cut wide so goggles sit flush and your view stays clear.</p>"
           }
         },
         "faq_5": {
           "type": "faq",
           "settings": {
             "question": "How long does shipping take?",
-            "answer": "<p>Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe. You'll get a tracking link by email.</p>"
+            "answer": "<p>Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe, with tracking.</p>"
           }
         },
         "faq_6": {
           "type": "faq",
           "settings": {
-            "question": "What if I don't like it?",
-            "answer": "<p>You're covered by our 30-day Happy Face Guarantee. Contact us and we'll sort out a return or exchange.</p>"
+            "question": "What if it's not for me?",
+            "answer": "<p>Return it unworn within 30 days of delivery for a full refund. Just email us with your order number.</p>"
           }
         },
         "faq_7": {
           "type": "faq",
           "settings": {
             "question": "How do I wash it?",
-            "answer": "<p>Hand wash in cold water and lay flat to dry. Don't tumble dry — your gramps hates the dryer.</p>"
+            "answer": "<p>Hand wash in cold water and lay flat to dry. Don't tumble dry.</p>"
           }
         }
       },
@@ -181,6 +196,12 @@
         "char_3",
         "char_4",
         "char_5",
+        "spec_1",
+        "spec_2",
+        "spec_3",
+        "spec_4",
+        "spec_5",
+        "spec_6",
         "feat_1",
         "feat_2",
         "feat_3",
@@ -189,9 +210,6 @@
         "video_2",
         "video_3",
         "video_4",
-        "step_1",
-        "step_2",
-        "step_3",
         "faq_1",
         "faq_2",
         "faq_3",

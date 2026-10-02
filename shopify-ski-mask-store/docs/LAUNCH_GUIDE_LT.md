@@ -30,7 +30,8 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 1. AliExpress susirask 3–5 tiekėjus kiekvienam veidui (senukas, katė, tigras, korgis, elfas). Rinkis: 4.7★+, 100+ parduota, yra *tikrų* pirkėjų nuotraukų.
 2. **Užsisakyk pavyzdžius sau** (po 1 vnt. kiekvieno, ~€40). Patikrink kokybę, kvapą, ar telpa po šalmu, ar akinių anga tinka. Nufilmuok pats — tai bus tavo pirmas tikras turinys.
 3. CJdropshipping pateik „Product Sourcing“ užklausą su AliExpress nuorodomis → gausi kainą su pristatymu į US/EU.
-4. Paprašyk tiekėjo: be AliExpress logotipų pakuotėje, su juodu maišeliu (kaip Rooog) — paprastai +$0.5–1.
+4. **Gavęs pavyzdžius, pataisyk specifikacijas** puslapyje (medžiaga, pamušalas, dydis) pagal tai, ką realiai gavai – neteisingi teiginiai = grąžinimai ir ginčai.
+5. Paprašyk tiekėjo: be AliExpress logotipų pakuotėje, su juodu maišeliu (kaip Rooog) — paprastai +$0.5–1.
 
 > ⚠️ Nenaudok tiekėjo nuotraukų su vandens ženklais (pvz. „cn1115979453jvbae“) — tai svetima nuosavybė ir atrodo pigiai. Darysi savo AI nuotraukas (žr. 5 skyrių).
 
@@ -55,6 +56,7 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 2. **Tema:** Online Store → Themes → palik **Dawn** (nemokama, greita).
 3. **Įkelk mano failus:** Themes → ⋯ → **Edit code**:
    - `Assets` → *Add a new asset* → įkelk `theme/assets/gnarhead-landing.css` ir `gnarhead-landing.js`
+   - `Snippets` → *Add a new snippet* → pavadink `gnarhead-icon` → įklijuok `theme/snippets/gnarhead-icon.liquid` (piktogramos — būtina)
    - `Sections` → *Add a new section* → pavadink `gnarhead-product-landing` → įklijuok `.liquid` turinį
    - `Templates` → *Add a new template* → tipas `product`, pavadinimas `landing`, JSON → įklijuok `product.landing.json`
 4. **Produktas:** Products → Add product
@@ -68,7 +70,13 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
    - Procentai turi sutapti su sekcijos nustatymais „Bundle discount %“.
 6. **Nemokamas pristatymas nuo 2 vnt.:** Settings → Shipping → pridėk tarifą „Free shipping“ su sąlyga *minimum quantity / order price ≥ $60*.
 7. **Pagrindinis puslapis = produktas:** paprasčiausia – Navigation meniu pašalink viską, o Online Store → Preferences / Theme customizer pradžios puslapyje įdėk „Featured product“ arba nukreipk reklamas tiesiai į `/products/funny-ski-mask`. Shopify neleidžia peradresuoti `/`, todėl visas reklamas ir „link in bio“ nukreipk į produkto URL.
-8. **Logotipas:** Theme customizer → Header → Logo. Laikinai gali naudoti tekstą „GNARHEAD“ šriftu *Archivo Black*.
+8. **Temos išvaizda, kad viskas atrodytų vientisa** (Theme settings Customizer'yje):
+   - *Colors → Scheme 1*: Background `#F2EFE8`, Text `#141414`, Solid button `#141414`. *Scheme 2* (juoda): Background `#141414`, Text `#F2EFE8`.
+   - *Typography*: Headings – **Archivo Narrow** (Bold), Body – **Inter**.
+   - *Announcement bar* → Scheme 2, tekstas: `FREE SHIPPING ON 2+ MASKS — 30-DAY RETURNS`.
+   - *Header*: logo centre, meniu kairėje, „Sticky header“ – on scroll up.
+   - *Buttons*: corner radius 0, shadow 0. *Product cards / Inputs*: corner radius 0.
+   - **Logotipas:** iki tikro logotipo – tekstinis „GNARHEAD“. Vėliau užsisakyk wordmark'ą (Fiverr/Dribbble dizaineris, $50–150) siaurame storame šrifte, kaip puslapio antraštės.
 9. **Atsiliepimai:** įdiek **Judge.me** (nemokamas). Jis užpildo `reviews.rating` metalaukus → žvaigždutės viršuje atsiras automatiškai. Iki tol žvaigždučių neberodo – tyčia.
 10. **Policies:** Settings → Policies → sugeneruok Refund/Privacy/Terms/Shipping, papildyk iš copy failo.
 11. **Mokėjimai:** Shopify Payments (+ Apple Pay, Google Pay, PayPal). Įjunk Shop Pay Installments, jei leidžia šalis.
@@ -88,13 +96,21 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 ---
 
 ## 5. Turinys su AI (tavo pagrindinis ginklas)
-### Nuotraukos (Shopify galerijai — 1:1, 2048×2048)
+### Kodėl nuotraukos svarbiausios
+Puslapio dizainas sąmoningai ramus (smėlio fonas, juoda, viena oranžinė spalva) – kad **nuotraukos** būtų žvaigždė. Pigų „AI“ įspūdį dažniausiai sukuria ne maketas, o nuotraukos: kiekviena kitokio stiliaus, persotintos spalvos, tekstas ant paveikslėlių. Taisyklės:
+- **Vienas stilius visoms:** tas pats šviesos tipas (saulėta diena, natūralios spalvos), ta pati kameros „nuotaika“ (lyg telefonu ar 35 mm juosta).
+- **Jokio teksto ir ženkliukų ant nuotraukų** – tekstą rašo puslapis.
+- **Fonai neperkrauti:** sniegas, keltuvo eilė, medinė kalnų kavinė.
+- Swatch'ams (mažiems kvadratėliams prie „Face“) – po vieną švarią kaukės nuotrauką iš priekio vienodame fone.
+- Proporcijos: galerija **4:5** (1600×2000), „crew“ kortelės **3:4**, video **9:16**, apatinis baneris **16:9**.
+
+### Nuotraukos (Shopify galerijai — 4:5, 1600×2000)
 Reikia ~6–8 kiekvienam veidui: herojaus kadras, iš arti, grupė, pakuotė, ant stalo (flat lay), su šalmu.
 **Svarbu:** AI nuotraukos turi rodyti **tikrą tavo produktą** — sugeneruok iš tikros pavyzdžio nuotraukos (image-to-image / reference), kitaip pirkėjai gaus ne tai, ką matė → grąžinimai ir ginčai.
 
 Promptų šablonai (anglų k.):
 ```
-Hero: Product photo of a knitted ski balaclava with a [grumpy old man face with white mustache], worn by a skier with mirrored goggles, standing in a ski resort lift line, bright sunny alpine day, snow, shallow depth of field, shot on iPhone, natural colors, centered, square 1:1
+Hero: Editorial product photo of a knitted ski balaclava with a [grumpy old man face with white mustache], worn by a skier with mirrored goggles, standing in a ski resort lift line, bright sunny alpine day, snow, shallow depth of field, shot on 35mm film, muted natural colors, no text, vertical 4:5
 
 Group: Five friends at a ski resort each wearing different funny knitted ski masks (old man, cat, tiger, corgi, christmas elf), goggles on helmets, laughing, pointing at camera, chairlift station behind, sunny, candid smartphone photo
 
@@ -144,4 +160,6 @@ Metrikos: CTR ≥ 1.5%, add-to-cart ≥ 8%, konversija ≥ 2%, CPA < $24.
 | `theme/sections/gnarhead-product-landing.liquid` | Shopify sekcija (viskas redaguojama per Customizer) |
 | `theme/templates/product.landing.json` | Produkto šablonas su užpildytu turiniu |
 | `theme/assets/gnarhead-landing.css/js` | Stilius ir logika (variantai, bundles, sticky mygtukas) |
+| `theme/snippets/gnarhead-icon.liquid` | Piktogramos ir kaukės siluetas (rodomas kol neįkeltos nuotraukos) |
+| `preview/build.mjs` | Sugeneruoja peržiūrą iš tikro Shopify kodo (`cd preview && npm install && npm run build`) |
 | `docs/PRODUCT_COPY_EN.md` | Visi angliški tekstai, SEO, politikos, reklamų kabliukai |

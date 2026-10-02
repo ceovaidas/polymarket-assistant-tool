@@ -1,19 +1,21 @@
-/* GNARHEAD landing — variant picker, bundle selector, gallery, sticky add-to-cart.
-   Works with the gnarhead-product-landing section. No dependencies. */
+/* GNARHEAD landing — variant swatches, bundle selector, gallery, sticky add-to-cart.
+   Pairs with sections/gnarhead-product-landing.liquid. No dependencies. */
 (function () {
   'use strict';
 
   function money(cents, format) {
     var value = (cents / 100).toFixed(2);
-    var noDecimals = Math.round(cents / 100).toString();
     if (!format) return '$' + value;
     return format
-      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, noDecimals)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100).toString())
       .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, value.replace('.', ','))
       .replace(/\{\{\s*amount\s*\}\}/, value);
   }
 
   function init(root) {
+    if (root.dataset.ghReady) return;
+    root.dataset.ghReady = '1';
+
     var dataEl = root.querySelector('[data-gh-json]');
     if (!dataEl) return;
     var data = JSON.parse(dataEl.textContent);
@@ -21,21 +23,16 @@
     var form = root.querySelector('[data-gh-form]');
     var idInput = root.querySelector('[data-gh-variant-id]');
     var qtyInput = root.querySelector('[data-gh-qty]');
-    var atcButtons = root.querySelectorAll('[data-gh-atc]');
-    var priceNow = root.querySelectorAll('[data-gh-price]');
-    var priceWas = root.querySelector('[data-gh-compare]');
-    var saveBadge = root.querySelector('[data-gh-save]');
-    var optionLabels = root.querySelectorAll('[data-gh-option-value]');
-    var mainMedia = root.querySelector('[data-gh-main]');
-    var thumbs = root.querySelectorAll('[data-gh-thumb]');
+    var track = root.querySelector('[data-gh-track]');
+    var hero = root.querySelector('[data-gh-hero]');
+    var counter = root.querySelector('[data-gh-count]');
+    var stickySub = root.querySelector('[data-gh-sticky-sub]');
 
     function selectedOptions() {
-      var values = [];
-      root.querySelectorAll('[data-gh-option]').forEach(function (fieldset) {
-        var checked = fieldset.querySelector('input:checked');
-        values.push(checked ? checked.value : null);
+      return Array.prototype.map.call(root.querySelectorAll('[data-gh-option]'), function (fs) {
+        var c = fs.querySelector('input:checked');
+        return c ? c.value : null;
       });
-      return values;
     }
 
     function findVariant(values) {
@@ -44,79 +41,72 @@
       });
     }
 
-    function currentBundle() {
-      var checked = root.querySelector('[data-gh-bundle] input:checked');
-      if (!checked) return { qty: 1, pct: 0 };
-      return { qty: parseInt(checked.value, 10) || 1, pct: parseFloat(checked.dataset.pct) || 0 };
+    function bundle() {
+      var c = root.querySelector('[data-gh-bundle] input:checked');
+      return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.getAttribute('aria-label') } : { qty: 1, pct: 0, label: '' };
     }
 
-    function showMedia(src, alt) {
-      if (!mainMedia || !src) return;
-      var img = mainMedia.querySelector('img');
+    function setHero(src, alt) {
+      if (!hero || !src) return;
+      var img = hero.querySelector('img');
       if (!img) {
-        mainMedia.innerHTML = '';
+        hero.innerHTML = '';
         img = document.createElement('img');
-        mainMedia.appendChild(img);
+        hero.appendChild(img);
       }
+      img.removeAttribute('srcset');
       img.src = src;
       img.alt = alt || '';
-      thumbs.forEach(function (t) { t.setAttribute('aria-current', t.dataset.src === src ? 'true' : 'false'); });
+      if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
     }
 
-    function render() {
-      var variant = findVariant(selectedOptions());
-      var bundle = currentBundle();
+    function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
 
-      optionLabels.forEach(function (el) {
-        el.textContent = selectedOptions()[parseInt(el.dataset.ghOptionValue, 10)] || '';
-      });
+    function render(changedOption) {
+      var values = selectedOptions();
+      var variant = findVariant(values);
+      var b = bundle();
+
+      each('[data-gh-option-value]', function (el) { el.textContent = values[+el.dataset.ghOptionValue] || ''; });
 
       if (!variant) {
-        atcButtons.forEach(function (b) { b.disabled = true; b.textContent = data.strings.unavailable; });
+        each('[data-gh-atc]', function (btn) { btn.disabled = true; });
+        each('[data-gh-atc-label]', function (el) { el.textContent = data.strings.unavailable; });
         return;
       }
 
       idInput.value = variant.id;
-      qtyInput.value = bundle.qty;
+      qtyInput.value = b.qty;
 
-      // Bundle cards show their own totals for the selected variant.
-      root.querySelectorAll('[data-gh-bundle] input').forEach(function (input) {
-        var qty = parseInt(input.value, 10) || 1;
-        var pct = parseFloat(input.dataset.pct) || 0;
-        var full = variant.price * qty;
-        var total = Math.round(full * (1 - pct / 100));
-        var label = input.nextElementSibling;
-        var nowEl = label.querySelector('[data-gh-bundle-now]');
-        var wasEl = label.querySelector('[data-gh-bundle-was]');
-        if (nowEl) nowEl.textContent = money(total, data.moneyFormat);
-        if (wasEl) {
-          var compareBase = (variant.compare_at_price && variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price) * qty;
-          wasEl.textContent = compareBase > total ? money(compareBase, data.moneyFormat) : '';
-        }
+      var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
+      each('[data-gh-bundle] input', function (input) {
+        var q = +input.value || 1;
+        var total = Math.round(variant.price * q * (1 - (+input.dataset.pct || 0) / 100));
+        var row = input.nextElementSibling;
+        row.querySelector('[data-gh-bundle-now]').textContent = money(total, data.moneyFormat);
+        row.querySelector('[data-gh-bundle-was]').textContent = base * q > total ? money(base * q, data.moneyFormat) : '';
       });
 
-      var total = Math.round(variant.price * bundle.qty * (1 - bundle.pct / 100));
-      priceNow.forEach(function (el) { el.textContent = money(total, data.moneyFormat); });
+      var total = Math.round(variant.price * b.qty * (1 - b.pct / 100));
+      var compare = base * b.qty;
+      each('[data-gh-price]', function (el) { el.textContent = money(total, data.moneyFormat); });
 
-      var compare = variant.compare_at_price && variant.compare_at_price > variant.price ? variant.compare_at_price * bundle.qty : 0;
-      if (priceWas) {
-        priceWas.textContent = compare ? money(compare, data.moneyFormat) : '';
-        priceWas.hidden = !compare;
+      var was = root.querySelector('[data-gh-compare]');
+      if (was) { was.hidden = compare <= total; was.textContent = compare > total ? money(compare, data.moneyFormat) : ''; }
+      var save = root.querySelector('[data-gh-save]');
+      if (save) {
+        var pct = compare > total ? Math.round((1 - total / compare) * 100) : 0;
+        save.hidden = pct <= 0;
+        save.textContent = data.strings.save.replace('[percent]', pct);
       }
-      if (saveBadge) {
-        var pctOff = compare ? Math.round((1 - total / compare) * 100) : 0;
-        saveBadge.textContent = data.strings.save.replace('[percent]', pctOff);
-        saveBadge.hidden = pctOff <= 0;
-      }
 
-      atcButtons.forEach(function (b) {
-        b.disabled = !variant.available;
-        b.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut;
-      });
+      each('[data-gh-atc]', function (btn) { btn.disabled = !variant.available; });
+      each('[data-gh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
+      if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' · ' + b.label : '');
 
-      if (variant.featured_image) showMedia(variant.featured_image, variant.name);
+      if (changedOption && variant.image) setHero(variant.image, variant.title);
 
-      if (window.history && window.history.replaceState) {
+      if (window.history && window.history.replaceState && changedOption) {
         var url = new URL(window.location.href);
         url.searchParams.set('variant', variant.id);
         window.history.replaceState({}, '', url.toString());
@@ -124,33 +114,39 @@
     }
 
     root.addEventListener('change', function (e) {
-      if (e.target.closest('[data-gh-option]') || e.target.closest('[data-gh-bundle]')) render();
+      if (e.target.closest('[data-gh-option]')) render(true);
+      else if (e.target.closest('[data-gh-bundle]')) render(false);
     });
 
-    thumbs.forEach(function (t) {
-      t.addEventListener('click', function () { showMedia(t.dataset.src, t.dataset.alt); });
-    });
-
-    // Sticky bar and secondary buttons submit the main form.
-    root.querySelectorAll('[data-gh-submit-main]').forEach(function (btn) {
+    each('[data-gh-submit-main]', function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         if (form.requestSubmit) form.requestSubmit(); else form.submit();
       });
     });
 
-    var sticky = root.querySelector('[data-gh-sticky]');
-    var anchor = root.querySelector('[data-gh-form]');
-    if (sticky && anchor && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          var past = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-          sticky.classList.toggle('is-visible', past);
-        });
-      }).observe(anchor);
+    if (track && counter) {
+      var total = track.children.length;
+      track.addEventListener('scroll', function () {
+        var i = Math.round(track.scrollLeft / track.clientWidth) + 1;
+        counter.textContent = Math.min(i, total) + ' / ' + total;
+      }, { passive: true });
     }
 
-    render();
+    var sticky = root.querySelector('[data-gh-sticky]');
+    if (sticky && form) {
+      var ticking = false;
+      var updateSticky = function () {
+        ticking = false;
+        sticky.classList.toggle('is-visible', form.getBoundingClientRect().bottom < 0);
+      };
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; window.requestAnimationFrame(updateSticky); }
+      }, { passive: true });
+      updateSticky();
+    }
+
+    render(false);
   }
 
   function boot() { document.querySelectorAll('[data-gh-root]').forEach(init); }

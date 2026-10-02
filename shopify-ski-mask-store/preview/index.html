@@ -4,504 +4,763 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GNARHEAD Preview</title>
-<meta name="description" content="Design preview of the GNARHEAD one-product Shopify landing page.">
+<meta name="description" content="Design preview of the GNARHEAD one-product Shopify page, rendered from the real section code.">
 <style>
-/* GNARHEAD — one-product landing page styles
-   Scoped under .gh so it never fights with the base Shopify theme. */
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap');
+/* GNARHEAD — one-product landing
+   Direction: technical outdoor-gear brand, editorial layout. The product is the joke; the page is not.
+   Everything is scoped under .gh so it never fights the base Shopify theme. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 .gh {
-  --gh-ink: #0b1b3f;
-  --gh-ink-soft: #3a4a6b;
-  --gh-snow: #f6f9ff;
-  --gh-ice: #dcecff;
-  --gh-yellow: #ffd60a;
-  --gh-yellow-deep: #f5b700;
-  --gh-red: #ff3b30;
-  --gh-green: #12b76a;
-  --gh-white: #ffffff;
-  --gh-radius: 18px;
-  --gh-radius-sm: 10px;
-  --gh-shadow: 0 10px 30px rgba(11, 27, 63, .12);
-  --gh-display: 'Archivo Black', 'Arial Black', sans-serif;
-  --gh-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --paper: #f2efe8;
+  --paper-2: #e8e4db;
+  --ink: #141414;
+  --ink-2: #4a4843;
+  --stone: #8b877e;
+  --line: rgba(20, 20, 20, .14);
+  --line-strong: rgba(20, 20, 20, .9);
+  --signal: #ff4f1f;
+  --night: #121212;
+  --night-line: rgba(242, 239, 232, .16);
 
-  font-family: var(--gh-body);
-  color: var(--gh-ink);
-  background: var(--gh-snow);
-  line-height: 1.5;
+  --f-display: 'Archivo', 'Arial Narrow', sans-serif;
+  --f-body: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  --gutter: 16px;
+  --max: 1440px;
+
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
+@media (min-width: 750px) { .gh { --gutter: 32px; } }
+@media (min-width: 1200px) { .gh { --gutter: 48px; } }
+
 .gh *, .gh *::before, .gh *::after { box-sizing: border-box; }
-.gh img { max-width: 100%; display: block; }
-.gh h1, .gh h2, .gh h3 { font-family: var(--gh-display); line-height: 1.05; margin: 0; letter-spacing: -.01em; }
-.gh p { margin: 0; }
-.gh-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 16px; }
-.gh-section { padding: 64px 0; }
-.gh-section--ink { background: var(--gh-ink); color: var(--gh-white); }
-.gh-section--yellow { background: var(--gh-yellow); }
-.gh-eyebrow {
-  display: inline-block; font-weight: 800; font-size: 12px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--gh-red); margin-bottom: 10px;
+.gh :where(img, video) { display: block; max-width: 100%; }
+.gh :where(h1, h2, h3, p, ul, ol, figure, blockquote) { margin: 0; }
+.gh :where(button) { font: inherit; color: inherit; }
+.gh :where(a) { color: inherit; }
+
+/* ---------- Type system ---------- */
+.gh-display {
+  font-family: var(--f-display);
+  font-stretch: 72%;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: .9;
+  letter-spacing: -.01em;
 }
-.gh-h2 { font-size: clamp(30px, 5vw, 48px); margin-bottom: 14px; }
-.gh-lead { font-size: 18px; color: var(--gh-ink-soft); max-width: 640px; }
-.gh-section--ink .gh-lead { color: #c9d4ee; }
-.gh-center { text-align: center; }
-.gh-center .gh-lead { margin: 0 auto; }
+.gh-mono {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.gh-h2 { font-size: clamp(40px, 7vw, 96px); }
+.gh-h3 { font-family: var(--f-display); font-stretch: 85%; font-weight: 700; font-size: 20px; text-transform: uppercase; letter-spacing: .01em; line-height: 1.1; }
+.gh-muted { color: var(--ink-2); }
 
-/* ---------- Ticker ---------- */
-.gh-ticker { background: var(--gh-ink); color: var(--gh-yellow); overflow: hidden; white-space: nowrap; }
-.gh-ticker__track { display: inline-flex; gap: 48px; padding: 10px 0; animation: gh-scroll 28s linear infinite; font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
-@keyframes gh-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .gh-ticker__track { animation: none; } }
+.gh-wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.gh-section { padding: 72px 0; border-top: 1px solid var(--line); }
+@media (min-width: 990px) { .gh-section { padding: 120px 0; } }
+.gh-section__head { display: grid; gap: 16px; margin-bottom: 40px; }
+@media (min-width: 990px) {
+  .gh-section__head { grid-template-columns: 1fr 1fr; align-items: end; margin-bottom: 64px; }
+  .gh-section__head > p { max-width: 440px; justify-self: end; }
+}
+.gh-kicker { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; color: var(--ink-2); }
+.gh-kicker::before { content: ''; width: 24px; height: 1px; background: currentColor; }
 
-/* ---------- Hero / product ---------- */
-.gh-hero { padding: 28px 0 56px; }
-.gh-hero__grid { display: grid; gap: 32px; grid-template-columns: 1fr; }
-@media (min-width: 900px) { .gh-hero__grid { grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; } }
+/* ---------- Media placeholders (shown until real photos are uploaded) ---------- */
+.gh-media { position: relative; overflow: hidden; background: var(--tone, var(--paper-2)); }
+.gh-media img, .gh-media video { width: 100%; height: 100%; object-fit: cover; }
+.gh-ph { position: absolute; inset: 0; display: grid; place-items: center; }
+.gh-ph svg { width: 46%; max-width: 280px; height: auto; color: var(--ink); opacity: .82; }
+.gh-ph__cap { position: absolute; left: 12px; bottom: 12px; color: var(--ink); opacity: .6; }
+.gh-ph::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .35; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
+/* ---------- Announcement ---------- */
+.gh-announce { background: var(--ink); color: var(--paper); text-align: center; padding: 10px var(--gutter); }
+
+/* ---------- Product ---------- */
+.gh-product { padding: 0 0 72px; }
+@media (min-width: 990px) {
+  .gh-product__grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(380px, 1fr); }
+}
+
+/* Gallery: swipe on mobile, stacked editorial grid on desktop */
 .gh-gallery { position: relative; }
-.gh-gallery__frame { position: relative; }
-.gh-gallery__main {
-  position: relative; aspect-ratio: 1 / 1; border-radius: var(--gh-radius); overflow: hidden;
-  background: linear-gradient(160deg, #bfe0ff 0%, #eaf4ff 55%, #ffffff 100%); box-shadow: var(--gh-shadow);
+.gh-gallery__track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 100%;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
 }
-.gh-gallery__main img, .gh-gallery__main video { width: 100%; height: 100%; object-fit: cover; }
-.gh-gallery__badges { position: absolute; left: 14px; top: 14px; display: flex; flex-direction: column; gap: 8px; z-index: 2; }
-.gh-badge {
-  background: rgba(255,255,255,.92); backdrop-filter: blur(6px); border-radius: 999px; padding: 6px 12px;
-  font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+.gh-gallery__track::-webkit-scrollbar { display: none; }
+.gh-gallery__item { scroll-snap-align: start; aspect-ratio: 4 / 5; }
+.gh-gallery__count { position: absolute; right: 12px; bottom: 12px; background: var(--paper); padding: 6px 8px; }
+@media (min-width: 990px) {
+  .gh-gallery__track { grid-auto-flow: row; grid-template-columns: 1fr 1fr; gap: 4px; overflow: visible; }
+  .gh-gallery__item:first-child { grid-column: 1 / -1; aspect-ratio: 5 / 4; }
+  .gh-gallery__count { display: none; }
 }
-.gh-gallery__sticker {
-  position: absolute; right: 14px; bottom: 14px; z-index: 2; width: 96px; height: 96px; border-radius: 50%;
-  background: var(--gh-red); color: #fff; display: grid; place-items: center; text-align: center;
-  font-family: var(--gh-display); font-size: 15px; line-height: 1.05; transform: rotate(-12deg); box-shadow: var(--gh-shadow);
-}
-.gh-thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-.gh-thumbs::-webkit-scrollbar { display: none; }
-.gh-thumb {
-  flex: 0 0 72px; height: 72px; border-radius: var(--gh-radius-sm); overflow: hidden; border: 2px solid transparent;
-  background: var(--gh-ice); cursor: pointer; padding: 0;
-}
-.gh-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.gh-thumb[aria-current="true"] { border-color: var(--gh-ink); }
 
-.gh-info__rating { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-.gh-stars { color: var(--gh-yellow-deep); letter-spacing: 2px; font-size: 16px; }
-.gh-info__title { font-size: clamp(34px, 5.5vw, 54px); margin-bottom: 10px; }
-.gh-info__sub { font-size: 17px; color: var(--gh-ink-soft); margin-bottom: 18px; }
-.gh-price { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
-.gh-price__now { font-family: var(--gh-display); font-size: 34px; color: var(--gh-red); }
-.gh-price__was { font-size: 20px; text-decoration: line-through; color: #8a96b3; font-weight: 600; }
-.gh-price__save { background: var(--gh-ink); color: var(--gh-yellow); font-weight: 800; font-size: 13px; padding: 6px 10px; border-radius: 8px; letter-spacing: .04em; }
+.gh-buy { padding: 28px var(--gutter) 0; }
+@media (min-width: 990px) {
+  .gh-buy { padding: 40px var(--gutter) 0 56px; }
+  .gh-buy__inner { position: sticky; top: 24px; }
+}
+.gh-buy__meta { display: flex; justify-content: space-between; color: var(--ink-2); margin-bottom: 20px; }
+.gh-buy__title { font-size: clamp(56px, 9vw, 104px); margin-bottom: 16px; }
+.gh-buy__rating { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: var(--ink-2); }
+.gh-buy__rating svg { width: 76px; height: 12px; }
+.gh-buy__lede { font-size: 17px; color: var(--ink-2); max-width: 440px; margin-bottom: 28px; }
 
-.gh-option { margin-bottom: 20px; border: 0; padding: 0; }
-.gh-option__label { font-weight: 800; font-size: 14px; margin-bottom: 10px; display: block; }
-.gh-option__label span { font-weight: 500; color: var(--gh-ink-soft); }
-.gh-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.gh-pill { position: relative; }
-.gh-pill input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.gh-pill label {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 2px solid var(--gh-ink);
-  font-weight: 700; font-size: 15px; cursor: pointer; background: #fff; transition: transform .15s, background .15s, color .15s;
-}
-.gh-pill label .gh-pill__emoji { font-size: 18px; line-height: 1; }
-.gh-pill input:checked + label { background: var(--gh-ink); color: #fff; }
-.gh-pill input:focus-visible + label { outline: 3px solid var(--gh-yellow-deep); outline-offset: 2px; }
-.gh-pill input:disabled + label { opacity: .4; text-decoration: line-through; }
-.gh-pill label:hover { transform: translateY(-1px); }
+.gh-price { display: flex; align-items: baseline; gap: 12px; padding: 18px 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.gh-price__now { font-family: var(--f-display); font-stretch: 85%; font-weight: 700; font-size: 28px; }
+.gh-price__was { color: var(--stone); text-decoration: line-through; font-size: 16px; }
+.gh-price__save { margin-left: auto; color: var(--signal); }
 
-/* Bundle offer cards */
-.gh-bundles { display: grid; gap: 10px; margin-bottom: 18px; }
-.gh-bundle { position: relative; }
-.gh-bundle input { position: absolute; opacity: 0; }
-.gh-bundle label {
-  display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 14px 16px;
-  border: 2px solid #c7d3ea; border-radius: var(--gh-radius-sm); background: #fff; cursor: pointer; transition: border-color .15s, box-shadow .15s;
-}
-.gh-bundle__dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gh-ink); display: grid; place-items: center; }
-.gh-bundle input:checked + label { border-color: var(--gh-ink); box-shadow: 0 0 0 3px var(--gh-ice); }
-.gh-bundle input:checked + label .gh-bundle__dot::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--gh-ink); }
-.gh-bundle input:focus-visible + label { outline: 3px solid var(--gh-yellow-deep); outline-offset: 2px; }
-.gh-bundle__name { font-weight: 800; }
-.gh-bundle__note { font-size: 13px; color: var(--gh-ink-soft); }
-.gh-bundle__price { text-align: right; font-weight: 800; }
-.gh-bundle__price s { display: block; font-size: 12px; color: #8a96b3; font-weight: 600; }
-.gh-bundle__tag {
-  position: absolute; top: -10px; right: 14px; background: var(--gh-red); color: #fff; font-size: 11px; font-weight: 800;
-  letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; text-transform: uppercase;
-}
+.gh-field { border: 0; padding: 0; margin: 0 0 28px; min-width: 0; }
+.gh-field__legend { display: flex; justify-content: space-between; width: 100%; padding: 0; margin-bottom: 12px; color: var(--ink-2); }
+.gh-field__legend b { color: var(--ink); font-weight: 500; }
+
+/* Face swatches */
+.gh-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.gh-swatch { position: relative; }
+.gh-swatch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+.gh-swatch__img { display: block; aspect-ratio: 1; outline: 1px solid var(--line); outline-offset: -1px; transition: outline-color .15s; }
+.gh-swatch__img .gh-ph svg { width: 70%; }
+.gh-swatch__img .gh-ph__cap { display: none; }
+.gh-swatch__name { display: block; margin-top: 6px; font-size: 12px; line-height: 1.25; color: var(--ink-2); }
+.gh-swatch input:checked ~ .gh-swatch__img { outline: 2px solid var(--ink); outline-offset: 2px; }
+.gh-swatch input:checked ~ .gh-swatch__name { color: var(--ink); font-weight: 600; }
+.gh-swatch input:focus-visible ~ .gh-swatch__img { outline: 2px solid var(--signal); outline-offset: 2px; }
+.gh-swatch input:disabled ~ .gh-swatch__img { opacity: .35; }
+
+/* Text options (fallback for non-face options) */
+.gh-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.gh-chip { position: relative; }
+.gh-chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.gh-chip span { display: block; padding: 10px 16px; border: 1px solid var(--line); font-size: 14px; }
+.gh-chip input:checked + span { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.gh-chip input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+/* Bundle rows */
+.gh-bundles { border-top: 1px solid var(--line); }
+.gh-bundle { position: relative; border-bottom: 1px solid var(--line); }
+.gh-bundle input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; z-index: 1; }
+.gh-bundle__row { display: grid; grid-template-columns: 18px 1fr auto; gap: 14px; align-items: center; padding: 16px 0; }
+.gh-bundle__radio { width: 16px; height: 16px; border: 1px solid var(--ink); border-radius: 50%; display: grid; place-items: center; }
+.gh-bundle input:checked + .gh-bundle__row .gh-bundle__radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.gh-bundle input:focus-visible + .gh-bundle__row { outline: 2px solid var(--signal); outline-offset: 2px; }
+.gh-bundle__name { font-weight: 600; }
+.gh-bundle__note { display: block; font-size: 13px; color: var(--ink-2); }
+.gh-bundle__tag { color: var(--signal); margin-left: 8px; }
+.gh-bundle__price { text-align: right; font-variant-numeric: tabular-nums; }
+.gh-bundle__price s { display: block; font-size: 13px; color: var(--stone); }
 
 .gh-atc {
-  width: 100%; border: 0; border-radius: 14px; padding: 18px 20px; font-family: var(--gh-display); font-size: 19px; letter-spacing: .02em;
-  background: var(--gh-yellow); color: var(--gh-ink); cursor: pointer; box-shadow: 0 6px 0 var(--gh-yellow-deep);
-  transition: transform .1s, box-shadow .1s; text-transform: uppercase;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%;
+  border: 0; border-radius: 0; padding: 20px 22px; cursor: pointer;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--f-display); font-stretch: 85%; font-weight: 700; font-size: 16px; letter-spacing: .06em; text-transform: uppercase;
+  transition: background .2s;
 }
-.gh-atc:hover { transform: translateY(-1px); }
-.gh-atc:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--gh-yellow-deep); }
-.gh-atc[disabled] { opacity: .55; cursor: not-allowed; }
-.gh-assure { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
-.gh-assure div { background: #fff; border-radius: var(--gh-radius-sm); padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; }
-.gh-assure b { display: block; font-size: 20px; margin-bottom: 2px; }
-.gh-stock { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; margin: 14px 0; }
-.gh-stock__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gh-green); box-shadow: 0 0 0 4px rgba(18,183,106,.18); }
-.gh-hook { background: #fff; border-left: 4px solid var(--gh-yellow-deep); border-radius: 8px; padding: 12px 14px; font-weight: 600; margin-bottom: 20px; font-size: 15px; }
+.gh-atc:hover { background: var(--signal); color: var(--ink); }
+.gh-atc:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.gh-atc[disabled] { background: var(--stone); cursor: not-allowed; }
+.gh-atc__price { font-variant-numeric: tabular-nums; }
 
-.gh-acc { border-top: 1px solid #d5deef; margin-top: 22px; }
-.gh-acc details { border-bottom: 1px solid #d5deef; }
-.gh-acc summary { list-style: none; cursor: pointer; padding: 16px 0; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+.gh-ship { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; color: var(--ink-2); }
+.gh-ship__dot { width: 6px; height: 6px; border-radius: 50%; background: #2f9e44; }
+
+.gh-perks { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.gh-perk { padding: 16px 8px; display: grid; gap: 8px; justify-items: start; font-size: 13px; line-height: 1.3; }
+.gh-perk + .gh-perk { border-left: 1px solid var(--line); padding-left: 14px; }
+.gh-perk svg { width: 20px; height: 20px; }
+
+.gh-acc { margin-top: 8px; }
+.gh-acc details { border-bottom: 1px solid var(--line); }
+.gh-acc summary { list-style: none; cursor: pointer; padding: 18px 0; display: flex; justify-content: space-between; align-items: center; }
 .gh-acc summary::-webkit-details-marker { display: none; }
-.gh-acc summary::after { content: '+'; font-size: 22px; font-weight: 500; }
-.gh-acc details[open] summary::after { content: '–'; }
-.gh-acc .gh-acc__body { padding: 0 0 16px; color: var(--gh-ink-soft); }
-.gh-acc ul { margin: 0; padding-left: 18px; }
+.gh-acc summary::after { content: ''; width: 10px; height: 10px; border-right: 1.5px solid; border-bottom: 1.5px solid; transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s; }
+.gh-acc details[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.gh-acc__body { padding: 0 0 20px; color: var(--ink-2); font-size: 15px; }
+.gh-acc__body ul { padding-left: 18px; }
+.gh-acc__body p + p, .gh-acc__body p + ul { margin-top: 10px; }
 
-/* ---------- Placeholder art (preview + empty Shopify store) ---------- */
-.gh-ph {
-  width: 100%; height: 100%; display: grid; place-items: center; text-align: center; position: relative;
-  background: radial-gradient(circle at 50% 35%, var(--ph-a, #fff3b0), var(--ph-b, #ffd60a) 70%);
-}
-.gh-ph__emoji { font-size: clamp(90px, 22vw, 180px); line-height: 1; filter: drop-shadow(0 10px 18px rgba(0,0,0,.18)); }
-.gh-ph__goggles { position: absolute; top: 37%; left: 50%; transform: translateX(-50%); width: 46%; height: 13%; border-radius: 40px; background: linear-gradient(90deg,#111 0,#4b5f8c 40%,#9fd0ff 50%,#4b5f8c 60%,#111 100%); opacity: .9; box-shadow: 0 0 0 6px #111; }
-.gh-ph__note { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; background: rgba(11,27,63,.8); color: #fff; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+/* ---------- Manifesto band ---------- */
+.gh-manifesto { padding: 88px 0; border-top: 1px solid var(--line); }
+@media (min-width: 990px) { .gh-manifesto { padding: 140px 0; } }
+.gh-manifesto__line { font-size: clamp(52px, 10.5vw, 168px); }
+.gh-manifesto__line--indent { padding-left: 8vw; color: var(--signal); }
+.gh-manifesto__foot { display: grid; gap: 16px; margin-top: 40px; color: var(--ink-2); }
+@media (min-width: 990px) { .gh-manifesto__foot { grid-template-columns: 1fr 1fr; } .gh-manifesto__foot p { max-width: 440px; justify-self: end; } }
 
-/* ---------- Press / social strip ---------- */
-.gh-strip { background: #fff; border-top: 1px solid #e3eaf7; border-bottom: 1px solid #e3eaf7; }
-.gh-strip__row { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; padding: 18px 0; font-weight: 800; color: var(--gh-ink-soft); font-size: 14px; }
+/* ---------- Crew ---------- */
+.gh-crew { display: grid; grid-auto-flow: column; grid-auto-columns: 72%; gap: 12px; scroll-padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 var(--gutter); }
+.gh-crew::-webkit-scrollbar { display: none; }
+@media (min-width: 750px) { .gh-crew { grid-auto-columns: 38%; } }
+@media (min-width: 1200px) { .gh-crew { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); overflow: visible; max-width: var(--max); margin: 0 auto; } }
+.gh-crew__item { scroll-snap-align: start; }
+.gh-crew__media { aspect-ratio: 3 / 4; }
+.gh-crew__media img { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.gh-crew__item:hover .gh-crew__media img { transform: scale(1.03); }
+.gh-crew__body { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.gh-crew__idx { color: var(--stone); padding-top: 3px; }
+.gh-crew__line { grid-column: 2; font-size: 14px; color: var(--ink-2); }
 
-/* ---------- Characters / lineup ---------- */
-.gh-lineup { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 32px; }
-@media (min-width: 760px) { .gh-lineup { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-@media (min-width: 1080px) { .gh-lineup { grid-template-columns: repeat(5, 1fr); } }
-.gh-char { background: #fff; border-radius: var(--gh-radius); overflow: hidden; box-shadow: var(--gh-shadow); color: var(--gh-ink); display: flex; flex-direction: column; }
-.gh-char__img { aspect-ratio: 4 / 5; overflow: hidden; }
-.gh-char__img img { width: 100%; height: 100%; object-fit: cover; }
-.gh-char__img .gh-ph__emoji { font-size: 72px; }
-.gh-char__body { padding: 14px; }
-.gh-char__name { font-family: var(--gh-display); font-size: 18px; margin-bottom: 4px; }
-.gh-char__vibe { font-size: 13px; color: var(--gh-ink-soft); }
+/* ---------- Spec ---------- */
+.gh-spec { display: grid; gap: 40px; }
+@media (min-width: 990px) { .gh-spec { grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; } }
+.gh-spec__media { aspect-ratio: 4 / 5; }
+.gh-spec .gh-h2 { font-size: clamp(40px, 5.2vw, 76px); }
+.gh-spec__table { width: 100%; border-collapse: collapse; margin-top: 32px; }
+.gh-spec__table th, .gh-spec__table td { text-align: left; padding: 16px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.gh-spec__table tr:last-child th, .gh-spec__table tr:last-child td { border-bottom: 1px solid var(--line); }
+.gh-spec__table th { width: 38%; color: var(--ink-2); font-weight: 500; }
+.gh-features { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; margin-top: 48px; }
+.gh-feature svg { width: 28px; height: 28px; margin-bottom: 14px; }
+.gh-feature p { margin-top: 6px; font-size: 14px; color: var(--ink-2); }
 
-/* ---------- Features ---------- */
-.gh-features { display: grid; gap: 16px; margin-top: 32px; grid-template-columns: 1fr; }
-@media (min-width: 700px) { .gh-features { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1000px) { .gh-features { grid-template-columns: repeat(4, 1fr); } }
-.gh-feature { background: #fff; border-radius: var(--gh-radius); padding: 22px; box-shadow: var(--gh-shadow); }
-.gh-feature__icon { width: 52px; height: 52px; border-radius: 14px; background: var(--gh-yellow); display: grid; place-items: center; font-size: 26px; margin-bottom: 14px; }
-.gh-feature h3 { font-size: 19px; margin-bottom: 6px; }
-.gh-feature p { color: var(--gh-ink-soft); font-size: 15px; }
+/* ---------- Field footage (video) ---------- */
+.gh-field-footage { background: var(--night); color: var(--paper); border-top: 0; }
+.gh-field-footage .gh-kicker, .gh-field-footage .gh-muted { color: rgba(242,239,232,.6); }
+.gh-reel { display: grid; grid-auto-flow: column; grid-auto-columns: 64%; gap: 12px; scroll-padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 var(--gutter); }
+.gh-reel::-webkit-scrollbar { display: none; }
+@media (min-width: 750px) { .gh-reel { grid-auto-columns: 32%; } }
+@media (min-width: 1200px) { .gh-reel { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; max-width: var(--max); margin: 0 auto; } }
+.gh-reel__item { scroll-snap-align: start; }
+.gh-reel__media { aspect-ratio: 9 / 16; --tone: #1d1d1c; }
+.gh-reel__media .gh-ph svg { color: var(--paper); opacity: .5; }
+.gh-reel__media .gh-ph__cap { color: var(--paper); }
+.gh-reel__cap { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--night-line); font-size: 14px; }
+.gh-reel__cap .gh-mono { color: rgba(242,239,232,.5); white-space: nowrap; }
 
-/* ---------- Video / UGC wall ---------- */
-.gh-ugc { display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin-top: 28px; padding-bottom: 6px; }
-@media (min-width: 760px) { .gh-ugc { grid-auto-columns: 30%; } }
-@media (min-width: 1080px) { .gh-ugc { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; } }
-.gh-ugc__item { scroll-snap-align: start; aspect-ratio: 9 / 16; border-radius: var(--gh-radius); overflow: hidden; position: relative; background: #1a2b55; }
-.gh-ugc__item video, .gh-ugc__item img { width: 100%; height: 100%; object-fit: cover; }
-.gh-ugc__cap { position: absolute; left: 10px; right: 10px; bottom: 10px; color: #fff; font-weight: 800; font-size: 14px; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
-.gh-ugc__play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; font-size: 22px; color: var(--gh-ink); }
-
-/* ---------- Comparison ---------- */
-.gh-compare { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 28px; background: #fff; border-radius: var(--gh-radius); overflow: hidden; box-shadow: var(--gh-shadow); font-size: 15px; }
-.gh-compare th, .gh-compare td { padding: 14px 12px; text-align: center; border-bottom: 1px solid #e6ecf7; }
-.gh-compare th:first-child, .gh-compare td:first-child { text-align: left; font-weight: 600; }
-.gh-compare thead th { font-family: var(--gh-display); font-size: 15px; }
-.gh-compare .gh-compare__us { background: var(--gh-yellow); }
-.gh-compare tr:last-child td { border-bottom: 0; }
-.gh-yes { color: var(--gh-green); font-weight: 800; font-size: 18px; }
-.gh-no { color: var(--gh-red); font-weight: 800; font-size: 18px; }
-
-/* ---------- Steps ---------- */
-.gh-steps { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: 1fr; counter-reset: step; }
-@media (min-width: 800px) { .gh-steps { grid-template-columns: repeat(3, 1fr); } }
-.gh-step { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: var(--gh-radius); padding: 22px; }
-.gh-step::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gh-yellow); color: var(--gh-ink); font-family: var(--gh-display); margin-bottom: 12px; }
-.gh-step h3 { font-size: 20px; margin-bottom: 6px; }
-.gh-step p { color: #c9d4ee; }
-
-/* ---------- Reviews ---------- */
-.gh-reviews { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: 1fr; }
-@media (min-width: 800px) { .gh-reviews { grid-template-columns: repeat(3, 1fr); } }
-.gh-review { background: #fff; border-radius: var(--gh-radius); padding: 20px; box-shadow: var(--gh-shadow); }
-.gh-review__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.gh-review__name { font-weight: 800; }
-.gh-review__verified { font-size: 12px; color: var(--gh-green); font-weight: 700; }
-.gh-review p { color: var(--gh-ink-soft); }
+/* ---------- Reviews (real only) ---------- */
+.gh-reviews { display: grid; gap: 0; border-top: 1px solid var(--line-strong); }
+@media (min-width: 990px) { .gh-reviews { grid-template-columns: repeat(3, 1fr); } }
+.gh-review { padding: 28px 0; border-bottom: 1px solid var(--line); }
+@media (min-width: 990px) { .gh-review { padding: 32px 32px 32px 0; } .gh-review + .gh-review { padding-left: 32px; border-left: 1px solid var(--line); } }
+.gh-review blockquote { margin: 16px 0 20px; font-size: 20px; line-height: 1.35; }
+.gh-review__by { color: var(--ink-2); }
 
 /* ---------- Guarantee ---------- */
-.gh-guarantee { display: grid; gap: 24px; align-items: center; grid-template-columns: 1fr; }
-@media (min-width: 800px) { .gh-guarantee { grid-template-columns: auto 1fr; } }
-.gh-seal { width: 150px; height: 150px; border-radius: 50%; background: var(--gh-ink); color: var(--gh-yellow); display: grid; place-items: center; text-align: center; font-family: var(--gh-display); font-size: 18px; line-height: 1.1; margin: 0 auto; border: 6px dashed var(--gh-yellow); }
+.gh-guarantee { display: grid; gap: 24px; align-items: end; }
+@media (min-width: 990px) { .gh-guarantee { grid-template-columns: auto 1fr; gap: 64px; } }
+.gh-guarantee__num { font-size: clamp(160px, 28vw, 380px); line-height: .78; color: var(--signal); }
+.gh-guarantee__body { max-width: 560px; padding-bottom: 12px; }
+.gh-guarantee__body .gh-h2 { font-size: clamp(36px, 5vw, 64px); margin-bottom: 20px; }
 
 /* ---------- FAQ ---------- */
-.gh-faq { max-width: 780px; margin: 28px auto 0; }
-.gh-faq details { background: #fff; border-radius: var(--gh-radius-sm); margin-bottom: 10px; box-shadow: 0 2px 10px rgba(11,27,63,.06); }
-.gh-faq summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 800; display: flex; justify-content: space-between; gap: 12px; }
-.gh-faq summary::-webkit-details-marker { display: none; }
-.gh-faq summary::after { content: '+'; font-size: 22px; line-height: 1; }
-.gh-faq details[open] summary::after { content: '–'; }
-.gh-faq .gh-faq__a { padding: 0 20px 18px; color: var(--gh-ink-soft); }
+.gh-faq { display: grid; gap: 32px; }
+@media (min-width: 990px) { .gh-faq { grid-template-columns: 1fr 1.4fr; gap: 80px; } }
+.gh-faq__list { border-top: 1px solid var(--line-strong); }
+.gh-faq__list details { border-bottom: 1px solid var(--line); }
+.gh-faq__list summary { list-style: none; cursor: pointer; padding: 22px 40px 22px 0; position: relative; font-size: 18px; font-weight: 500; }
+.gh-faq__list summary::-webkit-details-marker { display: none; }
+.gh-faq__list summary::before, .gh-faq__list summary::after { content: ''; position: absolute; right: 4px; top: 50%; width: 14px; height: 1.5px; background: currentColor; transition: transform .2s; }
+.gh-faq__list summary::after { transform: rotate(90deg); }
+.gh-faq__list details[open] summary::after { transform: rotate(0); }
+.gh-faq__a { padding: 0 40px 24px 0; color: var(--ink-2); }
 
 /* ---------- Final CTA ---------- */
-.gh-final { text-align: center; }
-.gh-final .gh-h2 { font-size: clamp(34px, 6vw, 64px); }
-.gh-final .gh-atc { max-width: 420px; margin-top: 24px; background: var(--gh-ink); color: var(--gh-yellow); box-shadow: 0 6px 0 #000; }
+.gh-final { position: relative; min-height: 78vh; display: grid; align-items: end; color: var(--paper); --tone: #2a2a28; }
+.gh-final > .gh-media { position: absolute; inset: 0; }
+.gh-final > .gh-media::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 60%); }
+.gh-final__inner { position: relative; z-index: 2; padding-top: 64px; padding-bottom: 56px; width: 100%; display: grid; gap: 28px; }
+@media (min-width: 990px) { .gh-final__inner { grid-template-columns: 1fr auto; align-items: end; } }
+.gh-final .gh-h2 { font-size: clamp(48px, 7.5vw, 124px); }
+.gh-final .gh-ph svg { display: none; }
+.gh-final .gh-ph__cap { top: 16px; bottom: auto; left: var(--gutter); }
+.gh-final .gh-atc { background: var(--paper); color: var(--ink); min-width: 300px; }
+.gh-final .gh-atc:hover { background: var(--signal); }
 
 /* ---------- Sticky mobile ATC ---------- */
 .gh-sticky {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; box-shadow: 0 -6px 20px rgba(11,27,63,.15);
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px;
-  transform: translateY(110%); transition: transform .25s;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  background: var(--paper); border-top: 1px solid var(--line-strong);
+  transform: translateY(105%); transition: transform .3s cubic-bezier(.2,.7,.2,1);
 }
-.gh-sticky.is-visible { transform: translateY(0); }
-.gh-sticky__info { flex: 1; min-width: 0; }
-.gh-sticky__title { font-weight: 800; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gh-sticky__price { color: var(--gh-red); font-weight: 800; }
-.gh-sticky .gh-atc { width: auto; padding: 14px 18px; font-size: 15px; box-shadow: 0 4px 0 var(--gh-yellow-deep); }
-@media (min-width: 900px) { .gh-sticky { display: none; } }
+.gh-sticky.is-visible { transform: none; }
+.gh-sticky__title { font-weight: 600; font-size: 14px; }
+.gh-sticky__sub { font-size: 13px; color: var(--ink-2); }
+.gh-sticky .gh-atc { width: auto; padding: 14px 20px; font-size: 14px; }
+@media (min-width: 990px) { .gh-sticky { display: none; } }
 
-body { margin: 0; background: #f6f9ff; }
-.pv-header { background: #fff; border-bottom: 1px solid #e3eaf7; }
-.pv-header .gh-wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-.pv-logo { font-family: 'Archivo Black', sans-serif; font-size: 24px; letter-spacing: -.02em; color: #0b1b3f; }
-.pv-logo span { display: inline-block; background: #ffd60a; border-radius: 50%; width: 26px; height: 26px; text-align: center; line-height: 26px; font-size: 16px; transform: translateY(-2px); }
-.pv-icons { display: flex; gap: 18px; font-size: 20px; }
-.pv-note { background: #0b1b3f; color: #ffd60a; text-align: center; font: 600 12px Inter, sans-serif; padding: 6px 16px; }
+@media (prefers-reduced-motion: reduce) {
+  .gh *, .gh *::before, .gh *::after { transition: none !important; }
+}
+
+/* preview-only stand-ins for the theme's announcement bar and header */
+body { margin: 0; background: #f2efe8; }
+.pv-head { position: sticky; top: 0; z-index: 30; background: var(--paper); border-bottom: 1px solid var(--line); }
+.pv-head__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 60px; }
+.pv-nav { display: none; gap: 28px; }
+.pv-nav a { text-decoration: none; }
+@media (min-width: 990px) { .pv-nav { display: flex; } .pv-burger { display: none; } }
+@media (max-width: 749px) { .pv-search { display: none; } }
+.pv-logo { font-size: 26px; letter-spacing: .02em; text-decoration: none; }
+.pv-cart { justify-self: end; display: flex; gap: 20px; align-items: center; }
+.pv-burger { display: inline-block; width: 22px; height: 10px; border-top: 1.5px solid; border-bottom: 1.5px solid; }
 </style>
 </head>
 <body>
-<div class="pv-note">Design preview — photos are placeholders until you upload your AI images / product shots in Shopify.</div>
-<div class="gh" data-pv>
-  <div class="gh-ticker"><div class="gh-ticker__track" aria-hidden="true">
-    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
-    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
-  </div></div>
-
-  <header class="pv-header"><div class="gh-wrap">
-    <span aria-hidden="true" style="font-size:22px">☰</span>
-    <div class="pv-logo">GNAR<span>🤪</span>HEAD</div>
-    <div class="pv-icons" aria-hidden="true"><span>🔍</span><span>🛍️</span></div>
+<div class="gh">
+  <div class="gh-announce gh-mono">Free shipping on 2+ masks — 30-day returns</div>
+  <header class="pv-head"><div class="gh-wrap pv-head__in">
+    <div><span class="pv-burger" aria-hidden="true"></span><nav class="pv-nav gh-mono"><a href="#">Shop</a><a href="#">The crew</a><a href="#">FAQ</a></nav></div>
+    <a class="pv-logo gh-display" href="#">Gnarhead</a>
+    <div class="pv-cart gh-mono"><span class="pv-search">Search</span><span>Cart (0)</span></div>
   </div></header>
+</div>
 
-  <section class="gh-hero">
-    <div class="gh-wrap gh-hero__grid">
+<div class="gh" data-gh-root id="gh-preview"><section class="gh-product">
+    <div class="gh-product__grid">
+
       <div class="gh-gallery">
-        <div class="gh-gallery__frame">
-        <div class="gh-gallery__main">
-          <div class="gh-ph" id="pv-main" style="--ph-a:#fff7cc;--ph-b:#ffd60a">
-            <div class="gh-ph__emoji" id="pv-emoji">👴</div>
-            <span class="gh-ph__note">Your AI hero photo goes here (1:1)</span>
+        <div class="gh-gallery__track" data-gh-track><figure class="gh-gallery__item gh-media" style="--tone: #d8ccb8" data-gh-hero>
+                <div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Photo 1 — upload in Products</span></div>
+              </figure><figure class="gh-gallery__item gh-media" style="--tone: #cdc6bd" >
+                <div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Photo 2 — upload in Products</span></div>
+              </figure><figure class="gh-gallery__item gh-media" style="--tone: #c9a27a" >
+                <div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Photo 3 — upload in Products</span></div>
+              </figure><figure class="gh-gallery__item gh-media" style="--tone: #dcc2a0" >
+                <div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Photo 4 — upload in Products</span></div>
+              </figure><figure class="gh-gallery__item gh-media" style="--tone: #a9b5a0" >
+                <div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Photo 5 — upload in Products</span></div>
+              </figure></div>
+        <span class="gh-gallery__count gh-mono" data-gh-count>1 / 5</span>
+      </div>
+
+      <div class="gh-buy">
+        <div class="gh-buy__inner">
+          <div class="gh-buy__meta gh-mono"><span>Balaclava — 001</span><span>Season 26/27</span></div>
+
+          <h1 class="gh-buy__title gh-display">The Gnarhead</h1><p class="gh-buy__lede">A properly warm, goggle-ready ski balaclava — with a face nobody in the lift line will forget.</p><div class="gh-price">
+            <span class="gh-price__now" data-gh-price>$39.99</span>
+            <s class="gh-price__was" data-gh-compare hidden>$0.00</s>
+            <span class="gh-price__save gh-mono" data-gh-save hidden></span>
+          </div><form method="post" action="/cart/add" data-gh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="1000" data-gh-variant-id>
+            <input type="hidden" name="quantity" value="1" data-gh-qty><fieldset class="gh-field" data-gh-option>
+                  <legend class="gh-field__legend gh-mono"><span>Face</span><b data-gh-option-value="0">Gramps</b></legend>
+                  <div class="gh-swatches"><label class="gh-swatch" for="gh-preview-0-0">
+                          <input type="radio" id="gh-preview-0-0" name="gh-opt-preview-0" value="Gramps" checked>
+                          <span class="gh-swatch__img gh-media" style="--tone: #d8ccb8"><span class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg></span></span>
+                          <span class="gh-swatch__name">Gramps</span>
+                        </label><label class="gh-swatch" for="gh-preview-0-1">
+                          <input type="radio" id="gh-preview-0-1" name="gh-opt-preview-0" value="The Cat" >
+                          <span class="gh-swatch__img gh-media" style="--tone: #cdc6bd"><span class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg></span></span>
+                          <span class="gh-swatch__name">The Cat</span>
+                        </label><label class="gh-swatch" for="gh-preview-0-2">
+                          <input type="radio" id="gh-preview-0-2" name="gh-opt-preview-0" value="Tiger" >
+                          <span class="gh-swatch__img gh-media" style="--tone: #c9a27a"><span class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg></span></span>
+                          <span class="gh-swatch__name">Tiger</span>
+                        </label><label class="gh-swatch" for="gh-preview-0-3">
+                          <input type="radio" id="gh-preview-0-3" name="gh-opt-preview-0" value="Corgi" >
+                          <span class="gh-swatch__img gh-media" style="--tone: #dcc2a0"><span class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg></span></span>
+                          <span class="gh-swatch__name">Corgi</span>
+                        </label><label class="gh-swatch" for="gh-preview-0-4">
+                          <input type="radio" id="gh-preview-0-4" name="gh-opt-preview-0" value="The Elf" >
+                          <span class="gh-swatch__img gh-media" style="--tone: #a9b5a0"><span class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg></span></span>
+                          <span class="gh-swatch__name">The Elf</span>
+                        </label></div>
+                </fieldset><fieldset class="gh-field">
+                <legend class="gh-field__legend gh-mono"><span>Quantity</span></legend>
+                <div class="gh-bundles" data-gh-bundle><div class="gh-bundle">
+                      <input type="radio" name="gh-bundle-preview" value="1" data-pct="0" aria-label="One mask" checked>
+                      <div class="gh-bundle__row">
+                        <span class="gh-bundle__radio"></span>
+                        <span>
+                          <span class="gh-bundle__name">One mask</span><span class="gh-bundle__note">Standard shipping</span>
+                        </span>
+                        <span class="gh-bundle__price"><span data-gh-bundle-now></span><s data-gh-bundle-was></s></span>
+                      </div>
+                    </div><div class="gh-bundle">
+                      <input type="radio" name="gh-bundle-preview" value="2" data-pct="15" aria-label="Two masks" >
+                      <div class="gh-bundle__row">
+                        <span class="gh-bundle__radio"></span>
+                        <span>
+                          <span class="gh-bundle__name">Two masks</span><span class="gh-bundle__tag gh-mono">Popular</span><span class="gh-bundle__note">Save 15% · Free shipping</span>
+                        </span>
+                        <span class="gh-bundle__price"><span data-gh-bundle-now></span><s data-gh-bundle-was></s></span>
+                      </div>
+                    </div><div class="gh-bundle">
+                      <input type="radio" name="gh-bundle-preview" value="3" data-pct="25" aria-label="Three masks" >
+                      <div class="gh-bundle__row">
+                        <span class="gh-bundle__radio"></span>
+                        <span>
+                          <span class="gh-bundle__name">Three masks</span><span class="gh-bundle__note">Save 25% · Free shipping</span>
+                        </span>
+                        <span class="gh-bundle__price"><span data-gh-bundle-now></span><s data-gh-bundle-was></s></span>
+                      </div>
+                    </div></div>
+              </fieldset><button type="submit" name="add" class="gh-atc" data-gh-atc >
+              <span data-gh-atc-label>Add to cart</span>
+              <span class="gh-atc__price" data-gh-price>$39.99</span>
+            </button><p class="gh-ship"><span class="gh-ship__dot"></span>In stock. Ships in 1–3 business days.</p></form><div class="gh-perks">
+            <div class="gh-perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6h12v10H2zM14 9h4l4 4v3h-8z"/><circle cx="6.5" cy="17.5" r="1.8" fill="var(--paper,#fff)"/><circle cx="17.5" cy="17.5" r="1.8" fill="var(--paper,#fff)"/></svg><span>Tracked shipping</span></div>
+            <div class="gh-perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M8 5 4 9l4 4"/></svg><span>30-day returns</span></div>
+            <div class="gh-perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="10" width="16" height="11"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>Secure checkout</span></div>
           </div>
+
+          <div class="gh-acc"><details open><summary class="gh-mono">Details</summary><div class="gh-acc__body"><p>Every ski trip has <em>that</em> photo. This is how you end up in it.</p><ul><li>Double-layer knit, fleece-lined face</li><li>Wide, goggle-ready eye port</li><li>Breathable mouth zone</li><li>Fits under most helmets</li><li>Ships in a drawstring pouch</li></ul></div></details><details><summary class="gh-mono">Materials &amp; care</summary><div class="gh-acc__body"><p>Double-layer acrylic knit with a brushed fleece face panel. Hand wash cold, lay flat to dry. Do not tumble dry.</p></div></details><details><summary class="gh-mono">Shipping &amp; returns</summary><div class="gh-acc__body"><p>Ships in 1–3 business days with tracking. Delivery to the US, Canada and EU typically takes 6–12 business days. Returns accepted within 30 days of delivery on unworn items.</p></div></details></div>
         </div>
-        <div class="gh-gallery__badges">
-          <span class="gh-badge">🧶 Premium knit</span><span class="gh-badge">❄️ Keeps you warm</span>
-          <span class="gh-badge">🥽 Goggle-friendly</span><span class="gh-badge">🌍 One size fits most</span>
-        </div>
-        <div class="gh-gallery__sticker">FALL<br>DROP<br>2026</div>
-        </div>
-        <div class="gh-thumbs" id="pv-thumbs"></div>
       </div>
-
-      <div class="gh-info">
-        <div class="gh-info__rating"><span class="gh-stars" aria-hidden="true">★★★★★</span><span>Shows automatically once you have real reviews</span></div>
-        <h1 class="gh-info__title">GNARHEAD™ Ski Mask</h1>
-        <p class="gh-info__sub">The ski mask that turns every lift line into a show.</p>
-        <div class="gh-price">
-          <span class="gh-price__now" data-pv-price>$67.98</span>
-          <s class="gh-price__was" data-pv-was>$109.98</s>
-          <span class="gh-price__save" data-pv-save>SAVE 38%</span>
-        </div>
-        <div class="gh-hook">😂 Warning: strangers WILL ask for selfies.</div>
-
-        <form onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.');">
-          <fieldset class="gh-option">
-            <legend class="gh-option__label">Face: <span id="pv-face">Grumpy Gramps</span></legend>
-            <div class="gh-pills" id="pv-pills"></div>
-          </fieldset>
-
-          <fieldset class="gh-option" style="margin-bottom:0">
-            <legend class="gh-option__label">Bring the crew &amp; save</legend>
-            <div class="gh-bundles" id="pv-bundles">
-              <div class="gh-bundle"><input type="radio" name="b" id="b1" value="1" data-pct="0"><label for="b1"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">1 Mask</span><br><span class="gh-bundle__note">Solo legend</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label></div>
-              <div class="gh-bundle"><input type="radio" name="b" id="b2" value="2" data-pct="15" checked><label for="b2"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">2 Masks</span><br><span class="gh-bundle__note">You + your ride-or-die · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Most popular</span></div>
-              <div class="gh-bundle"><input type="radio" name="b" id="b3" value="3" data-pct="25"><label for="b3"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">3 Masks</span><br><span class="gh-bundle__note">Full squad · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Best value</span></div>
+    </div>
+  </section><section class="gh-manifesto">
+      <div class="gh-wrap">
+        <p class="gh-kicker gh-mono">The idea</p>
+        <h2 class="gh-display">
+          <span class="gh-manifesto__line" style="display:block">Serious gear.</span>
+          <span class="gh-manifesto__line gh-manifesto__line--indent" style="display:block">Unserious face.</span>
+        </h2>
+        <div class="gh-manifesto__foot"><span class="gh-mono">Designed for cold lifts & group photos</span><p>Every mask starts as a real piece of ski kit — dense knit, fleece-lined face, goggle-ready eye port. Then we give it a face. The mountain is more fun when nobody takes it too seriously.</p></div>
+      </div>
+    </section><section class="gh-section">
+      <div class="gh-wrap gh-section__head">
+        <div><p class="gh-kicker gh-mono">The crew</p><h2 class="gh-h2 gh-display">Pick your face</h2></div>
+        <p class="gh-muted">Five characters, one fit. Mix them across your group for the photo of the season.</p>
+      </div>
+      <div class="gh-crew"><article class="gh-crew__item" >
+            <div class="gh-crew__media gh-media" style="--tone: #d8ccb8"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Gramps</span></div></div>
+            <div class="gh-crew__body">
+              <span class="gh-crew__idx gh-mono">01</span>
+              <h3 class="gh-h3">Gramps</h3>
+              <p class="gh-crew__line">Wrinkles, moustache, zero patience for slow skiers.</p>
             </div>
-          </fieldset>
-
-          <div class="gh-stock"><span class="gh-stock__dot"></span>In stock — ships within 1–3 business days</div>
-          <button type="submit" class="gh-atc" id="pv-atc">Add to cart</button>
-        </form>
-
-        <div class="gh-assure">
-          <div><b>🚚</b>Tracked shipping</div><div><b>↩️</b>30-day returns</div><div><b>🔒</b>Secure checkout</div>
-        </div>
-
-        <div class="gh-acc">
-          <details open><summary>Why riders love it</summary><div class="gh-acc__body">
-            <p style="margin-bottom:10px">Every ski trip has <em>that</em> photo. Make sure you're the reason it goes viral. GNARHEAD masks are real, warm balaclavas with a ridiculous face knitted right in. Pull one on and the lift line becomes your stage.</p>
-            <ul><li>Double-layer knit + fleece face panel</li><li>Wide, goggle-friendly eye opening</li><li>Breathable mouth zone</li><li>Fits under most helmets</li><li>Ships in a gift-ready drawstring pouch</li></ul>
-          </div></details>
-          <details><summary>Material &amp; fit</summary><div class="gh-acc__body">Soft acrylic knit with a fleece-lined face panel. One size fits most adults (head 54–62 cm). Hand wash cold, lay flat to dry.</div></details>
-          <details><summary>Shipping &amp; returns</summary><div class="gh-acc__body">Orders ship within 1–3 business days with tracking. Delivery to US/CA/EU usually takes 6–12 business days. Not loving it? Return within 30 days of delivery.</div></details>
+          </article><article class="gh-crew__item" >
+            <div class="gh-crew__media gh-media" style="--tone: #cdc6bd"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">The Cat</span></div></div>
+            <div class="gh-crew__body">
+              <span class="gh-crew__idx gh-mono">02</span>
+              <h3 class="gh-h3">The Cat</h3>
+              <p class="gh-crew__line">Nine lives. Spends most of them in the terrain park.</p>
+            </div>
+          </article><article class="gh-crew__item" >
+            <div class="gh-crew__media gh-media" style="--tone: #c9a27a"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Tiger</span></div></div>
+            <div class="gh-crew__body">
+              <span class="gh-crew__idx gh-mono">03</span>
+              <h3 class="gh-h3">Tiger</h3>
+              <p class="gh-crew__line">Apex predator of the beginner slope.</p>
+            </div>
+          </article><article class="gh-crew__item" >
+            <div class="gh-crew__media gh-media" style="--tone: #dcc2a0"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Corgi</span></div></div>
+            <div class="gh-crew__body">
+              <span class="gh-crew__idx gh-mono">04</span>
+              <h3 class="gh-h3">Corgi</h3>
+              <p class="gh-crew__line">Short legs. Big send energy.</p>
+            </div>
+          </article><article class="gh-crew__item" >
+            <div class="gh-crew__media gh-media" style="--tone: #a9b5a0"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">The Elf</span></div></div>
+            <div class="gh-crew__body">
+              <span class="gh-crew__idx gh-mono">05</span>
+              <h3 class="gh-h3">The Elf</h3>
+              <p class="gh-crew__line">Seasonal release. Santa didn't approve this.</p>
+            </div>
+          </article></div>
+    </section><section class="gh-section">
+      <div class="gh-wrap gh-spec">
+        <div class="gh-spec__media gh-media" style="--tone: #d8ccb8"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Detail photo — knit close-up</span></div></div>
+        <div>
+          <p class="gh-kicker gh-mono">Specification</p>
+          <h2 class="gh-h2 gh-display">Built like real kit</h2><table class="gh-spec__table">
+              <tbody><tr ><th scope="row" class="gh-mono">Shell</th><td>Double-layer acrylic knit</td></tr><tr ><th scope="row" class="gh-mono">Face lining</th><td>Brushed fleece panel</td></tr><tr ><th scope="row" class="gh-mono">Eye port</th><td>Wide cut, fits most goggles</td></tr><tr ><th scope="row" class="gh-mono">Fit</th><td>One size — head 54–62 cm</td></tr><tr ><th scope="row" class="gh-mono">Helmet</th><td>Low-profile crown, fits under most helmets</td></tr><tr ><th scope="row" class="gh-mono">Care</th><td>Hand wash cold, dry flat</td></tr></tbody>
+            </table><div class="gh-features"><div class="gh-feature" >
+                  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3v16"/><path d="m9 6 5 3 5-3M9 15l5-3 5 3"/><path d="M5 9.5 23 18.5M23 9.5 5 18.5" opacity=".45"/><path d="M14 19v6"/></svg>
+                  <h3 class="gh-h3">Actually warm</h3>
+                  <p>Made for cold chairlifts, not just for photos.</p>
+                </div><div class="gh-feature" >
+                  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="9" width="20" height="10" rx="5"/><path d="M1 14h3M24 14h3M8 12.5c1.5-.8 3-.9 4.5-.7"/></svg>
+                  <h3 class="gh-h3">Goggle-ready</h3>
+                  <p>The eye port sits flush with goggles. No gaps, no wind burn.</p>
+                </div><div class="gh-feature" >
+                  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 10h14a3 3 0 1 0-3-3M3 15h19a3 3 0 1 1-3 3M3 20h9"/></svg>
+                  <h3 class="gh-h3">Breathable</h3>
+                  <p>Open-knit mouth zone, so you can talk, laugh and breathe.</p>
+                </div><div class="gh-feature" >
+                  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg>
+                  <h3 class="gh-h3">Gift-ready</h3>
+                  <p>Ships in a drawstring pouch, ready to wrap.</p>
+                </div></div></div>
+      </div>
+    </section><section class="gh-section gh-field-footage">
+      <div class="gh-wrap gh-section__head">
+        <div><p class="gh-kicker gh-mono">Field footage</p><h2 class="gh-h2 gh-display">Seen on the mountain</h2></div>
+        <p class="gh-muted">Tag @gnarhead on TikTok or Instagram. Our favourite clip each week gets a free mask.</p>
+      </div>
+      <div class="gh-reel"><figure class="gh-reel__item" >
+            <div class="gh-reel__media gh-media"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Vertical video 9:16</span></div></div>
+            <figcaption class="gh-reel__cap"><span>Gramps drops in</span><span class="gh-mono">Gramps</span></figcaption>
+          </figure><figure class="gh-reel__item" >
+            <div class="gh-reel__media gh-media"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Vertical video 9:16</span></div></div>
+            <figcaption class="gh-reel__cap"><span>The lift line had questions</span><span class="gh-mono">The Cat</span></figcaption>
+          </figure><figure class="gh-reel__item" >
+            <div class="gh-reel__media gh-media"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Vertical video 9:16</span></div></div>
+            <figcaption class="gh-reel__cap"><span>Tiger on the T-bar</span><span class="gh-mono">Tiger</span></figcaption>
+          </figure><figure class="gh-reel__item" >
+            <div class="gh-reel__media gh-media"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono">Vertical video 9:16</span></div></div>
+            <figcaption class="gh-reel__cap"><span>Corgi meets the rail</span><span class="gh-mono">Corgi</span></figcaption>
+          </figure></div>
+    </section><section class="gh-section">
+      <div class="gh-wrap gh-guarantee">
+        <div class="gh-guarantee__num gh-display">30</div>
+        <div class="gh-guarantee__body">
+          <p class="gh-kicker gh-mono">Day guarantee</p>
+          <h2 class="gh-h2 gh-display">Try it on. Love it. Or send it back.</h2>
+          <p class="gh-muted">Wrong fit, wrong face, or just not your thing? Return it unworn within 30 days for a full refund.</p>
         </div>
       </div>
+    </section><section class="gh-section">
+      <div class="gh-wrap gh-faq">
+        <div><p class="gh-kicker gh-mono">FAQ</p><h2 class="gh-h2 gh-display">Questions</h2></div>
+        <div class="gh-faq__list"><details ><summary>Does it fit under a helmet?</summary><div class="gh-faq__a"><p>Yes. The crown is low-profile and sits comfortably under most ski and snowboard helmets.</p></div></details><details ><summary>Will it fit me?</summary><div class="gh-faq__a"><p>One size fits most adults (head circumference 54–62 cm). The knit stretches and keeps its shape.</p></div></details><details ><summary>Is it warm enough for real skiing?</summary><div class="gh-faq__a"><p>Yes. It's a full balaclava with a fleece-lined face panel — proper ski kit that happens to have a face on it.</p></div></details><details ><summary>Can I wear it with goggles?</summary><div class="gh-faq__a"><p>Yes. The eye port is cut wide so goggles sit flush and your view stays clear.</p></div></details><details ><summary>How long does shipping take?</summary><div class="gh-faq__a"><p>Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe, with tracking.</p></div></details><details ><summary>What if it's not for me?</summary><div class="gh-faq__a"><p>Return it unworn within 30 days of delivery for a full refund. Just email us with your order number.</p></div></details><details ><summary>How do I wash it?</summary><div class="gh-faq__a"><p>Hand wash in cold water and lay flat to dry. Don't tumble dry.</p></div></details></div>
+      </div>
+    </section><section class="gh-final">
+    <div class="gh-media"><div class="gh-ph"><svg viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M62 238c0-22-9-36-13-60-8-46-6-108 22-140 17-20 41-20 58 0 28 32 30 94 22 140-4 24-13 38-13 60"/><path d="M58 72c26-12 58-12 84 0"/><path d="M66 50c22-8 46-8 68 0" opacity=".5"/><rect x="46" y="92" width="108" height="42" rx="21" fill="currentColor" fill-opacity=".9"/><path d="M60 104c10-4 22-5 34-4" stroke="#fff" stroke-opacity=".55"/><path d="M40 113h6M154 113h6"/><ellipse cx="100" cy="168" rx="17" ry="10"/><path d="M58 210c28 6 56 6 84 0M60 222c27 6 53 6 80 0" opacity=".5"/></svg><span class="gh-ph__cap gh-mono" style="color:var(--paper)">Wide group photo — 16:9</span></div></div>
+    <div class="gh-wrap gh-final__inner">
+      <h2 class="gh-h2 gh-display">Don't be the boring<br />
+one in the photo.</h2>
+      <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>
+        <span data-gh-atc-label>Add to cart</span><span class="gh-atc__price" data-gh-price>$39.99</span>
+      </button>
     </div>
   </section>
 
-  <div class="gh-strip"><div class="gh-wrap gh-strip__row">
-    <span>⭐ Loved on TikTok</span><span>🎿 Built for the slopes</span><span>🎁 Gift-ready packaging</span><span>💬 Real human support</span>
-  </div></div>
-
-  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-center">
-    <span class="gh-eyebrow">Pick your alter ego</span>
-    <h2 class="gh-h2">Meet the Gnar Crew</h2>
-    <p class="gh-lead">Five faces. Zero chill. Mix them up for the group chat photo of the season.</p>
-    <div class="gh-lineup" id="pv-lineup"></div>
-  </div></section>
-
-  <section class="gh-section"><div class="gh-wrap gh-center">
-    <span class="gh-eyebrow">Not just a costume</span>
-    <h2 class="gh-h2">Funny face. Serious mask.</h2>
-    <div class="gh-features" style="text-align:left">
-      <div class="gh-feature"><div class="gh-feature__icon">❄️</div><h3>Actually warm</h3><p>Thick double-layer knit with a fleece face panel. Built for −15 °C chairlifts, not just photos.</p></div>
-      <div class="gh-feature"><div class="gh-feature__icon">🥽</div><h3>Goggle-friendly</h3><p>Wide eye opening sits flush with any goggle. No gaps, no fogging, no wind burn.</p></div>
-      <div class="gh-feature"><div class="gh-feature__icon">🌬️</div><h3>Breathes easy</h3><p>Open mouth zone with breathable knit so you can talk, laugh and yell "SEND IT".</p></div>
-      <div class="gh-feature"><div class="gh-feature__icon">🎁</div><h3>Gift-ready</h3><p>Arrives in a branded drawstring pouch. The funniest stocking stuffer they'll actually use.</p></div>
+  <div class="gh-sticky" data-gh-sticky>
+    <div>
+      <div class="gh-sticky__title">The Gnarhead</div>
+      <div class="gh-sticky__sub" data-gh-sticky-sub>Gramps</div>
     </div>
-  </div></section>
-
-  <section class="gh-section gh-section--ink"><div class="gh-wrap gh-center">
-    <span class="gh-eyebrow">Spotted on the mountain</span>
-    <h2 class="gh-h2">The internet can't stop watching</h2>
-    <p class="gh-lead">Your AI clips go here — vertical 9:16, autoplay, muted, looping.</p>
-    <div class="gh-ugc">
-      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">👴</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">POV: Gramps shreds harder than you</div></div>
-      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐱</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">The lift line had questions</div></div>
-      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐯</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">Squad goals, but make it feline</div></div>
-      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐶</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">When the corgi hits the rail</div></div>
-    </div>
-  </div></section>
-
-  <section class="gh-section"><div class="gh-wrap gh-center">
-    <span class="gh-eyebrow">The difference</span>
-    <h2 class="gh-h2">Why settle for a boring balaclava?</h2>
-    <table class="gh-compare">
-      <thead><tr><th scope="col"></th><th scope="col" class="gh-compare__us">GNARHEAD</th><th scope="col">Boring balaclava</th></tr></thead>
-      <tbody>
-        <tr><td>Gets you noticed in the lift line</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
-        <tr><td>Warm, breathable knit</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-yes">✓</span></td></tr>
-        <tr><td>Goggle-friendly eye opening</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
-        <tr><td>Instant group-photo upgrade</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
-        <tr><td>Gift-ready</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
-      </tbody>
-    </table>
-  </div></section>
-
-  <section class="gh-section gh-section--ink"><div class="gh-wrap">
-    <div class="gh-center"><span class="gh-eyebrow">How it works</span><h2 class="gh-h2">From checkout to chairlift legend</h2></div>
-    <div class="gh-steps">
-      <div class="gh-step"><h3>Pick your face</h3><p>Choose your alter ego — or grab a crew bundle and save up to 25%.</p></div>
-      <div class="gh-step"><h3>We ship it fast</h3><p>Packed within 1–3 business days with tracking straight to your door.</p></div>
-      <div class="gh-step"><h3>Become a legend</h3><p>Pull it on, hit the slopes, and watch your phone blow up with tags.</p></div>
-    </div>
-  </div></section>
-
-  <section class="gh-section"><div class="gh-wrap gh-center">
-    <span class="gh-eyebrow">Real riders</span>
-    <h2 class="gh-h2">What the crew says</h2>
-    <p class="gh-lead">Review cards appear here once real customers leave reviews (Judge.me / Shopify reviews app).</p>
-  </div></section>
-
-  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-guarantee">
-    <div class="gh-seal">30-DAY<br>HAPPY FACE<br>GUARANTEE</div>
-    <div><h2 class="gh-h2">If it doesn't make you laugh, it's on us.</h2>
-    <p class="gh-lead" style="color:#0b1b3f">Try it on, wear it on the slopes, show your friends. If you're not grinning, send it back within 30 days for a full refund. No awkward questions.</p></div>
-  </div></section>
-
-  <section class="gh-section"><div class="gh-wrap">
-    <div class="gh-center"><span class="gh-eyebrow">FAQ</span><h2 class="gh-h2">Questions? We've got answers.</h2></div>
-    <div class="gh-faq">
-      <details><summary>Does it fit under a helmet?</summary><div class="gh-faq__a">Yes — the crown is thin enough to sit comfortably under most ski and snowboard helmets.</div></details>
-      <details><summary>Will it fit me?</summary><div class="gh-faq__a">One size fits most adults (head circumference 54–62 cm). The knit stretches and keeps its shape.</div></details>
-      <details><summary>Is it really warm enough for skiing?</summary><div class="gh-faq__a">Yes. It's a full balaclava with a fleece-lined face panel — a real ski mask that happens to be hilarious.</div></details>
-      <details><summary>How long does shipping take?</summary><div class="gh-faq__a">Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe.</div></details>
-      <details><summary>What if I don't like it?</summary><div class="gh-faq__a">You're covered by our 30-day Happy Face Guarantee. Contact us and we'll sort out a return or exchange.</div></details>
-      <details><summary>How do I wash it?</summary><div class="gh-faq__a">Hand wash in cold water and lay flat to dry. Don't tumble dry — your gramps hates the dryer.</div></details>
-    </div>
-  </div></section>
-
-  <section class="gh-section gh-section--yellow gh-final"><div class="gh-wrap">
-    <h2 class="gh-h2">Don't be the boring one in the group photo.</h2>
-    <p class="gh-lead" style="margin:0 auto;color:#0b1b3f">Grab your face before the season sells it out.</p>
-    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
-  </div></section>
-
-  <div class="gh-sticky" id="pv-sticky">
-    <div class="gh-sticky__info"><div class="gh-sticky__title">GNARHEAD™ Ski Mask</div><div class="gh-sticky__price" data-pv-price></div></div>
-    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
+    <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>
+      <span data-gh-atc-label>Add to cart</span><span class="gh-atc__price" data-gh-price>$39.99</span>
+    </button>
   </div>
+
+  <script type="application/json" data-gh-json>
+    {
+      "moneyFormat": "${{amount}}",
+      "strings": {
+        "addToCart": "Add to cart",
+        "soldOut": "Sold out",
+        "unavailable": "Unavailable",
+        "save": "Save [percent]%"
+      },
+      "variants": [{
+            "id": 1000,
+            "title": "Gramps",
+            "options": ["Gramps"],
+            "price": 3999,
+            "compare_at_price": 0,
+            "available": true,
+            "image": null
+          },{
+            "id": 1001,
+            "title": "The Cat",
+            "options": ["The Cat"],
+            "price": 3999,
+            "compare_at_price": 0,
+            "available": true,
+            "image": null
+          },{
+            "id": 1002,
+            "title": "Tiger",
+            "options": ["Tiger"],
+            "price": 3999,
+            "compare_at_price": 0,
+            "available": true,
+            "image": null
+          },{
+            "id": 1003,
+            "title": "Corgi",
+            "options": ["Corgi"],
+            "price": 3999,
+            "compare_at_price": 0,
+            "available": true,
+            "image": null
+          },{
+            "id": 1004,
+            "title": "The Elf",
+            "options": ["The Elf"],
+            "price": 3999,
+            "compare_at_price": 0,
+            "available": true,
+            "image": null
+          }]
+    }
+  </script>
 </div>
 
+
+
 <script>
+/* GNARHEAD landing — variant swatches, bundle selector, gallery, sticky add-to-cart.
+   Pairs with sections/gnarhead-product-landing.liquid. No dependencies. */
 (function () {
-  var PRICE = 3999, WAS = 5499;
-  var faces = [
-    { name: 'Grumpy Gramps', emoji: '👴', a: '#fff7cc', b: '#ffd60a', vibe: "Wrinkles, 'stache, zero patience for slow skiers." },
-    { name: 'Purrfect Powder', emoji: '🐱', a: '#fff0f6', b: '#ffc9de', vibe: 'Nine lives. Uses all of them in the terrain park.' },
-    { name: 'Tiger Mode', emoji: '🐯', a: '#fff1e0', b: '#ffb35c', vibe: 'Apex predator of the bunny slope.' },
-    { name: 'Corgi Shred', emoji: '🐶', a: '#fff8ea', b: '#ffe1a8', vibe: 'Short legs. Big send energy.' },
-    { name: 'Elf on the Shelf-ie', emoji: '🧝', a: '#ecfff0', b: '#a8e6b8', vibe: "Santa's most reckless helper. Seasonal drop." }
-  ];
-  function $(s) { return document.querySelector(s); }
-  function money(c) { return '$' + (c / 100).toFixed(2); }
+  'use strict';
 
-  var pills = $('#pv-pills'), thumbs = $('#pv-thumbs'), lineup = $('#pv-lineup');
-  faces.forEach(function (f, i) {
-    pills.insertAdjacentHTML('beforeend',
-      '<div class="gh-pill"><input type="radio" name="face" id="f' + i + '" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
-      '<label for="f' + i + '"><span class="gh-pill__emoji">' + f.emoji + '</span>' + f.name + '</label></div>');
-    thumbs.insertAdjacentHTML('beforeend',
-      '<button type="button" class="gh-thumb" data-i="' + i + '" aria-label="' + f.name + '" aria-current="' + (i === 0) + '">' +
-      '<div class="gh-ph" style="--ph-a:' + f.a + ';--ph-b:' + f.b + '"><span style="font-size:34px">' + f.emoji + '</span></div></button>');
-    lineup.insertAdjacentHTML('beforeend',
-      '<div class="gh-char"><div class="gh-char__img"><div class="gh-ph" style="--ph-a:#fff;--ph-b:' + f.b + '"><div class="gh-ph__emoji">' + f.emoji + '</div></div></div>' +
-      '<div class="gh-char__body"><div class="gh-char__name">' + f.name + '</div><div class="gh-char__vibe">' + f.vibe + '</div></div></div>');
-  });
-
-  function setFace(i) {
-    var f = faces[i];
-    $('#pv-emoji').textContent = f.emoji;
-    $('#pv-main').style.setProperty('--ph-a', f.a);
-    $('#pv-main').style.setProperty('--ph-b', f.b);
-    $('#pv-face').textContent = f.name;
-    document.getElementById('f' + i).checked = true;
-    thumbs.querySelectorAll('.gh-thumb').forEach(function (t) { t.setAttribute('aria-current', String(t.dataset.i == i)); });
+  function money(cents, format) {
+    var value = (cents / 100).toFixed(2);
+    if (!format) return '$' + value;
+    return format
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100).toString())
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, value.replace('.', ','))
+      .replace(/\{\{\s*amount\s*\}\}/, value);
   }
-  function render() {
-    var sel = document.querySelector('#pv-bundles input:checked');
-    var qty = +sel.value, pct = +sel.dataset.pct;
-    document.querySelectorAll('#pv-bundles input').forEach(function (inp) {
-      var q = +inp.value, p = +inp.dataset.pct, lab = inp.nextElementSibling;
-      lab.querySelector('[data-now]').textContent = money(Math.round(PRICE * q * (1 - p / 100)));
-      lab.querySelector('[data-was]').textContent = money(WAS * q);
+
+  function init(root) {
+    if (root.dataset.ghReady) return;
+    root.dataset.ghReady = '1';
+
+    var dataEl = root.querySelector('[data-gh-json]');
+    if (!dataEl) return;
+    var data = JSON.parse(dataEl.textContent);
+    var variants = data.variants || [];
+    var form = root.querySelector('[data-gh-form]');
+    var idInput = root.querySelector('[data-gh-variant-id]');
+    var qtyInput = root.querySelector('[data-gh-qty]');
+    var track = root.querySelector('[data-gh-track]');
+    var hero = root.querySelector('[data-gh-hero]');
+    var counter = root.querySelector('[data-gh-count]');
+    var stickySub = root.querySelector('[data-gh-sticky-sub]');
+
+    function selectedOptions() {
+      return Array.prototype.map.call(root.querySelectorAll('[data-gh-option]'), function (fs) {
+        var c = fs.querySelector('input:checked');
+        return c ? c.value : null;
+      });
+    }
+
+    function findVariant(values) {
+      return variants.find(function (v) {
+        return v.options.every(function (opt, i) { return opt === values[i]; });
+      });
+    }
+
+    function bundle() {
+      var c = root.querySelector('[data-gh-bundle] input:checked');
+      return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.getAttribute('aria-label') } : { qty: 1, pct: 0, label: '' };
+    }
+
+    function setHero(src, alt) {
+      if (!hero || !src) return;
+      var img = hero.querySelector('img');
+      if (!img) {
+        hero.innerHTML = '';
+        img = document.createElement('img');
+        hero.appendChild(img);
+      }
+      img.removeAttribute('srcset');
+      img.src = src;
+      img.alt = alt || '';
+      if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+
+    function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
+
+    function render(changedOption) {
+      var values = selectedOptions();
+      var variant = findVariant(values);
+      var b = bundle();
+
+      each('[data-gh-option-value]', function (el) { el.textContent = values[+el.dataset.ghOptionValue] || ''; });
+
+      if (!variant) {
+        each('[data-gh-atc]', function (btn) { btn.disabled = true; });
+        each('[data-gh-atc-label]', function (el) { el.textContent = data.strings.unavailable; });
+        return;
+      }
+
+      idInput.value = variant.id;
+      qtyInput.value = b.qty;
+
+      var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
+      each('[data-gh-bundle] input', function (input) {
+        var q = +input.value || 1;
+        var total = Math.round(variant.price * q * (1 - (+input.dataset.pct || 0) / 100));
+        var row = input.nextElementSibling;
+        row.querySelector('[data-gh-bundle-now]').textContent = money(total, data.moneyFormat);
+        row.querySelector('[data-gh-bundle-was]').textContent = base * q > total ? money(base * q, data.moneyFormat) : '';
+      });
+
+      var total = Math.round(variant.price * b.qty * (1 - b.pct / 100));
+      var compare = base * b.qty;
+      each('[data-gh-price]', function (el) { el.textContent = money(total, data.moneyFormat); });
+
+      var was = root.querySelector('[data-gh-compare]');
+      if (was) { was.hidden = compare <= total; was.textContent = compare > total ? money(compare, data.moneyFormat) : ''; }
+      var save = root.querySelector('[data-gh-save]');
+      if (save) {
+        var pct = compare > total ? Math.round((1 - total / compare) * 100) : 0;
+        save.hidden = pct <= 0;
+        save.textContent = data.strings.save.replace('[percent]', pct);
+      }
+
+      each('[data-gh-atc]', function (btn) { btn.disabled = !variant.available; });
+      each('[data-gh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
+      if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' · ' + b.label : '');
+
+      if (changedOption && variant.image) setHero(variant.image, variant.title);
+
+      if (window.history && window.history.replaceState && changedOption) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('variant', variant.id);
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+
+    root.addEventListener('change', function (e) {
+      if (e.target.closest('[data-gh-option]')) render(true);
+      else if (e.target.closest('[data-gh-bundle]')) render(false);
     });
-    var total = Math.round(PRICE * qty * (1 - pct / 100));
-    document.querySelectorAll('[data-pv-price]').forEach(function (e) { e.textContent = money(total); });
-    $('[data-pv-was]').textContent = money(WAS * qty);
-    $('[data-pv-save]').textContent = 'SAVE ' + Math.round((1 - total / (WAS * qty)) * 100) + '%';
-  }
-  pills.addEventListener('change', function (e) { setFace(+e.target.value); });
-  thumbs.addEventListener('click', function (e) { var b = e.target.closest('.gh-thumb'); if (b) setFace(+b.dataset.i); });
-  $('#pv-bundles').addEventListener('change', render);
-  render();
 
-  var sticky = $('#pv-sticky');
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) {
-      es.forEach(function (en) { sticky.classList.toggle('is-visible', !en.isIntersecting && en.boundingClientRect.top < 0); });
-    }).observe($('#pv-atc'));
+    each('[data-gh-submit-main]', function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (form.requestSubmit) form.requestSubmit(); else form.submit();
+      });
+    });
+
+    if (track && counter) {
+      var total = track.children.length;
+      track.addEventListener('scroll', function () {
+        var i = Math.round(track.scrollLeft / track.clientWidth) + 1;
+        counter.textContent = Math.min(i, total) + ' / ' + total;
+      }, { passive: true });
+    }
+
+    var sticky = root.querySelector('[data-gh-sticky]');
+    if (sticky && form) {
+      var ticking = false;
+      var updateSticky = function () {
+        ticking = false;
+        sticky.classList.toggle('is-visible', form.getBoundingClientRect().bottom < 0);
+      };
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; window.requestAnimationFrame(updateSticky); }
+      }, { passive: true });
+      updateSticky();
+    }
+
+    render(false);
   }
+
+  function boot() { document.querySelectorAll('[data-gh-root]').forEach(init); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  document.addEventListener('shopify:section:load', boot);
 })();
+
 </script>
 </body>
 </html>
