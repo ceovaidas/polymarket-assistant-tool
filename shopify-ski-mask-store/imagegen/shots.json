@@ -1,0 +1,28 @@
+{
+  "style": "Editorial outdoor-apparel photography, shot on 35mm film, natural sunlight, muted true-to-life colours, soft film grain, realistic skin and fabric texture, uncluttered composition, no text, no logos, no watermarks, no graphics",
+  "masks": {
+    "gramps": "a knitted ski balaclava whose face is knitted to look like a grumpy old man with wrinkles, bushy grey eyebrows and a big white moustache",
+    "cat": "a knitted ski balaclava whose face is knitted to look like a grey tabby cat with pointed ears on top",
+    "tiger": "a knitted ski balaclava whose face is knitted to look like an orange and black striped tiger with small rounded ears",
+    "corgi": "a knitted ski balaclava whose face is knitted to look like a tan and white corgi with tall pointed ears",
+    "elf": "a chunky crochet ski balaclava styled as a Christmas elf: green body, red zigzag collar, small gold bells and pointy knitted ears"
+  },
+  "shots": [
+    { "id": "gallery-01-{mask}", "for": "Product media (first image of each variant)", "aspect": "4:5", "each_mask": true,
+      "prompt": "A skier wearing {mask} with dark mirrored ski goggles, standing in a ski resort lift line, waist-up, looking straight into the camera, snowy mountains and chairlift softly blurred behind, bright clear winter day" },
+    { "id": "swatch-{mask}", "for": "Variant swatch image", "aspect": "1:1", "each_mask": true,
+      "prompt": "Studio product photo of {mask}, displayed on an invisible mannequin head, straight-on front view, centred, plain warm off-white background (#E8E4DB), soft even studio light, gentle shadow" },
+    { "id": "crew-{mask}", "for": "Crew block portrait", "aspect": "3:4", "each_mask": true,
+      "prompt": "Candid portrait of a snowboarder wearing {mask} and a helmet with goggles pushed up, sitting on a chairlift, mountain panorama behind, golden late-afternoon light" },
+    { "id": "gallery-02-group", "for": "Product media", "aspect": "4:5",
+      "prompt": "Five friends at a ski resort, each wearing a different funny knitted ski balaclava (old man with moustache, grey cat, tiger, corgi, Christmas elf), goggles on helmets, laughing and leaning together, chairlift station behind, sunny day, candid moment" },
+    { "id": "gallery-03-flatlay", "for": "Product media", "aspect": "4:5",
+      "prompt": "Top-down flat lay on fresh snow: {gramps_mask} folded neatly next to a black drawstring pouch and a pair of ski goggles, clean composition, soft daylight" },
+    { "id": "gallery-04-helmet", "for": "Product media", "aspect": "4:5",
+      "prompt": "Close-up side profile of a skier wearing {gramps_mask} under a matte black ski helmet with goggles, showing how the balaclava fits under the helmet, snowy background" },
+    { "id": "spec-detail", "for": "Spec section image", "aspect": "4:5",
+      "prompt": "Extreme macro close-up of thick double-layer knitted acrylic yarn on a ski balaclava, showing the soft brushed fleece lining at the edge of the eye opening, shallow depth of field, warm neutral tones" },
+    { "id": "final-banner", "for": "Final call-to-action background", "aspect": "16:9",
+      "prompt": "Wide shot of five skiers walking towards camera on a snowy slope at golden hour, each wearing a different funny knitted ski balaclava (old man, cat, tiger, corgi, elf), skis on shoulders, long shadows, cinematic, lots of empty sky in the upper half" }
+  ]
+}
