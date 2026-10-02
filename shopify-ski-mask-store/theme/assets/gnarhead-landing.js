@@ -1,4 +1,4 @@
-/* GNARHEAD landing — variant swatches, bundle selector, gallery, sticky add-to-cart.
+/* GNARHEAD landing — gallery slider, face swatches, bundles, crew "Choose" buttons, sticky add-to-cart.
    Pairs with sections/gnarhead-product-landing.liquid. No dependencies. */
 (function () {
   'use strict';
@@ -25,25 +25,38 @@
     var qtyInput = root.querySelector('[data-gh-qty]');
     var track = root.querySelector('[data-gh-track]');
     var hero = root.querySelector('[data-gh-hero]');
-    var counter = root.querySelector('[data-gh-count]');
     var stickySub = root.querySelector('[data-gh-sticky-sub]');
 
-    function selectedOptions() {
-      return Array.prototype.map.call(root.querySelectorAll('[data-gh-option]'), function (fs) {
-        var c = fs.querySelector('input:checked');
-        return c ? c.value : null;
-      });
-    }
+    function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
 
-    function findVariant(values) {
-      return variants.find(function (v) {
-        return v.options.every(function (opt, i) { return opt === values[i]; });
-      });
+    /* ---------- Gallery slider ---------- */
+    var slides = track ? track.children.length : 0;
+    function currentSlide() { return track ? Math.round(track.scrollLeft / track.clientWidth) : 0; }
+    function goTo(i) {
+      if (!track) return;
+      i = Math.max(0, Math.min(slides - 1, i));
+      track.scrollTo({ left: i * track.clientWidth });
     }
-
-    function bundle() {
-      var c = root.querySelector('[data-gh-bundle] input:checked');
-      return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.getAttribute('aria-label') } : { qty: 1, pct: 0, label: '' };
+    function markSlide() {
+      var i = currentSlide();
+      each('[data-gh-dots] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
+      each('[data-gh-thumbs] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
+    }
+    if (track) {
+      var raf = 0;
+      track.addEventListener('scroll', function () {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(markSlide);
+      }, { passive: true });
+      var prev = root.querySelector('[data-gh-prev]');
+      var next = root.querySelector('[data-gh-next]');
+      if (prev) prev.addEventListener('click', function () { goTo(currentSlide() - 1); });
+      if (next) next.addEventListener('click', function () {
+        var i = currentSlide();
+        goTo(i >= slides - 1 ? 0 : i + 1);
+      });
+      each('[data-gh-dots] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
+      each('[data-gh-thumbs] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
     }
 
     function setHero(src, alt) {
@@ -57,22 +70,39 @@
       img.removeAttribute('srcset');
       img.src = src;
       img.alt = alt || '';
-      if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+      goTo(0);
     }
 
-    // No product photos yet: mirror the selected swatch's illustration into the main image.
+    // No product photos yet: mirror the selected swatch's illustration into the first slide.
     function showSwatchArt() {
       var heroPh = hero && hero.querySelector('.gh-ph');
-      var swatch = root.querySelector('.gh-swatch input:checked');
-      var art = swatch && swatch.closest('.gh-swatch').querySelector('.gh-swatch__img');
-      if (!heroPh || !art || !art.querySelector('.gh-ph')) return;
-      heroPh.querySelector('svg') && heroPh.removeChild(heroPh.querySelector('svg'));
-      heroPh.insertBefore(art.querySelector('.gh-ph svg').cloneNode(true), heroPh.firstChild);
+      var checked = root.querySelector('.gh-swatch input:checked');
+      var art = checked && checked.closest('.gh-swatch').querySelector('.gh-swatch__img');
+      var svg = art && art.querySelector('.gh-ph svg');
+      if (!heroPh || !svg) return;
+      var old = heroPh.querySelector('svg');
+      if (old) heroPh.removeChild(old);
+      heroPh.insertBefore(svg.cloneNode(true), heroPh.firstChild);
       hero.style.setProperty('--tone', art.style.getPropertyValue('--tone'));
-      if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+      goTo(0);
     }
 
-    function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
+    /* ---------- Variants & bundles ---------- */
+    function selectedOptions() {
+      return Array.prototype.map.call(root.querySelectorAll('[data-gh-option]'), function (fs) {
+        var c = fs.querySelector('input:checked');
+        return c ? c.value : null;
+      });
+    }
+    function findVariant(values) {
+      return variants.find(function (v) {
+        return v.options.every(function (opt, i) { return opt === values[i]; });
+      });
+    }
+    function bundle() {
+      var c = root.querySelector('[data-gh-bundle] input:checked');
+      return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.dataset.label || '' } : { qty: 1, pct: 0, label: '' };
+    }
 
     function render(changedOption) {
       var values = selectedOptions();
@@ -93,10 +123,10 @@
       var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
       each('[data-gh-bundle] input', function (input) {
         var q = +input.value || 1;
-        var total = Math.round(variant.price * q * (1 - (+input.dataset.pct || 0) / 100));
+        var t = Math.round(variant.price * q * (1 - (+input.dataset.pct || 0) / 100));
         var row = input.nextElementSibling;
-        row.querySelector('[data-gh-bundle-now]').textContent = money(total, data.moneyFormat);
-        row.querySelector('[data-gh-bundle-was]').textContent = base * q > total ? money(base * q, data.moneyFormat) : '';
+        row.querySelector('[data-gh-bundle-now]').textContent = money(t, data.moneyFormat);
+        row.querySelector('[data-gh-bundle-was]').textContent = base * q > t ? money(base * q, data.moneyFormat) : '';
       });
 
       var total = Math.round(variant.price * b.qty * (1 - b.pct / 100));
@@ -114,21 +144,34 @@
 
       each('[data-gh-atc]', function (btn) { btn.disabled = !variant.available; });
       each('[data-gh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
-      if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' · ' + b.label : '');
+      if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' × ' + b.qty : '');
 
-      if (changedOption && variant.image) setHero(variant.image, variant.title);
-      else if (changedOption) showSwatchArt();
-
-      if (window.history && window.history.replaceState && changedOption) {
-        var url = new URL(window.location.href);
-        url.searchParams.set('variant', variant.id);
-        window.history.replaceState({}, '', url.toString());
+      if (changedOption) {
+        if (variant.image) setHero(variant.image, variant.title); else showSwatchArt();
+        if (window.history && window.history.replaceState) {
+          var url = new URL(window.location.href);
+          url.searchParams.set('variant', variant.id);
+          window.history.replaceState({}, '', url.toString());
+        }
       }
     }
 
     root.addEventListener('change', function (e) {
       if (e.target.closest('[data-gh-option]')) render(true);
       else if (e.target.closest('[data-gh-bundle]')) render(false);
+    });
+
+    /* ---------- Crew "Choose" buttons ---------- */
+    each('[data-gh-pick]', function (btn) {
+      btn.addEventListener('click', function () {
+        var value = btn.dataset.ghPick;
+        var input = Array.prototype.find.call(root.querySelectorAll('[data-gh-option] input'), function (i) { return i.value === value; });
+        if (!input) return;
+        input.checked = true;
+        render(true);
+        var target = root.querySelector('.gh-gallery') || form;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     each('[data-gh-submit-main]', function (btn) {
@@ -138,14 +181,7 @@
       });
     });
 
-    if (track && counter) {
-      var total = track.children.length;
-      track.addEventListener('scroll', function () {
-        var i = Math.round(track.scrollLeft / track.clientWidth) + 1;
-        counter.textContent = Math.min(i, total) + ' / ' + total;
-      }, { passive: true });
-    }
-
+    /* ---------- Sticky bar (shown once the main button has scrolled away) ---------- */
     var sticky = root.querySelector('[data-gh-sticky]');
     if (sticky && form) {
       var ticking = false;

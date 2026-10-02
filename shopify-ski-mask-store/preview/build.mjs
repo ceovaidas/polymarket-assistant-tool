@@ -83,26 +83,29 @@ const html = `<!doctype html>
 <meta name="description" content="Design preview of the GNARHEAD one-product Shopify page, rendered from the real section code.">
 <style>
 ${css}
-/* preview-only stand-ins for the theme's announcement bar and header */
-body { margin: 0; background: #f2efe8; }
-.pv-head { position: sticky; top: 0; z-index: 30; background: var(--paper); border-bottom: 1px solid var(--line); }
-.pv-head__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 60px; }
-.pv-nav { display: none; gap: 28px; }
+/* preview-only stand-in for the theme header (Dawn renders its own) */
+body { margin: 0; background: #fff; }
+.pv-head { position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid var(--line); }
+.pv-head__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; }
+.pv-nav { display: none; gap: 26px; font-weight: 600; font-size: 15px; }
 .pv-nav a { text-decoration: none; }
-@media (min-width: 990px) { .pv-nav { display: flex; } .pv-burger { display: none; } }
-@media (max-width: 749px) { .pv-search { display: none; } }
-.pv-logo { font-size: 26px; letter-spacing: .02em; text-decoration: none; }
-.pv-cart { justify-self: end; display: flex; gap: 20px; align-items: center; }
-.pv-burger { display: inline-block; width: 22px; height: 10px; border-top: 1.5px solid; border-bottom: 1.5px solid; }
+@media (min-width: 990px) { .pv-nav { display: flex; } .pv-burger { display: none !important; } }
+.pv-logo { font-weight: 900; font-size: 28px; letter-spacing: -.04em; text-decoration: none; }
+.pv-logo span { color: var(--pop); }
+.pv-icons { justify-self: end; display: flex; gap: 18px; }
+.pv-icons svg { width: 24px; height: 24px; }
+.pv-burger { display: inline-block; width: 24px; height: 12px; border-top: 2.5px solid; border-bottom: 2.5px solid; border-radius: 1px; }
 </style>
 </head>
 <body>
 <div class="gh">
-  <div class="gh-announce gh-mono">Free shipping on 2+ masks — 30-day returns</div>
   <header class="pv-head"><div class="gh-wrap pv-head__in">
-    <div><span class="pv-burger" aria-hidden="true"></span><nav class="pv-nav gh-mono"><a href="#">Shop</a><a href="#">The crew</a><a href="#">FAQ</a></nav></div>
-    <a class="pv-logo gh-display" href="#">Gnarhead</a>
-    <div class="pv-cart gh-mono"><span class="pv-search">Search</span><span>Cart (0)</span></div>
+    <div><span class="pv-burger" aria-hidden="true"></span><nav class="pv-nav"><a href="#">Shop</a><a href="#">The Crew</a><a href="#">FAQ</a></nav></div>
+    <a class="pv-logo" href="#">gnarhead<span>.</span></a>
+    <div class="pv-icons" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
+    </div>
   </div></header>
 </div>
 ${cleaned}

@@ -8,7 +8,8 @@
           "settings": {
             "name": "Gramps",
             "line": "Wrinkles, moustache, zero patience for slow skiers.",
-            "art": "gramps"
+            "art": "gramps",
+            "option_value": "Gramps"
           }
         },
         "char_2": {
@@ -16,7 +17,8 @@
           "settings": {
             "name": "The Cat",
             "line": "Nine lives. Spends most of them in the terrain park.",
-            "art": "cat"
+            "art": "cat",
+            "option_value": "The Cat"
           }
         },
         "char_3": {
@@ -24,7 +26,8 @@
           "settings": {
             "name": "Tiger",
             "line": "Apex predator of the beginner slope.",
-            "art": "tiger"
+            "art": "tiger",
+            "option_value": "Tiger"
           }
         },
         "char_4": {
@@ -32,7 +35,8 @@
           "settings": {
             "name": "Corgi",
             "line": "Short legs. Big send energy.",
-            "art": "corgi"
+            "art": "corgi",
+            "option_value": "Corgi"
           }
         },
         "char_5": {
@@ -40,7 +44,8 @@
           "settings": {
             "name": "The Elf",
             "line": "Seasonal release. Santa didn't approve this.",
-            "art": "elf"
+            "art": "elf",
+            "option_value": "The Elf"
           }
         },
         "spec_1": {
@@ -88,7 +93,7 @@
         "feat_1": {
           "type": "feature",
           "settings": {
-            "icon": "thermo",
+            "icon": "snow",
             "title": "Actually warm",
             "text": "Made for cold chairlifts, not just for photos."
           }
@@ -115,34 +120,6 @@
             "icon": "gift",
             "title": "Gift-ready",
             "text": "Ships in a drawstring pouch, ready to wrap."
-          }
-        },
-        "video_1": {
-          "type": "video",
-          "settings": {
-            "caption": "Gramps drops in",
-            "tag": "Gramps"
-          }
-        },
-        "video_2": {
-          "type": "video",
-          "settings": {
-            "caption": "The lift line had questions",
-            "tag": "The Cat"
-          }
-        },
-        "video_3": {
-          "type": "video",
-          "settings": {
-            "caption": "Tiger on the T-bar",
-            "tag": "Tiger"
-          }
-        },
-        "video_4": {
-          "type": "video",
-          "settings": {
-            "caption": "Corgi meets the rail",
-            "tag": "Corgi"
           }
         },
         "faq_1": {
@@ -193,6 +170,48 @@
             "question": "How do I wash it?",
             "answer": "<p>Hand wash in cold water and lay flat to dry. Don't tumble dry.</p>"
           }
+        },
+        "compare_1": {
+          "type": "compare",
+          "settings": {
+            "label": "Gets you noticed in the lift line",
+            "them": false
+          }
+        },
+        "compare_2": {
+          "type": "compare",
+          "settings": {
+            "label": "Warm, breathable knit",
+            "them": true
+          }
+        },
+        "compare_3": {
+          "type": "compare",
+          "settings": {
+            "label": "Goggle-friendly eye opening",
+            "them": false
+          }
+        },
+        "compare_4": {
+          "type": "compare",
+          "settings": {
+            "label": "Fits under a helmet",
+            "them": true
+          }
+        },
+        "compare_5": {
+          "type": "compare",
+          "settings": {
+            "label": "Instant group-photo upgrade",
+            "them": false
+          }
+        },
+        "compare_6": {
+          "type": "compare",
+          "settings": {
+            "label": "Gift-ready pouch",
+            "them": false
+          }
         }
       },
       "block_order": [
@@ -211,10 +230,12 @@
         "feat_2",
         "feat_3",
         "feat_4",
-        "video_1",
-        "video_2",
-        "video_3",
-        "video_4",
+        "compare_1",
+        "compare_2",
+        "compare_3",
+        "compare_4",
+        "compare_5",
+        "compare_6",
         "faq_1",
         "faq_2",
         "faq_3",

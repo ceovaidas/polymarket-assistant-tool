@@ -58,7 +58,8 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
    - `Assets` → *Add a new asset* → įkelk `theme/assets/gnarhead-landing.css` ir `gnarhead-landing.js`
    - `Snippets` → *Add a new snippet* → pavadink `gnarhead-icon` → įklijuok `theme/snippets/gnarhead-icon.liquid` (piktogramos — būtina)
    - `Snippets` → *Add a new snippet* → pavadink `gnarhead-art` → įklijuok `theme/snippets/gnarhead-art.liquid` (iliustracijos — būtina)
-   - Kol neįkėlei nuotraukų, puslapyje rodomos iliustracijos; techniniai užrašai („upload…“) matosi tik redaktoriuje. Video blokas atsiranda tik įkėlus bent vieną video.
+   - Kol neįkėlei nuotraukų, puslapyje rodomos iliustracijos; techniniai užrašai („upload…“) matosi tik redaktoriuje. Video blokas atsiranda tik pridėjus „Video“ bloką su video ar nuotrauka.
+   - Veidų kortelių mygtukai „Choose …“ pasirenka variantą pagal lauką *Variant value to select* – jis turi tiksliai sutapti su Face reikšme (pvz. `The Cat`).
    - `Sections` → *Add a new section* → pavadink `gnarhead-product-landing` → įklijuok `.liquid` turinį
    - `Templates` → *Add a new template* → tipas `product`, pavadinimas `landing`, JSON → įklijuok `product.landing.json`
 4. **Produktas:** Products → Add product
@@ -73,11 +74,11 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 6. **Nemokamas pristatymas nuo 2 vnt.:** Settings → Shipping → pridėk tarifą „Free shipping“ su sąlyga *minimum quantity / order price ≥ $60*.
 7. **Pagrindinis puslapis = produktas:** paprasčiausia – Navigation meniu pašalink viską, o Online Store → Preferences / Theme customizer pradžios puslapyje įdėk „Featured product“ arba nukreipk reklamas tiesiai į `/products/funny-ski-mask`. Shopify neleidžia peradresuoti `/`, todėl visas reklamas ir „link in bio“ nukreipk į produkto URL.
 8. **Temos išvaizda, kad viskas atrodytų vientisa** (Theme settings Customizer'yje):
-   - *Colors → Scheme 1*: Background `#F2EFE8`, Text `#141414`, Solid button `#141414`. *Scheme 2* (juoda): Background `#141414`, Text `#F2EFE8`.
-   - *Typography*: Headings – **Archivo Narrow** (Bold), Body – **Inter**.
-   - *Announcement bar* → Scheme 2, tekstas: `FREE SHIPPING ON 2+ MASKS — 30-DAY RETURNS`.
+   - *Colors → Scheme 1*: Background `#FFFFFF`, Text `#10183A`, Solid button `#FF6B2C`, button label `#FFFFFF`. *Scheme 2* (tamsi): Background `#0F1838`, Text `#FFFFFF`.
+   - *Typography*: Headings ir Body – **Rubik** (puslapis naudoja tą patį šriftą).
+   - *Announcement bar*: išjunk – puslapis turi savo bėgančią juostą (keičiama sekcijos nustatymuose „Scrolling top bar“).
    - *Header*: logo centre, meniu kairėje, „Sticky header“ – on scroll up.
-   - *Buttons*: corner radius 0, shadow 0. *Product cards / Inputs*: corner radius 0.
+   - *Buttons*: corner radius 16. *Product cards / Inputs*: corner radius 14.
    - **Logotipas:** iki tikro logotipo – tekstinis „GNARHEAD“. Vėliau užsisakyk wordmark'ą (Fiverr/Dribbble dizaineris, $50–150) siaurame storame šrifte, kaip puslapio antraštės.
 9. **Atsiliepimai:** įdiek **Judge.me** (nemokamas). Jis užpildo `reviews.rating` metalaukus → žvaigždutės viršuje atsiras automatiškai. Iki tol žvaigždučių neberodo – tyčia.
 10. **Policies:** Settings → Policies → sugeneruok Refund/Privacy/Terms/Shipping, papildyk iš copy failo.
@@ -99,7 +100,7 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 
 ## 5. Turinys su AI (tavo pagrindinis ginklas)
 ### Kodėl nuotraukos svarbiausios
-Puslapio dizainas sąmoningai ramus (smėlio fonas, juoda, viena oranžinė spalva) – kad **nuotraukos** būtų žvaigždė. Pigų „AI“ įspūdį dažniausiai sukuria ne maketas, o nuotraukos: kiekviena kitokio stiliaus, persotintos spalvos, tekstas ant paveikslėlių. Taisyklės:
+Puslapis ryškus (tamsiai mėlyna, kobalto mėlyna, oranžinis pirkimo mygtukas), todėl nuotraukos turi būti švarios ir natūralios – kad viskas kartu neatrodytų perkrauta. Pigų „AI“ įspūdį dažniausiai sukuria ne maketas, o nuotraukos: kiekviena kitokio stiliaus, persotintos spalvos, tekstas ant paveikslėlių. Taisyklės:
 - **Vienas stilius visoms:** tas pats šviesos tipas (saulėta diena, natūralios spalvos), ta pati kameros „nuotaika“ (lyg telefonu ar 35 mm juosta).
 - **Jokio teksto ir ženkliukų ant nuotraukų** – tekstą rašo puslapis.
 - **Fonai neperkrauti:** sniegas, keltuvo eilė, medinė kalnų kavinė.
