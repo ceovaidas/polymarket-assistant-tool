@@ -1,0 +1,484 @@
+{%- comment -%}
+  GNARHEAD — one-product landing section.
+  Drop into any Online Store 2.0 theme (Dawn, Sense, Craft, Refresh…).
+  Assign the "product.landing" template to your ski mask product.
+  Everything below the buy box is built from blocks you can edit in the theme editor.
+{%- endcomment -%}
+
+{{ 'gnarhead-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gnarhead-landing.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
+  assign featured = current_variant.featured_media | default: product.featured_media
+-%}
+
+<div class="gh" data-gh-root id="gh-{{ section.id }}">
+
+  {%- if section.settings.ticker != blank -%}
+    {%- assign ticker_items = section.settings.ticker | split: '|' -%}
+    <div class="gh-ticker" aria-label="{{ section.settings.ticker | replace: '|', ' · ' | escape }}">
+      <div class="gh-ticker__track" aria-hidden="true">
+        {%- for i in (1..2) -%}
+          {%- for item in ticker_items -%}<span>{{ item | strip }}</span>{%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============ HERO / BUY BOX ============ {%- endcomment -%}
+  <section class="gh-hero">
+    <div class="gh-wrap gh-hero__grid">
+
+      <div class="gh-gallery">
+        <div class="gh-gallery__frame">
+        <div class="gh-gallery__main" data-gh-main>
+          {%- if featured -%}
+            {{ featured | image_url: width: 1400 | image_tag: loading: 'eager', sizes: '(min-width: 900px) 55vw, 100vw', alt: featured.alt | default: product.title }}
+          {%- else -%}
+            <div class="gh-ph"><div class="gh-ph__emoji">🤪</div><div class="gh-ph__goggles"></div><span class="gh-ph__note">Upload product photos in Shopify admin</span></div>
+          {%- endif -%}
+        </div>
+
+        <div class="gh-gallery__badges">
+          {%- for i in (1..4) -%}
+            {%- capture key -%}badge_{{ i }}{%- endcapture -%}
+            {%- if section.settings[key] != blank -%}<span class="gh-badge">{{ section.settings[key] }}</span>{%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.sticker != blank -%}
+          <div class="gh-gallery__sticker">{{ section.settings.sticker | newline_to_br }}</div>
+        {%- endif -%}
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="gh-thumbs">
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                {%- assign src = media | image_url: width: 1400 -%}
+                <button type="button" class="gh-thumb" data-gh-thumb data-src="{{ src }}" data-alt="{{ media.alt | escape }}" aria-current="{% if media.id == featured.id %}true{% else %}false{% endif %}" aria-label="Show image {{ forloop.index }}">
+                  {{ media | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="gh-info">
+        {%- if rating != blank -%}
+          <div class="gh-info__rating">
+            <span class="gh-stars" aria-hidden="true">★★★★★</span>
+            <span>{{ rating.rating | round: 1 }}/5 · {{ rating_count }} reviews</span>
+          </div>
+        {%- endif -%}
+
+        <h1 class="gh-info__title">{{ product.title }}</h1>
+        {%- if section.settings.subtitle != blank -%}<p class="gh-info__sub">{{ section.settings.subtitle }}</p>{%- endif -%}
+
+        <div class="gh-price">
+          <span class="gh-price__now" data-gh-price>{{ current_variant.price | money }}</span>
+          <s class="gh-price__was" data-gh-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+          <span class="gh-price__save" data-gh-save hidden></span>
+        </div>
+
+        {%- if section.settings.hook != blank -%}<div class="gh-hook">{{ section.settings.hook }}</div>{%- endif -%}
+
+        {%- assign gh_form_id = 'gh-form-' | append: section.id -%}
+        {%- form 'product', product, id: gh_form_id, data-gh-form: 'true' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-gh-variant-id>
+          <input type="hidden" name="quantity" value="1" data-gh-qty>
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign option_index = forloop.index0 -%}
+              <fieldset class="gh-option" data-gh-option>
+                <legend class="gh-option__label">{{ option.name }}: <span data-gh-option-value="{{ option_index }}">{{ option.selected_value }}</span></legend>
+                <div class="gh-pills">
+                  {%- for value in option.values -%}
+                    <div class="gh-pill">
+                      <input type="radio" id="gh-{{ section.id }}-{{ option_index }}-{{ forloop.index0 }}" name="gh-opt-{{ option_index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                      <label for="gh-{{ section.id }}-{{ option_index }}-{{ forloop.index0 }}">{{ value }}</label>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          {%- if section.settings.show_bundles -%}
+            <fieldset class="gh-option" style="margin-bottom:0">
+              <legend class="gh-option__label">{{ section.settings.bundle_heading }}</legend>
+              <div class="gh-bundles" data-gh-bundle>
+                {%- for i in (1..3) -%}
+                  {%- capture k_label -%}bundle_{{ i }}_label{%- endcapture -%}
+                  {%- capture k_note -%}bundle_{{ i }}_note{%- endcapture -%}
+                  {%- capture k_pct -%}bundle_{{ i }}_pct{%- endcapture -%}
+                  {%- capture k_tag -%}bundle_{{ i }}_tag{%- endcapture -%}
+                  <div class="gh-bundle">
+                    <input type="radio" name="gh-bundle-{{ section.id }}" id="gh-b-{{ section.id }}-{{ i }}" value="{{ i }}" data-pct="{{ section.settings[k_pct] }}" {% if i == section.settings.bundle_default %}checked{% endif %}>
+                    <label for="gh-b-{{ section.id }}-{{ i }}">
+                      <span class="gh-bundle__dot"></span>
+                      <span><span class="gh-bundle__name">{{ section.settings[k_label] }}</span><br><span class="gh-bundle__note">{{ section.settings[k_note] }}</span></span>
+                      <span class="gh-bundle__price"><span data-gh-bundle-now></span><s data-gh-bundle-was></s></span>
+                    </label>
+                    {%- if section.settings[k_tag] != blank -%}<span class="gh-bundle__tag">{{ section.settings[k_tag] }}</span>{%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endif -%}
+
+          <div class="gh-stock"><span class="gh-stock__dot"></span>{{ section.settings.stock_line }}</div>
+
+          <button type="submit" name="add" class="gh-atc" data-gh-atc {% unless current_variant.available %}disabled{% endunless %}>
+            {%- if current_variant.available -%}{{ section.settings.atc_label }}{%- else -%}Sold out{%- endif -%}
+          </button>
+          {{ form | payment_terms }}
+        {%- endform -%}
+
+        <div class="gh-assure">
+          <div><b>🚚</b>{{ section.settings.assure_1 }}</div>
+          <div><b>↩️</b>{{ section.settings.assure_2 }}</div>
+          <div><b>🔒</b>{{ section.settings.assure_3 }}</div>
+        </div>
+
+        <div class="gh-acc">
+          <details open>
+            <summary>Why riders love it</summary>
+            <div class="gh-acc__body">{{ product.description }}</div>
+          </details>
+          {%- if section.settings.specs != blank -%}
+            <details><summary>Material &amp; fit</summary><div class="gh-acc__body">{{ section.settings.specs }}</div></details>
+          {%- endif -%}
+          {%- if section.settings.shipping_info != blank -%}
+            <details><summary>Shipping &amp; returns</summary><div class="gh-acc__body">{{ section.settings.shipping_info }}</div></details>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- if section.settings.strip != blank -%}
+    <div class="gh-strip"><div class="gh-wrap gh-strip__row">
+      {%- assign strip_items = section.settings.strip | split: '|' -%}
+      {%- for s in strip_items -%}<span>{{ s | strip }}</span>{%- endfor -%}
+    </div></div>
+  {%- endif -%}
+
+  {%- comment -%} ============ BLOCK-DRIVEN SECTIONS ============ {%- endcomment -%}
+  {%- liquid
+    assign chars = section.blocks | where: 'type', 'character'
+    assign features = section.blocks | where: 'type', 'feature'
+    assign videos = section.blocks | where: 'type', 'video'
+    assign steps = section.blocks | where: 'type', 'step'
+    assign reviews = section.blocks | where: 'type', 'review'
+    assign faqs = section.blocks | where: 'type', 'faq'
+  -%}
+
+  {%- if chars.size > 0 -%}
+    <section class="gh-section gh-section--yellow">
+      <div class="gh-wrap gh-center">
+        <span class="gh-eyebrow">{{ section.settings.lineup_eyebrow }}</span>
+        <h2 class="gh-h2">{{ section.settings.lineup_heading }}</h2>
+        <p class="gh-lead">{{ section.settings.lineup_text }}</p>
+        <div class="gh-lineup">
+          {%- for block in chars -%}
+            <div class="gh-char" {{ block.shopify_attributes }}>
+              <div class="gh-char__img">
+                {%- if block.settings.image -%}
+                  {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                {%- else -%}
+                  <div class="gh-ph" style="--ph-a:#ffffff;--ph-b:{{ block.settings.color }}"><div class="gh-ph__emoji">{{ block.settings.emoji }}</div></div>
+                {%- endif -%}
+              </div>
+              <div class="gh-char__body">
+                <div class="gh-char__name">{{ block.settings.name }}</div>
+                <div class="gh-char__vibe">{{ block.settings.vibe }}</div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if features.size > 0 -%}
+    <section class="gh-section">
+      <div class="gh-wrap gh-center">
+        <span class="gh-eyebrow">{{ section.settings.features_eyebrow }}</span>
+        <h2 class="gh-h2">{{ section.settings.features_heading }}</h2>
+        <div class="gh-features" style="text-align:left">
+          {%- for block in features -%}
+            <div class="gh-feature" {{ block.shopify_attributes }}>
+              <div class="gh-feature__icon" aria-hidden="true">{{ block.settings.icon }}</div>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if videos.size > 0 -%}
+    <section class="gh-section gh-section--ink">
+      <div class="gh-wrap gh-center">
+        <span class="gh-eyebrow">{{ section.settings.ugc_eyebrow }}</span>
+        <h2 class="gh-h2">{{ section.settings.ugc_heading }}</h2>
+        <p class="gh-lead">{{ section.settings.ugc_text }}</p>
+        <div class="gh-ugc">
+          {%- for block in videos -%}
+            <div class="gh-ugc__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.video -%}
+                {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, image_size: '540x' }}
+              {%- elsif block.settings.poster -%}
+                {{ block.settings.poster | image_url: width: 540 | image_tag: loading: 'lazy', alt: block.settings.caption }}
+                <span class="gh-ugc__play" aria-hidden="true">▶</span>
+              {%- else -%}
+                <div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🎿</div></div>
+                <span class="gh-ugc__play" aria-hidden="true">▶</span>
+              {%- endif -%}
+              {%- if block.settings.caption != blank -%}<div class="gh-ugc__cap">{{ block.settings.caption }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if section.settings.show_compare -%}
+    <section class="gh-section">
+      <div class="gh-wrap gh-center">
+        <span class="gh-eyebrow">The difference</span>
+        <h2 class="gh-h2">{{ section.settings.compare_heading }}</h2>
+        <table class="gh-compare">
+          <thead><tr><th scope="col"></th><th scope="col" class="gh-compare__us">{{ shop.name }}</th><th scope="col">Boring balaclava</th></tr></thead>
+          <tbody>
+            <tr><td>Gets you noticed in the lift line</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+            <tr><td>Warm, breathable knit</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-yes">✓</span></td></tr>
+            <tr><td>Goggle-friendly eye opening</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+            <tr><td>Instant group-photo upgrade</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+            <tr><td>Gift-ready</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if steps.size > 0 -%}
+    <section class="gh-section gh-section--ink">
+      <div class="gh-wrap">
+        <div class="gh-center"><span class="gh-eyebrow">{{ section.settings.steps_eyebrow }}</span><h2 class="gh-h2">{{ section.settings.steps_heading }}</h2></div>
+        <div class="gh-steps">
+          {%- for block in steps -%}
+            <div class="gh-step" {{ block.shopify_attributes }}><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if reviews.size > 0 -%}
+    <section class="gh-section">
+      <div class="gh-wrap gh-center">
+        <span class="gh-eyebrow">Real riders</span>
+        <h2 class="gh-h2">{{ section.settings.reviews_heading }}</h2>
+        <div class="gh-reviews" style="text-align:left">
+          {%- for block in reviews -%}
+            <div class="gh-review" {{ block.shopify_attributes }}>
+              <div class="gh-review__head"><span class="gh-review__name">{{ block.settings.name }}</span><span class="gh-review__verified">✓ Verified buyer</span></div>
+              <div class="gh-stars" aria-label="5 out of 5 stars">★★★★★</div>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if section.settings.guarantee_heading != blank -%}
+    <section class="gh-section gh-section--yellow">
+      <div class="gh-wrap gh-guarantee">
+        <div class="gh-seal">{{ section.settings.guarantee_seal | newline_to_br }}</div>
+        <div>
+          <h2 class="gh-h2">{{ section.settings.guarantee_heading }}</h2>
+          <p class="gh-lead" style="color:var(--gh-ink)">{{ section.settings.guarantee_text }}</p>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if faqs.size > 0 -%}
+    <section class="gh-section">
+      <div class="gh-wrap">
+        <div class="gh-center"><span class="gh-eyebrow">FAQ</span><h2 class="gh-h2">{{ section.settings.faq_heading }}</h2></div>
+        <div class="gh-faq">
+          {%- for block in faqs -%}
+            <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="gh-faq__a">{{ block.settings.answer }}</div></details>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <section class="gh-section gh-section--yellow gh-final">
+    <div class="gh-wrap">
+      <h2 class="gh-h2">{{ section.settings.final_heading }}</h2>
+      <p class="gh-lead" style="margin:0 auto;color:var(--gh-ink)">{{ section.settings.final_text }}</p>
+      <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>{{ section.settings.atc_label }}</button>
+    </div>
+  </section>
+
+  <div class="gh-sticky" data-gh-sticky>
+    <div class="gh-sticky__info">
+      <div class="gh-sticky__title">{{ product.title }}</div>
+      <div class="gh-sticky__price" data-gh-price>{{ current_variant.price | money }}</div>
+    </div>
+    <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>{{ section.settings.atc_label }}</button>
+  </div>
+
+  <script type="application/json" data-gh-json>
+    {
+      "moneyFormat": {{ shop.money_format | json }},
+      "strings": {
+        "addToCart": {{ section.settings.atc_label | json }},
+        "soldOut": "Sold out",
+        "unavailable": "Unavailable",
+        "save": "SAVE [percent]%"
+      },
+      "variants": [
+        {%- for v in product.variants -%}
+          {
+            "id": {{ v.id }},
+            "name": {{ v.title | json }},
+            "options": {{ v.options | json }},
+            "price": {{ v.price }},
+            "compare_at_price": {{ v.compare_at_price | default: 0 }},
+            "available": {{ v.available }},
+            "featured_image": {% if v.featured_media %}{{ v.featured_media | image_url: width: 1400 | json }}{% else %}null{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "GNARHEAD landing",
+  "tag": "section",
+  "class": "gh-section-wrapper",
+  "settings": [
+    { "type": "header", "content": "Top bar" },
+    { "type": "text", "id": "ticker", "label": "Scrolling ticker (separate with |)", "default": "❄️ Free shipping on 2+ masks|🎁 The gift they'll actually wear|🔥 Q4 drop is live|↩️ 30-day happy-face guarantee" },
+
+    { "type": "header", "content": "Buy box" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "The ski mask that turns every lift line into a show." },
+    { "type": "text", "id": "hook", "label": "Hook line", "default": "😂 Warning: strangers WILL ask for selfies." },
+    { "type": "text", "id": "badge_1", "label": "Image badge 1", "default": "🧶 Premium knit" },
+    { "type": "text", "id": "badge_2", "label": "Image badge 2", "default": "❄️ Keeps you warm" },
+    { "type": "text", "id": "badge_3", "label": "Image badge 3", "default": "🥽 Goggle-friendly" },
+    { "type": "text", "id": "badge_4", "label": "Image badge 4", "default": "🌍 One size fits most" },
+    { "type": "textarea", "id": "sticker", "label": "Round sticker on image", "default": "FALL\nDROP\n2026" },
+    { "type": "checkbox", "id": "show_bundles", "label": "Show bundle selector", "default": true },
+    { "type": "text", "id": "bundle_heading", "label": "Bundle heading", "default": "Bring the crew & save" },
+    { "type": "range", "id": "bundle_default", "label": "Pre-selected bundle", "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "text", "id": "bundle_1_label", "label": "Bundle 1 label", "default": "1 Mask" },
+    { "type": "text", "id": "bundle_1_note", "label": "Bundle 1 note", "default": "Solo legend" },
+    { "type": "range", "id": "bundle_1_pct", "label": "Bundle 1 discount %", "min": 0, "max": 50, "step": 1, "default": 0, "info": "Must match the automatic discount set in Shopify → Discounts." },
+    { "type": "text", "id": "bundle_1_tag", "label": "Bundle 1 tag" },
+    { "type": "text", "id": "bundle_2_label", "label": "Bundle 2 label", "default": "2 Masks" },
+    { "type": "text", "id": "bundle_2_note", "label": "Bundle 2 note", "default": "You + your ride-or-die · Free shipping" },
+    { "type": "range", "id": "bundle_2_pct", "label": "Bundle 2 discount %", "min": 0, "max": 50, "step": 1, "default": 15 },
+    { "type": "text", "id": "bundle_2_tag", "label": "Bundle 2 tag", "default": "Most popular" },
+    { "type": "text", "id": "bundle_3_label", "label": "Bundle 3 label", "default": "3 Masks" },
+    { "type": "text", "id": "bundle_3_note", "label": "Bundle 3 note", "default": "Full squad · Free shipping" },
+    { "type": "range", "id": "bundle_3_pct", "label": "Bundle 3 discount %", "min": 0, "max": 50, "step": 1, "default": 25 },
+    { "type": "text", "id": "bundle_3_tag", "label": "Bundle 3 tag", "default": "Best value" },
+    { "type": "text", "id": "stock_line", "label": "Stock / shipping line", "default": "In stock — ships within 1–3 business days" },
+    { "type": "text", "id": "atc_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "text", "id": "assure_1", "label": "Assurance 1", "default": "Tracked shipping" },
+    { "type": "text", "id": "assure_2", "label": "Assurance 2", "default": "30-day returns" },
+    { "type": "text", "id": "assure_3", "label": "Assurance 3", "default": "Secure checkout" },
+    { "type": "richtext", "id": "specs", "label": "Material & fit", "default": "<p>Soft acrylic knit with a fleece-lined face panel. Wide goggle-friendly eye opening, breathable mouth zone. One size fits most adults (head 54–62 cm). Hand wash cold, lay flat to dry.</p>" },
+    { "type": "richtext", "id": "shipping_info", "label": "Shipping & returns", "default": "<p>Orders ship within 1–3 business days with tracking. Delivery to US/CA/EU usually takes 6–12 business days. Not loving it? Return within 30 days of delivery.</p>" },
+    { "type": "text", "id": "strip", "label": "Trust strip (separate with |)", "default": "⭐ Loved on TikTok|🎿 Built for the slopes|🎁 Gift-ready packaging|💬 Real human support" },
+
+    { "type": "header", "content": "Section headings" },
+    { "type": "text", "id": "lineup_eyebrow", "label": "Lineup eyebrow", "default": "Pick your alter ego" },
+    { "type": "text", "id": "lineup_heading", "label": "Lineup heading", "default": "Meet the Gnar Crew" },
+    { "type": "text", "id": "lineup_text", "label": "Lineup text", "default": "Five faces. Zero chill. Mix them up for the group chat photo of the season." },
+    { "type": "text", "id": "features_eyebrow", "label": "Features eyebrow", "default": "Not just a costume" },
+    { "type": "text", "id": "features_heading", "label": "Features heading", "default": "Funny face. Serious mask." },
+    { "type": "text", "id": "ugc_eyebrow", "label": "Video wall eyebrow", "default": "Spotted on the mountain" },
+    { "type": "text", "id": "ugc_heading", "label": "Video wall heading", "default": "The internet can't stop watching" },
+    { "type": "text", "id": "ugc_text", "label": "Video wall text", "default": "Tag @gnarhead for a chance to be featured." },
+    { "type": "checkbox", "id": "show_compare", "label": "Show comparison table", "default": true },
+    { "type": "text", "id": "compare_heading", "label": "Comparison heading", "default": "Why settle for a boring balaclava?" },
+    { "type": "text", "id": "steps_eyebrow", "label": "Steps eyebrow", "default": "How it works" },
+    { "type": "text", "id": "steps_heading", "label": "Steps heading", "default": "From checkout to chairlift legend" },
+    { "type": "text", "id": "reviews_heading", "label": "Reviews heading", "default": "What the crew says" },
+    { "type": "textarea", "id": "guarantee_seal", "label": "Guarantee seal", "default": "30-DAY\nHAPPY FACE\nGUARANTEE" },
+    { "type": "text", "id": "guarantee_heading", "label": "Guarantee heading", "default": "If it doesn't make you laugh, it's on us." },
+    { "type": "textarea", "id": "guarantee_text", "label": "Guarantee text", "default": "Try it on, wear it on the slopes, show your friends. If you're not grinning, send it back within 30 days for a full refund. No awkward questions." },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Questions? We've got answers." },
+    { "type": "text", "id": "final_heading", "label": "Final CTA heading", "default": "Don't be the boring one in the group photo." },
+    { "type": "text", "id": "final_text", "label": "Final CTA text", "default": "Grab your face before the season sells it out." }
+  ],
+  "blocks": [
+    {
+      "type": "character", "name": "Character", "limit": 10,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Grumpy Gramps" },
+        { "type": "text", "id": "vibe", "label": "Vibe", "default": "Has opinions about your carving." },
+        { "type": "text", "id": "emoji", "label": "Placeholder emoji", "default": "👴" },
+        { "type": "color", "id": "color", "label": "Placeholder color", "default": "#ffd60a" }
+      ]
+    },
+    {
+      "type": "feature", "name": "Feature", "limit": 8,
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji icon", "default": "❄️" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Actually warm" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Thick knit + fleece face panel." }
+      ]
+    },
+    {
+      "type": "video", "name": "UGC video", "limit": 8,
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
+        { "type": "image_picker", "id": "poster", "label": "Fallback image" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "POV: your gramps shreds harder than you" }
+      ]
+    },
+    {
+      "type": "step", "name": "Step", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Pick your face" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Choose your alter ego." }
+      ]
+    },
+    {
+      "type": "review", "name": "Review (real customers only)", "limit": 9,
+      "settings": [
+        { "type": "paragraph", "content": "Only publish genuine customer reviews. Fake reviews are illegal in the US (FTC) and EU." },
+        { "type": "text", "id": "name", "label": "Customer name" },
+        { "type": "textarea", "id": "text", "label": "Review" }
+      ]
+    },
+    {
+      "type": "faq", "name": "FAQ", "limit": 12,
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "Does it fit under a helmet?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Yes — the knit is thin enough at the crown to sit comfortably under most ski and snowboard helmets.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "GNARHEAD landing" }]
+}
+{% endschema %}

@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GNARHEAD Preview</title>
+<meta name="description" content="Design preview of the GNARHEAD one-product Shopify landing page.">
+<style>
+/*CSS*/
+body { margin: 0; background: #f6f9ff; }
+.pv-header { background: #fff; border-bottom: 1px solid #e3eaf7; }
+.pv-header .gh-wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.pv-logo { font-family: 'Archivo Black', sans-serif; font-size: 24px; letter-spacing: -.02em; color: #0b1b3f; }
+.pv-logo span { display: inline-block; background: #ffd60a; border-radius: 50%; width: 26px; height: 26px; text-align: center; line-height: 26px; font-size: 16px; transform: translateY(-2px); }
+.pv-icons { display: flex; gap: 18px; font-size: 20px; }
+.pv-note { background: #0b1b3f; color: #ffd60a; text-align: center; font: 600 12px Inter, sans-serif; padding: 6px 16px; }
+</style>
+</head>
+<body>
+<div class="pv-note">Design preview — photos are placeholders until you upload your AI images / product shots in Shopify.</div>
+<div class="gh" data-pv>
+  <div class="gh-ticker"><div class="gh-ticker__track" aria-hidden="true">
+    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
+    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
+  </div></div>
+
+  <header class="pv-header"><div class="gh-wrap">
+    <span aria-hidden="true" style="font-size:22px">☰</span>
+    <div class="pv-logo">GNAR<span>🤪</span>HEAD</div>
+    <div class="pv-icons" aria-hidden="true"><span>🔍</span><span>🛍️</span></div>
+  </div></header>
+
+  <section class="gh-hero">
+    <div class="gh-wrap gh-hero__grid">
+      <div class="gh-gallery">
+        <div class="gh-gallery__frame">
+        <div class="gh-gallery__main">
+          <div class="gh-ph" id="pv-main" style="--ph-a:#fff7cc;--ph-b:#ffd60a">
+            <div class="gh-ph__emoji" id="pv-emoji">👴</div>
+            <span class="gh-ph__note">Your AI hero photo goes here (1:1)</span>
+          </div>
+        </div>
+        <div class="gh-gallery__badges">
+          <span class="gh-badge">🧶 Premium knit</span><span class="gh-badge">❄️ Keeps you warm</span>
+          <span class="gh-badge">🥽 Goggle-friendly</span><span class="gh-badge">🌍 One size fits most</span>
+        </div>
+        <div class="gh-gallery__sticker">FALL<br>DROP<br>2026</div>
+        </div>
+        <div class="gh-thumbs" id="pv-thumbs"></div>
+      </div>
+
+      <div class="gh-info">
+        <div class="gh-info__rating"><span class="gh-stars" aria-hidden="true">★★★★★</span><span>Shows automatically once you have real reviews</span></div>
+        <h1 class="gh-info__title">GNARHEAD™ Ski Mask</h1>
+        <p class="gh-info__sub">The ski mask that turns every lift line into a show.</p>
+        <div class="gh-price">
+          <span class="gh-price__now" data-pv-price>$67.98</span>
+          <s class="gh-price__was" data-pv-was>$109.98</s>
+          <span class="gh-price__save" data-pv-save>SAVE 38%</span>
+        </div>
+        <div class="gh-hook">😂 Warning: strangers WILL ask for selfies.</div>
+
+        <form onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.');">
+          <fieldset class="gh-option">
+            <legend class="gh-option__label">Face: <span id="pv-face">Grumpy Gramps</span></legend>
+            <div class="gh-pills" id="pv-pills"></div>
+          </fieldset>
+
+          <fieldset class="gh-option" style="margin-bottom:0">
+            <legend class="gh-option__label">Bring the crew &amp; save</legend>
+            <div class="gh-bundles" id="pv-bundles">
+              <div class="gh-bundle"><input type="radio" name="b" id="b1" value="1" data-pct="0"><label for="b1"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">1 Mask</span><br><span class="gh-bundle__note">Solo legend</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label></div>
+              <div class="gh-bundle"><input type="radio" name="b" id="b2" value="2" data-pct="15" checked><label for="b2"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">2 Masks</span><br><span class="gh-bundle__note">You + your ride-or-die · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Most popular</span></div>
+              <div class="gh-bundle"><input type="radio" name="b" id="b3" value="3" data-pct="25"><label for="b3"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">3 Masks</span><br><span class="gh-bundle__note">Full squad · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Best value</span></div>
+            </div>
+          </fieldset>
+
+          <div class="gh-stock"><span class="gh-stock__dot"></span>In stock — ships within 1–3 business days</div>
+          <button type="submit" class="gh-atc" id="pv-atc">Add to cart</button>
+        </form>
+
+        <div class="gh-assure">
+          <div><b>🚚</b>Tracked shipping</div><div><b>↩️</b>30-day returns</div><div><b>🔒</b>Secure checkout</div>
+        </div>
+
+        <div class="gh-acc">
+          <details open><summary>Why riders love it</summary><div class="gh-acc__body">
+            <p style="margin-bottom:10px">Every ski trip has <em>that</em> photo. Make sure you're the reason it goes viral. GNARHEAD masks are real, warm balaclavas with a ridiculous face knitted right in. Pull one on and the lift line becomes your stage.</p>
+            <ul><li>Double-layer knit + fleece face panel</li><li>Wide, goggle-friendly eye opening</li><li>Breathable mouth zone</li><li>Fits under most helmets</li><li>Ships in a gift-ready drawstring pouch</li></ul>
+          </div></details>
+          <details><summary>Material &amp; fit</summary><div class="gh-acc__body">Soft acrylic knit with a fleece-lined face panel. One size fits most adults (head 54–62 cm). Hand wash cold, lay flat to dry.</div></details>
+          <details><summary>Shipping &amp; returns</summary><div class="gh-acc__body">Orders ship within 1–3 business days with tracking. Delivery to US/CA/EU usually takes 6–12 business days. Not loving it? Return within 30 days of delivery.</div></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gh-strip"><div class="gh-wrap gh-strip__row">
+    <span>⭐ Loved on TikTok</span><span>🎿 Built for the slopes</span><span>🎁 Gift-ready packaging</span><span>💬 Real human support</span>
+  </div></div>
+
+  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Pick your alter ego</span>
+    <h2 class="gh-h2">Meet the Gnar Crew</h2>
+    <p class="gh-lead">Five faces. Zero chill. Mix them up for the group chat photo of the season.</p>
+    <div class="gh-lineup" id="pv-lineup"></div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Not just a costume</span>
+    <h2 class="gh-h2">Funny face. Serious mask.</h2>
+    <div class="gh-features" style="text-align:left">
+      <div class="gh-feature"><div class="gh-feature__icon">❄️</div><h3>Actually warm</h3><p>Thick double-layer knit with a fleece face panel. Built for −15 °C chairlifts, not just photos.</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🥽</div><h3>Goggle-friendly</h3><p>Wide eye opening sits flush with any goggle. No gaps, no fogging, no wind burn.</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🌬️</div><h3>Breathes easy</h3><p>Open mouth zone with breathable knit so you can talk, laugh and yell "SEND IT".</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🎁</div><h3>Gift-ready</h3><p>Arrives in a branded drawstring pouch. The funniest stocking stuffer they'll actually use.</p></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section gh-section--ink"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Spotted on the mountain</span>
+    <h2 class="gh-h2">The internet can't stop watching</h2>
+    <p class="gh-lead">Your AI clips go here — vertical 9:16, autoplay, muted, looping.</p>
+    <div class="gh-ugc">
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">👴</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">POV: Gramps shreds harder than you</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐱</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">The lift line had questions</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐯</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">Squad goals, but make it feline</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐶</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">When the corgi hits the rail</div></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">The difference</span>
+    <h2 class="gh-h2">Why settle for a boring balaclava?</h2>
+    <table class="gh-compare">
+      <thead><tr><th scope="col"></th><th scope="col" class="gh-compare__us">GNARHEAD</th><th scope="col">Boring balaclava</th></tr></thead>
+      <tbody>
+        <tr><td>Gets you noticed in the lift line</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Warm, breathable knit</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-yes">✓</span></td></tr>
+        <tr><td>Goggle-friendly eye opening</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Instant group-photo upgrade</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Gift-ready</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+      </tbody>
+    </table>
+  </div></section>
+
+  <section class="gh-section gh-section--ink"><div class="gh-wrap">
+    <div class="gh-center"><span class="gh-eyebrow">How it works</span><h2 class="gh-h2">From checkout to chairlift legend</h2></div>
+    <div class="gh-steps">
+      <div class="gh-step"><h3>Pick your face</h3><p>Choose your alter ego — or grab a crew bundle and save up to 25%.</p></div>
+      <div class="gh-step"><h3>We ship it fast</h3><p>Packed within 1–3 business days with tracking straight to your door.</p></div>
+      <div class="gh-step"><h3>Become a legend</h3><p>Pull it on, hit the slopes, and watch your phone blow up with tags.</p></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Real riders</span>
+    <h2 class="gh-h2">What the crew says</h2>
+    <p class="gh-lead">Review cards appear here once real customers leave reviews (Judge.me / Shopify reviews app).</p>
+  </div></section>
+
+  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-guarantee">
+    <div class="gh-seal">30-DAY<br>HAPPY FACE<br>GUARANTEE</div>
+    <div><h2 class="gh-h2">If it doesn't make you laugh, it's on us.</h2>
+    <p class="gh-lead" style="color:#0b1b3f">Try it on, wear it on the slopes, show your friends. If you're not grinning, send it back within 30 days for a full refund. No awkward questions.</p></div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap">
+    <div class="gh-center"><span class="gh-eyebrow">FAQ</span><h2 class="gh-h2">Questions? We've got answers.</h2></div>
+    <div class="gh-faq">
+      <details><summary>Does it fit under a helmet?</summary><div class="gh-faq__a">Yes — the crown is thin enough to sit comfortably under most ski and snowboard helmets.</div></details>
+      <details><summary>Will it fit me?</summary><div class="gh-faq__a">One size fits most adults (head circumference 54–62 cm). The knit stretches and keeps its shape.</div></details>
+      <details><summary>Is it really warm enough for skiing?</summary><div class="gh-faq__a">Yes. It's a full balaclava with a fleece-lined face panel — a real ski mask that happens to be hilarious.</div></details>
+      <details><summary>How long does shipping take?</summary><div class="gh-faq__a">Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe.</div></details>
+      <details><summary>What if I don't like it?</summary><div class="gh-faq__a">You're covered by our 30-day Happy Face Guarantee. Contact us and we'll sort out a return or exchange.</div></details>
+      <details><summary>How do I wash it?</summary><div class="gh-faq__a">Hand wash in cold water and lay flat to dry. Don't tumble dry — your gramps hates the dryer.</div></details>
+    </div>
+  </div></section>
+
+  <section class="gh-section gh-section--yellow gh-final"><div class="gh-wrap">
+    <h2 class="gh-h2">Don't be the boring one in the group photo.</h2>
+    <p class="gh-lead" style="margin:0 auto;color:#0b1b3f">Grab your face before the season sells it out.</p>
+    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
+  </div></section>
+
+  <div class="gh-sticky" id="pv-sticky">
+    <div class="gh-sticky__info"><div class="gh-sticky__title">GNARHEAD™ Ski Mask</div><div class="gh-sticky__price" data-pv-price></div></div>
+    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var PRICE = 3999, WAS = 5499;
+  var faces = [
+    { name: 'Grumpy Gramps', emoji: '👴', a: '#fff7cc', b: '#ffd60a', vibe: "Wrinkles, 'stache, zero patience for slow skiers." },
+    { name: 'Purrfect Powder', emoji: '🐱', a: '#fff0f6', b: '#ffc9de', vibe: 'Nine lives. Uses all of them in the terrain park.' },
+    { name: 'Tiger Mode', emoji: '🐯', a: '#fff1e0', b: '#ffb35c', vibe: 'Apex predator of the bunny slope.' },
+    { name: 'Corgi Shred', emoji: '🐶', a: '#fff8ea', b: '#ffe1a8', vibe: 'Short legs. Big send energy.' },
+    { name: 'Elf on the Shelf-ie', emoji: '🧝', a: '#ecfff0', b: '#a8e6b8', vibe: "Santa's most reckless helper. Seasonal drop." }
+  ];
+  function $(s) { return document.querySelector(s); }
+  function money(c) { return '$' + (c / 100).toFixed(2); }
+
+  var pills = $('#pv-pills'), thumbs = $('#pv-thumbs'), lineup = $('#pv-lineup');
+  faces.forEach(function (f, i) {
+    pills.insertAdjacentHTML('beforeend',
+      '<div class="gh-pill"><input type="radio" name="face" id="f' + i + '" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
+      '<label for="f' + i + '"><span class="gh-pill__emoji">' + f.emoji + '</span>' + f.name + '</label></div>');
+    thumbs.insertAdjacentHTML('beforeend',
+      '<button type="button" class="gh-thumb" data-i="' + i + '" aria-label="' + f.name + '" aria-current="' + (i === 0) + '">' +
+      '<div class="gh-ph" style="--ph-a:' + f.a + ';--ph-b:' + f.b + '"><span style="font-size:34px">' + f.emoji + '</span></div></button>');
+    lineup.insertAdjacentHTML('beforeend',
+      '<div class="gh-char"><div class="gh-char__img"><div class="gh-ph" style="--ph-a:#fff;--ph-b:' + f.b + '"><div class="gh-ph__emoji">' + f.emoji + '</div></div></div>' +
+      '<div class="gh-char__body"><div class="gh-char__name">' + f.name + '</div><div class="gh-char__vibe">' + f.vibe + '</div></div></div>');
+  });
+
+  function setFace(i) {
+    var f = faces[i];
+    $('#pv-emoji').textContent = f.emoji;
+    $('#pv-main').style.setProperty('--ph-a', f.a);
+    $('#pv-main').style.setProperty('--ph-b', f.b);
+    $('#pv-face').textContent = f.name;
+    document.getElementById('f' + i).checked = true;
+    thumbs.querySelectorAll('.gh-thumb').forEach(function (t) { t.setAttribute('aria-current', String(t.dataset.i == i)); });
+  }
+  function render() {
+    var sel = document.querySelector('#pv-bundles input:checked');
+    var qty = +sel.value, pct = +sel.dataset.pct;
+    document.querySelectorAll('#pv-bundles input').forEach(function (inp) {
+      var q = +inp.value, p = +inp.dataset.pct, lab = inp.nextElementSibling;
+      lab.querySelector('[data-now]').textContent = money(Math.round(PRICE * q * (1 - p / 100)));
+      lab.querySelector('[data-was]').textContent = money(WAS * q);
+    });
+    var total = Math.round(PRICE * qty * (1 - pct / 100));
+    document.querySelectorAll('[data-pv-price]').forEach(function (e) { e.textContent = money(total); });
+    $('[data-pv-was]').textContent = money(WAS * qty);
+    $('[data-pv-save]').textContent = 'SAVE ' + Math.round((1 - total / (WAS * qty)) * 100) + '%';
+  }
+  pills.addEventListener('change', function (e) { setFace(+e.target.value); });
+  thumbs.addEventListener('click', function (e) { var b = e.target.closest('.gh-thumb'); if (b) setFace(+b.dataset.i); });
+  $('#pv-bundles').addEventListener('change', render);
+  render();
+
+  var sticky = $('#pv-sticky');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) { sticky.classList.toggle('is-visible', !en.isIntersecting && en.boundingClientRect.top < 0); });
+    }).observe($('#pv-atc'));
+  }
+})();
+</script>
+</body>
+</html>

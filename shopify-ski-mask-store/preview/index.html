@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GNARHEAD Preview</title>
+<meta name="description" content="Design preview of the GNARHEAD one-product Shopify landing page.">
+<style>
+/* GNARHEAD — one-product landing page styles
+   Scoped under .gh so it never fights with the base Shopify theme. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap');
+
+.gh {
+  --gh-ink: #0b1b3f;
+  --gh-ink-soft: #3a4a6b;
+  --gh-snow: #f6f9ff;
+  --gh-ice: #dcecff;
+  --gh-yellow: #ffd60a;
+  --gh-yellow-deep: #f5b700;
+  --gh-red: #ff3b30;
+  --gh-green: #12b76a;
+  --gh-white: #ffffff;
+  --gh-radius: 18px;
+  --gh-radius-sm: 10px;
+  --gh-shadow: 0 10px 30px rgba(11, 27, 63, .12);
+  --gh-display: 'Archivo Black', 'Arial Black', sans-serif;
+  --gh-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  font-family: var(--gh-body);
+  color: var(--gh-ink);
+  background: var(--gh-snow);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.gh *, .gh *::before, .gh *::after { box-sizing: border-box; }
+.gh img { max-width: 100%; display: block; }
+.gh h1, .gh h2, .gh h3 { font-family: var(--gh-display); line-height: 1.05; margin: 0; letter-spacing: -.01em; }
+.gh p { margin: 0; }
+.gh-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+.gh-section { padding: 64px 0; }
+.gh-section--ink { background: var(--gh-ink); color: var(--gh-white); }
+.gh-section--yellow { background: var(--gh-yellow); }
+.gh-eyebrow {
+  display: inline-block; font-weight: 800; font-size: 12px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gh-red); margin-bottom: 10px;
+}
+.gh-h2 { font-size: clamp(30px, 5vw, 48px); margin-bottom: 14px; }
+.gh-lead { font-size: 18px; color: var(--gh-ink-soft); max-width: 640px; }
+.gh-section--ink .gh-lead { color: #c9d4ee; }
+.gh-center { text-align: center; }
+.gh-center .gh-lead { margin: 0 auto; }
+
+/* ---------- Ticker ---------- */
+.gh-ticker { background: var(--gh-ink); color: var(--gh-yellow); overflow: hidden; white-space: nowrap; }
+.gh-ticker__track { display: inline-flex; gap: 48px; padding: 10px 0; animation: gh-scroll 28s linear infinite; font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+@keyframes gh-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .gh-ticker__track { animation: none; } }
+
+/* ---------- Hero / product ---------- */
+.gh-hero { padding: 28px 0 56px; }
+.gh-hero__grid { display: grid; gap: 32px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .gh-hero__grid { grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; } }
+
+.gh-gallery { position: relative; }
+.gh-gallery__frame { position: relative; }
+.gh-gallery__main {
+  position: relative; aspect-ratio: 1 / 1; border-radius: var(--gh-radius); overflow: hidden;
+  background: linear-gradient(160deg, #bfe0ff 0%, #eaf4ff 55%, #ffffff 100%); box-shadow: var(--gh-shadow);
+}
+.gh-gallery__main img, .gh-gallery__main video { width: 100%; height: 100%; object-fit: cover; }
+.gh-gallery__badges { position: absolute; left: 14px; top: 14px; display: flex; flex-direction: column; gap: 8px; z-index: 2; }
+.gh-badge {
+  background: rgba(255,255,255,.92); backdrop-filter: blur(6px); border-radius: 999px; padding: 6px 12px;
+  font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.gh-gallery__sticker {
+  position: absolute; right: 14px; bottom: 14px; z-index: 2; width: 96px; height: 96px; border-radius: 50%;
+  background: var(--gh-red); color: #fff; display: grid; place-items: center; text-align: center;
+  font-family: var(--gh-display); font-size: 15px; line-height: 1.05; transform: rotate(-12deg); box-shadow: var(--gh-shadow);
+}
+.gh-thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.gh-thumbs::-webkit-scrollbar { display: none; }
+.gh-thumb {
+  flex: 0 0 72px; height: 72px; border-radius: var(--gh-radius-sm); overflow: hidden; border: 2px solid transparent;
+  background: var(--gh-ice); cursor: pointer; padding: 0;
+}
+.gh-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.gh-thumb[aria-current="true"] { border-color: var(--gh-ink); }
+
+.gh-info__rating { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+.gh-stars { color: var(--gh-yellow-deep); letter-spacing: 2px; font-size: 16px; }
+.gh-info__title { font-size: clamp(34px, 5.5vw, 54px); margin-bottom: 10px; }
+.gh-info__sub { font-size: 17px; color: var(--gh-ink-soft); margin-bottom: 18px; }
+.gh-price { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.gh-price__now { font-family: var(--gh-display); font-size: 34px; color: var(--gh-red); }
+.gh-price__was { font-size: 20px; text-decoration: line-through; color: #8a96b3; font-weight: 600; }
+.gh-price__save { background: var(--gh-ink); color: var(--gh-yellow); font-weight: 800; font-size: 13px; padding: 6px 10px; border-radius: 8px; letter-spacing: .04em; }
+
+.gh-option { margin-bottom: 20px; border: 0; padding: 0; }
+.gh-option__label { font-weight: 800; font-size: 14px; margin-bottom: 10px; display: block; }
+.gh-option__label span { font-weight: 500; color: var(--gh-ink-soft); }
+.gh-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.gh-pill { position: relative; }
+.gh-pill input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.gh-pill label {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 2px solid var(--gh-ink);
+  font-weight: 700; font-size: 15px; cursor: pointer; background: #fff; transition: transform .15s, background .15s, color .15s;
+}
+.gh-pill label .gh-pill__emoji { font-size: 18px; line-height: 1; }
+.gh-pill input:checked + label { background: var(--gh-ink); color: #fff; }
+.gh-pill input:focus-visible + label { outline: 3px solid var(--gh-yellow-deep); outline-offset: 2px; }
+.gh-pill input:disabled + label { opacity: .4; text-decoration: line-through; }
+.gh-pill label:hover { transform: translateY(-1px); }
+
+/* Bundle offer cards */
+.gh-bundles { display: grid; gap: 10px; margin-bottom: 18px; }
+.gh-bundle { position: relative; }
+.gh-bundle input { position: absolute; opacity: 0; }
+.gh-bundle label {
+  display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 14px 16px;
+  border: 2px solid #c7d3ea; border-radius: var(--gh-radius-sm); background: #fff; cursor: pointer; transition: border-color .15s, box-shadow .15s;
+}
+.gh-bundle__dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gh-ink); display: grid; place-items: center; }
+.gh-bundle input:checked + label { border-color: var(--gh-ink); box-shadow: 0 0 0 3px var(--gh-ice); }
+.gh-bundle input:checked + label .gh-bundle__dot::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--gh-ink); }
+.gh-bundle input:focus-visible + label { outline: 3px solid var(--gh-yellow-deep); outline-offset: 2px; }
+.gh-bundle__name { font-weight: 800; }
+.gh-bundle__note { font-size: 13px; color: var(--gh-ink-soft); }
+.gh-bundle__price { text-align: right; font-weight: 800; }
+.gh-bundle__price s { display: block; font-size: 12px; color: #8a96b3; font-weight: 600; }
+.gh-bundle__tag {
+  position: absolute; top: -10px; right: 14px; background: var(--gh-red); color: #fff; font-size: 11px; font-weight: 800;
+  letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; text-transform: uppercase;
+}
+
+.gh-atc {
+  width: 100%; border: 0; border-radius: 14px; padding: 18px 20px; font-family: var(--gh-display); font-size: 19px; letter-spacing: .02em;
+  background: var(--gh-yellow); color: var(--gh-ink); cursor: pointer; box-shadow: 0 6px 0 var(--gh-yellow-deep);
+  transition: transform .1s, box-shadow .1s; text-transform: uppercase;
+}
+.gh-atc:hover { transform: translateY(-1px); }
+.gh-atc:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--gh-yellow-deep); }
+.gh-atc[disabled] { opacity: .55; cursor: not-allowed; }
+.gh-assure { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.gh-assure div { background: #fff; border-radius: var(--gh-radius-sm); padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; }
+.gh-assure b { display: block; font-size: 20px; margin-bottom: 2px; }
+.gh-stock { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; margin: 14px 0; }
+.gh-stock__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gh-green); box-shadow: 0 0 0 4px rgba(18,183,106,.18); }
+.gh-hook { background: #fff; border-left: 4px solid var(--gh-yellow-deep); border-radius: 8px; padding: 12px 14px; font-weight: 600; margin-bottom: 20px; font-size: 15px; }
+
+.gh-acc { border-top: 1px solid #d5deef; margin-top: 22px; }
+.gh-acc details { border-bottom: 1px solid #d5deef; }
+.gh-acc summary { list-style: none; cursor: pointer; padding: 16px 0; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+.gh-acc summary::-webkit-details-marker { display: none; }
+.gh-acc summary::after { content: '+'; font-size: 22px; font-weight: 500; }
+.gh-acc details[open] summary::after { content: '–'; }
+.gh-acc .gh-acc__body { padding: 0 0 16px; color: var(--gh-ink-soft); }
+.gh-acc ul { margin: 0; padding-left: 18px; }
+
+/* ---------- Placeholder art (preview + empty Shopify store) ---------- */
+.gh-ph {
+  width: 100%; height: 100%; display: grid; place-items: center; text-align: center; position: relative;
+  background: radial-gradient(circle at 50% 35%, var(--ph-a, #fff3b0), var(--ph-b, #ffd60a) 70%);
+}
+.gh-ph__emoji { font-size: clamp(90px, 22vw, 180px); line-height: 1; filter: drop-shadow(0 10px 18px rgba(0,0,0,.18)); }
+.gh-ph__goggles { position: absolute; top: 37%; left: 50%; transform: translateX(-50%); width: 46%; height: 13%; border-radius: 40px; background: linear-gradient(90deg,#111 0,#4b5f8c 40%,#9fd0ff 50%,#4b5f8c 60%,#111 100%); opacity: .9; box-shadow: 0 0 0 6px #111; }
+.gh-ph__note { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; background: rgba(11,27,63,.8); color: #fff; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+/* ---------- Press / social strip ---------- */
+.gh-strip { background: #fff; border-top: 1px solid #e3eaf7; border-bottom: 1px solid #e3eaf7; }
+.gh-strip__row { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; padding: 18px 0; font-weight: 800; color: var(--gh-ink-soft); font-size: 14px; }
+
+/* ---------- Characters / lineup ---------- */
+.gh-lineup { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 32px; }
+@media (min-width: 760px) { .gh-lineup { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+@media (min-width: 1080px) { .gh-lineup { grid-template-columns: repeat(5, 1fr); } }
+.gh-char { background: #fff; border-radius: var(--gh-radius); overflow: hidden; box-shadow: var(--gh-shadow); color: var(--gh-ink); display: flex; flex-direction: column; }
+.gh-char__img { aspect-ratio: 4 / 5; overflow: hidden; }
+.gh-char__img img { width: 100%; height: 100%; object-fit: cover; }
+.gh-char__img .gh-ph__emoji { font-size: 72px; }
+.gh-char__body { padding: 14px; }
+.gh-char__name { font-family: var(--gh-display); font-size: 18px; margin-bottom: 4px; }
+.gh-char__vibe { font-size: 13px; color: var(--gh-ink-soft); }
+
+/* ---------- Features ---------- */
+.gh-features { display: grid; gap: 16px; margin-top: 32px; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .gh-features { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .gh-features { grid-template-columns: repeat(4, 1fr); } }
+.gh-feature { background: #fff; border-radius: var(--gh-radius); padding: 22px; box-shadow: var(--gh-shadow); }
+.gh-feature__icon { width: 52px; height: 52px; border-radius: 14px; background: var(--gh-yellow); display: grid; place-items: center; font-size: 26px; margin-bottom: 14px; }
+.gh-feature h3 { font-size: 19px; margin-bottom: 6px; }
+.gh-feature p { color: var(--gh-ink-soft); font-size: 15px; }
+
+/* ---------- Video / UGC wall ---------- */
+.gh-ugc { display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin-top: 28px; padding-bottom: 6px; }
+@media (min-width: 760px) { .gh-ugc { grid-auto-columns: 30%; } }
+@media (min-width: 1080px) { .gh-ugc { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; } }
+.gh-ugc__item { scroll-snap-align: start; aspect-ratio: 9 / 16; border-radius: var(--gh-radius); overflow: hidden; position: relative; background: #1a2b55; }
+.gh-ugc__item video, .gh-ugc__item img { width: 100%; height: 100%; object-fit: cover; }
+.gh-ugc__cap { position: absolute; left: 10px; right: 10px; bottom: 10px; color: #fff; font-weight: 800; font-size: 14px; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.gh-ugc__play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; font-size: 22px; color: var(--gh-ink); }
+
+/* ---------- Comparison ---------- */
+.gh-compare { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 28px; background: #fff; border-radius: var(--gh-radius); overflow: hidden; box-shadow: var(--gh-shadow); font-size: 15px; }
+.gh-compare th, .gh-compare td { padding: 14px 12px; text-align: center; border-bottom: 1px solid #e6ecf7; }
+.gh-compare th:first-child, .gh-compare td:first-child { text-align: left; font-weight: 600; }
+.gh-compare thead th { font-family: var(--gh-display); font-size: 15px; }
+.gh-compare .gh-compare__us { background: var(--gh-yellow); }
+.gh-compare tr:last-child td { border-bottom: 0; }
+.gh-yes { color: var(--gh-green); font-weight: 800; font-size: 18px; }
+.gh-no { color: var(--gh-red); font-weight: 800; font-size: 18px; }
+
+/* ---------- Steps ---------- */
+.gh-steps { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: 1fr; counter-reset: step; }
+@media (min-width: 800px) { .gh-steps { grid-template-columns: repeat(3, 1fr); } }
+.gh-step { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: var(--gh-radius); padding: 22px; }
+.gh-step::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gh-yellow); color: var(--gh-ink); font-family: var(--gh-display); margin-bottom: 12px; }
+.gh-step h3 { font-size: 20px; margin-bottom: 6px; }
+.gh-step p { color: #c9d4ee; }
+
+/* ---------- Reviews ---------- */
+.gh-reviews { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .gh-reviews { grid-template-columns: repeat(3, 1fr); } }
+.gh-review { background: #fff; border-radius: var(--gh-radius); padding: 20px; box-shadow: var(--gh-shadow); }
+.gh-review__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.gh-review__name { font-weight: 800; }
+.gh-review__verified { font-size: 12px; color: var(--gh-green); font-weight: 700; }
+.gh-review p { color: var(--gh-ink-soft); }
+
+/* ---------- Guarantee ---------- */
+.gh-guarantee { display: grid; gap: 24px; align-items: center; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .gh-guarantee { grid-template-columns: auto 1fr; } }
+.gh-seal { width: 150px; height: 150px; border-radius: 50%; background: var(--gh-ink); color: var(--gh-yellow); display: grid; place-items: center; text-align: center; font-family: var(--gh-display); font-size: 18px; line-height: 1.1; margin: 0 auto; border: 6px dashed var(--gh-yellow); }
+
+/* ---------- FAQ ---------- */
+.gh-faq { max-width: 780px; margin: 28px auto 0; }
+.gh-faq details { background: #fff; border-radius: var(--gh-radius-sm); margin-bottom: 10px; box-shadow: 0 2px 10px rgba(11,27,63,.06); }
+.gh-faq summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 800; display: flex; justify-content: space-between; gap: 12px; }
+.gh-faq summary::-webkit-details-marker { display: none; }
+.gh-faq summary::after { content: '+'; font-size: 22px; line-height: 1; }
+.gh-faq details[open] summary::after { content: '–'; }
+.gh-faq .gh-faq__a { padding: 0 20px 18px; color: var(--gh-ink-soft); }
+
+/* ---------- Final CTA ---------- */
+.gh-final { text-align: center; }
+.gh-final .gh-h2 { font-size: clamp(34px, 6vw, 64px); }
+.gh-final .gh-atc { max-width: 420px; margin-top: 24px; background: var(--gh-ink); color: var(--gh-yellow); box-shadow: 0 6px 0 #000; }
+
+/* ---------- Sticky mobile ATC ---------- */
+.gh-sticky {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; box-shadow: 0 -6px 20px rgba(11,27,63,.15);
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px;
+  transform: translateY(110%); transition: transform .25s;
+}
+.gh-sticky.is-visible { transform: translateY(0); }
+.gh-sticky__info { flex: 1; min-width: 0; }
+.gh-sticky__title { font-weight: 800; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gh-sticky__price { color: var(--gh-red); font-weight: 800; }
+.gh-sticky .gh-atc { width: auto; padding: 14px 18px; font-size: 15px; box-shadow: 0 4px 0 var(--gh-yellow-deep); }
+@media (min-width: 900px) { .gh-sticky { display: none; } }
+
+body { margin: 0; background: #f6f9ff; }
+.pv-header { background: #fff; border-bottom: 1px solid #e3eaf7; }
+.pv-header .gh-wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.pv-logo { font-family: 'Archivo Black', sans-serif; font-size: 24px; letter-spacing: -.02em; color: #0b1b3f; }
+.pv-logo span { display: inline-block; background: #ffd60a; border-radius: 50%; width: 26px; height: 26px; text-align: center; line-height: 26px; font-size: 16px; transform: translateY(-2px); }
+.pv-icons { display: flex; gap: 18px; font-size: 20px; }
+.pv-note { background: #0b1b3f; color: #ffd60a; text-align: center; font: 600 12px Inter, sans-serif; padding: 6px 16px; }
+</style>
+</head>
+<body>
+<div class="pv-note">Design preview — photos are placeholders until you upload your AI images / product shots in Shopify.</div>
+<div class="gh" data-pv>
+  <div class="gh-ticker"><div class="gh-ticker__track" aria-hidden="true">
+    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
+    <span>❄️ Free shipping on 2+ masks</span><span>🎁 The gift they'll actually wear</span><span>🔥 Q4 drop is live</span><span>↩️ 30-day happy-face guarantee</span>
+  </div></div>
+
+  <header class="pv-header"><div class="gh-wrap">
+    <span aria-hidden="true" style="font-size:22px">☰</span>
+    <div class="pv-logo">GNAR<span>🤪</span>HEAD</div>
+    <div class="pv-icons" aria-hidden="true"><span>🔍</span><span>🛍️</span></div>
+  </div></header>
+
+  <section class="gh-hero">
+    <div class="gh-wrap gh-hero__grid">
+      <div class="gh-gallery">
+        <div class="gh-gallery__frame">
+        <div class="gh-gallery__main">
+          <div class="gh-ph" id="pv-main" style="--ph-a:#fff7cc;--ph-b:#ffd60a">
+            <div class="gh-ph__emoji" id="pv-emoji">👴</div>
+            <span class="gh-ph__note">Your AI hero photo goes here (1:1)</span>
+          </div>
+        </div>
+        <div class="gh-gallery__badges">
+          <span class="gh-badge">🧶 Premium knit</span><span class="gh-badge">❄️ Keeps you warm</span>
+          <span class="gh-badge">🥽 Goggle-friendly</span><span class="gh-badge">🌍 One size fits most</span>
+        </div>
+        <div class="gh-gallery__sticker">FALL<br>DROP<br>2026</div>
+        </div>
+        <div class="gh-thumbs" id="pv-thumbs"></div>
+      </div>
+
+      <div class="gh-info">
+        <div class="gh-info__rating"><span class="gh-stars" aria-hidden="true">★★★★★</span><span>Shows automatically once you have real reviews</span></div>
+        <h1 class="gh-info__title">GNARHEAD™ Ski Mask</h1>
+        <p class="gh-info__sub">The ski mask that turns every lift line into a show.</p>
+        <div class="gh-price">
+          <span class="gh-price__now" data-pv-price>$67.98</span>
+          <s class="gh-price__was" data-pv-was>$109.98</s>
+          <span class="gh-price__save" data-pv-save>SAVE 38%</span>
+        </div>
+        <div class="gh-hook">😂 Warning: strangers WILL ask for selfies.</div>
+
+        <form onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.');">
+          <fieldset class="gh-option">
+            <legend class="gh-option__label">Face: <span id="pv-face">Grumpy Gramps</span></legend>
+            <div class="gh-pills" id="pv-pills"></div>
+          </fieldset>
+
+          <fieldset class="gh-option" style="margin-bottom:0">
+            <legend class="gh-option__label">Bring the crew &amp; save</legend>
+            <div class="gh-bundles" id="pv-bundles">
+              <div class="gh-bundle"><input type="radio" name="b" id="b1" value="1" data-pct="0"><label for="b1"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">1 Mask</span><br><span class="gh-bundle__note">Solo legend</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label></div>
+              <div class="gh-bundle"><input type="radio" name="b" id="b2" value="2" data-pct="15" checked><label for="b2"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">2 Masks</span><br><span class="gh-bundle__note">You + your ride-or-die · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Most popular</span></div>
+              <div class="gh-bundle"><input type="radio" name="b" id="b3" value="3" data-pct="25"><label for="b3"><span class="gh-bundle__dot"></span><span><span class="gh-bundle__name">3 Masks</span><br><span class="gh-bundle__note">Full squad · Free shipping</span></span><span class="gh-bundle__price"><span data-now></span><s data-was></s></span></label><span class="gh-bundle__tag">Best value</span></div>
+            </div>
+          </fieldset>
+
+          <div class="gh-stock"><span class="gh-stock__dot"></span>In stock — ships within 1–3 business days</div>
+          <button type="submit" class="gh-atc" id="pv-atc">Add to cart</button>
+        </form>
+
+        <div class="gh-assure">
+          <div><b>🚚</b>Tracked shipping</div><div><b>↩️</b>30-day returns</div><div><b>🔒</b>Secure checkout</div>
+        </div>
+
+        <div class="gh-acc">
+          <details open><summary>Why riders love it</summary><div class="gh-acc__body">
+            <p style="margin-bottom:10px">Every ski trip has <em>that</em> photo. Make sure you're the reason it goes viral. GNARHEAD masks are real, warm balaclavas with a ridiculous face knitted right in. Pull one on and the lift line becomes your stage.</p>
+            <ul><li>Double-layer knit + fleece face panel</li><li>Wide, goggle-friendly eye opening</li><li>Breathable mouth zone</li><li>Fits under most helmets</li><li>Ships in a gift-ready drawstring pouch</li></ul>
+          </div></details>
+          <details><summary>Material &amp; fit</summary><div class="gh-acc__body">Soft acrylic knit with a fleece-lined face panel. One size fits most adults (head 54–62 cm). Hand wash cold, lay flat to dry.</div></details>
+          <details><summary>Shipping &amp; returns</summary><div class="gh-acc__body">Orders ship within 1–3 business days with tracking. Delivery to US/CA/EU usually takes 6–12 business days. Not loving it? Return within 30 days of delivery.</div></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gh-strip"><div class="gh-wrap gh-strip__row">
+    <span>⭐ Loved on TikTok</span><span>🎿 Built for the slopes</span><span>🎁 Gift-ready packaging</span><span>💬 Real human support</span>
+  </div></div>
+
+  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Pick your alter ego</span>
+    <h2 class="gh-h2">Meet the Gnar Crew</h2>
+    <p class="gh-lead">Five faces. Zero chill. Mix them up for the group chat photo of the season.</p>
+    <div class="gh-lineup" id="pv-lineup"></div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Not just a costume</span>
+    <h2 class="gh-h2">Funny face. Serious mask.</h2>
+    <div class="gh-features" style="text-align:left">
+      <div class="gh-feature"><div class="gh-feature__icon">❄️</div><h3>Actually warm</h3><p>Thick double-layer knit with a fleece face panel. Built for −15 °C chairlifts, not just photos.</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🥽</div><h3>Goggle-friendly</h3><p>Wide eye opening sits flush with any goggle. No gaps, no fogging, no wind burn.</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🌬️</div><h3>Breathes easy</h3><p>Open mouth zone with breathable knit so you can talk, laugh and yell "SEND IT".</p></div>
+      <div class="gh-feature"><div class="gh-feature__icon">🎁</div><h3>Gift-ready</h3><p>Arrives in a branded drawstring pouch. The funniest stocking stuffer they'll actually use.</p></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section gh-section--ink"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Spotted on the mountain</span>
+    <h2 class="gh-h2">The internet can't stop watching</h2>
+    <p class="gh-lead">Your AI clips go here — vertical 9:16, autoplay, muted, looping.</p>
+    <div class="gh-ugc">
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">👴</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">POV: Gramps shreds harder than you</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐱</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">The lift line had questions</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐯</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">Squad goals, but make it feline</div></div>
+      <div class="gh-ugc__item"><div class="gh-ph" style="--ph-a:#30487f;--ph-b:#0b1b3f"><div class="gh-ph__emoji" style="font-size:64px">🐶</div></div><span class="gh-ugc__play">▶</span><div class="gh-ugc__cap">When the corgi hits the rail</div></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">The difference</span>
+    <h2 class="gh-h2">Why settle for a boring balaclava?</h2>
+    <table class="gh-compare">
+      <thead><tr><th scope="col"></th><th scope="col" class="gh-compare__us">GNARHEAD</th><th scope="col">Boring balaclava</th></tr></thead>
+      <tbody>
+        <tr><td>Gets you noticed in the lift line</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Warm, breathable knit</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-yes">✓</span></td></tr>
+        <tr><td>Goggle-friendly eye opening</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Instant group-photo upgrade</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+        <tr><td>Gift-ready</td><td class="gh-compare__us"><span class="gh-yes">✓</span></td><td><span class="gh-no">✕</span></td></tr>
+      </tbody>
+    </table>
+  </div></section>
+
+  <section class="gh-section gh-section--ink"><div class="gh-wrap">
+    <div class="gh-center"><span class="gh-eyebrow">How it works</span><h2 class="gh-h2">From checkout to chairlift legend</h2></div>
+    <div class="gh-steps">
+      <div class="gh-step"><h3>Pick your face</h3><p>Choose your alter ego — or grab a crew bundle and save up to 25%.</p></div>
+      <div class="gh-step"><h3>We ship it fast</h3><p>Packed within 1–3 business days with tracking straight to your door.</p></div>
+      <div class="gh-step"><h3>Become a legend</h3><p>Pull it on, hit the slopes, and watch your phone blow up with tags.</p></div>
+    </div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap gh-center">
+    <span class="gh-eyebrow">Real riders</span>
+    <h2 class="gh-h2">What the crew says</h2>
+    <p class="gh-lead">Review cards appear here once real customers leave reviews (Judge.me / Shopify reviews app).</p>
+  </div></section>
+
+  <section class="gh-section gh-section--yellow"><div class="gh-wrap gh-guarantee">
+    <div class="gh-seal">30-DAY<br>HAPPY FACE<br>GUARANTEE</div>
+    <div><h2 class="gh-h2">If it doesn't make you laugh, it's on us.</h2>
+    <p class="gh-lead" style="color:#0b1b3f">Try it on, wear it on the slopes, show your friends. If you're not grinning, send it back within 30 days for a full refund. No awkward questions.</p></div>
+  </div></section>
+
+  <section class="gh-section"><div class="gh-wrap">
+    <div class="gh-center"><span class="gh-eyebrow">FAQ</span><h2 class="gh-h2">Questions? We've got answers.</h2></div>
+    <div class="gh-faq">
+      <details><summary>Does it fit under a helmet?</summary><div class="gh-faq__a">Yes — the crown is thin enough to sit comfortably under most ski and snowboard helmets.</div></details>
+      <details><summary>Will it fit me?</summary><div class="gh-faq__a">One size fits most adults (head circumference 54–62 cm). The knit stretches and keeps its shape.</div></details>
+      <details><summary>Is it really warm enough for skiing?</summary><div class="gh-faq__a">Yes. It's a full balaclava with a fleece-lined face panel — a real ski mask that happens to be hilarious.</div></details>
+      <details><summary>How long does shipping take?</summary><div class="gh-faq__a">Orders ship in 1–3 business days. Delivery usually takes 6–12 business days to the US, Canada and Europe.</div></details>
+      <details><summary>What if I don't like it?</summary><div class="gh-faq__a">You're covered by our 30-day Happy Face Guarantee. Contact us and we'll sort out a return or exchange.</div></details>
+      <details><summary>How do I wash it?</summary><div class="gh-faq__a">Hand wash in cold water and lay flat to dry. Don't tumble dry — your gramps hates the dryer.</div></details>
+    </div>
+  </div></section>
+
+  <section class="gh-section gh-section--yellow gh-final"><div class="gh-wrap">
+    <h2 class="gh-h2">Don't be the boring one in the group photo.</h2>
+    <p class="gh-lead" style="margin:0 auto;color:#0b1b3f">Grab your face before the season sells it out.</p>
+    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
+  </div></section>
+
+  <div class="gh-sticky" id="pv-sticky">
+    <div class="gh-sticky__info"><div class="gh-sticky__title">GNARHEAD™ Ski Mask</div><div class="gh-sticky__price" data-pv-price></div></div>
+    <button type="button" class="gh-atc" onclick="document.getElementById('pv-atc').click()">Add to cart</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var PRICE = 3999, WAS = 5499;
+  var faces = [
+    { name: 'Grumpy Gramps', emoji: '👴', a: '#fff7cc', b: '#ffd60a', vibe: "Wrinkles, 'stache, zero patience for slow skiers." },
+    { name: 'Purrfect Powder', emoji: '🐱', a: '#fff0f6', b: '#ffc9de', vibe: 'Nine lives. Uses all of them in the terrain park.' },
+    { name: 'Tiger Mode', emoji: '🐯', a: '#fff1e0', b: '#ffb35c', vibe: 'Apex predator of the bunny slope.' },
+    { name: 'Corgi Shred', emoji: '🐶', a: '#fff8ea', b: '#ffe1a8', vibe: 'Short legs. Big send energy.' },
+    { name: 'Elf on the Shelf-ie', emoji: '🧝', a: '#ecfff0', b: '#a8e6b8', vibe: "Santa's most reckless helper. Seasonal drop." }
+  ];
+  function $(s) { return document.querySelector(s); }
+  function money(c) { return '$' + (c / 100).toFixed(2); }
+
+  var pills = $('#pv-pills'), thumbs = $('#pv-thumbs'), lineup = $('#pv-lineup');
+  faces.forEach(function (f, i) {
+    pills.insertAdjacentHTML('beforeend',
+      '<div class="gh-pill"><input type="radio" name="face" id="f' + i + '" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
+      '<label for="f' + i + '"><span class="gh-pill__emoji">' + f.emoji + '</span>' + f.name + '</label></div>');
+    thumbs.insertAdjacentHTML('beforeend',
+      '<button type="button" class="gh-thumb" data-i="' + i + '" aria-label="' + f.name + '" aria-current="' + (i === 0) + '">' +
+      '<div class="gh-ph" style="--ph-a:' + f.a + ';--ph-b:' + f.b + '"><span style="font-size:34px">' + f.emoji + '</span></div></button>');
+    lineup.insertAdjacentHTML('beforeend',
+      '<div class="gh-char"><div class="gh-char__img"><div class="gh-ph" style="--ph-a:#fff;--ph-b:' + f.b + '"><div class="gh-ph__emoji">' + f.emoji + '</div></div></div>' +
+      '<div class="gh-char__body"><div class="gh-char__name">' + f.name + '</div><div class="gh-char__vibe">' + f.vibe + '</div></div></div>');
+  });
+
+  function setFace(i) {
+    var f = faces[i];
+    $('#pv-emoji').textContent = f.emoji;
+    $('#pv-main').style.setProperty('--ph-a', f.a);
+    $('#pv-main').style.setProperty('--ph-b', f.b);
+    $('#pv-face').textContent = f.name;
+    document.getElementById('f' + i).checked = true;
+    thumbs.querySelectorAll('.gh-thumb').forEach(function (t) { t.setAttribute('aria-current', String(t.dataset.i == i)); });
+  }
+  function render() {
+    var sel = document.querySelector('#pv-bundles input:checked');
+    var qty = +sel.value, pct = +sel.dataset.pct;
+    document.querySelectorAll('#pv-bundles input').forEach(function (inp) {
+      var q = +inp.value, p = +inp.dataset.pct, lab = inp.nextElementSibling;
+      lab.querySelector('[data-now]').textContent = money(Math.round(PRICE * q * (1 - p / 100)));
+      lab.querySelector('[data-was]').textContent = money(WAS * q);
+    });
+    var total = Math.round(PRICE * qty * (1 - pct / 100));
+    document.querySelectorAll('[data-pv-price]').forEach(function (e) { e.textContent = money(total); });
+    $('[data-pv-was]').textContent = money(WAS * qty);
+    $('[data-pv-save]').textContent = 'SAVE ' + Math.round((1 - total / (WAS * qty)) * 100) + '%';
+  }
+  pills.addEventListener('change', function (e) { setFace(+e.target.value); });
+  thumbs.addEventListener('click', function (e) { var b = e.target.closest('.gh-thumb'); if (b) setFace(+b.dataset.i); });
+  $('#pv-bundles').addEventListener('change', render);
+  render();
+
+  var sticky = $('#pv-sticky');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) { sticky.classList.toggle('is-visible', !en.isIntersecting && en.boundingClientRect.top < 0); });
+    }).observe($('#pv-atc'));
+  }
+})();
+</script>
+</body>
+</html>
