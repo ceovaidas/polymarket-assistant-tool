@@ -57,6 +57,8 @@ Tavo nuotraukose esantys produktai (AliExpress, €5–10) — tinka startui.
 3. **Įkelk mano failus:** Themes → ⋯ → **Edit code**:
    - `Assets` → *Add a new asset* → įkelk `theme/assets/gnarhead-landing.css` ir `gnarhead-landing.js`
    - `Snippets` → *Add a new snippet* → pavadink `gnarhead-icon` → įklijuok `theme/snippets/gnarhead-icon.liquid` (piktogramos — būtina)
+   - `Snippets` → *Add a new snippet* → pavadink `gnarhead-art` → įklijuok `theme/snippets/gnarhead-art.liquid` (iliustracijos — būtina)
+   - Kol neįkėlei nuotraukų, puslapyje rodomos iliustracijos; techniniai užrašai („upload…“) matosi tik redaktoriuje. Video blokas atsiranda tik įkėlus bent vieną video.
    - `Sections` → *Add a new section* → pavadink `gnarhead-product-landing` → įklijuok `.liquid` turinį
    - `Templates` → *Add a new template* → tipas `product`, pavadinimas `landing`, JSON → įklijuok `product.landing.json`
 4. **Produktas:** Products → Add product
@@ -160,6 +162,7 @@ Metrikos: CTR ≥ 1.5%, add-to-cart ≥ 8%, konversija ≥ 2%, CPA < $24.
 | `theme/sections/gnarhead-product-landing.liquid` | Shopify sekcija (viskas redaguojama per Customizer) |
 | `theme/templates/product.landing.json` | Produkto šablonas su užpildytu turiniu |
 | `theme/assets/gnarhead-landing.css/js` | Stilius ir logika (variantai, bundles, sticky mygtukas) |
+| `theme/snippets/gnarhead-art.liquid` | Veidų iliustracijos ir mezginio raštas – rodomi vietoje nuotraukų, kol jų neįkėlei (būtina įkelti kaip snippet `gnarhead-art`) |
 | `theme/snippets/gnarhead-icon.liquid` | Piktogramos ir kaukės siluetas (rodomas kol neįkeltos nuotraukos) |
 | `preview/build.mjs` | Sugeneruoja peržiūrą iš tikro Shopify kodo (`cd preview && npm install && npm run build`) |
 | `docs/PRODUCT_COPY_EN.md` | Visi angliški tekstai, SEO, politikos, reklamų kabliukai |

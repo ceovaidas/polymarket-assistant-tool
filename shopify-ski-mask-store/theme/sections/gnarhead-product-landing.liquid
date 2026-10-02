@@ -13,6 +13,16 @@
   assign rating_count = product.metafields.reviews.rating_count
   assign tones = section.settings.placeholder_tones | split: ','
   assign tone_count = tones.size
+  assign art_keys = section.settings.art_order | split: ','
+  assign art_count = art_keys.size
+  assign has_footage = false
+  for b in section.blocks
+    if b.type == 'video'
+      if b.settings.video != blank or b.settings.poster != blank
+        assign has_footage = true
+      endif
+    endif
+  endfor
   assign chars = section.blocks | where: 'type', 'character'
   assign specs = section.blocks | where: 'type', 'spec'
   assign features = section.blocks | where: 'type', 'feature'
@@ -49,7 +59,8 @@
             {%- for i in (1..5) -%}
               {%- assign t = forloop.index0 | modulo: tone_count -%}
               <figure class="gh-gallery__item gh-media" style="--tone: {{ tones[t] | strip }}" {% if forloop.first %}data-gh-hero{% endif %}>
-                <div class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}<span class="gh-ph__cap gh-mono">Photo {{ i }} — upload in Products</span></div>
+                {%- assign a = forloop.index0 | modulo: art_count -%}
+                <div class="gh-ph">{% render 'gnarhead-art', face: art_keys[a] %}{% if request.design_mode %}<span class="gh-ph__cap gh-mono">Photo {{ i }} — upload in Products</span>{% endif %}</div>
               </figure>
             {%- endfor -%}
           {%- endif -%}
@@ -102,7 +113,8 @@
                             {%- if swatch_media -%}
                               {{ swatch_media | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                             {%- else -%}
-                              <span class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}</span>
+                              {%- assign a = forloop.index0 | modulo: art_count -%}
+                              <span class="gh-ph">{% render 'gnarhead-art', face: art_keys[a] %}</span>
                             {%- endif -%}
                           </span>
                           <span class="gh-swatch__name">{{ value }}</span>
@@ -206,7 +218,7 @@
               {%- if block.settings.image -%}
                 {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 1200px) 20vw, 72vw', alt: block.settings.name }}
               {%- else -%}
-                <div class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}<span class="gh-ph__cap gh-mono">{{ block.settings.name }}</span></div>
+                <div class="gh-ph">{% render 'gnarhead-art', face: block.settings.art %}</div>
               {%- endif -%}
             </div>
             <div class="gh-crew__body">
@@ -228,7 +240,7 @@
           {%- if section.settings.spec_image -%}
             {{ section.settings.spec_image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', alt: section.settings.spec_heading }}
           {%- else -%}
-            <div class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}<span class="gh-ph__cap gh-mono">Detail photo — knit close-up</span></div>
+            <div class="gh-ph gh-ph--fill">{% render 'gnarhead-art', face: 'knit' %}{% if request.design_mode %}<span class="gh-ph__cap gh-mono">Detail photo — knit close-up</span>{% endif %}</div>
           {%- endif -%}
         </div>
         <div>
@@ -260,7 +272,7 @@
   {%- endif -%}
 
   {%- comment -%} ================= FIELD FOOTAGE ================= {%- endcomment -%}
-  {%- if videos.size > 0 -%}
+  {%- if has_footage -%}
     <section class="gh-section gh-field-footage">
       <div class="gh-wrap gh-section__head">
         <div><p class="gh-kicker gh-mono">{{ section.settings.reel_kicker }}</p><h2 class="gh-h2 gh-display">{{ section.settings.reel_heading }}</h2></div>
@@ -275,7 +287,7 @@
               {%- elsif block.settings.poster -%}
                 {{ block.settings.poster | image_url: width: 540 | image_tag: loading: 'lazy', alt: block.settings.caption }}
               {%- else -%}
-                <div class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}<span class="gh-ph__cap gh-mono">Vertical video 9:16</span></div>
+                <div class="gh-ph"></div>
               {%- endif -%}
             </div>
             <figcaption class="gh-reel__cap"><span>{{ block.settings.caption }}</span><span class="gh-mono">{{ block.settings.tag }}</span></figcaption>
@@ -337,7 +349,9 @@
       {%- if section.settings.final_image -%}
         {{ section.settings.final_image | image_url: width: 2400 | image_tag: loading: 'lazy', sizes: '100vw', alt: '' }}
       {%- else -%}
-        <div class="gh-ph">{% render 'gnarhead-icon', name: 'mask' %}<span class="gh-ph__cap gh-mono" style="color:var(--paper)">Wide group photo — 16:9</span></div>
+        <div class="gh-ph gh-ph--lineup">
+          {%- for k in art_keys -%}<span>{% render 'gnarhead-art', face: k %}</span>{%- endfor -%}
+        </div>
       {%- endif -%}
     </div>
     <div class="gh-wrap gh-final__inner">
@@ -390,7 +404,8 @@
   "tag": "section",
   "class": "gh-section-wrapper",
   "settings": [
-    { "type": "text", "id": "placeholder_tones", "label": "Placeholder tones (comma separated)", "default": "#d8ccb8,#cdc6bd,#c9a27a,#dcc2a0,#a9b5a0", "info": "Background colours shown until photos are uploaded." },
+    { "type": "text", "id": "placeholder_tones", "label": "Placeholder tones (comma separated)", "default": "#cdd6db,#e2d6c8,#c9d2c0,#d3dbe2,#eadfce", "info": "Background colours shown until photos are uploaded." },
+    { "type": "text", "id": "art_order", "label": "Illustration order (matches Face option order)", "default": "gramps,cat,tiger,corgi,elf", "info": "Illustrations show until photos are uploaded. Options: gramps, cat, tiger, corgi, elf, mask." },
 
     { "type": "header", "content": "Buy box" },
     { "type": "text", "id": "meta_left", "label": "Meta left", "default": "Balaclava — 001" },
@@ -459,6 +474,9 @@
       "type": "character", "name": "Character", "limit": 10,
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Portrait image (3:4)" },
+        { "type": "select", "id": "art", "label": "Illustration (until image is set)", "default": "gramps", "options": [
+          { "value": "gramps", "label": "Gramps" }, { "value": "cat", "label": "Cat" }, { "value": "tiger", "label": "Tiger" },
+          { "value": "corgi", "label": "Corgi" }, { "value": "elf", "label": "Elf" }, { "value": "mask", "label": "Plain mask" } ] },
         { "type": "text", "id": "name", "label": "Name", "default": "Gramps" },
         { "type": "text", "id": "line", "label": "One-liner", "default": "Has opinions about your carving." }
       ]

@@ -75,10 +75,15 @@
 .gh-media { position: relative; overflow: hidden; background: var(--tone, var(--paper-2)); }
 .gh-media img, .gh-media video { width: 100%; height: 100%; object-fit: cover; }
 .gh-ph { position: absolute; inset: 0; display: grid; place-items: center; }
-.gh-ph svg { width: 46%; max-width: 280px; height: auto; color: var(--ink); opacity: .82; }
+.gh-ph svg { width: 52%; max-width: 320px; height: auto; color: var(--ink); filter: drop-shadow(0 18px 24px rgba(20,20,20,.12)); }
+.gh-ph--fill svg { width: 100%; height: 100%; max-width: none; filter: none; }
+.gh-ph--lineup { display: flex; justify-content: center; align-items: center; gap: 2%; padding: 0 6% 22%; }
+.gh-ph--lineup span { flex: 1; max-width: 220px; }
+.gh-ph--lineup svg { width: 100%; filter: drop-shadow(0 18px 30px rgba(0,0,0,.4)); }
+@media (max-width: 749px) { .gh-ph--lineup { padding-bottom: 60%; gap: 1%; } }
 .gh-ph__cap { position: absolute; left: 12px; bottom: 12px; color: var(--ink); opacity: .6; }
 .gh-ph::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .35; mix-blend-mode: multiply;
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .22; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -131,7 +136,7 @@
 .gh-swatch { position: relative; }
 .gh-swatch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
 .gh-swatch__img { display: block; aspect-ratio: 1; outline: 1px solid var(--line); outline-offset: -1px; transition: outline-color .15s; }
-.gh-swatch__img .gh-ph svg { width: 70%; }
+.gh-swatch__img .gh-ph svg { width: 66%; filter: none; }
 .gh-swatch__img .gh-ph__cap { display: none; }
 .gh-swatch__name { display: block; margin-top: 6px; font-size: 12px; line-height: 1.25; color: var(--ink-2); }
 .gh-swatch input:checked ~ .gh-swatch__img { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -267,13 +272,13 @@
 .gh-faq__a { padding: 0 40px 24px 0; color: var(--ink-2); }
 
 /* ---------- Final CTA ---------- */
-.gh-final { position: relative; min-height: 78vh; display: grid; align-items: end; color: var(--paper); --tone: #2a2a28; }
+.gh-final { position: relative; min-height: 78vh; display: grid; align-items: end; color: var(--paper); --tone: #1f2a33; }
 .gh-final > .gh-media { position: absolute; inset: 0; }
 .gh-final > .gh-media::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 60%); }
 .gh-final__inner { position: relative; z-index: 2; padding-top: 64px; padding-bottom: 56px; width: 100%; display: grid; gap: 28px; }
 @media (min-width: 990px) { .gh-final__inner { grid-template-columns: 1fr auto; align-items: end; } }
 .gh-final .gh-h2 { font-size: clamp(48px, 7.5vw, 124px); }
-.gh-final .gh-ph svg { display: none; }
+@media (max-width: 749px) { .gh-final .gh-h2 br { display: none; } }
 .gh-final .gh-ph__cap { top: 16px; bottom: auto; left: var(--gutter); }
 .gh-final .gh-atc { background: var(--paper); color: var(--ink); min-width: 300px; }
 .gh-final .gh-atc:hover { background: var(--signal); }

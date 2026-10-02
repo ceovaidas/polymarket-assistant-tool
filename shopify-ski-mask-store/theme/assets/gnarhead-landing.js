@@ -60,6 +60,18 @@
       if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
     }
 
+    // No product photos yet: mirror the selected swatch's illustration into the main image.
+    function showSwatchArt() {
+      var heroPh = hero && hero.querySelector('.gh-ph');
+      var swatch = root.querySelector('.gh-swatch input:checked');
+      var art = swatch && swatch.closest('.gh-swatch').querySelector('.gh-swatch__img');
+      if (!heroPh || !art || !art.querySelector('.gh-ph')) return;
+      heroPh.querySelector('svg') && heroPh.removeChild(heroPh.querySelector('svg'));
+      heroPh.insertBefore(art.querySelector('.gh-ph svg').cloneNode(true), heroPh.firstChild);
+      hero.style.setProperty('--tone', art.style.getPropertyValue('--tone'));
+      if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+
     function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
 
     function render(changedOption) {
@@ -105,6 +117,7 @@
       if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' · ' + b.label : '');
 
       if (changedOption && variant.image) setHero(variant.image, variant.title);
+      else if (changedOption) showSwatchArt();
 
       if (window.history && window.history.replaceState && changedOption) {
         var url = new URL(window.location.href);

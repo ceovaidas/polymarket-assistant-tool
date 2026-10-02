@@ -9,7 +9,8 @@ theme/
   assets/gnarhead-landing.css     # scoped .gh styles
   assets/gnarhead-landing.js      # variant picker, bundles, gallery, sticky ATC
   sections/gnarhead-product-landing.liquid
-  snippets/gnarhead-icon.liquid   # line icons + placeholder silhouette
+  snippets/gnarhead-icon.liquid   # line icons
+  snippets/gnarhead-art.liquid    # face illustrations shown until photos are uploaded
   templates/product.landing.json  # pre-filled crew, spec rows, features, FAQ
 preview/                          # build.mjs renders the section with mock data -> index.html
 docs/                             # launch guide (LT) + copy (EN)

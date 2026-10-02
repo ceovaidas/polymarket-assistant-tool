@@ -7,35 +7,40 @@
           "type": "character",
           "settings": {
             "name": "Gramps",
-            "line": "Wrinkles, moustache, zero patience for slow skiers."
+            "line": "Wrinkles, moustache, zero patience for slow skiers.",
+            "art": "gramps"
           }
         },
         "char_2": {
           "type": "character",
           "settings": {
             "name": "The Cat",
-            "line": "Nine lives. Spends most of them in the terrain park."
+            "line": "Nine lives. Spends most of them in the terrain park.",
+            "art": "cat"
           }
         },
         "char_3": {
           "type": "character",
           "settings": {
             "name": "Tiger",
-            "line": "Apex predator of the beginner slope."
+            "line": "Apex predator of the beginner slope.",
+            "art": "tiger"
           }
         },
         "char_4": {
           "type": "character",
           "settings": {
             "name": "Corgi",
-            "line": "Short legs. Big send energy."
+            "line": "Short legs. Big send energy.",
+            "art": "corgi"
           }
         },
         "char_5": {
           "type": "character",
           "settings": {
             "name": "The Elf",
-            "line": "Seasonal release. Santa didn't approve this."
+            "line": "Seasonal release. Santa didn't approve this.",
+            "art": "elf"
           }
         },
         "spec_1": {
