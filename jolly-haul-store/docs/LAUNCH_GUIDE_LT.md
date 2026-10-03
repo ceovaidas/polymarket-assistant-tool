@@ -56,24 +56,25 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
 2. **Įkelk failus** (Online Store → Themes → ⋯ → Edit code):
    - `Assets`: `jolly.css`, `jolly.js`
    - `Snippets`: `jolly-icon`, `jolly-art`, `jolly-card` (iš `theme/snippets/`)
-   - `Sections`: `jolly-home`, `jolly-product`
+   - `Sections`: `jolly-header`, `jolly-home`, `jolly-product`
    - `Templates`: pakeisk `index.json` turinį į `theme/templates/index.json`; pridėk naują `product` šabloną `landing` ir įklijuok `product.landing.json`
-3. **Kolekcijos** (Products → Collections):
+3. **Meniu juosta:** Online Store → Navigation → `Main menu`: 4 nuorodos (Home, Shop all, Funny masks, Gift finder → `/#jh-finder`). Tada Customize → viršuje *Header* grupėje paslėpk Dawn „Header“ ir „Announcement bar“ → *Add section* → **Jolly Haul header** → pasirink `Main menu`. Logotipas tekstinis, kol neįkelsi paveikslėlio.
+4. **Kolekcijos** (Products → Collections):
    - `Trending` – rankinė, sudėk 8 geriausius → pasirink ją pradinio puslapio „Trending“ nustatyme.
    - Po vieną kolekciją kiekvienai kategorijai (Funny masks, Star projectors, Baby & kids, Ugly sweaters, Lights & decor, Stocking stuffers) → įdėk nuorodas į kategorijų plyteles.
    - Dovanų paieška pagal kainą jau nukreipta į `/collections/all?filter.v.price.lte=20` ir pan. – įjunk *Search & Discovery* app'e kainos filtrą.
-4. **Produktų žymos (tags)** valdo ženkliukus kortelėse:
+5. **Produktų žymos (tags)** valdo ženkliukus kortelėse:
    - `viral` → „Viral on TikTok“, `new` → „New“.
    - Kol nėra nuotraukų: `art-projector`, `art-onesie`, `art-sweater`, `art-ornament`, `art-gift`, `art-lights`, `art-gramps`, `art-elf` – parenka iliustraciją.
-5. **Kaukių produktas:** variantai `Face` (Gramps, The Cat, Tiger, Corgi, The Elf), šablonas **landing**. Kitiems produktams gali naudoti tą patį šabloną arba standartinį Dawn.
-6. **Bundle nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt. (turi sutapti su sekcijos nustatymais).
-7. **Temos nustatymai, kad meniu ir krepšelis derėtų:**
+6. **Kaukių produktas:** variantai `Face` (Gramps, The Cat, Tiger, Corgi, The Elf), šablonas **landing**. Kitiems produktams gali naudoti tą patį šabloną arba standartinį Dawn.
+7. **Bundle nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt. (turi sutapti su sekcijos nustatymais).
+8. **Temos nustatymai, kad meniu ir krepšelis derėtų:**
    - *Colors → Scheme 1*: Background `#FFFFFF`, Text `#1B2420`, Button `#E0313F`, Button label `#FFFFFF`. *Scheme 2*: Background `#12291F`, Text `#FFFFFF`.
    - *Typography*: Headings ir Body – **Rubik**.
    - *Buttons* radius 14–16, *Inputs/Cards* radius 14.
    - *Announcement bar* išjunk – sekcijos turi savo bėgančią juostą.
-8. **Programėlės:** CJdropshipping/DSers, **Judge.me** (atsiliepimai → žvaigždutės atsiras automatiškai), Shopify Email (naujienlaiškio forma jau prijungta prie klientų sąrašo su žyma `newsletter`).
-9. **Prieš paleidžiant:** bandomasis užsakymas, patikrink nuolaidas, telefono vaizdą, siuntimo terminus kiekviename produkte.
+9. **Programėlės:** CJdropshipping/DSers, **Judge.me** (atsiliepimai → žvaigždutės atsiras automatiškai), Shopify Email (naujienlaiškio forma jau prijungta prie klientų sąrašo su žyma `newsletter`).
+10. **Prieš paleidžiant:** bandomasis užsakymas, patikrink nuolaidas, telefono vaizdą, siuntimo terminus kiekviename produkte.
 
 Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…“ matosi tik redaktoriuje.
 
@@ -114,6 +115,7 @@ Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…�
 |---|---|
 | `preview/index.html` | Pradinio puslapio peržiūra |
 | `preview/product.html` | Produkto (kaukių) puslapio peržiūra |
+| `theme/sections/jolly-header.liquid` | Meniu juosta (logotipas kairėje, meniu centre, piktogramos dešinėje; telefone – išskleidžiamas meniu) |
 | `theme/sections/jolly-home.liquid` | Pradinis puslapis (hero, kategorijos, trending, laikmatis, spotlight, dovanų paieška, DUK, naujienlaiškis) |
 | `theme/sections/jolly-product.liquid` | Produkto landing puslapis |
 | `theme/snippets/jolly-card.liquid` | Produkto kortelė tinkleliuose |

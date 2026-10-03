@@ -478,19 +478,56 @@
 .jh-news__ok { margin-top: 16px; font-weight: 700; }
 .jh-news small { display: block; margin-top: 12px; color: rgba(255,255,255,.75); font-size: 13px; }
 
-/* preview-only stand-ins for the theme header and footer */
-body { margin: 0; background: #fff; }
-.pv-head { position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid var(--line); }
-.pv-head__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 66px; }
-.pv-nav { display: none; gap: 26px; font-weight: 600; font-size: 15px; }
-.pv-nav a { text-decoration: none; }
-@media (min-width: 990px) { .pv-nav { display: flex; } .pv-burger { display: none !important; } }
+/* =====================================================================
+   Header
+   ===================================================================== */
+.jh-header-wrapper { position: sticky; top: 0; z-index: 30; }
+.jh-header { background: rgba(255,255,255,.92); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
+.jh-header__in { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; grid-template-areas: "menu logo icons"; align-items: center; height: 64px; }
+@media (min-width: 990px) {
+  .jh-header__in { grid-template-areas: "logo nav icons"; height: 76px; }
+  .jh-header__drawer { display: none; }
+}
+.jh-header__drawer { grid-area: menu; justify-self: start; }
+.jh-logo { grid-area: logo; justify-self: center; display: inline-flex; align-items: flex-start; gap: 2px; text-decoration: none; font-weight: 900; font-size: 26px; letter-spacing: -.045em; line-height: 1; }
+@media (min-width: 990px) { .jh-logo { justify-self: start; font-size: 28px; } }
+.jh-logo b { color: var(--pop); font-weight: 900; }
+.jh-logo svg { width: 15px; height: 15px; margin-top: -4px; }
+.jh-logo__img { display: block; }
+.jh-logo__img img { width: 100%; height: auto; }
+.jh-logo:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; border-radius: 6px; }
+
+.jh-header__nav { grid-area: nav; display: none; gap: 4px; padding: 5px; border-radius: 999px; background: var(--ice); }
+@media (min-width: 990px) { .jh-header__nav { display: flex; } }
+.jh-header__nav a { padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; text-decoration: none; color: var(--ink-2); transition: background .15s, color .15s; white-space: nowrap; }
+.jh-header__nav a:hover { color: var(--ink); background: rgba(255,255,255,.7); }
+.jh-header__nav a[aria-current="page"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(27,36,32,.1); }
+.jh-header__nav a:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+
+.jh-header__icons { grid-area: icons; justify-self: end; display: flex; gap: 4px; }
+.jh-iconbtn { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--ink); text-decoration: none; cursor: pointer; transition: background .15s; list-style: none; }
+.jh-iconbtn::-webkit-details-marker { display: none; }
+.jh-iconbtn:hover { background: var(--ice); }
+.jh-iconbtn:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+.jh-iconbtn svg { width: 22px; height: 22px; }
+.jh-cartcount { position: absolute; top: 4px; right: 3px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--pop); color: #fff; font-size: 11px; font-weight: 800; line-height: 18px; text-align: center; box-shadow: 0 0 0 2px #fff; }
+.jh-header__account { display: none; }
+@media (min-width: 750px) { .jh-header__account { display: grid; } }
+
+.jh-header__close { display: none; }
+.jh-header__drawer[open] .jh-header__open { display: none; }
+.jh-header__drawer[open] .jh-header__close { display: block; }
+.jh-header__mobile { position: absolute; left: 0; right: 0; top: 100%; padding: 8px var(--gutter) 20px; background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 16px 30px rgba(27,36,32,.08); display: grid; }
+.jh-header__mobile a { display: flex; justify-content: space-between; align-items: center; padding: 15px 4px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: 17px; text-decoration: none; }
+.jh-header__mobile a:last-child { border-bottom: 0; }
+.jh-header__mobile a[aria-current="page"] { color: var(--pop); }
+.jh-header__mobile svg { width: 18px; height: 18px; color: var(--ink-3); }
+
+/* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
 .pv-logo svg { width: 16px; height: 16px; margin-top: -2px; }
-.pv-icons { justify-self: end; display: flex; gap: 18px; }
-.pv-icons svg { width: 24px; height: 24px; }
-.pv-burger { display: inline-block; width: 24px; height: 12px; border-top: 2.5px solid; border-bottom: 2.5px solid; border-radius: 1px; }
+body { margin: 0; background: #fff; }
 .pv-foot { background: var(--navy); color: rgba(255,255,255,.75); padding: 48px 0; font-size: 14px; }
 .pv-foot__in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; }
 .pv-foot .pv-logo { color: #fff; font-size: 24px; }
@@ -499,15 +536,30 @@ body { margin: 0; background: #fff; }
 </style>
 </head>
 <body>
-<div class="jh">
-  <header class="pv-head"><div class="jh-wrap pv-head__in">
-    <div><span class="pv-burger" aria-hidden="true"></span><nav class="pv-nav"><a href="index.html">Home</a><a href="#">Shop all</a><a href="product.html">Funny masks</a><a href="#">Gift finder</a></nav></div>
-    <a class="pv-logo" href="index.html">jolly<b>haul</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
-    <div class="pv-icons" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
+<div class="jh-header-wrapper"><header class="jh jh-header">
+  <div class="jh-wrap jh-header__in">
+    <details class="jh-header__drawer">
+      <summary class="jh-iconbtn" aria-label="Menu">
+        <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </summary>
+      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html" aria-current="page">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Shop all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="product.html">Funny masks<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="index.html#jh-finder">Gift finder<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
+    </details>
+
+    <a class="jh-logo" href="index.html" aria-label="Jolly Haul"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
+
+    <nav class="jh-header__nav" aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="#">Shop all</a><a href="product.html">Funny masks</a><a href="index.html#jh-finder">Gift finder</a></nav>
+
+    <div class="jh-header__icons">
+      <a class="jh-iconbtn" href="#" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      </a><a class="jh-iconbtn" href="#" aria-label="Cart, 2 items">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg><span class="jh-cartcount">2</span></a>
     </div>
-  </div></header>
+  </div>
+</header>
+
+
 </div>
 
 <div class="jh" id="jh-home-home"><div class="jh-ticker" role="region" aria-label="Free shipping over $50 · Order by Dec 10 for Christmas delivery · 30-day easy returns · New viral finds every week">
@@ -577,7 +629,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Snowfall Star Projector</a></h3>
     <div class="jh-card__price">
       <span>$49.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="583837">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="645400">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -586,7 +638,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="686211">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="661729">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -595,7 +647,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="545637">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="52552">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -604,7 +656,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="867811">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="873416">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -613,7 +665,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Light-Up Ornament Set (6)</a></h3>
     <div class="jh-card__price">
       <span>$24.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="657674">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="279226">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -622,7 +674,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Mystery Stocking Stuffer Box</a></h3>
     <div class="jh-card__price">
       <span>$19.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="741452">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="916395">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -631,7 +683,7 @@ FYP</div></div>
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Warm-White Curtain Lights</a></h3>
     <div class="jh-card__price">
       <span>$34.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="370826">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="701110">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>

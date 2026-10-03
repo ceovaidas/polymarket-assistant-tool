@@ -9,6 +9,7 @@
 theme/
   assets/jolly.css                # scoped .jh styles (home + product)
   assets/jolly.js                 # gallery, swatches, bundles, sticky ATC, Christmas countdown
+  sections/jolly-header.liquid    # header: logo left, menu centred, icons right
   sections/jolly-home.liquid      # home page
   sections/jolly-product.liquid   # product landing page
   snippets/jolly-card.liquid      # product card (badges from tags: viral, new)

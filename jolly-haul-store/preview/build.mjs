@@ -86,7 +86,7 @@ const shop = { money_format: '${{amount}}', name: 'Jolly Haul' };
 
 // ---- shared page shell (stand-in for the theme header + footer, which Dawn renders) ----
 const logo = '<a class="pv-logo" href="index.html">jolly<b>haul</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>';
-const shell = (title, body) => `<!doctype html>
+const shell = (title, body, header) => `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -95,19 +95,11 @@ const shell = (title, body) => `<!doctype html>
 <meta name="description" content="Design preview of the Jolly Haul Shopify store, rendered from the real theme sections.">
 <style>
 ${css}
-/* preview-only stand-ins for the theme header and footer */
-body { margin: 0; background: #fff; }
-.pv-head { position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid var(--line); }
-.pv-head__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 66px; }
-.pv-nav { display: none; gap: 26px; font-weight: 600; font-size: 15px; }
-.pv-nav a { text-decoration: none; }
-@media (min-width: 990px) { .pv-nav { display: flex; } .pv-burger { display: none !important; } }
+/* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
 .pv-logo svg { width: 16px; height: 16px; margin-top: -2px; }
-.pv-icons { justify-self: end; display: flex; gap: 18px; }
-.pv-icons svg { width: 24px; height: 24px; }
-.pv-burger { display: inline-block; width: 24px; height: 12px; border-top: 2.5px solid; border-bottom: 2.5px solid; border-radius: 1px; }
+body { margin: 0; background: #fff; }
 .pv-foot { background: var(--navy); color: rgba(255,255,255,.75); padding: 48px 0; font-size: 14px; }
 .pv-foot__in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; }
 .pv-foot .pv-logo { color: #fff; font-size: 24px; }
@@ -116,16 +108,7 @@ body { margin: 0; background: #fff; }
 </style>
 </head>
 <body>
-<div class="jh">
-  <header class="pv-head"><div class="jh-wrap pv-head__in">
-    <div><span class="pv-burger" aria-hidden="true"></span><nav class="pv-nav"><a href="index.html">Home</a><a href="#">Shop all</a><a href="product.html">Funny masks</a><a href="#">Gift finder</a></nav></div>
-    ${logo}
-    <div class="pv-icons" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
-    </div>
-  </div></header>
-</div>
+<div class="jh-header-wrapper">${header}</div>
 ${body.replace(/<script src="[^"]*" defer><\/script>/, '')}
 <div class="jh"><footer class="pv-foot"><div class="jh-wrap pv-foot__in">
   ${logo}
@@ -139,17 +122,34 @@ ${js}
 </html>
 `;
 
+// ---- header (real section) ----
+const headerSrc = read('sections/jolly-header.liquid');
+const headerSchema = JSON.parse(headerSrc.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
+const headerSettings = Object.fromEntries(headerSchema.settings.filter((x) => x.id).map((x) => [x.id, x.default ?? null]));
+const renderHeader = (active) => engine.parseAndRender(headerSrc, {
+  section: { id: 'header', settings: headerSettings },
+  shop: { ...shop, customer_accounts_enabled: true },
+  cart: { item_count: 2 },
+  routes: { root_url: 'index.html', search_url: '#', cart_url: '#', account_url: '#' },
+  linklists: { 'main-menu': { links: [
+    { title: 'Home', url: 'index.html', active: active === 'home' },
+    { title: 'Shop all', url: '#', active: false },
+    { title: 'Funny masks', url: 'product.html', active: active === 'product' },
+    { title: 'Gift finder', url: 'index.html#jh-finder', active: false },
+  ] } },
+});
+
 // ---- home ----
 const home = sectionData('jolly-home.liquid', 'index.json', 'home');
 home.section.settings.trending_collection = { url: '#', products: catalogue };
 home.section.settings.spotlight_product = mask;
 home.section.settings.hero_cta_link = '#';
 const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, routes: { all_products_collection_url: '#' } });
-writeFileSync(join(here, 'index.html'), shell('Jolly Haul Preview', homeHtml));
+writeFileSync(join(here, 'index.html'), shell('Jolly Haul Preview', homeHtml, await renderHeader('home')));
 
 // ---- product ----
 const prod = sectionData('jolly-product.liquid', 'product.landing.json', 'main');
 const prodHtml = await engine.parseAndRender(prod.src, { product: mask, section: prod.section, shop, request: {} });
-writeFileSync(join(here, 'product.html'), shell('Jolly Haul Product Preview', prodHtml));
+writeFileSync(join(here, 'product.html'), shell('Jolly Haul Product Preview', prodHtml, await renderHeader('product')));
 
 console.log('wrote preview/index.html + preview/product.html');

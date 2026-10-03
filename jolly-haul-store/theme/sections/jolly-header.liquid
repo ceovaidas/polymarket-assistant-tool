@@ -1,0 +1,66 @@
+{%- comment -%}
+  Jolly Haul — header. Replaces Dawn's header in sections/header-group.json (see the launch guide).
+  Desktop: logo left · menu centred · icons right. Mobile: menu button · logo · icons.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+
+{%- assign menu = linklists[section.settings.menu] -%}
+<header class="jh jh-header">
+  <div class="jh-wrap jh-header__in">
+    <details class="jh-header__drawer">
+      <summary class="jh-iconbtn" aria-label="Menu">
+        <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </summary>
+      <nav class="jh-header__mobile" aria-label="Main">
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
+        {%- endfor -%}
+      </nav>
+    </details>
+
+    <a class="jh-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo -%}
+        <span class="jh-logo__img" style="width: {{ section.settings.logo_width }}px">{{ section.settings.logo | image_url: width: 480 | image_tag: alt: shop.name }}</span>
+      {%- else -%}
+        <span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg>
+      {%- endif -%}
+    </a>
+
+    <nav class="jh-header__nav" aria-label="Main">
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="jh-header__icons">
+      <a class="jh-iconbtn" href="{{ routes.search_url }}" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      </a>
+      {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
+        <a class="jh-iconbtn jh-header__account" href="{{ routes.account_url }}" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+        </a>
+      {%- endif -%}
+      <a class="jh-iconbtn" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
+        {%- if cart.item_count > 0 -%}<span class="jh-cartcount">{{ cart.item_count }}</span>{%- endif -%}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Jolly Haul header",
+  "tag": "div",
+  "class": "jh-header-wrapper",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "4–5 links look best." },
+    { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Leave empty to use the text logo." },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 240, "step": 10, "unit": "px", "default": 140 },
+    { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": false }
+  ]
+}
+{% endschema %}
