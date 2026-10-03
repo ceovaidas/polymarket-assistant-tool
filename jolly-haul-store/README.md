@@ -11,13 +11,19 @@ theme/
   assets/jolly.js                 # gallery, swatches, bundles, sticky ATC, Christmas countdown
   sections/jolly-header.liquid    # header: logo left, menu centred, icons right
   sections/jolly-home.liquid      # home page
+  sections/jolly-collection.liquid # collection + shop-all pages
+  sections/jolly-wheel.liquid     # Christmas prize wheel (footer group)
+  sections/cart-icon-bubble.liquid # overrides Dawn's so cart updates keep our icon
   sections/jolly-product.liquid   # product landing page
   snippets/jolly-card.liquid      # product card (badges from tags: viral, new)
   snippets/jolly-art.liquid       # illustrations shown until photos are uploaded
   snippets/jolly-icon.liquid      # line icons
   templates/index.json            # pre-filled home page
+  templates/product.json          # default product page (all products)
+  templates/collection.json       # collection pages
   templates/product.landing.json  # pre-filled product landing (ski masks)
-preview/                          # build.mjs -> index.html + product.html
+preview/                          # build.mjs -> index, product, projector, collection pages
+theme-config/footer-wheel.json    # default wheel prizes added to the footer group by build_theme.py
 imagegen/                         # shot list + kie.ai generator
 docs/                             # launch guide (LT) + copy (EN)
 ```

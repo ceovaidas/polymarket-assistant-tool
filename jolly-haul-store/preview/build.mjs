@@ -34,6 +34,18 @@ engine.registerTag('form', {
     emitter.write('</form>');
   },
 });
+engine.registerTag('paginate', {
+  parse(token, remain) {
+    this.tpls = [];
+    const stream = this.liquid.parser.parseStream(remain).on('tag:endpaginate', () => stream.stop()).on('template', (t) => this.tpls.push(t)).on('end', () => { throw new Error('paginate not closed'); });
+    stream.start();
+  },
+  * render(ctx, emitter) {
+    ctx.push({ paginate: { pages: 1, current_page: 1, parts: [] } });
+    yield this.liquid.renderer.renderTemplates(this.tpls, ctx, emitter);
+    ctx.pop();
+  },
+});
 engine.registerTag('schema', {
   parse(token, remain) {
     const stream = this.liquid.parser.parseStream(remain).on('tag:endschema', () => stream.stop()).on('end', () => {});
@@ -48,12 +60,12 @@ function sectionData(file, templateFile, key) {
   const schema = JSON.parse(src.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
   const tpl = JSON.parse(read(`templates/${templateFile}`)).sections[key];
   const defaults = (list) => Object.fromEntries(list.filter((s) => s.id).map((s) => [s.id, s.default ?? null]));
-  const blocks = tpl.block_order.map((id) => {
+  const blocks = (tpl.block_order || []).map((id) => {
     const b = tpl.blocks[id];
-    const def = schema.blocks.find((d) => d.type === b.type);
+    const def = (schema.blocks || []).find((d) => d.type === b.type);
     return { id, type: b.type, shopify_attributes: '', settings: { ...defaults(def.settings), ...b.settings } };
   });
-  return { src, section: { id: key, settings: { ...defaults(schema.settings), ...tpl.settings }, blocks } };
+  return { src, section: { id: key, settings: { ...defaults(schema.settings), ...(tpl.settings || {}) }, blocks } };
 }
 
 // ---- mock catalogue (no photos yet → illustrations render) ----
@@ -74,7 +86,7 @@ const mask = mk('Funny Face Ski Mask', 3999, ['viral', 'art-gramps'], 'product.h
 });
 const catalogue = [
   mask,
-  mk('Snowfall Star Projector', 4999, ['viral', 'art-projector']),
+  mk('Snowfall Star Projector', 4999, ['viral', 'art-projector'], 'projector.html', { description: '<p>Turns any ceiling into a starry Christmas sky in seconds. Quiet, USB-powered, with a sleep timer.</p>' }),
   mk('Baby Reindeer Onesie', 2999, ['new', 'art-onesie']),
   mk('“Sleigh Queen” Ugly Sweater', 4499, ['art-sweater']),
   mk('Elf Ski Mask', 3999, ['new', 'art-elf'], 'product.html'),
@@ -110,6 +122,7 @@ body { margin: 0; background: #fff; }
 <body>
 <div class="jh-header-wrapper">${header}</div>
 ${body.replace(/<script src="[^"]*" defer><\/script>/, '')}
+${wheelHtml.replace(/<script src="[^"]*" defer><\/script>/, '')}
 <div class="jh"><footer class="pv-foot"><div class="jh-wrap pv-foot__in">
   ${logo}
   <nav><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
@@ -122,6 +135,19 @@ ${js}
 </html>
 `;
 
+// ---- prize wheel (real section, footer group) ----
+const wheelSrc = read('sections/jolly-wheel.liquid').replace(/posted_successfully\?/g, 'posted_successfully');
+const wheelSchema = JSON.parse(wheelSrc.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
+const wheelCfg = JSON.parse(readFileSync(join(here, '..', 'theme-config', 'footer-wheel.json'), 'utf8'));
+const wDefaults = (list) => Object.fromEntries(list.filter((x) => x.id).map((x) => [x.id, x.default ?? null]));
+const wheelHtml = await engine.parseAndRender(wheelSrc, {
+  section: {
+    id: 'wheel',
+    settings: { ...wDefaults(wheelSchema.settings), ...wheelCfg.settings, delay: 4 },
+    blocks: wheelCfg.block_order.map((id) => ({ id, type: 'prize', shopify_attributes: '', settings: { ...wDefaults(wheelSchema.blocks[0].settings), ...wheelCfg.blocks[id].settings } })),
+  },
+});
+
 // ---- header (real section) ----
 const headerSrc = read('sections/jolly-header.liquid');
 const headerSchema = JSON.parse(headerSrc.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
@@ -133,7 +159,7 @@ const renderHeader = (active) => engine.parseAndRender(headerSrc, {
   routes: { root_url: 'index.html', search_url: '#', cart_url: '#', account_url: '#' },
   linklists: { 'main-menu': { links: [
     { title: 'Home', url: 'index.html', active: active === 'home' },
-    { title: 'Shop all', url: '#', active: false },
+    { title: 'Shop all', url: 'collection.html', active: active === 'shop' },
     { title: 'Funny masks', url: 'product.html', active: active === 'product' },
     { title: 'Gift finder', url: 'index.html#jh-finder', active: false },
   ] } },
@@ -143,7 +169,8 @@ const renderHeader = (active) => engine.parseAndRender(headerSrc, {
 const home = sectionData('jolly-home.liquid', 'index.json', 'home');
 home.section.settings.trending_collection = { url: '#', products: catalogue };
 home.section.settings.spotlight_product = mask;
-home.section.settings.hero_cta_link = '#';
+home.section.settings.hero_cta_link = 'collection.html';
+home.section.settings.trending_collection.url = 'collection.html';
 const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, routes: { all_products_collection_url: '#' } });
 writeFileSync(join(here, 'index.html'), shell('Jolly Haul Preview', homeHtml, await renderHeader('home')));
 
@@ -152,4 +179,19 @@ const prod = sectionData('jolly-product.liquid', 'product.landing.json', 'main')
 const prodHtml = await engine.parseAndRender(prod.src, { product: mask, section: prod.section, shop, request: {} });
 writeFileSync(join(here, 'product.html'), shell('Jolly Haul Product Preview', prodHtml, await renderHeader('product')));
 
-console.log('wrote preview/index.html + preview/product.html');
+// ---- generic product (default product.json template) ----
+const gen = sectionData('jolly-product.liquid', 'product.json', 'main');
+const projector = catalogue[1];
+const genHtml = await engine.parseAndRender(gen.src, { product: projector, section: gen.section, shop, request: {} });
+writeFileSync(join(here, 'projector.html'), shell('Jolly Haul Projector Preview', genHtml, await renderHeader('other')));
+
+// ---- collection (Shop all) ----
+const coll = sectionData('jolly-collection.liquid', 'collection.json', 'main');
+const collHtml = await engine.parseAndRender(coll.src, {
+  section: coll.section, shop, routes: { all_products_collection_url: 'collection.html' },
+  collection: { title: 'Shop all', description: '<p>Every viral Christmas find, in one place.</p>', products: catalogue, products_count: catalogue.length, filters: [],
+    sort_by: 'best-selling', sort_options: [{ value: 'best-selling', name: 'Best selling' }, { value: 'price-ascending', name: 'Price, low to high' }, { value: 'price-descending', name: 'Price, high to low' }, { value: 'created-descending', name: 'Newest' }] },
+});
+writeFileSync(join(here, 'collection.html'), shell('Jolly Haul Shop All Preview', collHtml, await renderHeader('shop')));
+
+console.log('wrote preview/index.html, product.html, projector.html, collection.html');

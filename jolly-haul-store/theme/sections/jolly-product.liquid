@@ -13,7 +13,17 @@
   assign rating_count = product.metafields.reviews.rating_count
   assign tones = section.settings.placeholder_tones | split: ','
   assign tone_count = tones.size
-  assign art_keys = section.settings.art_order | split: ','
+  assign tag_art = 'gift'
+  for tag in product.tags
+    if tag contains 'art-'
+      assign tag_art = tag | remove_first: 'art-'
+    endif
+  endfor
+  assign art_source = section.settings.art_order
+  if art_source == blank
+    assign art_source = tag_art
+  endif
+  assign art_keys = art_source | split: ','
   assign art_count = art_keys.size
   assign has_footage = false
   for b in section.blocks
@@ -82,13 +92,6 @@
             {%- endif -%}
           </div>
 
-          {%- if perks.size > 0 -%}
-            <div class="jh-perks-overlay" aria-hidden="true">
-              {%- for block in perks -%}
-                <div class="jh-perk-chip" {{ block.shopify_attributes }}>{% render 'jolly-icon', name: block.settings.icon %}{{ block.settings.label }}</div>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
 
           {%- if slide_count > 1 -%}
             <button type="button" class="jh-gallery__nav jh-gallery__nav--prev" data-jh-prev aria-label="Previous image">{% render 'jolly-icon', name: 'chev-left' %}</button>
@@ -101,6 +104,13 @@
           {%- endif -%}
         </div>
 
+        {%- if perks.size > 0 -%}
+          <div class="jh-perks-overlay" aria-hidden="true">
+            {%- for block in perks -%}
+              <div class="jh-perk-chip" {{ block.shopify_attributes }}>{% render 'jolly-icon', name: block.settings.icon %}{{ block.settings.label }}</div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
         {%- if slide_count > 1 -%}
           <div class="jh-thumbs" data-jh-thumbs>
             {%- if product.media.size > 0 -%}
@@ -503,7 +513,7 @@
       "id": "art_order",
       "label": "Illustration order (matches Face option order)",
       "default": "gramps,cat,tiger,corgi,elf",
-      "info": "Options: gramps, cat, tiger, corgi, elf, mask."
+      "info": "Faces shown until photos are uploaded, in the same order as the Face option. Leave empty to use the product's art-… tag (e.g. art-projector)."
     },
     {
       "type": "header",

@@ -79,6 +79,7 @@ def main(dawn_dir):
         for folder in ("assets", "sections", "snippets", "templates"):
             for f in (OURS / folder).iterdir():
                 shutil.copy(f, build / folder / f.name)
+        # Dawn's product template is replaced by ours (templates/product.json), so drop nothing else.
 
         # Home: point settings at the collections/products created from the import files.
         index = load_json(build / "templates" / "index.json")
@@ -103,6 +104,9 @@ def main(dawn_dir):
 
         footer = load_json(build / "sections" / "footer-group.json")
         footer["sections"]["footer"]["settings"]["color_scheme"] = "scheme-3"
+        # Prize wheel lives in the footer group so it is available on every page.
+        footer["sections"]["jolly-wheel"] = json.loads((HERE / "theme-config" / "footer-wheel.json").read_text())
+        footer["order"].append("jolly-wheel")
         dump_json(build / "sections" / "footer-group.json", footer)
 
         data = load_json(build / "config" / "settings_data.json")

@@ -1,0 +1,122 @@
+{%- comment -%}
+  Jolly Haul — Christmas prize wheel. Lives in the footer group so it is available on every page.
+  Polite by design: opens after a delay (or on exit intent on desktop), closes with "No thanks",
+  ✕, Esc or a click outside, then stays away for a few days. A small gift button lets people reopen it.
+  Every prize code must exist in Shopify → Discounts.
+{%- endcomment -%}
+
+{%- if section.settings.enabled -%}
+  {{ 'jolly.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'jolly.js' | asset_url }}" defer></script>
+
+  {%- assign prizes = section.blocks | where: 'type', 'prize' -%}
+  <div class="jh jh-wheel" data-jh-wheel data-delay="{{ section.settings.delay }}" data-snooze="{{ section.settings.snooze_days }}" data-exit="{{ section.settings.exit_intent }}">
+    <button type="button" class="jh-wheel__teaser" data-jh-wheel-open hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM2 7h20v4H2zM12 7v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7C10 3 5.5 3.5 6.5 6S12 7 12 7s4-4.5 6-2-6 2-6 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <span data-jh-teaser>{{ section.settings.teaser }}</span>
+    </button>
+
+    <div class="jh-wheel__layer" data-jh-wheel-layer hidden>
+      <div class="jh-wheel__backdrop" data-jh-wheel-close></div>
+      <div class="jh-wheel__dialog" role="dialog" aria-modal="true" aria-labelledby="jh-wheel-title-{{ section.id }}" tabindex="-1">
+        <button type="button" class="jh-wheel__x" data-jh-wheel-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+
+        <div class="jh-wheel__stage">
+          <div class="jh-wheel__snow" aria-hidden="true"></div>
+          <div class="jh-wheel__pointer" aria-hidden="true"></div>
+          <svg class="jh-wheel__svg" viewBox="-110 -110 220 220" aria-hidden="true"><g data-jh-wheel-disc></g></svg>
+          <button type="button" class="jh-wheel__hub" data-jh-spin aria-label="Spin the wheel">Spin</button>
+        </div>
+
+        <div class="jh-wheel__body">
+          <div data-jh-step="intro">
+            <span class="jh-eyebrow">{{ section.settings.eyebrow }}</span>
+            <h2 class="jh-wheel__title" id="jh-wheel-title-{{ section.id }}">{{ section.settings.heading }}</h2>
+            <p class="jh-wheel__text">{{ section.settings.text }}</p>
+            <button type="button" class="jh-btn jh-btn--pop jh-wheel__cta" data-jh-spin>{{ section.settings.button }}</button>
+            <button type="button" class="jh-wheel__no" data-jh-wheel-close>No thanks</button>
+            <p class="jh-wheel__fine">{{ section.settings.fine_print }}</p>
+          </div>
+
+          <div data-jh-step="spinning" hidden>
+            <span class="jh-eyebrow">Fingers crossed</span>
+            <h2 class="jh-wheel__title">Spinning…</h2>
+            <p class="jh-wheel__text" aria-live="polite">Santa's checking the list.</p>
+          </div>
+
+          <div data-jh-step="win" hidden>
+            <span class="jh-eyebrow">You won</span>
+            <h2 class="jh-wheel__title" data-jh-prize aria-live="polite"></h2>
+            <p class="jh-wheel__text" data-jh-prize-note></p>
+            <p class="jh-wheel__fine">Your code is saved on this device — tap the gift button anytime to see it again.</p>
+            <div class="jh-wheel__code">
+              <code data-jh-code></code>
+              <button type="button" data-jh-copy>Copy</button>
+            </div>
+            <a class="jh-btn jh-btn--pop jh-wheel__cta" href="#" data-jh-apply>Apply to my order</a>
+            {%- if section.settings.collect_email -%}
+              {%- form 'customer', class: 'jh-wheel__email' -%}
+                {%- if form.posted_successfully? -%}
+                  <p class="jh-wheel__fine">You're on the list for Christmas deals.</p>
+                {%- else -%}
+                  <input type="hidden" name="contact[tags]" value="newsletter,prize-wheel">
+                  <label class="visually-hidden" for="jh-wheel-email-{{ section.id }}">Email</label>
+                  <input id="jh-wheel-email-{{ section.id }}" type="email" name="contact[email]" placeholder="Email for deals (optional)" autocomplete="email" required>
+                  <button type="submit">Join</button>
+                {%- endif -%}
+              {%- endform -%}
+            {%- endif -%}
+            <button type="button" class="jh-wheel__no" data-jh-wheel-close>Keep shopping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/json" data-jh-wheel-json>
+      {
+        "prizes": [
+          {%- for block in prizes -%}
+            { "label": {{ block.settings.label | json }}, "sub": {{ block.settings.sub | json }}, "note": {{ block.settings.note | json }}, "code": {{ block.settings.code | strip | json }}, "weight": {{ block.settings.weight }}, "color": {{ block.settings.color | json }} }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Jolly prize wheel",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show the prize wheel", "default": true },
+    { "type": "range", "id": "delay", "label": "Open after", "min": 3, "max": 60, "step": 1, "unit": "s", "default": 8 },
+    { "type": "checkbox", "id": "exit_intent", "label": "Also open when a desktop visitor moves to leave", "default": true },
+    { "type": "range", "id": "snooze_days", "label": "After 'No thanks', hide for", "min": 1, "max": 30, "step": 1, "unit": "d", "default": 7 },
+    { "type": "text", "id": "teaser", "label": "Small gift button text", "default": "Your Christmas spin" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A little Christmas thank-you" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Spin for a gift on your first order" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "No sign-up needed. Every slice is a real prize — your code works at checkout." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Spin the wheel" },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "default": "One spin per visitor. Prizes are drawn at random; odds vary by prize. Codes valid until Dec 31, 2026." },
+    { "type": "checkbox", "id": "collect_email", "label": "Show an optional newsletter field after winning", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "prize", "name": "Prize", "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Slice label", "default": "10%" },
+        { "type": "text", "id": "sub", "label": "Slice small text", "default": "OFF" },
+        { "type": "text", "id": "note", "label": "Shown after winning", "default": "10% off your order." },
+        { "type": "text", "id": "code", "label": "Discount code", "default": "JOLLY10", "info": "Create exactly this code in Shopify → Discounts." },
+        { "type": "range", "id": "weight", "label": "Chance (relative)", "min": 1, "max": 50, "step": 1, "default": 20 },
+        { "type": "select", "id": "color", "label": "Slice colour", "default": "pine", "options": [
+          { "value": "pine", "label": "Pine" }, { "value": "cranberry", "label": "Cranberry" }, { "value": "cream", "label": "Cream" }, { "value": "gold", "label": "Gold" } ] }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Jolly prize wheel" }]
+}
+{% endschema %}

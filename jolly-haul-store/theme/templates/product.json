@@ -1,0 +1,86 @@
+{
+  "sections": {
+    "main": {
+      "type": "jolly-product",
+      "blocks": {
+        "perk_1": {
+          "type": "perk",
+          "settings": {
+            "label": "Ships in 1–3 days",
+            "icon": "truck"
+          }
+        },
+        "perk_2": {
+          "type": "perk",
+          "settings": {
+            "label": "Gift-ready",
+            "icon": "gift"
+          }
+        },
+        "perk_3": {
+          "type": "perk",
+          "settings": {
+            "label": "30-day returns",
+            "icon": "check"
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Will it arrive before Christmas?",
+            "answer": "<p>Order by December 10 for standard delivery before Christmas. You'll get a tracking link as soon as it ships.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "How much is shipping?",
+            "answer": "<p>Free on orders over $50. Below that, the exact cost is shown at checkout before you pay.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I send it as a gift?",
+            "answer": "<p>Yes. Enter their address at checkout and add a gift note — prices are left out of the parcel.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "What if it's not right?",
+            "answer": "<p>Return unused items within 30 days of delivery for a refund. Just email us with your order number.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "perk_1",
+        "perk_2",
+        "perk_3",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ],
+      "settings": {
+        "art_order": "",
+        "badge": "Christmas favourite",
+        "lede": "",
+        "hook_emoji": "🎁",
+        "hook": "Gift tip: add a gift note at checkout — we leave prices out of the parcel.",
+        "swatch_option": "",
+        "bundle_heading": "",
+        "materials": "",
+        "marquee": "Ships in 1–3 days|30-day returns|Gift-ready|Secure checkout|Order by Dec 10 for Christmas",
+        "guarantee_heading": "Love it, or send it back.",
+        "guarantee_text": "Not quite right? Return unused items within 30 days of delivery for a full refund.",
+        "final_heading": "The gift they'll actually talk about.",
+        "final_text": "Order by December 10 for delivery before Christmas.",
+        "ticker": "Free shipping over $50|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -46,6 +46,7 @@
 @media (min-width: 750px) { .jh { --gutter: 28px; } }
 
 .jh *, .jh *::before, .jh *::after { box-sizing: border-box; }
+.jh [hidden], .jh[hidden] { display: none !important; }
 .jh :where(img, video) { display: block; max-width: 100%; }
 .jh :where(h1, h2, h3, p, ul, ol, figure, blockquote) { margin: 0; }
 .jh :where(button) { font: inherit; color: inherit; }
@@ -85,6 +86,12 @@
 .jh-gallery__item { scroll-snap-align: start; aspect-ratio: 1 / 1; }
 
 .jh-perks-overlay { position: absolute; left: 14px; top: 14px; z-index: 2; display: grid; gap: 8px; pointer-events: none; }
+@media (max-width: 749px) {
+  .jh-perks-overlay { position: static; display: flex; gap: 6px; overflow-x: auto; padding: 10px 0 0; scrollbar-width: none; }
+  .jh-perks-overlay::-webkit-scrollbar { display: none; }
+  .jh-perk-chip { width: auto !important; display: flex; align-items: center; gap: 6px; flex: none; padding: 8px 12px !important; border-radius: 999px; background: var(--ice); box-shadow: none; white-space: nowrap; font-size: 11px !important; }
+  .jh-perk-chip svg { margin: 0 !important; width: 16px !important; height: 16px !important; }
+}
 .jh-perk-chip { width: 76px; padding: 10px 6px 8px; border-radius: var(--r-sm); background: rgba(255,255,255,.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); text-align: center; font-size: 10px; line-height: 1.15; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; box-shadow: 0 4px 14px rgba(16,24,58,.08); }
 .jh-perk-chip svg { display: block; width: 22px; height: 22px; margin: 0 auto 5px; color: var(--brand); }
 @media (max-width: 420px) { .jh-perk-chip { width: 64px; font-size: 9px; padding: 8px 4px 6px; } .jh-perk-chip svg { width: 18px; height: 18px; } }
@@ -523,6 +530,95 @@
 .jh-header__mobile a[aria-current="page"] { color: var(--pop); }
 .jh-header__mobile svg { width: 18px; height: 18px; color: var(--ink-3); }
 
+/* =====================================================================
+   Prize wheel
+   ===================================================================== */
+.jh-wheel { position: relative; z-index: 60; }
+.jh-wheel__teaser {
+  position: fixed; left: 16px; bottom: 16px; z-index: 45; display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px 10px 12px; border: 0; border-radius: 999px; background: var(--brand); color: #fff;
+  font: 700 14px/1 var(--f); cursor: pointer; box-shadow: 0 8px 24px rgba(20,81,58,.3);
+  animation: jh-pop .4s cubic-bezier(.2,.8,.3,1.3);
+}
+.jh-wheel__teaser svg { width: 20px; height: 20px; color: var(--sun); }
+.jh-wheel__teaser:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+@media (max-width: 749px) { .jh-wheel__teaser { padding: 0; width: 52px; height: 52px; justify-content: center; } .jh-wheel__teaser span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .jh-wheel__teaser svg { width: 24px; height: 24px; } }
+@media (max-width: 989px) { html.jh-sticky-on .jh-wheel__teaser { bottom: 88px; } }
+@keyframes jh-pop { from { transform: scale(.6); opacity: 0; } }
+
+.jh-wheel__layer { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; }
+.jh-wheel__backdrop { position: absolute; inset: 0; background: rgba(18,41,31,.55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); animation: jh-fade .25s ease; }
+@keyframes jh-fade { from { opacity: 0; } }
+.jh-wheel__dialog {
+  position: relative; width: 100%; max-width: 820px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow: auto;
+  display: grid; grid-template-columns: 1fr; border-radius: var(--r-lg); background: #fff; box-shadow: 0 30px 80px rgba(0,0,0,.3);
+  animation: jh-rise .35s cubic-bezier(.2,.8,.3,1);
+}
+.jh-wheel__dialog:focus { outline: none; }
+@keyframes jh-rise { from { transform: translateY(24px); opacity: 0; } }
+@media (min-width: 750px) { .jh-wheel__dialog { grid-template-columns: 1.05fr 1fr; } }
+@media (max-width: 749px) {
+  .jh-wheel__layer { align-items: end; padding: 0; }
+  .jh-wheel__dialog { border-radius: var(--r-lg) var(--r-lg) 0 0; max-height: 94vh; max-height: 94dvh; animation-name: jh-sheet; }
+  @keyframes jh-sheet { from { transform: translateY(100%); } }
+}
+.jh-wheel__x { position: absolute; top: 12px; right: 12px; z-index: 3; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; cursor: pointer; color: var(--ink); }
+.jh-wheel__x svg { width: 20px; height: 20px; }
+.jh-wheel__x:focus-visible { outline: 3px solid var(--brand); }
+
+.jh-wheel__stage { position: relative; display: grid; place-items: center; padding: 34px 24px 22px; background: var(--navy); overflow: hidden; }
+@media (min-width: 750px) { .jh-wheel__stage { padding: 48px 32px; } }
+.jh-wheel__snow { position: absolute; inset: 0; pointer-events: none; opacity: .5; background-image: radial-gradient(circle, #fff 1.3px, transparent 1.8px), radial-gradient(circle, rgba(242,179,61,.8) 1px, transparent 1.5px); background-size: 70px 70px, 110px 110px; background-position: 0 0, 30px 40px; }
+.jh-wheel__svg { position: relative; width: min(300px, 70vw); height: auto; filter: drop-shadow(0 14px 24px rgba(0,0,0,.35)); }
+@media (max-width: 749px) { .jh-wheel__svg { width: min(250px, 66vw); } }
+.jh-wheel__svg > g { transform-box: fill-box; transform-origin: center; transition: transform 5.2s cubic-bezier(.12,.64,.08,1); }
+.jh-wheel__pointer { position: absolute; z-index: 2; top: calc(50% - min(150px, 35vw) - 2px); left: 50%; width: 30px; height: 36px; transform: translateX(-50%); background: var(--sun); clip-path: polygon(0 0, 100% 0, 50% 100%); filter: drop-shadow(0 3px 4px rgba(0,0,0,.35)); }
+@media (min-width: 750px) { .jh-wheel__pointer { top: calc(50% - 150px - 2px); } }
+@media (max-width: 749px) { .jh-wheel__pointer { top: calc(50% - min(125px, 33vw) - 4px); } }
+.jh-wheel__hub { position: absolute; z-index: 2; top: 50%; left: 50%; width: 74px; height: 74px; transform: translate(-50%, -50%); border-radius: 50%; border: 5px solid var(--sun); background: #fff; color: var(--pop); font: 900 15px/1 var(--f); text-transform: uppercase; letter-spacing: .04em; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .15s; }
+.jh-wheel__hub:hover { transform: translate(-50%, -50%) scale(1.06); }
+.jh-wheel__hub:disabled { cursor: default; color: var(--ink-3); transform: translate(-50%, -50%); }
+.jh-wheel__hub:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+.jh-wheel__body { padding: 26px 24px 28px; display: grid; align-content: center; }
+@media (min-width: 750px) { .jh-wheel__body { padding: 44px 40px; } }
+.jh-wheel__title { font-weight: 900; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.05; letter-spacing: -.025em; }
+.jh-wheel__text { margin-top: 10px; color: var(--ink-2); font-size: 16px; }
+.jh-wheel__cta { width: 100%; margin-top: 20px; }
+.jh-wheel__no { display: block; width: 100%; margin-top: 10px; padding: 12px; border: 0; background: none; color: var(--ink-2); font: 600 15px var(--f); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.jh-wheel__no:focus-visible { outline: 3px solid var(--brand); border-radius: 8px; }
+.jh-wheel__fine { margin-top: 12px; font-size: 12px; color: var(--ink-3); line-height: 1.45; }
+.jh-wheel__code { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding: 8px 8px 8px 16px; border: 2px dashed var(--brand); border-radius: 14px; background: var(--ice); }
+.jh-wheel__code code { flex: 1; font: 800 22px/1.2 var(--f); letter-spacing: .06em; color: var(--brand-dark); }
+.jh-wheel__code button { padding: 10px 16px; border: 0; border-radius: 10px; background: var(--brand); color: #fff; font: 700 14px var(--f); cursor: pointer; }
+.jh-wheel__code button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.jh-wheel__email { display: flex; gap: 8px; margin-top: 14px; }
+.jh-wheel__email input { flex: 1; min-width: 0; padding: 13px 14px; border: 1px solid #d9cfbf; border-radius: 12px; background: var(--ice); font: 15px var(--f); color: var(--ink); }
+.jh-wheel__email input:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+.jh-wheel__email button { padding: 13px 16px; border: 0; border-radius: 12px; background: var(--ink); color: #fff; font: 700 14px var(--f); cursor: pointer; }
+html.jh-lock { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .jh-wheel__svg g { transition-duration: .8s !important; } }
+
+/* =====================================================================
+   Collection page
+   ===================================================================== */
+.jh-collhead { position: relative; background: var(--ice); padding: 64px 0 40px; text-align: center; overflow: hidden; }
+.jh-collhead .jh-lights { position: absolute; top: 0; left: 0; right: 0; }
+.jh-collhead .jh-sub { max-width: 640px; margin-left: auto; margin-right: auto; }
+.jh-collbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+.jh-collbar__count { font-weight: 600; color: var(--ink-2); }
+.jh-chipfilter { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--ice-2); color: var(--ink); font-weight: 700; font-size: 14px; text-decoration: none; }
+.jh-sort { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+.jh-sort select { padding: 10px 36px 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2420' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 14px; font: 600 14px var(--f); color: var(--ink); -webkit-appearance: none; appearance: none; cursor: pointer; }
+.jh-sort select:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+.jh-empty { padding: 56px 20px; border-radius: var(--r-lg); background: var(--ice); text-align: center; }
+.jh-empty h2 { font-weight: 900; font-size: 28px; }
+.jh-empty p { margin: 8px 0 20px; color: var(--ink-2); }
+.jh-pages { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 40px; }
+.jh-pages a, .jh-pages span { display: grid; place-items: center; min-width: 44px; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 700; text-decoration: none; }
+.jh-pages [aria-current="page"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.jh-pages svg { width: 18px; height: 18px; }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -543,18 +639,18 @@ body { margin: 0; background: #fff; }
         <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </summary>
-      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Shop all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="product.html" aria-current="page">Funny masks<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="index.html#jh-finder">Gift finder<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
+      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Shop all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="product.html" aria-current="page">Funny masks<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="index.html#jh-finder">Gift finder<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
     </details>
 
     <a class="jh-logo" href="index.html" aria-label="Jolly Haul"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
 
-    <nav class="jh-header__nav" aria-label="Main"><a href="index.html">Home</a><a href="#">Shop all</a><a href="product.html" aria-current="page">Funny masks</a><a href="index.html#jh-finder">Gift finder</a></nav>
+    <nav class="jh-header__nav" aria-label="Main"><a href="index.html">Home</a><a href="collection.html">Shop all</a><a href="product.html" aria-current="page">Funny masks</a><a href="index.html#jh-finder">Gift finder</a></nav>
 
     <div class="jh-header__icons">
       <a class="jh-iconbtn" href="#" aria-label="Search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      </a><a class="jh-iconbtn" href="#" aria-label="Cart, 2 items">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg><span class="jh-cartcount">2</span></a>
+      </a><a class="jh-iconbtn" href="#" id="cart-icon-bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
+<span class="visually-hidden">Cart,  items</span></a>
     </div>
   </div>
 </header>
@@ -579,9 +675,9 @@ body { margin: 0; background: #fff; }
                   <div class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Corgi ski mask illustration" xmlns="http://www.w3.org/2000/svg"><path d="M76 88 L54 12 L114 50 Z" fill="#d69a5c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M 164.0 88 L 186.0 12 L 126.0 50 Z" fill="#d69a5c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M78 74 L64 30 L100 54 Z" fill="#f1d6b6"/><path d="M 162.0 74 L 176.0 30 L 140.0 54 Z" fill="#f1d6b6"/><path d="M70 292C70 264 58 248 54 222 44 162 46 94 78 56 98 32 142 32 162 56 194 94 196 162 186 222 182 248 170 264 170 292Z" fill="#d69a5c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 252C100 262 140 262 176 252L172 292H68Z" fill="#d69a5c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 266C104 274 136 274 170 266M70 279C104 287 136 287 170 279" fill="none" stroke="#141414" stroke-width="2" opacity=".35"/><path d="M120 40C110 70 114 98 112 104H128C126 98 130 70 120 40Z" fill="#f6f1e8"/><path d="M44 128H196" stroke="#141414" stroke-width="12" stroke-linecap="round"/><rect x="58" y="104" width="124" height="50" rx="25" fill="#23262d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 116C92 109 112 108 128 110L102 148C88 148 74 146 70 138Z" fill="#fff" opacity=".16"/><path d="M142 112 120 148" stroke="#fff" stroke-width="5" opacity=".1"/><path d="M110 154C104 166 86 174 84 196 84 222 156 222 156 196 154 174 136 166 130 154Z" fill="#f6f1e8" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="120" cy="178" rx="12" ry="8.5" fill="#141414"/><ellipse cx="120" cy="204" rx="15" ry="9" fill="#2b1d18" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M112 208C112 224 128 224 128 208Z" fill="#e0717a" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
                 </figure><figure class="jh-gallery__item jh-media" style="--tone: #f6e3e3" >
                   <div class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Elf ski mask illustration" xmlns="http://www.w3.org/2000/svg"><path d="M62 138 L4 96 L64 188 Z" fill="#efd0ae" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M 178.0 138 L 236.0 96 L 176.0 188 Z" fill="#efd0ae" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="120" cy="34" r="14" fill="#c8372d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 292C70 264 58 248 54 222 44 162 46 94 78 56 98 32 142 32 162 56 194 94 196 162 186 222 182 248 170 264 170 292Z" fill="#3f7a50" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 252C100 262 140 262 176 252L172 292H68Z" fill="#3f7a50" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 266C104 274 136 274 170 266M70 279C104 287 136 287 170 279" fill="none" stroke="#141414" stroke-width="2" opacity=".35"/><path d="M96 62 104 76 112 62 120 76 128 62 136 76 144 62" fill="none" stroke="#f2efe9" stroke-width="3" opacity=".55"/><path d="M44 128H196" stroke="#141414" stroke-width="12" stroke-linecap="round"/><rect x="58" y="104" width="124" height="50" rx="25" fill="#23262d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 116C92 109 112 108 128 110L102 148C88 148 74 146 70 138Z" fill="#fff" opacity=".16"/><path d="M142 112 120 148" stroke="#fff" stroke-width="5" opacity=".1"/><ellipse cx="120" cy="206" rx="16" ry="9" fill="#2b1d18" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 238 74 262 88 238 104 262 120 238 136 262 152 238 166 262 180 238 176 252C140 266 100 266 64 252Z" fill="#c8372d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="74" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="104" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="136" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="166" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-                </figure></div><div class="jh-perks-overlay" aria-hidden="true"><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 4 5 4-5 4 5 4-5M4 12l4 5 4-5 4 5 4-5"/></svg>Premium knit</div><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 3.5 3 2.5 3-2.5M9 20.5l3-2.5 3 2.5M3.6 10.6l3.7-1.3-.6-3.9M20.4 13.4l-3.7 1.3.6 3.9M3.6 13.4l3.7 1.3-.6 3.9M20.4 10.6l-3.7-1.3.6-3.9"/></svg>Keeps you warm</div><div class="jh-perk-chip" ><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="9" width="20" height="10" rx="5"/><path d="M1 14h3M24 14h3M8 12.5c1.5-.8 3-.9 4.5-.7"/></svg>Goggle friendly</div><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3Z"/></svg>One size fits most</div></div><button type="button" class="jh-gallery__nav jh-gallery__nav--prev" data-jh-prev aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+                </figure></div><button type="button" class="jh-gallery__nav jh-gallery__nav--prev" data-jh-prev aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
             <button type="button" class="jh-gallery__nav jh-gallery__nav--next" data-jh-next aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
-            <div class="jh-dots" data-jh-dots><button type="button" aria-label="Image 1" aria-current="true"></button><button type="button" aria-label="Image 2" aria-current="false"></button><button type="button" aria-label="Image 3" aria-current="false"></button><button type="button" aria-label="Image 4" aria-current="false"></button><button type="button" aria-label="Image 5" aria-current="false"></button></div></div><div class="jh-thumbs" data-jh-thumbs><button type="button" class="jh-thumb jh-media" style="--tone: #e7f1ea" aria-label="Show image 1" aria-current="true">
+            <div class="jh-dots" data-jh-dots><button type="button" aria-label="Image 1" aria-current="true"></button><button type="button" aria-label="Image 2" aria-current="false"></button><button type="button" aria-label="Image 3" aria-current="false"></button><button type="button" aria-label="Image 4" aria-current="false"></button><button type="button" aria-label="Image 5" aria-current="false"></button></div></div><div class="jh-perks-overlay" aria-hidden="true"><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m4 5 4 5 4-5 4 5 4-5M4 12l4 5 4-5 4 5 4-5"/></svg>Premium knit</div><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 3.5 3 2.5 3-2.5M9 20.5l3-2.5 3 2.5M3.6 10.6l3.7-1.3-.6-3.9M20.4 13.4l-3.7 1.3.6 3.9M3.6 13.4l3.7 1.3-.6 3.9M20.4 10.6l-3.7-1.3.6-3.9"/></svg>Keeps you warm</div><div class="jh-perk-chip" ><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="9" width="20" height="10" rx="5"/><path d="M1 14h3M24 14h3M8 12.5c1.5-.8 3-.9 4.5-.7"/></svg>Goggle friendly</div><div class="jh-perk-chip" ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3Z"/></svg>One size fits most</div></div><div class="jh-thumbs" data-jh-thumbs><button type="button" class="jh-thumb jh-media" style="--tone: #e7f1ea" aria-label="Show image 1" aria-current="true">
                   <span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Gramps ski mask illustration" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="168" rx="11" ry="19" fill="#e6c09c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="190" cy="168" rx="11" ry="19" fill="#e6c09c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 292C70 264 58 248 54 222 44 162 46 94 78 56 98 32 142 32 162 56 194 94 196 162 186 222 182 248 170 264 170 292Z" fill="#e6c09c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 252C100 262 140 262 176 252L172 292H68Z" fill="#e6c09c" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 266C104 274 136 274 170 266M70 279C104 287 136 287 170 279" fill="none" stroke="#141414" stroke-width="2" opacity=".35"/><path d="M92 66C108 61 132 61 148 66M86 78C106 72 134 72 154 78M90 90C108 85 132 85 150 90" fill="none" stroke="#141414" stroke-width="2.2" opacity=".45"/><path d="M44 128H196" stroke="#141414" stroke-width="12" stroke-linecap="round"/><rect x="58" y="104" width="124" height="50" rx="25" fill="#23262d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 116C92 109 112 108 128 110L102 148C88 148 74 146 70 138Z" fill="#fff" opacity=".16"/><path d="M142 112 120 148" stroke="#fff" stroke-width="5" opacity=".1"/><path d="M64 102C76 88 98 88 112 98 98 96 82 98 64 102ZM176 102C164 88 142 88 128 98 142 96 158 98 176 102Z" fill="#e9e5df" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="120" cy="174" rx="14" ry="12" fill="#d9a882" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="120" cy="216" rx="16" ry="9" fill="#2b1d18" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M120 188C104 178 80 184 70 204 88 198 104 204 120 197 136 204 152 198 170 204 160 184 136 178 120 188Z" fill="#f2efe9" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
                 </button><button type="button" class="jh-thumb jh-media" style="--tone: #fbe9df" aria-label="Show image 2" aria-current="false">
                   <span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Cat ski mask illustration" xmlns="http://www.w3.org/2000/svg"><path d="M72 84 L62 26 L110 52 Z" fill="#b9b1a6" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M 168.0 84 L 178.0 26 L 130.0 52 Z" fill="#b9b1a6" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M76 72 L70 40 L98 56 Z" fill="#e3b4a6"/><path d="M 164.0 72 L 170.0 40 L 142.0 56 Z" fill="#e3b4a6"/><path d="M70 292C70 264 58 248 54 222 44 162 46 94 78 56 98 32 142 32 162 56 194 94 196 162 186 222 182 248 170 264 170 292Z" fill="#b9b1a6" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 252C100 262 140 262 176 252L172 292H68Z" fill="#b9b1a6" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 266C104 274 136 274 170 266M70 279C104 287 136 287 170 279" fill="none" stroke="#141414" stroke-width="2" opacity=".35"/><path d="M120 46V70M106 50 110 72M134 50 130 72M62 170 82 176M60 186 82 186M178 170 158 176M180 186 158 186" fill="none" stroke="#5f574e" stroke-width="5" stroke-linecap="round"/><path d="M44 128H196" stroke="#141414" stroke-width="12" stroke-linecap="round"/><rect x="58" y="104" width="124" height="50" rx="25" fill="#23262d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 116C92 109 112 108 128 110L102 148C88 148 74 146 70 138Z" fill="#fff" opacity=".16"/><path d="M142 112 120 148" stroke="#fff" stroke-width="5" opacity=".1"/><ellipse cx="120" cy="198" rx="36" ry="26" fill="#efe9df" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M110 176H130L120 188Z" fill="#d9928a" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="120" cy="208" rx="13" ry="8" fill="#2b1d18" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M84 196 50 190M84 204 52 208M156 196 190 190M156 204 188 208" stroke="#141414" stroke-width="1.8" opacity=".5"/></svg></span>
@@ -856,6 +952,68 @@ body { margin: 0; background: #fff; }
 
 
 
+
+  <div class="jh jh-wheel" data-jh-wheel data-delay="4" data-snooze="7" data-exit="true">
+    <button type="button" class="jh-wheel__teaser" data-jh-wheel-open hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM2 7h20v4H2zM12 7v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7C10 3 5.5 3.5 6.5 6S12 7 12 7s4-4.5 6-2-6 2-6 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <span data-jh-teaser>Your Christmas spin</span>
+    </button>
+
+    <div class="jh-wheel__layer" data-jh-wheel-layer hidden>
+      <div class="jh-wheel__backdrop" data-jh-wheel-close></div>
+      <div class="jh-wheel__dialog" role="dialog" aria-modal="true" aria-labelledby="jh-wheel-title-wheel" tabindex="-1">
+        <button type="button" class="jh-wheel__x" data-jh-wheel-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+
+        <div class="jh-wheel__stage">
+          <div class="jh-wheel__snow" aria-hidden="true"></div>
+          <div class="jh-wheel__pointer" aria-hidden="true"></div>
+          <svg class="jh-wheel__svg" viewBox="-110 -110 220 220" aria-hidden="true"><g data-jh-wheel-disc></g></svg>
+          <button type="button" class="jh-wheel__hub" data-jh-spin aria-label="Spin the wheel">Spin</button>
+        </div>
+
+        <div class="jh-wheel__body">
+          <div data-jh-step="intro">
+            <span class="jh-eyebrow">A little Christmas thank-you</span>
+            <h2 class="jh-wheel__title" id="jh-wheel-title-wheel">Spin for a gift on your first order</h2>
+            <p class="jh-wheel__text">No sign-up needed. Every slice is a real prize — your code works at checkout.</p>
+            <button type="button" class="jh-btn jh-btn--pop jh-wheel__cta" data-jh-spin>Spin the wheel</button>
+            <button type="button" class="jh-wheel__no" data-jh-wheel-close>No thanks</button>
+            <p class="jh-wheel__fine">One spin per visitor. Prizes are drawn at random; odds vary by prize. Codes valid until Dec 31, 2026.</p>
+          </div>
+
+          <div data-jh-step="spinning" hidden>
+            <span class="jh-eyebrow">Fingers crossed</span>
+            <h2 class="jh-wheel__title">Spinning…</h2>
+            <p class="jh-wheel__text" aria-live="polite">Santa's checking the list.</p>
+          </div>
+
+          <div data-jh-step="win" hidden>
+            <span class="jh-eyebrow">You won</span>
+            <h2 class="jh-wheel__title" data-jh-prize aria-live="polite"></h2>
+            <p class="jh-wheel__text" data-jh-prize-note></p>
+            <p class="jh-wheel__fine">Your code is saved on this device — tap the gift button anytime to see it again.</p>
+            <div class="jh-wheel__code">
+              <code data-jh-code></code>
+              <button type="button" data-jh-copy>Copy</button>
+            </div>
+            <a class="jh-btn jh-btn--pop jh-wheel__cta" href="#" data-jh-apply>Apply to my order</a><form class="jh-news__form" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this subscribes the email.')"><input type="hidden" name="contact[tags]" value="newsletter,prize-wheel">
+                  <label class="visually-hidden" for="jh-wheel-email-wheel">Email</label>
+                  <input id="jh-wheel-email-wheel" type="email" name="contact[email]" placeholder="Email for deals (optional)" autocomplete="email" required>
+                  <button type="submit">Join</button></form><button type="button" class="jh-wheel__no" data-jh-wheel-close>Keep shopping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/json" data-jh-wheel-json>
+      {
+        "prizes": [{ "label": "10%", "sub": "OFF", "note": "10% off your first order.", "code": "JOLLY10", "weight": 30, "color": "pine" },{ "label": "FREE", "sub": "SHIPPING", "note": "Free shipping on your order.", "code": "JOLLYSHIP", "weight": 20, "color": "cranberry" },{ "label": "5%", "sub": "OFF", "note": "5% off your first order.", "code": "JOLLY5", "weight": 25, "color": "cream" },{ "label": "15%", "sub": "OFF", "note": "15% off your first order.", "code": "JOLLY15", "weight": 15, "color": "gold" },{ "label": "$5", "sub": "OFF", "note": "$5 off orders over $30.", "code": "JOLLY5OFF", "weight": 8, "color": "pine" },{ "label": "20%", "sub": "OFF", "note": "20% off — lucky you!", "code": "JOLLY20", "weight": 2, "color": "cranberry" }]
+      }
+    </script>
+  </div>
+
 <div class="jh"><footer class="pv-foot"><div class="jh-wrap pv-foot__in">
   <a class="pv-logo" href="index.html">jolly<b>haul</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
   <nav><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
@@ -959,6 +1117,8 @@ body { margin: 0; background: #fff; }
       });
     }
     function findVariant(values) {
+      // Products without option pickers (single "Default Title" variant): use the current variant.
+      if (!values.length) return variants.find(function (v) { return String(v.id) === idInput.value; }) || variants[0];
       return variants.find(function (v) {
         return v.options.every(function (opt, i) { return opt === values[i]; });
       });
@@ -1051,7 +1211,9 @@ body { margin: 0; background: #fff; }
       var ticking = false;
       var updateSticky = function () {
         ticking = false;
-        sticky.classList.toggle('is-visible', form.getBoundingClientRect().bottom < 0);
+        var on = form.getBoundingClientRect().bottom < 0;
+        sticky.classList.toggle('is-visible', on);
+        document.documentElement.classList.toggle('jh-sticky-on', on && window.innerWidth < 990);
       };
       window.addEventListener('scroll', function () {
         if (!ticking) { ticking = true; window.requestAnimationFrame(updateSticky); }
@@ -1082,9 +1244,153 @@ body { margin: 0; background: #fff; }
     tick();
   }
 
+  /* ---------- Christmas prize wheel ---------- */
+  var COLORS = {
+    pine: ['#1f6b4e', '#ffffff'], cranberry: ['#e0313f', '#ffffff'],
+    cream: ['#fff6e6', '#1b2420'], gold: ['#f2b33d', '#12291f']
+  };
+  function store(key, value) {
+    try {
+      if (value === undefined) return JSON.parse(localStorage.getItem(key) || 'null');
+      if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) { return null; }
+  }
+
+  function wheel(root) {
+    if (root.dataset.jhReady) return;
+    root.dataset.jhReady = '1';
+    var path = window.location.pathname;
+    if (/^\/(cart|checkout|account|checkouts)/.test(path) || /\/(cart|checkouts?)(\/|$)/.test(path)) return;
+
+    var data = JSON.parse(root.querySelector('[data-jh-wheel-json]').textContent || '{}');
+    var prizes = (data.prizes || []).filter(function (p) { return p.code && p.weight > 0; });
+    if (prizes.length < 2) return;
+
+    var layer = root.querySelector('[data-jh-wheel-layer]');
+    var dialog = root.querySelector('.jh-wheel__dialog');
+    var disc = root.querySelector('[data-jh-wheel-disc]');
+    var teaser = root.querySelector('[data-jh-wheel-open]');
+    var teaserText = root.querySelector('[data-jh-teaser]');
+    var steps = root.querySelectorAll('[data-jh-step]');
+    var spinBtns = root.querySelectorAll('[data-jh-spin]');
+    var lastFocus = null;
+    var KEY_WIN = 'jh-wheel-win', KEY_SNOOZE = 'jh-wheel-snooze';
+
+    // Draw the wheel.
+    var seg = 360 / prizes.length, r = 100, svgNS = 'http://www.w3.org/2000/svg', html = '';
+    function pt(deg, rad) { var a = (deg - 90) * Math.PI / 180; return [(rad * Math.cos(a)).toFixed(2), (rad * Math.sin(a)).toFixed(2)]; }
+    prizes.forEach(function (p, i) {
+      var c = COLORS[p.color] || COLORS.pine, a0 = i * seg, a1 = a0 + seg, s0 = pt(a0, r), s1 = pt(a1, r), mid = a0 + seg / 2;
+      html += '<path d="M0 0L' + s0[0] + ' ' + s0[1] + 'A' + r + ' ' + r + ' 0 0 1 ' + s1[0] + ' ' + s1[1] + 'Z" fill="' + c[0] + '" stroke="#12291f" stroke-width="1.2"/>';
+      html += '<g transform="rotate(' + mid + ')"><text y="-66" text-anchor="middle" fill="' + c[1] + '" font-family="Rubik, sans-serif" font-weight="900" font-size="' + (p.label.length > 5 ? 11 : 16) + '">' + escapeXml(p.label) + '</text>' +
+        '<text y="-52" text-anchor="middle" fill="' + c[1] + '" font-family="Rubik, sans-serif" font-weight="700" font-size="8" letter-spacing=".6">' + escapeXml(p.sub || '') + '</text></g>';
+    });
+    html += '<circle r="' + (r + 6) + '" fill="none" stroke="#f2b33d" stroke-width="10"/>';
+    for (var b = 0; b < 24; b++) { var q = pt(b * 15, r + 6); html += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="2.4" fill="' + (b % 2 ? '#fff6e6' : '#e0313f') + '"/>'; }
+    disc.innerHTML = html;
+    function escapeXml(t) { return String(t).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+
+    function show(step) { steps.forEach(function (el) { el.hidden = el.dataset.jhStep !== step; }); }
+
+    function showWin(win) {
+      root.querySelector('[data-jh-prize]').textContent = win.label + (win.sub ? ' ' + win.sub : '');
+      root.querySelector('[data-jh-prize-note]').textContent = win.note || '';
+      root.querySelector('[data-jh-code]').textContent = win.code;
+      root.querySelector('[data-jh-apply]').href = '/discount/' + encodeURIComponent(win.code) + '?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+      spinBtns.forEach(function (btn) { btn.disabled = true; });
+      show('win');
+      teaserText.textContent = 'Your code: ' + win.code;
+    }
+
+    function trap(e) {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+      var f = Array.prototype.filter.call(dialog.querySelectorAll('button, a[href], input'), function (el) { return !el.disabled && el.offsetParent !== null; });
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+    function open() {
+      if (!layer.hidden) return;
+      lastFocus = document.activeElement;
+      layer.hidden = false;
+      teaser.hidden = true;
+      document.documentElement.classList.add('jh-lock');
+      document.addEventListener('keydown', trap);
+      dialog.focus();
+    }
+    function close() {
+      if (layer.hidden) return;
+      layer.hidden = true;
+      document.documentElement.classList.remove('jh-lock');
+      document.removeEventListener('keydown', trap);
+      if (!store(KEY_WIN)) store(KEY_SNOOZE, Date.now() + (+root.dataset.snooze || 7) * 864e5);
+      teaser.hidden = false;
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    var spun = false, angle = 0;
+    function spin() {
+      if (spun) return;
+      spun = true;
+      spinBtns.forEach(function (btn) { btn.disabled = true; });
+      show('spinning');
+      var total = prizes.reduce(function (sum, p) { return sum + p.weight; }, 0), roll = Math.random() * total, idx = 0;
+      for (var i = 0; i < prizes.length; i++) { roll -= prizes[i].weight; if (roll < 0) { idx = i; break; } }
+      var jitter = (Math.random() - 0.5) * seg * 0.6;
+      angle = 360 * 6 + (360 - (idx * seg + seg / 2)) + jitter;
+      disc.style.transform = 'rotate(' + angle + 'deg)';
+      var ms = parseFloat(getComputedStyle(disc).transitionDuration) * 1000 || 0;
+      setTimeout(function () {
+        var p = prizes[idx], win = { label: p.label, sub: p.sub, note: p.note, code: p.code };
+        store(KEY_WIN, win);
+        showWin(win);
+      }, ms + 150);
+    }
+
+    spinBtns.forEach(function (btn) { btn.addEventListener('click', spin); });
+    root.querySelectorAll('[data-jh-wheel-close]').forEach(function (el) { el.addEventListener('click', close); });
+    teaser.addEventListener('click', open);
+    root.querySelector('[data-jh-copy]').addEventListener('click', function (e) {
+      var code = root.querySelector('[data-jh-code]').textContent, btn = e.currentTarget;
+      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done);
+      else { var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (err) {} t.remove(); done(); }
+    });
+
+    var win = store(KEY_WIN);
+    if (win) {
+      spun = true;
+      showWin(win);
+      teaser.hidden = false;
+      if (/customer_posted=true/.test(window.location.search)) open();
+      return;
+    }
+    teaser.hidden = false;
+    var snooze = store(KEY_SNOOZE);
+    if (snooze && snooze > Date.now()) return;
+    var autoOpened = false;
+    function autoOpen() { if (!autoOpened && !spun) { autoOpened = true; open(); } }
+    setTimeout(autoOpen, (+root.dataset.delay || 8) * 1000);
+    if (root.dataset.exit === 'true' && window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mouseout', function (e) { if (!e.relatedTarget && e.clientY <= 0) autoOpen(); });
+    }
+  }
+
   function boot() {
     document.querySelectorAll('[data-jh-root]').forEach(init);
     document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
+    document.querySelectorAll('[data-jh-wheel]').forEach(wheel);
+    document.querySelectorAll('[data-jh-sort]').forEach(function (sel) {
+      if (sel.dataset.jhReady) return;
+      sel.dataset.jhReady = '1';
+      sel.addEventListener('change', function () {
+        var url = new URL(window.location.href);
+        url.searchParams.set('sort_by', sel.value);
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
+      });
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   document.addEventListener('shopify:section:load', boot);

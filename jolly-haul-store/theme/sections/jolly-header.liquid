@@ -43,10 +43,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
         </a>
       {%- endif -%}
-      <a class="jh-iconbtn" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
-        {%- if cart.item_count > 0 -%}<span class="jh-cartcount">{{ cart.item_count }}</span>{%- endif -%}
-      </a>
+      <a class="jh-iconbtn" href="{{ routes.cart_url }}" id="cart-icon-bubble">{% render 'jolly-cart-icon' %}</a>
     </div>
   </div>
 </header>

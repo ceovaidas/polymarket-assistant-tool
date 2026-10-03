@@ -69,6 +69,18 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
 4. **Kaukės puslapis:** Products → *Funny Face Ski Mask* → dešinėje *Theme template* → **landing** → Save.
 5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, Shop all (`/collections/all`), Funny masks (kolekcija), Gift finder (`/#jh-finder`).
 6. **Nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt.
+7. **Kalėdų rato kodai (būtina!)** – Discounts → *Create discount* → *Amount off order* (arba *Free shipping*) → **Discount code**, kiekvienam: *Limit to one use per customer*, galioja iki 2026-12-31:
+   | Kodas | Nuolaida |
+   |---|---|
+   | `JOLLY5` | 5% nuo užsakymo |
+   | `JOLLY10` | 10% nuo užsakymo |
+   | `JOLLY15` | 15% nuo užsakymo |
+   | `JOLLY20` | 20% nuo užsakymo |
+   | `JOLLY5OFF` | $5 nuo užsakymų nuo $30 |
+   | `JOLLYSHIP` | Nemokamas pristatymas |
+   Ratą, prizus, tikimybes ir tekstus keisi Customize → poraštės grupėje **Jolly prize wheel**. Jei kodai nesukurti – išjunk ratą ten pat, kitaip pirkėjai gaus neveikiantį kodą.
+
+**Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
 
 Zip'e jau sukonfigūruota: spalvos, apvalūs kampai, Jolly meniu juosta, tamsi poraštė, pradinis puslapis su nuorodomis į aukščiau išvardintas kolekcijas, krepšelio pastaba dovanai. Zip'ą galima sugeneruoti iš naujo: `python3 build_theme.py <dawn aplankas>`.
 
@@ -137,6 +149,8 @@ Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…�
 | `preview/index.html` | Pradinio puslapio peržiūra |
 | `preview/product.html` | Produkto (kaukių) puslapio peržiūra |
 | `theme/sections/jolly-header.liquid` | Meniu juosta (logotipas kairėje, meniu centre, piktogramos dešinėje; telefone – išskleidžiamas meniu) |
+| `theme/sections/jolly-collection.liquid` | Kolekcijų / „Shop all“ puslapis |
+| `theme/sections/jolly-wheel.liquid` | Kalėdų prizų ratas (poraštės grupėje) |
 | `theme/sections/jolly-home.liquid` | Pradinis puslapis (hero, kategorijos, trending, laikmatis, spotlight, dovanų paieška, DUK, naujienlaiškis) |
 | `theme/sections/jolly-product.liquid` | Produkto landing puslapis |
 | `theme/snippets/jolly-card.liquid` | Produkto kortelė tinkleliuose |
