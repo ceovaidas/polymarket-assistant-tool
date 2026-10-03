@@ -355,10 +355,40 @@
     }
   }
 
+  /* ---------- Cart page: quantity steppers auto-submit, wheel code reminder ---------- */
+  function cartForm(form) {
+    if (form.dataset.jhReady) return;
+    form.dataset.jhReady = '1';
+    form.classList.add('is-js');
+    var timer = 0;
+    function submitSoon() {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        var btn = form.querySelector('[data-jh-cart-update]');
+        if (form.requestSubmit) form.requestSubmit(btn); else btn.click();
+      }, 600);
+    }
+    form.querySelectorAll('[data-jh-step]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = btn.parentElement.querySelector('[data-jh-qty-input]');
+        input.value = Math.max(0, (parseInt(input.value, 10) || 0) + parseInt(btn.dataset.jhStep, 10));
+        submitSoon();
+      });
+    });
+    form.querySelectorAll('[data-jh-qty-input]').forEach(function (input) { input.addEventListener('change', submitSoon); });
+    var win = store('jh-wheel-win'), box = document.querySelector('[data-jh-wincode]');
+    if (win && box) {
+      box.querySelector('[data-jh-wincode-code]').textContent = win.code;
+      box.querySelector('[data-jh-wincode-link]').href = '/discount/' + encodeURIComponent(win.code) + '?redirect=/checkout';
+      box.hidden = false;
+    }
+  }
+
   function boot() {
     document.querySelectorAll('[data-jh-root]').forEach(init);
     document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
     document.querySelectorAll('[data-jh-wheel]').forEach(wheel);
+    document.querySelectorAll('[data-jh-cart-form]').forEach(cartForm);
     document.querySelectorAll('[data-jh-sort]').forEach(function (sel) {
       if (sel.dataset.jhReady) return;
       sel.dataset.jhReady = '1';

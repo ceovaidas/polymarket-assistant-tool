@@ -201,4 +201,16 @@ const collHtml = await engine.parseAndRender(coll.src, {
 });
 writeFileSync(join(here, 'collection.html'), shell('Jolly Haul Shop All Preview', collHtml, await renderHeader('shop')));
 
-console.log('wrote preview/index.html, product.html, projector.html, collection.html');
+// ---- cart ----
+const cartData = sectionData('jolly-cart.liquid', 'cart.json', 'main');
+const line = (prod, v, qty, i) => ({ index: i + 1, quantity: qty, url: prod.url, product: prod, variant: v, image: null, properties: {}, line_level_discount_allocations: [],
+  original_line_price: v.price * qty, final_line_price: v.price * qty, url_to_remove: '#' });
+const lines = [line(mask, mask.variants[2], 2, 0), line(catalogue[1], catalogue[1].variants[0], 1, 1)];
+const cartTotal = lines.reduce((a, l) => a + l.final_line_price, 0);
+const cartHtml = await engine.parseAndRender(cartData.src, {
+  section: cartData.section, shop, routes: { cart_url: '#', all_products_collection_url: 'collection.html' },
+  cart: { item_count: 3, items: lines, total_price: cartTotal, items_subtotal_price: cartTotal, cart_level_discount_applications: [], note: '' },
+});
+writeFileSync(join(here, 'cart.html'), shell('Jolly Haul Cart Preview', cartHtml, await renderHeader('cart')));
+
+console.log('wrote preview/index.html, product.html, projector.html, collection.html, cart.html');

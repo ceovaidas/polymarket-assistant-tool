@@ -12,6 +12,7 @@ theme/
   sections/jolly-header.liquid    # header: logo left, menu centred, icons right
   sections/jolly-home.liquid      # home page
   sections/jolly-collection.liquid # collection + shop-all pages
+  sections/jolly-cart.liquid      # cart page (replaces Dawn's cart sections)
   sections/jolly-wheel.liquid     # Christmas prize wheel (footer group)
   sections/cart-icon-bubble.liquid # overrides Dawn's so cart updates keep our icon
   sections/jolly-product.liquid   # product landing page
@@ -21,6 +22,7 @@ theme/
   templates/index.json            # pre-filled home page
   templates/product.json          # default product page (all products)
   templates/collection.json       # collection pages
+  templates/cart.json             # cart page
   templates/product.landing.json  # pre-filled product landing (ski masks)
 preview/                          # build.mjs -> index, product, projector, collection pages
 theme-config/footer-wheel.json    # default wheel prizes added to the footer group by build_theme.py

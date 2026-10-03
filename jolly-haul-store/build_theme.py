@@ -53,7 +53,7 @@ GLOBAL_SETTINGS = {
     "sale_badge_color_scheme": "scheme-4",
     "cart_type": "page",          # Jolly forms post straight to /cart
     "show_cart_note": True,       # "Add a gift note" promise on the home page
-    "page_width": 1240,
+    "page_width": 1200,
 }
 
 

@@ -80,7 +80,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
    | `JOLLYSHIP` | Nemokamas pristatymas |
    Ratą, prizus, tikimybes ir tekstus keisi Customize → poraštės grupėje **Jolly prize wheel**. Jei kodai nesukurti – išjunk ratą ten pat, kitaip pirkėjai gaus neveikiantį kodą.
 
-**Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
+**Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelis – Jolly dizaino (`cart.json`: kiekiai, nemokamo pristatymo juosta, dovanos žinutė, rato kodo priminimas, express mokėjimai), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
 
 Zip'e jau sukonfigūruota: spalvos, apvalūs kampai, Jolly meniu juosta, tamsi poraštė, pradinis puslapis su nuorodomis į aukščiau išvardintas kolekcijas, krepšelio pastaba dovanai. Zip'ą galima sugeneruoti iš naujo: `python3 build_theme.py <dawn aplankas>`.
 
@@ -149,6 +149,7 @@ Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…�
 | `preview/index.html` | Pradinio puslapio peržiūra |
 | `preview/product.html` | Produkto (kaukių) puslapio peržiūra |
 | `theme/sections/jolly-header.liquid` | Meniu juosta (logotipas kairėje, meniu centre, piktogramos dešinėje; telefone – išskleidžiamas meniu) |
+| `theme/sections/jolly-cart.liquid` | Krepšelio puslapis |
 | `theme/sections/jolly-collection.liquid` | Kolekcijų / „Shop all“ puslapis |
 | `theme/sections/jolly-wheel.liquid` | Kalėdų prizų ratas (poraštės grupėje) |
 | `theme/sections/jolly-home.liquid` | Pradinis puslapis (hero, kategorijos, trending, laikmatis, spotlight, dovanų paieška, DUK, naujienlaiškis) |
