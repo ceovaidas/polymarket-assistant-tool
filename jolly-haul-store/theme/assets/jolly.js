@@ -1,5 +1,5 @@
-/* GNARHEAD landing — gallery slider, face swatches, bundles, crew "Choose" buttons, sticky add-to-cart.
-   Pairs with sections/gnarhead-product-landing.liquid. No dependencies. */
+/* Jolly Haul — product page (gallery, swatches, bundles, crew buttons, sticky add-to-cart)
+   and home page (Christmas countdown). Pairs with sections/jolly-product + jolly-home. No dependencies. */
 (function () {
   'use strict';
 
@@ -13,19 +13,19 @@
   }
 
   function init(root) {
-    if (root.dataset.ghReady) return;
-    root.dataset.ghReady = '1';
+    if (root.dataset.jhReady) return;
+    root.dataset.jhReady = '1';
 
-    var dataEl = root.querySelector('[data-gh-json]');
+    var dataEl = root.querySelector('[data-jh-json]');
     if (!dataEl) return;
     var data = JSON.parse(dataEl.textContent);
     var variants = data.variants || [];
-    var form = root.querySelector('[data-gh-form]');
-    var idInput = root.querySelector('[data-gh-variant-id]');
-    var qtyInput = root.querySelector('[data-gh-qty]');
-    var track = root.querySelector('[data-gh-track]');
-    var hero = root.querySelector('[data-gh-hero]');
-    var stickySub = root.querySelector('[data-gh-sticky-sub]');
+    var form = root.querySelector('[data-jh-form]');
+    var idInput = root.querySelector('[data-jh-variant-id]');
+    var qtyInput = root.querySelector('[data-jh-qty]');
+    var track = root.querySelector('[data-jh-track]');
+    var hero = root.querySelector('[data-jh-hero]');
+    var stickySub = root.querySelector('[data-jh-sticky-sub]');
 
     function each(sel, fn) { root.querySelectorAll(sel).forEach(fn); }
 
@@ -39,8 +39,8 @@
     }
     function markSlide() {
       var i = currentSlide();
-      each('[data-gh-dots] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
-      each('[data-gh-thumbs] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
+      each('[data-jh-dots] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
+      each('[data-jh-thumbs] button', function (b, n) { b.setAttribute('aria-current', String(n === i)); });
     }
     if (track) {
       var raf = 0;
@@ -48,15 +48,15 @@
         cancelAnimationFrame(raf);
         raf = requestAnimationFrame(markSlide);
       }, { passive: true });
-      var prev = root.querySelector('[data-gh-prev]');
-      var next = root.querySelector('[data-gh-next]');
+      var prev = root.querySelector('[data-jh-prev]');
+      var next = root.querySelector('[data-jh-next]');
       if (prev) prev.addEventListener('click', function () { goTo(currentSlide() - 1); });
       if (next) next.addEventListener('click', function () {
         var i = currentSlide();
         goTo(i >= slides - 1 ? 0 : i + 1);
       });
-      each('[data-gh-dots] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
-      each('[data-gh-thumbs] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
+      each('[data-jh-dots] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
+      each('[data-jh-thumbs] button', function (b, n) { b.addEventListener('click', function () { goTo(n); }); });
     }
 
     function setHero(src, alt) {
@@ -75,10 +75,10 @@
 
     // No product photos yet: mirror the selected swatch's illustration into the first slide.
     function showSwatchArt() {
-      var heroPh = hero && hero.querySelector('.gh-ph');
-      var checked = root.querySelector('.gh-swatch input:checked');
-      var art = checked && checked.closest('.gh-swatch').querySelector('.gh-swatch__img');
-      var svg = art && art.querySelector('.gh-ph svg');
+      var heroPh = hero && hero.querySelector('.jh-ph');
+      var checked = root.querySelector('.jh-swatch input:checked');
+      var art = checked && checked.closest('.jh-swatch').querySelector('.jh-swatch__img');
+      var svg = art && art.querySelector('.jh-ph svg');
       if (!heroPh || !svg) return;
       var old = heroPh.querySelector('svg');
       if (old) heroPh.removeChild(old);
@@ -89,7 +89,7 @@
 
     /* ---------- Variants & bundles ---------- */
     function selectedOptions() {
-      return Array.prototype.map.call(root.querySelectorAll('[data-gh-option]'), function (fs) {
+      return Array.prototype.map.call(root.querySelectorAll('[data-jh-option]'), function (fs) {
         var c = fs.querySelector('input:checked');
         return c ? c.value : null;
       });
@@ -100,7 +100,7 @@
       });
     }
     function bundle() {
-      var c = root.querySelector('[data-gh-bundle] input:checked');
+      var c = root.querySelector('[data-jh-bundle] input:checked');
       return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.dataset.label || '' } : { qty: 1, pct: 0, label: '' };
     }
 
@@ -109,11 +109,11 @@
       var variant = findVariant(values);
       var b = bundle();
 
-      each('[data-gh-option-value]', function (el) { el.textContent = values[+el.dataset.ghOptionValue] || ''; });
+      each('[data-jh-option-value]', function (el) { el.textContent = values[+el.dataset.jhOptionValue] || ''; });
 
       if (!variant) {
-        each('[data-gh-atc]', function (btn) { btn.disabled = true; });
-        each('[data-gh-atc-label]', function (el) { el.textContent = data.strings.unavailable; });
+        each('[data-jh-atc]', function (btn) { btn.disabled = true; });
+        each('[data-jh-atc-label]', function (el) { el.textContent = data.strings.unavailable; });
         return;
       }
 
@@ -121,29 +121,29 @@
       qtyInput.value = b.qty;
 
       var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
-      each('[data-gh-bundle] input', function (input) {
+      each('[data-jh-bundle] input', function (input) {
         var q = +input.value || 1;
         var t = Math.round(variant.price * q * (1 - (+input.dataset.pct || 0) / 100));
         var row = input.nextElementSibling;
-        row.querySelector('[data-gh-bundle-now]').textContent = money(t, data.moneyFormat);
-        row.querySelector('[data-gh-bundle-was]').textContent = base * q > t ? money(base * q, data.moneyFormat) : '';
+        row.querySelector('[data-jh-bundle-now]').textContent = money(t, data.moneyFormat);
+        row.querySelector('[data-jh-bundle-was]').textContent = base * q > t ? money(base * q, data.moneyFormat) : '';
       });
 
       var total = Math.round(variant.price * b.qty * (1 - b.pct / 100));
       var compare = base * b.qty;
-      each('[data-gh-price]', function (el) { el.textContent = money(total, data.moneyFormat); });
+      each('[data-jh-price]', function (el) { el.textContent = money(total, data.moneyFormat); });
 
-      var was = root.querySelector('[data-gh-compare]');
+      var was = root.querySelector('[data-jh-compare]');
       if (was) { was.hidden = compare <= total; was.textContent = compare > total ? money(compare, data.moneyFormat) : ''; }
-      var save = root.querySelector('[data-gh-save]');
+      var save = root.querySelector('[data-jh-save]');
       if (save) {
         var pct = compare > total ? Math.round((1 - total / compare) * 100) : 0;
         save.hidden = pct <= 0;
         save.textContent = data.strings.save.replace('[percent]', pct);
       }
 
-      each('[data-gh-atc]', function (btn) { btn.disabled = !variant.available; });
-      each('[data-gh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
+      each('[data-jh-atc]', function (btn) { btn.disabled = !variant.available; });
+      each('[data-jh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
       if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' × ' + b.qty : '');
 
       if (changedOption) {
@@ -157,24 +157,24 @@
     }
 
     root.addEventListener('change', function (e) {
-      if (e.target.closest('[data-gh-option]')) render(true);
-      else if (e.target.closest('[data-gh-bundle]')) render(false);
+      if (e.target.closest('[data-jh-option]')) render(true);
+      else if (e.target.closest('[data-jh-bundle]')) render(false);
     });
 
     /* ---------- Crew "Choose" buttons ---------- */
-    each('[data-gh-pick]', function (btn) {
+    each('[data-jh-pick]', function (btn) {
       btn.addEventListener('click', function () {
-        var value = btn.dataset.ghPick;
-        var input = Array.prototype.find.call(root.querySelectorAll('[data-gh-option] input'), function (i) { return i.value === value; });
+        var value = btn.dataset.jhPick;
+        var input = Array.prototype.find.call(root.querySelectorAll('[data-jh-option] input'), function (i) { return i.value === value; });
         if (!input) return;
         input.checked = true;
         render(true);
-        var target = root.querySelector('.gh-gallery') || form;
+        var target = root.querySelector('.jh-gallery') || form;
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
 
-    each('[data-gh-submit-main]', function (btn) {
+    each('[data-jh-submit-main]', function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         if (form.requestSubmit) form.requestSubmit(); else form.submit();
@@ -182,7 +182,7 @@
     });
 
     /* ---------- Sticky bar (shown once the main button has scrolled away) ---------- */
-    var sticky = root.querySelector('[data-gh-sticky]');
+    var sticky = root.querySelector('[data-jh-sticky]');
     if (sticky && form) {
       var ticking = false;
       var updateSticky = function () {
@@ -198,7 +198,30 @@
     render(false);
   }
 
-  function boot() { document.querySelectorAll('[data-gh-root]').forEach(init); }
+  /* ---------- Countdown to a real date (home page) ---------- */
+  function countdown(el) {
+    if (el.dataset.jhReady) return;
+    el.dataset.jhReady = '1';
+    var parts = (el.dataset.jhCountdown || '').split('-');
+    var target = new Date(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1).getTime();
+    if (isNaN(target)) return;
+    var d = el.querySelector('[data-jh-d]'), h = el.querySelector('[data-jh-h]'), m = el.querySelector('[data-jh-m]');
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    function tick() {
+      var left = target - Date.now();
+      if (left <= 0) { el.hidden = true; return; }
+      d.textContent = Math.floor(left / 864e5);
+      h.textContent = pad(Math.floor(left / 36e5) % 24);
+      m.textContent = pad(Math.floor(left / 6e4) % 60);
+      setTimeout(tick, 30000);
+    }
+    tick();
+  }
+
+  function boot() {
+    document.querySelectorAll('[data-jh-root]').forEach(init);
+    document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   document.addEventListener('shopify:section:load', boot);
 })();

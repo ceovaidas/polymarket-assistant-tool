@@ -1,11 +1,11 @@
 {%- comment -%}
-  GNARHEAD — one-product landing section ("Glacier Pop").
+  Jolly Haul — product landing section.
   Works in any Online Store 2.0 theme (Dawn recommended). Assign the "product.landing"
-  template to the ski mask product. Requires snippets/gnarhead-icon.liquid and snippets/gnarhead-art.liquid.
+  template to products that deserve a full landing page (e.g. the ski masks). Requires snippets/jolly-icon.liquid and snippets/jolly-art.liquid.
 {%- endcomment -%}
 
-{{ 'gnarhead-landing.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'gnarhead-landing.js' | asset_url }}" defer></script>
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'jolly.js' | asset_url }}" defer></script>
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
@@ -36,27 +36,27 @@
   endif
 -%}
 
-<div class="gh" data-gh-root id="gh-{{ section.id }}">
+<div class="jh" data-jh-root id="jh-{{ section.id }}">
 
   {%- if section.settings.ticker != blank -%}
     {%- assign ticker_items = section.settings.ticker | split: '|' -%}
-    <div class="gh-ticker" role="region" aria-label="{{ section.settings.ticker | replace: '|', ' · ' | escape }}">
-      <div class="gh-ticker__track" aria-hidden="true">
+    <div class="jh-ticker" role="region" aria-label="{{ section.settings.ticker | replace: '|', ' · ' | escape }}">
+      <div class="jh-ticker__track" aria-hidden="true">
         {%- for i in (1..4) -%}{%- for item in ticker_items -%}<span>{{ item | strip }}</span>{%- endfor -%}{%- endfor -%}
       </div>
     </div>
   {%- endif -%}
 
   {%- comment -%} ================= PRODUCT ================= {%- endcomment -%}
-  <section class="gh-product">
-    <div class="gh-wrap gh-product__grid">
+  <section class="jh-product">
+    <div class="jh-wrap jh-product__grid">
 
-      <div class="gh-gallery">
-        <div class="gh-gallery__frame">
-          <div class="gh-gallery__track" data-gh-track>
+      <div class="jh-gallery">
+        <div class="jh-gallery__frame">
+          <div class="jh-gallery__track" data-jh-track>
             {%- if product.media.size > 0 -%}
               {%- for media in product.media -%}
-                <figure class="gh-gallery__item gh-media" data-media-id="{{ media.id }}" {% if forloop.first %}data-gh-hero{% endif %}>
+                <figure class="jh-gallery__item jh-media" data-media-id="{{ media.id }}" {% if forloop.first %}data-jh-hero{% endif %}>
                   {%- if media.media_type == 'image' -%}
                     {%- if forloop.first -%}
                       {{ media | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 55vw, 100vw', alt: media.alt | default: product.title }}
@@ -73,27 +73,27 @@
             {%- else -%}
               {%- for key in art_keys -%}
                 {%- assign t = forloop.index0 | modulo: tone_count -%}
-                <figure class="gh-gallery__item gh-media" style="--tone: {{ tones[t] | strip }}" {% if forloop.first %}data-gh-hero{% endif %}>
-                  <div class="gh-ph">{% render 'gnarhead-art', face: key %}{% if request.design_mode %}<span class="gh-ph__cap">Upload photos in Products</span>{% endif %}</div>
+                <figure class="jh-gallery__item jh-media" style="--tone: {{ tones[t] | strip }}" {% if forloop.first %}data-jh-hero{% endif %}>
+                  <div class="jh-ph">{% render 'jolly-art', face: key %}{% if request.design_mode %}<span class="jh-ph__cap">Upload photos in Products</span>{% endif %}</div>
                 </figure>
               {%- endfor -%}
             {%- endif -%}
           </div>
 
-          <div class="gh-perks-overlay" aria-hidden="true">
+          <div class="jh-perks-overlay" aria-hidden="true">
             {%- for i in (1..4) -%}
               {%- capture k_label -%}perk_{{ i }}_label{%- endcapture -%}
               {%- capture k_icon -%}perk_{{ i }}_icon{%- endcapture -%}
               {%- if section.settings[k_label] != blank -%}
-                <div class="gh-perk-chip">{% render 'gnarhead-icon', name: section.settings[k_icon] %}{{ section.settings[k_label] }}</div>
+                <div class="jh-perk-chip">{% render 'jolly-icon', name: section.settings[k_icon] %}{{ section.settings[k_label] }}</div>
               {%- endif -%}
             {%- endfor -%}
           </div>
 
           {%- if slide_count > 1 -%}
-            <button type="button" class="gh-gallery__nav gh-gallery__nav--prev" data-gh-prev aria-label="Previous image">{% render 'gnarhead-icon', name: 'chev-left' %}</button>
-            <button type="button" class="gh-gallery__nav gh-gallery__nav--next" data-gh-next aria-label="Next image">{% render 'gnarhead-icon', name: 'chev-right' %}</button>
-            <div class="gh-dots" data-gh-dots>
+            <button type="button" class="jh-gallery__nav jh-gallery__nav--prev" data-jh-prev aria-label="Previous image">{% render 'jolly-icon', name: 'chev-left' %}</button>
+            <button type="button" class="jh-gallery__nav jh-gallery__nav--next" data-jh-next aria-label="Next image">{% render 'jolly-icon', name: 'chev-right' %}</button>
+            <div class="jh-dots" data-jh-dots>
               {%- for i in (1..slide_count) -%}
                 <button type="button" aria-label="Image {{ i }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
               {%- endfor -%}
@@ -102,18 +102,18 @@
         </div>
 
         {%- if slide_count > 1 -%}
-          <div class="gh-thumbs" data-gh-thumbs>
+          <div class="jh-thumbs" data-jh-thumbs>
             {%- if product.media.size > 0 -%}
               {%- for media in product.media limit: 6 -%}
-                <button type="button" class="gh-thumb gh-media" aria-label="Show image {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+                <button type="button" class="jh-thumb jh-media" aria-label="Show image {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
                   {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
                 </button>
               {%- endfor -%}
             {%- else -%}
               {%- for key in art_keys limit: 6 -%}
                 {%- assign t = forloop.index0 | modulo: tone_count -%}
-                <button type="button" class="gh-thumb gh-media" style="--tone: {{ tones[t] | strip }}" aria-label="Show image {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
-                  <span class="gh-ph">{% render 'gnarhead-art', face: key %}</span>
+                <button type="button" class="jh-thumb jh-media" style="--tone: {{ tones[t] | strip }}" aria-label="Show image {{ forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+                  <span class="jh-ph">{% render 'jolly-art', face: key %}</span>
                 </button>
               {%- endfor -%}
             {%- endif -%}
@@ -121,43 +121,43 @@
         {%- endif -%}
       </div>
 
-      <div class="gh-buy">
-        <div class="gh-buy__top">
+      <div class="jh-buy">
+        <div class="jh-buy__top">
           {%- if rating != blank -%}
-            <span class="gh-rating">{% render 'gnarhead-icon', name: 'stars' %}{{ rating.rating | round: 1 }} · {{ rating_count }} reviews</span>
+            <span class="jh-rating">{% render 'jolly-icon', name: 'stars' %}{{ rating.rating | round: 1 }} · {{ rating_count }} reviews</span>
           {%- elsif section.settings.badge != blank -%}
-            <span class="gh-pill">{% render 'gnarhead-icon', name: 'snow' %}{{ section.settings.badge }}</span>
+            <span class="jh-pill">{% render 'jolly-icon', name: 'snow' %}{{ section.settings.badge }}</span>
           {%- endif -%}
         </div>
 
-        <h1 class="gh-buy__title">{{ product.title }}</h1>
-        {%- if section.settings.lede != blank -%}<p class="gh-buy__lede">{{ section.settings.lede }}</p>{%- endif -%}
+        <h1 class="jh-buy__title">{{ product.title }}</h1>
+        {%- if section.settings.lede != blank -%}<p class="jh-buy__lede">{{ section.settings.lede }}</p>{%- endif -%}
 
-        <div class="gh-price">
-          <span class="gh-price__now" data-gh-price>{{ current_variant.price | money }}</span>
-          <s class="gh-price__was" data-gh-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
-          <span class="gh-price__save" data-gh-save hidden></span>
+        <div class="jh-price">
+          <span class="jh-price__now" data-jh-price>{{ current_variant.price | money }}</span>
+          <s class="jh-price__was" data-jh-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+          <span class="jh-price__save" data-jh-save hidden></span>
         </div>
 
         {%- if section.settings.hook != blank -%}
-          <div class="gh-hook"><span class="gh-hook__emoji" aria-hidden="true">{{ section.settings.hook_emoji }}</span><span>{{ section.settings.hook }}</span></div>
+          <div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">{{ section.settings.hook_emoji }}</span><span>{{ section.settings.hook }}</span></div>
         {%- endif -%}
 
-        {%- assign gh_form_id = 'gh-form-' | append: section.id -%}
-        {%- form 'product', product, id: gh_form_id, data-gh-form: 'true' -%}
-          <input type="hidden" name="id" value="{{ current_variant.id }}" data-gh-variant-id>
-          <input type="hidden" name="quantity" value="1" data-gh-qty>
+        {%- assign gh_form_id = 'jh-form-' | append: section.id -%}
+        {%- form 'product', product, id: gh_form_id, data-jh-form: 'true' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-jh-variant-id>
+          <input type="hidden" name="quantity" value="1" data-jh-qty>
 
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
               {%- assign option_index = forloop.index0 -%}
               {%- assign is_swatch = false -%}
               {%- if option.name == section.settings.swatch_option -%}{%- assign is_swatch = true -%}{%- endif -%}
-              <fieldset class="gh-field" data-gh-option>
-                <legend class="gh-field__legend">{{ option.name }}: <span data-gh-option-value="{{ option_index }}">{{ option.selected_value }}</span></legend>
-                <div class="{% if is_swatch %}gh-swatches{% else %}gh-chips{% endif %}">
+              <fieldset class="jh-field" data-jh-option>
+                <legend class="jh-field__legend">{{ option.name }}: <span data-jh-option-value="{{ option_index }}">{{ option.selected_value }}</span></legend>
+                <div class="{% if is_swatch %}jh-swatches{% else %}jh-chips{% endif %}">
                   {%- for value in option.values -%}
-                    {%- assign input_id = 'gh-' | append: section.id | append: '-' | append: option_index | append: '-' | append: forloop.index0 -%}
+                    {%- assign input_id = 'jh-' | append: section.id | append: '-' | append: option_index | append: '-' | append: forloop.index0 -%}
                     {%- if is_swatch -%}
                       {%- assign swatch_media = nil -%}
                       {%- for v in product.variants -%}
@@ -165,20 +165,20 @@
                       {%- endfor -%}
                       {%- assign t = forloop.index0 | modulo: tone_count -%}
                       {%- assign a = forloop.index0 | modulo: art_count -%}
-                      <label class="gh-swatch" for="{{ input_id }}">
-                        <input type="radio" id="{{ input_id }}" name="gh-opt-{{ section.id }}-{{ option_index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
-                        <span class="gh-swatch__img gh-media" style="--tone: {{ tones[t] | strip }}">
+                      <label class="jh-swatch" for="{{ input_id }}">
+                        <input type="radio" id="{{ input_id }}" name="jh-opt-{{ section.id }}-{{ option_index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                        <span class="jh-swatch__img jh-media" style="--tone: {{ tones[t] | strip }}">
                           {%- if swatch_media -%}
                             {{ swatch_media | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
                           {%- else -%}
-                            <span class="gh-ph">{% render 'gnarhead-art', face: art_keys[a] %}</span>
+                            <span class="jh-ph">{% render 'jolly-art', face: art_keys[a] %}</span>
                           {%- endif -%}
                         </span>
-                        <span class="gh-swatch__name">{{ value }}</span>
+                        <span class="jh-swatch__name">{{ value }}</span>
                       </label>
                     {%- else -%}
-                      <label class="gh-chip" for="{{ input_id }}">
-                        <input type="radio" id="{{ input_id }}" name="gh-opt-{{ section.id }}-{{ option_index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                      <label class="jh-chip" for="{{ input_id }}">
+                        <input type="radio" id="{{ input_id }}" name="jh-opt-{{ section.id }}-{{ option_index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
                         <span>{{ value }}</span>
                       </label>
                     {%- endif -%}
@@ -189,56 +189,56 @@
           {%- endunless -%}
 
           {%- if section.settings.show_bundles -%}
-            <fieldset class="gh-field">
-              <legend class="gh-field__legend">{{ section.settings.bundle_heading }}</legend>
-              <div class="gh-bundles" data-gh-bundle>
+            <fieldset class="jh-field">
+              <legend class="jh-field__legend">{{ section.settings.bundle_heading }}</legend>
+              <div class="jh-bundles" data-jh-bundle>
                 {%- for i in (1..3) -%}
                   {%- capture k_label -%}bundle_{{ i }}_label{%- endcapture -%}
                   {%- capture k_note -%}bundle_{{ i }}_note{%- endcapture -%}
                   {%- capture k_pct -%}bundle_{{ i }}_pct{%- endcapture -%}
                   {%- capture k_tag -%}bundle_{{ i }}_tag{%- endcapture -%}
-                  <label class="gh-bundle">
-                    <input type="radio" name="gh-bundle-{{ section.id }}" value="{{ i }}" data-pct="{{ section.settings[k_pct] }}" data-label="{{ section.settings[k_label] | escape }}" {% if i == section.settings.bundle_default %}checked{% endif %}>
-                    <span class="gh-bundle__row">
-                      <span class="gh-bundle__radio"></span>
+                  <label class="jh-bundle">
+                    <input type="radio" name="jh-bundle-{{ section.id }}" value="{{ i }}" data-pct="{{ section.settings[k_pct] }}" data-label="{{ section.settings[k_label] | escape }}" {% if i == section.settings.bundle_default %}checked{% endif %}>
+                    <span class="jh-bundle__row">
+                      <span class="jh-bundle__radio"></span>
                       <span>
-                        <span class="gh-bundle__name">{{ section.settings[k_label] }}</span>
-                        <span class="gh-bundle__note">{{ section.settings[k_note] }}</span>
+                        <span class="jh-bundle__name">{{ section.settings[k_label] }}</span>
+                        <span class="jh-bundle__note">{{ section.settings[k_note] }}</span>
                       </span>
-                      <span class="gh-bundle__price"><span data-gh-bundle-now></span><s data-gh-bundle-was></s></span>
+                      <span class="jh-bundle__price"><span data-jh-bundle-now></span><s data-jh-bundle-was></s></span>
                     </span>
-                    {%- if section.settings[k_tag] != blank -%}<span class="gh-bundle__tag">{{ section.settings[k_tag] }}</span>{%- endif -%}
+                    {%- if section.settings[k_tag] != blank -%}<span class="jh-bundle__tag">{{ section.settings[k_tag] }}</span>{%- endif -%}
                   </label>
                 {%- endfor -%}
               </div>
             </fieldset>
           {%- endif -%}
 
-          <button type="submit" name="add" class="gh-atc" data-gh-atc {% unless current_variant.available %}disabled{% endunless %}>
-            <span data-gh-atc-label>{% if current_variant.available %}{{ section.settings.atc_label }}{% else %}Sold out{% endif %}</span>
-            <span class="gh-atc__price" data-gh-price>{{ current_variant.price | money }}</span>
+          <button type="submit" name="add" class="jh-atc" data-jh-atc {% unless current_variant.available %}disabled{% endunless %}>
+            <span data-jh-atc-label>{% if current_variant.available %}{{ section.settings.atc_label }}{% else %}Sold out{% endif %}</span>
+            <span class="jh-atc__price" data-jh-price>{{ current_variant.price | money }}</span>
           </button>
           {%- if section.settings.stock_line != blank -%}
-            <p class="gh-stock"><span class="gh-stock__dot"></span>{{ section.settings.stock_line }}</p>
+            <p class="jh-stock"><span class="jh-stock__dot"></span>{{ section.settings.stock_line }}</p>
           {%- endif -%}
           {{ form | payment_terms }}
         {%- endform -%}
 
-        <div class="gh-trust">
-          <div>{% render 'gnarhead-icon', name: 'truck' %}{{ section.settings.trust_1 }}</div>
-          <div>{% render 'gnarhead-icon', name: 'return' %}{{ section.settings.trust_2 }}</div>
-          <div>{% render 'gnarhead-icon', name: 'lock' %}{{ section.settings.trust_3 }}</div>
+        <div class="jh-trust">
+          <div>{% render 'jolly-icon', name: 'truck' %}{{ section.settings.trust_1 }}</div>
+          <div>{% render 'jolly-icon', name: 'return' %}{{ section.settings.trust_2 }}</div>
+          <div>{% render 'jolly-icon', name: 'lock' %}{{ section.settings.trust_3 }}</div>
         </div>
 
-        <div class="gh-acc">
+        <div class="jh-acc">
           {%- if product.description != blank -%}
-            <details open><summary>Why you'll love it</summary><div class="gh-acc__body">{{ product.description }}</div></details>
+            <details open><summary>Why you'll love it</summary><div class="jh-acc__body">{{ product.description }}</div></details>
           {%- endif -%}
           {%- if section.settings.materials != blank -%}
-            <details><summary>Materials &amp; care</summary><div class="gh-acc__body">{{ section.settings.materials }}</div></details>
+            <details><summary>Materials &amp; care</summary><div class="jh-acc__body">{{ section.settings.materials }}</div></details>
           {%- endif -%}
           {%- if section.settings.shipping != blank -%}
-            <details><summary>Shipping &amp; returns</summary><div class="gh-acc__body">{{ section.settings.shipping }}</div></details>
+            <details><summary>Shipping &amp; returns</summary><div class="jh-acc__body">{{ section.settings.shipping }}</div></details>
           {%- endif -%}
         </div>
       </div>
@@ -248,8 +248,8 @@
   {%- comment -%} ================= MARQUEE ================= {%- endcomment -%}
   {%- if section.settings.marquee != blank -%}
     {%- assign marquee_items = section.settings.marquee | split: '|' -%}
-    <div class="gh-marquee" aria-hidden="true">
-      <div class="gh-marquee__track">
+    <div class="jh-marquee" aria-hidden="true">
+      <div class="jh-marquee__track">
         {%- for i in (1..4) -%}{%- for item in marquee_items -%}<span>{{ item | strip }}</span>{%- endfor -%}{%- endfor -%}
       </div>
     </div>
@@ -257,28 +257,28 @@
 
   {%- comment -%} ================= CREW ================= {%- endcomment -%}
   {%- if chars.size > 0 -%}
-    <section class="gh-section gh-section--ice" id="gh-crew-{{ section.id }}">
-      <div class="gh-wrap gh-head">
-        <span class="gh-eyebrow">{{ section.settings.crew_eyebrow }}</span>
-        <h2 class="gh-h2">{{ section.settings.crew_heading }}</h2>
-        {%- if section.settings.crew_text != blank -%}<p class="gh-sub">{{ section.settings.crew_text }}</p>{%- endif -%}
+    <section class="jh-section jh-section--ice" id="jh-crew-{{ section.id }}">
+      <div class="jh-wrap jh-head">
+        <span class="jh-eyebrow">{{ section.settings.crew_eyebrow }}</span>
+        <h2 class="jh-h2">{{ section.settings.crew_heading }}</h2>
+        {%- if section.settings.crew_text != blank -%}<p class="jh-sub">{{ section.settings.crew_text }}</p>{%- endif -%}
       </div>
-      <div class="gh-crew">
+      <div class="jh-crew">
         {%- for block in chars -%}
           {%- assign t = forloop.index0 | modulo: tone_count -%}
-          <article class="gh-char" {{ block.shopify_attributes }}>
-            <div class="gh-char__media gh-media" style="--tone: {{ tones[t] | strip }}">
+          <article class="jh-char" {{ block.shopify_attributes }}>
+            <div class="jh-char__media jh-media" style="--tone: {{ tones[t] | strip }}">
               {%- if block.settings.image -%}
                 {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 20vw, 74vw', alt: block.settings.name }}
               {%- else -%}
-                <div class="gh-ph">{% render 'gnarhead-art', face: block.settings.art %}</div>
+                <div class="jh-ph">{% render 'jolly-art', face: block.settings.art %}</div>
               {%- endif -%}
             </div>
-            <div class="gh-char__body">
-              <h3 class="gh-char__name">{{ block.settings.name }}</h3>
-              <p class="gh-char__line">{{ block.settings.line }}</p>
+            <div class="jh-char__body">
+              <h3 class="jh-char__name">{{ block.settings.name }}</h3>
+              <p class="jh-char__line">{{ block.settings.line }}</p>
               {%- if block.settings.option_value != blank -%}
-                <button type="button" class="gh-char__btn" data-gh-pick="{{ block.settings.option_value | escape }}">Choose {{ block.settings.name }}</button>
+                <button type="button" class="jh-char__btn" data-jh-pick="{{ block.settings.option_value | escape }}">Choose {{ block.settings.name }}</button>
               {%- endif -%}
             </div>
           </article>
@@ -289,17 +289,17 @@
 
   {%- comment -%} ================= FEATURES + SPEC ================= {%- endcomment -%}
   {%- if features.size > 0 or specs.size > 0 -%}
-    <section class="gh-section">
-      <div class="gh-wrap">
-        <div class="gh-head">
-          <span class="gh-eyebrow">{{ section.settings.features_eyebrow }}</span>
-          <h2 class="gh-h2">{{ section.settings.features_heading }}</h2>
+    <section class="jh-section">
+      <div class="jh-wrap">
+        <div class="jh-head">
+          <span class="jh-eyebrow">{{ section.settings.features_eyebrow }}</span>
+          <h2 class="jh-h2">{{ section.settings.features_heading }}</h2>
         </div>
         {%- if features.size > 0 -%}
-          <div class="gh-features">
+          <div class="jh-features">
             {%- for block in features -%}
-              <div class="gh-feature" {{ block.shopify_attributes }}>
-                <div class="gh-feature__icon">{% render 'gnarhead-icon', name: block.settings.icon %}</div>
+              <div class="jh-feature" {{ block.shopify_attributes }}>
+                <div class="jh-feature__icon">{% render 'jolly-icon', name: block.settings.icon %}</div>
                 <h3>{{ block.settings.title }}</h3>
                 <p>{{ block.settings.text }}</p>
               </div>
@@ -307,17 +307,17 @@
           </div>
         {%- endif -%}
         {%- if specs.size > 0 -%}
-          <div class="gh-spec">
-            <div class="gh-spec__media gh-media">
+          <div class="jh-spec">
+            <div class="jh-spec__media jh-media">
               {%- if section.settings.spec_image -%}
                 {{ section.settings.spec_image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', alt: section.settings.spec_heading }}
               {%- else -%}
-                <div class="gh-ph gh-ph--fill">{% render 'gnarhead-art', face: 'knit' %}</div>
+                <div class="jh-ph jh-ph--fill">{% render 'jolly-art', face: 'knit' %}</div>
               {%- endif -%}
             </div>
-            <div class="gh-spec__card">
+            <div class="jh-spec__card">
               <h3>{{ section.settings.spec_heading }}</h3>
-              <table class="gh-spec__table"><tbody>
+              <table class="jh-spec__table"><tbody>
                 {%- for block in specs -%}
                   <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.label }}</th><td>{{ block.settings.value }}</td></tr>
                 {%- endfor -%}
@@ -331,21 +331,21 @@
 
   {%- comment -%} ================= COMPARISON ================= {%- endcomment -%}
   {%- if compares.size > 0 -%}
-    <section class="gh-section gh-section--ice">
-      <div class="gh-wrap">
-        <div class="gh-head">
-          <span class="gh-eyebrow">{{ section.settings.compare_eyebrow }}</span>
-          <h2 class="gh-h2">{{ section.settings.compare_heading }}</h2>
+    <section class="jh-section jh-section--ice">
+      <div class="jh-wrap">
+        <div class="jh-head">
+          <span class="jh-eyebrow">{{ section.settings.compare_eyebrow }}</span>
+          <h2 class="jh-h2">{{ section.settings.compare_heading }}</h2>
         </div>
-        <div class="gh-compare">
+        <div class="jh-compare">
           <table>
             <thead><tr><th scope="col"><span class="visually-hidden">Feature</span></th><th scope="col" class="is-us">{{ shop.name }}</th><th scope="col">{{ section.settings.compare_them }}</th></tr></thead>
             <tbody>
               {%- for block in compares -%}
                 <tr {{ block.shopify_attributes }}>
                   <td>{{ block.settings.label }}</td>
-                  <td class="is-us"><span class="gh-yes">{% render 'gnarhead-icon', name: 'check' %}</span></td>
-                  <td>{%- if block.settings.them -%}<span class="gh-yes">{% render 'gnarhead-icon', name: 'check' %}</span>{%- else -%}<span class="gh-no">{% render 'gnarhead-icon', name: 'x' %}</span>{%- endif -%}</td>
+                  <td class="is-us"><span class="jh-yes">{% render 'jolly-icon', name: 'check' %}</span></td>
+                  <td>{%- if block.settings.them -%}<span class="jh-yes">{% render 'jolly-icon', name: 'check' %}</span>{%- else -%}<span class="jh-no">{% render 'jolly-icon', name: 'x' %}</span>{%- endif -%}</td>
                 </tr>
               {%- endfor -%}
             </tbody>
@@ -357,21 +357,21 @@
 
   {%- comment -%} ================= FIELD FOOTAGE (only once videos exist) ================= {%- endcomment -%}
   {%- if has_footage -%}
-    <section class="gh-section">
-      <div class="gh-wrap gh-head">
-        <span class="gh-eyebrow">{{ section.settings.reel_eyebrow }}</span>
-        <h2 class="gh-h2">{{ section.settings.reel_heading }}</h2>
+    <section class="jh-section">
+      <div class="jh-wrap jh-head">
+        <span class="jh-eyebrow">{{ section.settings.reel_eyebrow }}</span>
+        <h2 class="jh-h2">{{ section.settings.reel_heading }}</h2>
       </div>
-      <div class="gh-reel">
+      <div class="jh-reel">
         {%- for block in videos -%}
           {%- if block.settings.video != blank or block.settings.poster != blank -%}
-            <figure class="gh-reel__item" {{ block.shopify_attributes }}>
+            <figure class="jh-reel__item" {{ block.shopify_attributes }}>
               {%- if block.settings.video -%}
                 {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', image_size: '540x' }}
               {%- else -%}
                 {{ block.settings.poster | image_url: width: 540 | image_tag: loading: 'lazy', alt: block.settings.caption }}
               {%- endif -%}
-              {%- if block.settings.caption != blank -%}<figcaption class="gh-reel__cap">{{ block.settings.caption }}</figcaption>{%- endif -%}
+              {%- if block.settings.caption != blank -%}<figcaption class="jh-reel__cap">{{ block.settings.caption }}</figcaption>{%- endif -%}
             </figure>
           {%- endif -%}
         {%- endfor -%}
@@ -381,13 +381,13 @@
 
   {%- comment -%} ================= REVIEWS (real customers only) ================= {%- endcomment -%}
   {%- if reviews.size > 0 -%}
-    <section class="gh-section gh-section--ice">
-      <div class="gh-wrap">
-        <div class="gh-head"><span class="gh-eyebrow">Reviews</span><h2 class="gh-h2">{{ section.settings.reviews_heading }}</h2></div>
-        <div class="gh-reviews">
+    <section class="jh-section jh-section--ice">
+      <div class="jh-wrap">
+        <div class="jh-head"><span class="jh-eyebrow">Reviews</span><h2 class="jh-h2">{{ section.settings.reviews_heading }}</h2></div>
+        <div class="jh-reviews">
           {%- for block in reviews -%}
-            <figure class="gh-review" {{ block.shopify_attributes }}>
-              {% render 'gnarhead-icon', name: 'stars' %}
+            <figure class="jh-review" {{ block.shopify_attributes }}>
+              {% render 'jolly-icon', name: 'stars' %}
               <blockquote>“{{ block.settings.text }}”</blockquote>
               <figcaption>{{ block.settings.name }}<span>✓ Verified buyer</span></figcaption>
             </figure>
@@ -399,12 +399,12 @@
 
   {%- comment -%} ================= GUARANTEE ================= {%- endcomment -%}
   {%- if section.settings.guarantee_heading != blank -%}
-    <section class="gh-section">
-      <div class="gh-wrap">
-        <div class="gh-guarantee">
-          <div class="gh-seal"><span><b>{{ section.settings.guarantee_days }}</b>day<br>guarantee</span></div>
+    <section class="jh-section">
+      <div class="jh-wrap">
+        <div class="jh-guarantee">
+          <div class="jh-seal"><span><b>{{ section.settings.guarantee_days }}</b>day<br>guarantee</span></div>
           <div>
-            <h2 class="gh-h2">{{ section.settings.guarantee_heading }}</h2>
+            <h2 class="jh-h2">{{ section.settings.guarantee_heading }}</h2>
             <p>{{ section.settings.guarantee_text }}</p>
           </div>
         </div>
@@ -414,12 +414,12 @@
 
   {%- comment -%} ================= FAQ ================= {%- endcomment -%}
   {%- if faqs.size > 0 -%}
-    <section class="gh-section gh-section--ice">
-      <div class="gh-wrap">
-        <div class="gh-head"><span class="gh-eyebrow">FAQ</span><h2 class="gh-h2">{{ section.settings.faq_heading }}</h2></div>
-        <div class="gh-faq">
+    <section class="jh-section jh-section--ice">
+      <div class="jh-wrap">
+        <div class="jh-head"><span class="jh-eyebrow">FAQ</span><h2 class="jh-h2">{{ section.settings.faq_heading }}</h2></div>
+        <div class="jh-faq">
           {%- for block in faqs -%}
-            <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="gh-faq__a">{{ block.settings.answer }}</div></details>
+            <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="jh-faq__a">{{ block.settings.answer }}</div></details>
           {%- endfor -%}
         </div>
       </div>
@@ -427,36 +427,37 @@
   {%- endif -%}
 
   {%- comment -%} ================= FINAL CTA ================= {%- endcomment -%}
-  <section class="gh-final">
-    <div class="gh-wrap">
-      <h2 class="gh-h2">{{ section.settings.final_heading }}</h2>
-      {%- if section.settings.final_text != blank -%}<p class="gh-sub">{{ section.settings.final_text }}</p>{%- endif -%}
-      <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>
-        <span data-gh-atc-label>{{ section.settings.atc_label }}</span><span class="gh-atc__price" data-gh-price>{{ current_variant.price | money }}</span>
+  <section class="jh-final">
+    <div class="jh-snow" aria-hidden="true"></div>
+    <div class="jh-wrap">
+      <h2 class="jh-h2">{{ section.settings.final_heading }}</h2>
+      {%- if section.settings.final_text != blank -%}<p class="jh-sub">{{ section.settings.final_text }}</p>{%- endif -%}
+      <button type="button" class="jh-atc" data-jh-submit-main data-jh-atc>
+        <span data-jh-atc-label>{{ section.settings.atc_label }}</span><span class="jh-atc__price" data-jh-price>{{ current_variant.price | money }}</span>
       </button>
     </div>
-    <div class="gh-final__art">
-      <div class="gh-media">
+    <div class="jh-final__art">
+      <div class="jh-media">
         {%- if section.settings.final_image -%}
           {{ section.settings.final_image | image_url: width: 2400 | image_tag: loading: 'lazy', sizes: '100vw', alt: '' }}
         {%- else -%}
-          <div class="gh-ph gh-ph--lineup">{%- for k in art_keys -%}<span>{% render 'gnarhead-art', face: k %}</span>{%- endfor -%}</div>
+          <div class="jh-ph jh-ph--lineup">{%- for k in art_keys -%}<span>{% render 'jolly-art', face: k %}</span>{%- endfor -%}</div>
         {%- endif -%}
       </div>
     </div>
   </section>
 
-  <div class="gh-sticky" data-gh-sticky>
+  <div class="jh-sticky" data-jh-sticky>
     <div>
-      <div class="gh-sticky__title">{{ product.title }}</div>
-      <div class="gh-sticky__sub"><span data-gh-sticky-sub>{{ current_variant.title }}</span> · <span data-gh-price>{{ current_variant.price | money }}</span></div>
+      <div class="jh-sticky__title">{{ product.title }}</div>
+      <div class="jh-sticky__sub"><span data-jh-sticky-sub>{{ current_variant.title }}</span> · <span data-jh-price>{{ current_variant.price | money }}</span></div>
     </div>
-    <button type="button" class="gh-atc" data-gh-submit-main data-gh-atc>
-      <span data-gh-atc-label>{{ section.settings.atc_label }}</span><span class="gh-atc__price" data-gh-price>{{ current_variant.price | money }}</span>
+    <button type="button" class="jh-atc" data-jh-submit-main data-jh-atc>
+      <span data-jh-atc-label>{{ section.settings.atc_label }}</span><span class="jh-atc__price" data-jh-price>{{ current_variant.price | money }}</span>
     </button>
   </div>
 
-  <script type="application/json" data-gh-json>
+  <script type="application/json" data-jh-json>
     {
       "moneyFormat": {{ shop.money_format | json }},
       "strings": {
@@ -484,12 +485,12 @@
 
 {% schema %}
 {
-  "name": "GNARHEAD landing",
+  "name": "Jolly Haul product",
   "tag": "section",
-  "class": "gh-section-wrapper",
+  "class": "jh-section-wrapper",
   "settings": [
-    { "type": "text", "id": "ticker", "label": "Scrolling top bar (separate with |)", "default": "Free shipping on 2+ masks|30-day happy-face guarantee|New season drop — 26/27|Ships in 1–3 business days" },
-    { "type": "text", "id": "placeholder_tones", "label": "Illustration background tones", "default": "#dbe8ff,#ffe4d6,#d9f2e6,#fff1c9,#e6defc", "info": "Background colours shown until photos are uploaded." },
+    { "type": "text", "id": "ticker", "label": "Scrolling top bar (separate with |)", "default": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days" },
+    { "type": "text", "id": "placeholder_tones", "label": "Illustration background tones", "default": "#e7f1ea,#fbe9df,#e9f3e3,#fff1d6,#f6e3e3", "info": "Background colours shown until photos are uploaded." },
     { "type": "text", "id": "art_order", "label": "Illustration order (matches Face option order)", "default": "gramps,cat,tiger,corgi,elf", "info": "Options: gramps, cat, tiger, corgi, elf, mask." },
 
     { "type": "header", "content": "Image perks (overlay)" },
@@ -534,7 +535,7 @@
     { "type": "header", "content": "Sections" },
     { "type": "text", "id": "marquee", "label": "Benefit strip (separate with |)", "default": "Keeps you warm|Goggle friendly|Fits under helmets|Turns heads on every lift|Gift-ready pouch" },
     { "type": "text", "id": "crew_eyebrow", "label": "Crew eyebrow", "default": "Pick your alter ego" },
-    { "type": "text", "id": "crew_heading", "label": "Crew heading", "default": "Meet the Gnar Crew" },
+    { "type": "text", "id": "crew_heading", "label": "Crew heading", "default": "Meet the crew" },
     { "type": "textarea", "id": "crew_text", "label": "Crew text", "default": "Five faces, one fit. Mix them across your group for the photo of the season." },
     { "type": "text", "id": "features_eyebrow", "label": "Features eyebrow", "default": "Not just a costume" },
     { "type": "text", "id": "features_heading", "label": "Features heading", "default": "Funny face. Serious mask." },
@@ -615,6 +616,6 @@
       ]
     }
   ],
-  "presets": [{ "name": "GNARHEAD landing" }]
+  "presets": [{ "name": "Jolly Haul product" }]
 }
 {% endschema %}

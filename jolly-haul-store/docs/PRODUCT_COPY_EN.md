@@ -1,57 +1,61 @@
-# GNARHEAD — store copy (English, ready to paste)
+# Jolly Haul — store copy (English, ready to paste)
 
-## Product
-**Title:** The Gnarhead
-*(Never use ® unless the name is registered.)*
+## Brand
+- **Name:** Jolly Haul
+- **Tagline:** Christmas, but make it viral.
+- **One-liner:** The funniest, cosiest and most-shared Christmas finds from your feed — all in one place, ready to gift.
+- **Socials bio:** Viral Christmas finds, curated ✦ Ships in 1–3 days ✦ Tag us in your haul
 
-**Option name:** `Face`
-**Values:** Gramps · The Cat · Tiger · Corgi · The Elf
+## SEO (home)
+- **Title:** Jolly Haul — Viral Christmas Gifts, Funny Masks & Festive Finds
+- **Meta description:** The internet's favourite Christmas finds in one place: funny ski masks, star projectors, baby costumes, ugly sweaters and lights. Free shipping over $50.
 
-**Price:** $39.99 · **Compare-at:** leave empty (bundles carry the discount — see the guide)
+## Products (titles + short descriptions)
+**Funny Face Ski Mask** — $39.99 · tags: `viral`, `art-gramps`
+> A warm, goggle-friendly ski balaclava with a face nobody in the lift line will forget. Five characters: Gramps, The Cat, Tiger, Corgi and The Elf.
 
-**SKU pattern:** `GH-GRAMPS`, `GH-CAT`, `GH-TIGER`, `GH-CORGI`, `GH-ELF`
+**Snowfall Star Projector** — $49.99 · tags: `viral`, `art-projector`
+> Turns any ceiling into a starry Christmas sky in seconds. Quiet, USB-powered, with a sleep timer. Bedroom magic, zero ladders.
 
-### Description (Shopify product description field)
-> Every ski trip has *that* photo. This is how you end up in it.
->
-> - Double-layer knit, fleece-lined face
-> - Wide, goggle-ready eye port
-> - Breathable mouth zone
-> - Fits under most helmets
-> - Ships in a gift-ready drawstring pouch
+**Baby Reindeer Onesie** — $29.99 · tags: `new`, `art-onesie`
+> Soft cotton-blend onesie with an antler hood and a little red nose. Snap closures for easy changes. Sizes 0–24 months.
 
-### Character blurbs
-| Face | One-liner |
-|---|---|
-| Gramps | Wrinkles, moustache, zero patience for slow skiers. |
-| The Cat | Nine lives. Spends most of them in the terrain park. |
-| Tiger | Apex predator of the beginner slope. |
-| Corgi | Short legs. Big send energy. |
-| The Elf | Seasonal release. Santa didn't approve this. |
+**"Sleigh Queen" Ugly Sweater** — $44.99 · tags: `art-sweater`
+> Proudly tacky, actually cosy. Soft knit, unisex fit, made for office parties and family photos.
 
-## SEO
-- **Page title:** Funny Ski Masks — Animal & Old Man Balaclavas | GNARHEAD
-- **Meta description:** Warm, goggle-friendly ski masks with hilarious faces. Gramps, cat, tiger, corgi & elf. Free shipping on 2+. 30-day guarantee.
-- **URL handle:** `funny-ski-mask`
-- **Image alt text example:** "Skier wearing the Gramps funny ski mask with goggles in a lift line"
+**Elf Ski Mask** — $39.99 · tags: `new`, `art-elf`
+> Santa's most reckless helper, now on the slopes. Chunky knit with pointy ears and jingle-bell collar.
 
-## Announcement bar (theme header)
-`FREE SHIPPING ON 2+ MASKS — 30-DAY RETURNS`
+**Light-Up Ornament Set (6)** — $24.99 · tags: `art-ornament`
+> Six shatter-proof baubles with warm LED glow. Battery powered, timer included.
 
-## Policies — short versions (Settings → Policies; use Shopify's generator for the full legal text)
-**Shipping:** Orders are processed in 1–3 business days. Estimated delivery: US/Canada 7–12 business days, EU/UK 6–10 business days. Tracking is emailed when your order ships. Free shipping on orders of 2+ masks.
+**Mystery Stocking Stuffer Box** — $19.99 · tags: `viral`, `art-gift`
+> Five small, funny, giftable surprises picked from this season's viral finds. Perfect for Secret Santa.
 
-**Returns:** You have 30 days from delivery to request a return. Items must be unworn and in original packaging (hygiene item). Contact support@gnarhead.com with your order number. EU customers keep their 14-day statutory right of withdrawal.
+**Warm-White Curtain Lights** — $34.99 · tags: `art-lights`
+> 3 m × 3 m of soft fairy lights for windows and walls. Eight modes, remote included.
 
-## Email: order confirmation add-on
-> Your Gnarhead is on its way.
-> Tag us **@gnarhead** when it hits the slopes — the funniest clip each week wins a free mask.
+*(Rewrite specs after your samples arrive — only describe what the real product does.)*
 
-## Ad hooks (first 2 seconds of a video / primary text)
-1. "My grandpa started skiing again. Or did he?"
-2. "POV: you show up to the lift line as a corgi."
-3. "Ski instructors HATE this one mask." *(joke tone, keep it obviously silly)*
-4. "Rating every face in the lift line… until THIS showed up."
-5. "Christmas gift idea for the friend who has everything."
-6. "We wore these on the steepest run of the mountain. Nobody took us seriously."
-7. "The group photo was supposed to be normal."
+## Category tiles
+Funny masks · Star projectors · Baby & kids · Ugly sweaters · Lights & decor · Stocking stuffers
+
+## Policies — short versions
+**Shipping:** Orders are processed in 1–3 business days. Estimated delivery: US/Canada 7–12 business days, EU/UK 6–10 business days. Free shipping on orders over $50. Order by December 10 for standard delivery before Christmas.
+
+**Returns:** Return unused items within 30 days of delivery for a refund. Hygiene items (masks, baby clothing) must be unworn with tags attached. EU customers keep their 14-day statutory right of withdrawal. Contact hello@jollyhaul.com.
+
+## Emails
+**Welcome (newsletter):**
+> You're on the list. 🎄 Our next viral find drops soon — you'll hear first.
+
+**Order confirmation add-on:**
+> Your haul is on its way. Tag **@jollyhaul** in your unboxing — our favourite video each week wins a free gift.
+
+## Ad hooks
+1. "POV: your ceiling on Christmas Eve." (projector)
+2. "Rating Christmas gifts from TikTok — this one's an 11."
+3. "The $20 Secret Santa gift that wins every single time."
+4. "My grandpa started skiing again. Or did he?" (mask)
+5. "Tiny reindeer, big feelings." (baby onesie)
+6. "We tested the most viral Christmas finds so you don't have to."

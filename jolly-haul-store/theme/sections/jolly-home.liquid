@@ -1,0 +1,337 @@
+{%- comment -%}
+  Jolly Haul — home page section. Add it to templates/index.json (already set up).
+  Requires snippets/jolly-icon, jolly-art and jolly-card, plus assets/jolly.css + jolly.js.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'jolly.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign tones = section.settings.tones | split: ','
+  assign tone_count = tones.size
+  assign hero_art = section.settings.hero_art | split: ','
+  assign hero_labels = section.settings.hero_labels | split: '|'
+  assign cats = section.blocks | where: 'type', 'category'
+  assign prices = section.blocks | where: 'type', 'price'
+  assign whys = section.blocks | where: 'type', 'why'
+  assign faqs = section.blocks | where: 'type', 'faq'
+  assign trending = section.settings.trending_collection
+  assign spot = section.settings.spotlight_product
+-%}
+
+<div class="jh" id="jh-home-{{ section.id }}">
+
+  {%- if section.settings.ticker != blank -%}
+    {%- assign ticker_items = section.settings.ticker | split: '|' -%}
+    <div class="jh-ticker" role="region" aria-label="{{ section.settings.ticker | replace: '|', ' · ' | escape }}">
+      <div class="jh-ticker__track" aria-hidden="true">
+        {%- for i in (1..4) -%}{%- for item in ticker_items -%}<span>{{ item | strip }}</span>{%- endfor -%}{%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= HERO ================= {%- endcomment -%}
+  <section class="jh-hero">
+    <div class="jh-lights" aria-hidden="true"></div>
+    <div class="jh-snow jh-snow--dark" aria-hidden="true"></div>
+    <div class="jh-wrap jh-hero__grid">
+      <div>
+        <span class="jh-eyebrow">{{ section.settings.hero_eyebrow }}</span>
+        <h1 class="jh-hero__title">{{ section.settings.hero_title }}</h1>
+        <p class="jh-hero__text">{{ section.settings.hero_text }}</p>
+        <div class="jh-hero__ctas">
+          <a class="jh-btn jh-btn--pop" href="{{ section.settings.hero_cta_link | default: routes.all_products_collection_url }}">{{ section.settings.hero_cta }}</a>
+          {%- if section.settings.hero_cta2 != blank -%}<a class="jh-btn" href="{{ section.settings.hero_cta2_link | default: '#jh-finder' }}">{{ section.settings.hero_cta2 }}</a>{%- endif -%}
+        </div>
+        <div class="jh-hero__proof">
+          {%- for i in (1..3) -%}
+            {%- capture k -%}proof_{{ i }}{%- endcapture -%}
+            {%- if section.settings[k] != blank -%}<span>{% render 'jolly-icon', name: 'check' %}{{ section.settings[k] }}</span>{%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="jh-collage" aria-hidden="true">
+        {%- for i in (1..3) -%}
+          {%- assign n = forloop.index0 -%}
+          {%- capture k_img -%}hero_image_{{ i }}{%- endcapture -%}
+          {%- assign t = n | modulo: tone_count -%}
+          <div class="jh-collage__card">
+            <div class="jh-media" style="--tone: {{ tones[t] | strip }}">
+              {%- if section.settings[k_img] -%}
+                {{ section.settings[k_img] | image_url: width: 900 | image_tag: loading: 'eager', alt: '' }}
+              {%- else -%}
+                <div class="jh-ph">{% render 'jolly-art', face: hero_art[n] %}</div>
+              {%- endif -%}
+            </div>
+            {%- if hero_labels[n] != blank -%}<span class="jh-collage__label">{{ hero_labels[n] | strip }}</span>{%- endif -%}
+          </div>
+        {%- endfor -%}
+        {%- if section.settings.hero_sticker != blank -%}<div class="jh-collage__sticker">{{ section.settings.hero_sticker | newline_to_br }}</div>{%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= CATEGORIES ================= {%- endcomment -%}
+  {%- if cats.size > 0 -%}
+    <section class="jh-section">
+      <div class="jh-wrap">
+        <div class="jh-head">
+          <span class="jh-eyebrow">{{ section.settings.cats_eyebrow }}</span>
+          <h2 class="jh-h2">{{ section.settings.cats_heading }}</h2>
+        </div>
+        <div class="jh-cats">
+          {%- for block in cats -%}
+            {%- assign t = forloop.index0 | modulo: tone_count -%}
+            <a class="jh-cat" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+              <span class="jh-cat__media jh-media" style="--tone: {{ tones[t] | strip }}">
+                {%- if block.settings.image -%}
+                  {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 16vw, 50vw', alt: '' }}
+                {%- else -%}
+                  <span class="jh-ph">{% render 'jolly-art', face: block.settings.art %}</span>
+                {%- endif -%}
+              </span>
+              <span class="jh-cat__name">{{ block.settings.title }}{% render 'jolly-icon', name: 'chev-right' %}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= TRENDING ================= {%- endcomment -%}
+  <section class="jh-section jh-section--ice">
+    <div class="jh-wrap">
+      <div class="jh-grid-head">
+        <div>
+          <span class="jh-eyebrow">{{ section.settings.trending_eyebrow }}</span>
+          <h2 class="jh-h2">{{ section.settings.trending_heading }}</h2>
+        </div>
+        {%- if trending != blank -%}<a class="jh-link" href="{{ trending.url }}">Shop all {% render 'jolly-icon', name: 'chev-right' %}</a>{%- endif -%}
+      </div>
+      {%- if trending != blank and trending.products.size > 0 -%}
+        <div class="jh-grid">
+          {%- for p in trending.products limit: section.settings.trending_count -%}
+            {%- assign t = forloop.index0 | modulo: tone_count -%}
+            {% render 'jolly-card', card_product: p, tone: tones[t] %}
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        <p class="jh-sub">Pick a collection for “Trending” in the section settings.</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ================= COUNTDOWN ================= {%- endcomment -%}
+  {%- if section.settings.countdown_date != blank -%}
+    <section class="jh-section" style="padding-bottom:0">
+      <div class="jh-wrap">
+        <div class="jh-count" data-jh-countdown="{{ section.settings.countdown_date }}">
+          <div class="jh-snow" aria-hidden="true"></div>
+          <div>
+            <h2 class="jh-h2">{{ section.settings.countdown_heading }}</h2>
+            <p>{{ section.settings.countdown_text }}</p>
+          </div>
+          <div class="jh-count__clock" role="timer" aria-live="off">
+            <div class="jh-count__unit"><b data-jh-d>--</b><span>Days</span></div>
+            <div class="jh-count__unit"><b data-jh-h>--</b><span>Hours</span></div>
+            <div class="jh-count__unit"><b data-jh-m>--</b><span>Mins</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= SPOTLIGHT ================= {%- endcomment -%}
+  {%- if spot != blank -%}
+    <section class="jh-section">
+      <div class="jh-wrap jh-spot">
+        <a class="jh-spot__media jh-media" href="{{ spot.url }}" style="--tone: {{ tones[1] | strip }}" tabindex="-1" aria-hidden="true">
+          {%- if spot.featured_media -%}
+            {{ spot.featured_media | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', alt: '' }}
+          {%- else -%}
+            <span class="jh-ph">{% render 'jolly-art', face: section.settings.spotlight_art %}</span>
+          {%- endif -%}
+        </a>
+        <div>
+          <span class="jh-eyebrow">{{ section.settings.spotlight_eyebrow }}</span>
+          <h2 class="jh-spot__title">{{ spot.title }}</h2>
+          <p class="jh-sub" style="margin-top:0">{{ section.settings.spotlight_text }}</p>
+          {%- assign bullets = section.settings.spotlight_bullets | newline_to_br | split: '<br />' -%}
+          <ul class="jh-spot__list">
+            {%- for b in bullets -%}{%- assign bs = b | strip -%}{%- if bs != blank -%}<li>{% render 'jolly-icon', name: 'check' %}{{ bs }}</li>{%- endif -%}{%- endfor -%}
+          </ul>
+          <div class="jh-spot__price">{% if spot.price_varies %}From {% endif %}{{ spot.price | money }}</div>
+          <a class="jh-btn jh-btn--pop" href="{{ spot.url }}">{{ section.settings.spotlight_cta }}</a>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= GIFT FINDER ================= {%- endcomment -%}
+  {%- if prices.size > 0 -%}
+    <section class="jh-section jh-section--ice" id="jh-finder">
+      <div class="jh-wrap">
+        <div class="jh-head">
+          <span class="jh-eyebrow">{{ section.settings.finder_eyebrow }}</span>
+          <h2 class="jh-h2">{{ section.settings.finder_heading }}</h2>
+        </div>
+        <div class="jh-finder">
+          {%- for block in prices -%}
+            <a href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}><span>{{ block.settings.prefix }}</span><b>{{ block.settings.amount }}</b><span>{{ block.settings.note }}</span></a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= WHY US ================= {%- endcomment -%}
+  {%- if whys.size > 0 -%}
+    <section class="jh-section jh-section--ice" style="padding-top:0">
+      <div class="jh-wrap jh-why">
+        {%- for block in whys -%}
+          <div {{ block.shopify_attributes }}>{% render 'jolly-icon', name: block.settings.icon %}<h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= FAQ ================= {%- endcomment -%}
+  {%- if faqs.size > 0 -%}
+    <section class="jh-section">
+      <div class="jh-wrap">
+        <div class="jh-head"><span class="jh-eyebrow">FAQ</span><h2 class="jh-h2">{{ section.settings.faq_heading }}</h2></div>
+        <div class="jh-faq">
+          {%- for block in faqs -%}
+            <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="jh-faq__a">{{ block.settings.answer }}</div></details>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= NEWSLETTER ================= {%- endcomment -%}
+  {%- if section.settings.news_heading != blank -%}
+    <section class="jh-section" style="padding-top:0">
+      <div class="jh-wrap">
+        <div class="jh-news">
+          <div class="jh-snow" aria-hidden="true"></div>
+          <h2 class="jh-h2">{{ section.settings.news_heading }}</h2>
+          <p>{{ section.settings.news_text }}</p>
+          {%- form 'customer', class: 'jh-news__form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="jh-news__ok">You're on the list. Watch your inbox.</p>
+            {%- else -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label class="visually-hidden" for="jh-news-{{ section.id }}">Email</label>
+              <input id="jh-news-{{ section.id }}" type="email" name="contact[email]" placeholder="you@email.com" autocomplete="email" required>
+              <button type="submit">Subscribe</button>
+            {%- endif -%}
+          {%- endform -%}
+          <small>No spam. Unsubscribe anytime.</small>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Jolly Haul home",
+  "tag": "section",
+  "class": "jh-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "ticker", "label": "Scrolling top bar (separate with |)", "default": "Free shipping over $50|Order by Dec 10 for Christmas delivery|30-day easy returns|New viral finds every week" },
+    { "type": "text", "id": "tones", "label": "Tile background tones", "default": "#e7f1ea,#fbe9df,#fff1d6,#f6e3e3,#eef0e4,#f3ead8" },
+
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "The Christmas haul of 2026" },
+    { "type": "text", "id": "hero_title", "label": "Heading", "default": "Christmas, but make it viral." },
+    { "type": "textarea", "id": "hero_text", "label": "Text", "default": "The funniest, cosiest and most-shared Christmas finds from your feed — all in one place, ready to gift." },
+    { "type": "text", "id": "hero_cta", "label": "Main button", "default": "Shop the haul" },
+    { "type": "url", "id": "hero_cta_link", "label": "Main button link" },
+    { "type": "text", "id": "hero_cta2", "label": "Second button", "default": "Gift finder" },
+    { "type": "url", "id": "hero_cta2_link", "label": "Second button link" },
+    { "type": "text", "id": "proof_1", "label": "Proof point 1", "default": "Ships in 1–3 days" },
+    { "type": "text", "id": "proof_2", "label": "Proof point 2", "default": "30-day returns" },
+    { "type": "text", "id": "proof_3", "label": "Proof point 3", "default": "Secure checkout" },
+    { "type": "image_picker", "id": "hero_image_1", "label": "Collage image 1 (4:5)" },
+    { "type": "image_picker", "id": "hero_image_2", "label": "Collage image 2 (1:1)" },
+    { "type": "image_picker", "id": "hero_image_3", "label": "Collage image 3 (1:1)" },
+    { "type": "text", "id": "hero_art", "label": "Collage illustrations (until images are set)", "default": "gramps,projector,onesie" },
+    { "type": "text", "id": "hero_labels", "label": "Collage labels (separate with |)", "default": "Funny masks|Star projectors|Baby costumes" },
+    { "type": "textarea", "id": "hero_sticker", "label": "Round sticker", "default": "As seen\non your\nFYP" },
+
+    { "type": "header", "content": "Categories" },
+    { "type": "text", "id": "cats_eyebrow", "label": "Eyebrow", "default": "Shop by vibe" },
+    { "type": "text", "id": "cats_heading", "label": "Heading", "default": "Find your kind of jolly" },
+
+    { "type": "header", "content": "Trending" },
+    { "type": "collection", "id": "trending_collection", "label": "Collection" },
+    { "type": "range", "id": "trending_count", "label": "Products to show", "min": 4, "max": 12, "step": 4, "default": 8 },
+    { "type": "text", "id": "trending_eyebrow", "label": "Eyebrow", "default": "Trending right now" },
+    { "type": "text", "id": "trending_heading", "label": "Heading", "default": "The internet's favourites" },
+
+    { "type": "header", "content": "Countdown" },
+    { "type": "text", "id": "countdown_date", "label": "Count down to (YYYY-MM-DD)", "default": "2026-12-25", "info": "Leave empty to hide. Counts down to the real date — no fake timers." },
+    { "type": "text", "id": "countdown_heading", "label": "Heading", "default": "Christmas is coming. Fast." },
+    { "type": "textarea", "id": "countdown_text", "label": "Text", "default": "Order by December 10 for standard delivery before Christmas. Check each product page for exact shipping times." },
+
+    { "type": "header", "content": "Spotlight" },
+    { "type": "product", "id": "spotlight_product", "label": "Product" },
+    { "type": "select", "id": "spotlight_art", "label": "Illustration (until the product has photos)", "default": "gramps", "options": [
+      { "value": "gramps", "label": "Gramps mask" }, { "value": "elf", "label": "Elf mask" }, { "value": "projector", "label": "Projector" }, { "value": "onesie", "label": "Baby costume" },
+      { "value": "sweater", "label": "Sweater" }, { "value": "ornament", "label": "Ornament" }, { "value": "gift", "label": "Gift" }, { "value": "lights", "label": "Lights" } ] },
+    { "type": "text", "id": "spotlight_eyebrow", "label": "Eyebrow", "default": "Bestseller spotlight" },
+    { "type": "textarea", "id": "spotlight_text", "label": "Text", "default": "The ski mask that broke the group chat. Warm, goggle-friendly, and impossible to ignore in the lift line." },
+    { "type": "textarea", "id": "spotlight_bullets", "label": "Bullets (one per line)", "default": "Five hilarious faces\nFits under most helmets\nGift-ready pouch" },
+    { "type": "text", "id": "spotlight_cta", "label": "Button", "default": "Shop now" },
+
+    { "type": "header", "content": "Gift finder, FAQ, newsletter" },
+    { "type": "text", "id": "finder_eyebrow", "label": "Gift finder eyebrow", "default": "Gift finder" },
+    { "type": "text", "id": "finder_heading", "label": "Gift finder heading", "default": "Gifts for every budget" },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Before you check out" },
+    { "type": "text", "id": "news_heading", "label": "Newsletter heading", "default": "Get first dibs on the next viral drop" },
+    { "type": "textarea", "id": "news_text", "label": "Newsletter text", "default": "New finds sell out fast in December. Join the list and we'll tell you first." }
+  ],
+  "blocks": [
+    {
+      "type": "category", "name": "Category tile", "limit": 12,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Funny masks" },
+        { "type": "url", "id": "link", "label": "Link (usually a collection)" },
+        { "type": "image_picker", "id": "image", "label": "Image (1:1)" },
+        { "type": "select", "id": "art", "label": "Illustration (until image is set)", "default": "gramps", "options": [
+          { "value": "gramps", "label": "Gramps mask" }, { "value": "elf", "label": "Elf mask" }, { "value": "cat", "label": "Cat mask" }, { "value": "projector", "label": "Projector" },
+          { "value": "onesie", "label": "Baby costume" }, { "value": "sweater", "label": "Sweater" }, { "value": "ornament", "label": "Ornament" }, { "value": "gift", "label": "Gift" }, { "value": "lights", "label": "Lights" } ] }
+      ]
+    },
+    {
+      "type": "price", "name": "Gift finder price", "limit": 6,
+      "settings": [
+        { "type": "text", "id": "prefix", "label": "Prefix", "default": "Under" },
+        { "type": "text", "id": "amount", "label": "Amount", "default": "$25" },
+        { "type": "text", "id": "note", "label": "Note", "default": "Stocking stuffers" },
+        { "type": "url", "id": "link", "label": "Link", "info": "e.g. a collection filtered by price: /collections/all?filter.v.price.lte=25" }
+      ]
+    },
+    {
+      "type": "why", "name": "Why shop with us", "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "truck", "options": [
+          { "value": "truck", "label": "Truck" }, { "value": "return", "label": "Return" }, { "value": "lock", "label": "Lock" }, { "value": "gift", "label": "Gift" }, { "value": "snow", "label": "Snowflake" }, { "value": "check", "label": "Check" } ] },
+        { "type": "text", "id": "title", "label": "Title", "default": "Fast, tracked shipping" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Every order ships with tracking." }
+      ]
+    },
+    {
+      "type": "faq", "name": "FAQ", "limit": 10,
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "Will it arrive before Christmas?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Order by December 10 for standard delivery before Christmas.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Jolly Haul home" }]
+}
+{% endschema %}

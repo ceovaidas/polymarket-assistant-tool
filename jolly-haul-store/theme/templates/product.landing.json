@@ -1,7 +1,7 @@
 {
   "sections": {
     "main": {
-      "type": "gnarhead-product-landing",
+      "type": "jolly-product",
       "blocks": {
         "char_1": {
           "type": "character",

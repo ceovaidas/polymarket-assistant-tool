@@ -1,0 +1,58 @@
+{%- comment -%}
+  Product card. Usage: {% render 'jolly-card', card_product: product, tone: '#fbe9df' %}
+  Badges come from product tags: "viral" → Viral on TikTok, "new" → New. A real compare-at price shows "Save X%".
+  Until photos exist, a tag like "art-projector" picks the illustration (see snippets/jolly-art.liquid).
+{%- endcomment -%}
+{%- liquid
+  assign p = card_product
+  assign v = p.selected_or_first_available_variant
+  assign art = 'gift'
+  for tag in p.tags
+    if tag contains 'art-'
+      assign art = tag | remove_first: 'art-'
+    endif
+  endfor
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+-%}
+<article class="jh-card">
+  <a class="jh-card__media jh-media" href="{{ p.url }}" style="--tone: {{ tone | default: '#fbf5ec' }}" tabindex="-1" aria-hidden="true">
+    {%- if on_sale -%}
+      <span class="jh-card__badge jh-card__badge--sale">Save {{ p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price }}%</span>
+    {%- elsif p.tags contains 'viral' -%}
+      <span class="jh-card__badge jh-card__badge--viral">Viral on TikTok</span>
+    {%- elsif p.tags contains 'new' -%}
+      <span class="jh-card__badge">New</span>
+    {%- endif -%}
+    {%- if p.featured_media -%}
+      {{ p.featured_media | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', alt: p.featured_media.alt | default: p.title }}
+    {%- else -%}
+      <span class="jh-ph">{% render 'jolly-art', face: art %}</span>
+    {%- endif -%}
+  </a>
+  <div class="jh-card__body">
+    {%- assign r = p.metafields.reviews.rating.value -%}
+    {%- if r != blank -%}
+      <div class="jh-card__rating">{% render 'jolly-icon', name: 'stars' %}<span>{{ r.rating | round: 1 }} ({{ p.metafields.reviews.rating_count }})</span></div>
+    {%- endif -%}
+    <h3 class="jh-card__title"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+    <div class="jh-card__price{% if on_sale %} jh-card__price--sale{% endif %}">
+      <span>{% if p.price_varies %}From {% endif %}{{ p.price | money }}</span>
+      {%- if on_sale -%}<s>{{ p.compare_at_price | money }}</s>{%- endif -%}
+    </div>
+    <div class="jh-card__form">
+      {%- if p.available and p.has_only_default_variant -%}
+        {%- form 'product', p -%}
+          <input type="hidden" name="id" value="{{ v.id }}">
+          <button type="submit" class="jh-card__add">Add to cart</button>
+        {%- endform -%}
+      {%- elsif p.available -%}
+        <a class="jh-card__add" href="{{ p.url }}">Choose options</a>
+      {%- else -%}
+        <span class="jh-card__add" aria-disabled="true">Sold out</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>
