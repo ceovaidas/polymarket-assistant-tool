@@ -3,6 +3,64 @@
     "main": {
       "type": "jolly-product",
       "blocks": {
+        "perk_1": {
+          "type": "perk",
+          "settings": {
+            "label": "Premium knit",
+            "icon": "knit"
+          }
+        },
+        "perk_2": {
+          "type": "perk",
+          "settings": {
+            "label": "Keeps you warm",
+            "icon": "snow"
+          }
+        },
+        "perk_3": {
+          "type": "perk",
+          "settings": {
+            "label": "Goggle friendly",
+            "icon": "goggles"
+          }
+        },
+        "perk_4": {
+          "type": "perk",
+          "settings": {
+            "label": "One size fits most",
+            "icon": "globe"
+          }
+        },
+        "bundle_1": {
+          "type": "bundle",
+          "settings": {
+            "qty": 1,
+            "label": "1 Mask",
+            "note": "Solo legend",
+            "pct": 0,
+            "tag": ""
+          }
+        },
+        "bundle_2": {
+          "type": "bundle",
+          "settings": {
+            "qty": 2,
+            "label": "2 Masks",
+            "note": "You + your ride-or-die · Free shipping",
+            "pct": 15,
+            "tag": "Most popular"
+          }
+        },
+        "bundle_3": {
+          "type": "bundle",
+          "settings": {
+            "qty": 3,
+            "label": "3 Masks",
+            "note": "The whole squad · Free shipping",
+            "pct": 25,
+            "tag": "Best value"
+          }
+        },
         "char_1": {
           "type": "character",
           "settings": {
@@ -215,6 +273,13 @@
         }
       },
       "block_order": [
+        "perk_1",
+        "perk_2",
+        "perk_3",
+        "perk_4",
+        "bundle_1",
+        "bundle_2",
+        "bundle_3",
         "char_1",
         "char_2",
         "char_3",

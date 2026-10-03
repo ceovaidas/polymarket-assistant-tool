@@ -1,7 +1,7 @@
 # Jolly Haul — viral Christmas finds (Shopify)
 
 - **Preview:** `preview/index.html` (home) and `preview/product.html` (product landing). Both are rendered from the real theme sections: `cd preview && npm install && npm run build`.
-- **Install into Shopify:** `docs/LAUNCH_GUIDE_LT.md`, section 4.
+- **Install into Shopify:** upload `dist/jolly-haul-theme.zip` (Dawn + Jolly Haul, pre-configured) and import `shopify-import/products.csv` — steps in `docs/LAUNCH_GUIDE_LT.md`, section 4. Rebuild the zip with `python3 build_theme.py <path to Dawn checkout>`.
 - **Store copy (EN):** `docs/PRODUCT_COPY_EN.md`.
 - **AI photos (kie.ai):** `KIE_API_KEY=... node imagegen/generate.mjs` — the key is read from the environment only.
 

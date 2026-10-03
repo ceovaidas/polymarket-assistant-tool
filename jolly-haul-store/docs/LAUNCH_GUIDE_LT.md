@@ -52,6 +52,27 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
 ---
 
 ## 4. Shopify paruošimas
+
+### Greitas būdas (rekomenduoju)
+1. **Tema:** Online Store → Themes → *Add theme* → **Upload zip file** → `dist/jolly-haul-theme.zip` → *Publish* (arba pirma *Customize*, kad pažiūrėtum).
+2. **Prekės:** Products → *Import* → `shopify-import/products.csv` (8 pavyzdinės prekės, kaukė su 5 veidais).
+3. **Kolekcijos:** Products → Collections → *Create collection* → *Automated* → sąlyga *Product tag is equal to*:
+   | Pavadinimas (tiksliai taip) | Žyma |
+   |---|---|
+   | Trending | `trending` |
+   | Funny masks | `cat-masks` |
+   | Star projectors | `cat-projectors` |
+   | Baby & kids | `cat-baby` |
+   | Ugly sweaters | `cat-sweaters` |
+   | Lights & decor | `cat-decor` |
+   | Stocking stuffers | `cat-stuffers` |
+4. **Kaukės puslapis:** Products → *Funny Face Ski Mask* → dešinėje *Theme template* → **landing** → Save.
+5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, Shop all (`/collections/all`), Funny masks (kolekcija), Gift finder (`/#jh-finder`).
+6. **Nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt.
+
+Zip'e jau sukonfigūruota: spalvos, apvalūs kampai, Jolly meniu juosta, tamsi poraštė, pradinis puslapis su nuorodomis į aukščiau išvardintas kolekcijas, krepšelio pastaba dovanai. Zip'ą galima sugeneruoti iš naujo: `python3 build_theme.py <dawn aplankas>`.
+
+### Rankinis būdas (jei nori pridėti prie esamos temos)
 1. **Paskyra ir tema:** Shopify → Basic planas → tema **Dawn**.
 2. **Įkelk failus** (Online Store → Themes → ⋯ → Edit code):
    - `Assets`: `jolly.css`, `jolly.js`

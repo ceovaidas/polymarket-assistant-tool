@@ -30,6 +30,8 @@
   assign reviews = section.blocks | where: 'type', 'review'
   assign faqs = section.blocks | where: 'type', 'faq'
   assign compares = section.blocks | where: 'type', 'compare'
+  assign bundles = section.blocks | where: 'type', 'bundle'
+  assign perks = section.blocks | where: 'type', 'perk'
   assign slide_count = product.media.size
   if slide_count == 0
     assign slide_count = art_count
@@ -80,15 +82,13 @@
             {%- endif -%}
           </div>
 
-          <div class="jh-perks-overlay" aria-hidden="true">
-            {%- for i in (1..4) -%}
-              {%- capture k_label -%}perk_{{ i }}_label{%- endcapture -%}
-              {%- capture k_icon -%}perk_{{ i }}_icon{%- endcapture -%}
-              {%- if section.settings[k_label] != blank -%}
-                <div class="jh-perk-chip">{% render 'jolly-icon', name: section.settings[k_icon] %}{{ section.settings[k_label] }}</div>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
+          {%- if perks.size > 0 -%}
+            <div class="jh-perks-overlay" aria-hidden="true">
+              {%- for block in perks -%}
+                <div class="jh-perk-chip" {{ block.shopify_attributes }}>{% render 'jolly-icon', name: block.settings.icon %}{{ block.settings.label }}</div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
 
           {%- if slide_count > 1 -%}
             <button type="button" class="jh-gallery__nav jh-gallery__nav--prev" data-jh-prev aria-label="Previous image">{% render 'jolly-icon', name: 'chev-left' %}</button>
@@ -188,26 +188,22 @@
             {%- endfor -%}
           {%- endunless -%}
 
-          {%- if section.settings.show_bundles -%}
+          {%- if bundles.size > 0 -%}
             <fieldset class="jh-field">
               <legend class="jh-field__legend">{{ section.settings.bundle_heading }}</legend>
               <div class="jh-bundles" data-jh-bundle>
-                {%- for i in (1..3) -%}
-                  {%- capture k_label -%}bundle_{{ i }}_label{%- endcapture -%}
-                  {%- capture k_note -%}bundle_{{ i }}_note{%- endcapture -%}
-                  {%- capture k_pct -%}bundle_{{ i }}_pct{%- endcapture -%}
-                  {%- capture k_tag -%}bundle_{{ i }}_tag{%- endcapture -%}
-                  <label class="jh-bundle">
-                    <input type="radio" name="jh-bundle-{{ section.id }}" value="{{ i }}" data-pct="{{ section.settings[k_pct] }}" data-label="{{ section.settings[k_label] | escape }}" {% if i == section.settings.bundle_default %}checked{% endif %}>
+                {%- for block in bundles -%}
+                  <label class="jh-bundle" {{ block.shopify_attributes }}>
+                    <input type="radio" name="jh-bundle-{{ section.id }}" value="{{ block.settings.qty }}" data-pct="{{ block.settings.pct }}" data-label="{{ block.settings.label | escape }}" {% if forloop.index == section.settings.bundle_default %}checked{% endif %}>
                     <span class="jh-bundle__row">
                       <span class="jh-bundle__radio"></span>
                       <span>
-                        <span class="jh-bundle__name">{{ section.settings[k_label] }}</span>
-                        <span class="jh-bundle__note">{{ section.settings[k_note] }}</span>
+                        <span class="jh-bundle__name">{{ block.settings.label }}</span>
+                        <span class="jh-bundle__note">{{ block.settings.note }}</span>
                       </span>
                       <span class="jh-bundle__price"><span data-jh-bundle-now></span><s data-jh-bundle-was></s></span>
                     </span>
-                    {%- if section.settings[k_tag] != blank -%}<span class="jh-bundle__tag">{{ section.settings[k_tag] }}</span>{%- endif -%}
+                    {%- if block.settings.tag != blank -%}<span class="jh-bundle__tag">{{ block.settings.tag }}</span>{%- endif -%}
                   </label>
                 {%- endfor -%}
               </div>
@@ -489,133 +485,571 @@
   "tag": "section",
   "class": "jh-section-wrapper",
   "settings": [
-    { "type": "text", "id": "ticker", "label": "Scrolling top bar (separate with |)", "default": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days" },
-    { "type": "text", "id": "placeholder_tones", "label": "Illustration background tones", "default": "#e7f1ea,#fbe9df,#e9f3e3,#fff1d6,#f6e3e3", "info": "Background colours shown until photos are uploaded." },
-    { "type": "text", "id": "art_order", "label": "Illustration order (matches Face option order)", "default": "gramps,cat,tiger,corgi,elf", "info": "Options: gramps, cat, tiger, corgi, elf, mask." },
-
-    { "type": "header", "content": "Image perks (overlay)" },
-    { "type": "text", "id": "perk_1_label", "label": "Perk 1", "default": "Premium knit" },
-    { "type": "select", "id": "perk_1_icon", "label": "Perk 1 icon", "default": "knit", "options": [{ "value": "knit", "label": "Knit" }, { "value": "snow", "label": "Snowflake" }, { "value": "goggles", "label": "Goggles" }, { "value": "globe", "label": "Globe" }, { "value": "helmet", "label": "Helmet" }, { "value": "gift", "label": "Gift" }] },
-    { "type": "text", "id": "perk_2_label", "label": "Perk 2", "default": "Keeps you warm" },
-    { "type": "select", "id": "perk_2_icon", "label": "Perk 2 icon", "default": "snow", "options": [{ "value": "knit", "label": "Knit" }, { "value": "snow", "label": "Snowflake" }, { "value": "goggles", "label": "Goggles" }, { "value": "globe", "label": "Globe" }, { "value": "helmet", "label": "Helmet" }, { "value": "gift", "label": "Gift" }] },
-    { "type": "text", "id": "perk_3_label", "label": "Perk 3", "default": "Goggle friendly" },
-    { "type": "select", "id": "perk_3_icon", "label": "Perk 3 icon", "default": "goggles", "options": [{ "value": "knit", "label": "Knit" }, { "value": "snow", "label": "Snowflake" }, { "value": "goggles", "label": "Goggles" }, { "value": "globe", "label": "Globe" }, { "value": "helmet", "label": "Helmet" }, { "value": "gift", "label": "Gift" }] },
-    { "type": "text", "id": "perk_4_label", "label": "Perk 4", "default": "One size fits most" },
-    { "type": "select", "id": "perk_4_icon", "label": "Perk 4 icon", "default": "globe", "options": [{ "value": "knit", "label": "Knit" }, { "value": "snow", "label": "Snowflake" }, { "value": "goggles", "label": "Goggles" }, { "value": "globe", "label": "Globe" }, { "value": "helmet", "label": "Helmet" }, { "value": "gift", "label": "Gift" }] },
-
-    { "type": "header", "content": "Buy box" },
-    { "type": "text", "id": "badge", "label": "Badge (shown until you have reviews)", "default": "New season drop" },
-    { "type": "textarea", "id": "lede", "label": "Intro", "default": "The warm, goggle-friendly ski mask that turns every lift line into a show." },
-    { "type": "text", "id": "hook_emoji", "label": "Hook emoji", "default": "😂" },
-    { "type": "text", "id": "hook", "label": "Hook line", "default": "Warning: strangers will ask for selfies." },
-    { "type": "text", "id": "swatch_option", "label": "Option shown as picture swatches", "default": "Face" },
-    { "type": "checkbox", "id": "show_bundles", "label": "Show bundle selector", "default": true },
-    { "type": "text", "id": "bundle_heading", "label": "Bundle heading", "default": "Bring the crew & save" },
-    { "type": "range", "id": "bundle_default", "label": "Pre-selected bundle", "min": 1, "max": 3, "step": 1, "default": 2 },
-    { "type": "text", "id": "bundle_1_label", "label": "Bundle 1 label", "default": "1 Mask" },
-    { "type": "text", "id": "bundle_1_note", "label": "Bundle 1 note", "default": "Solo legend" },
-    { "type": "range", "id": "bundle_1_pct", "label": "Bundle 1 discount %", "min": 0, "max": 50, "step": 1, "default": 0, "info": "Must match an automatic discount in Shopify → Discounts." },
-    { "type": "text", "id": "bundle_1_tag", "label": "Bundle 1 tag" },
-    { "type": "text", "id": "bundle_2_label", "label": "Bundle 2 label", "default": "2 Masks" },
-    { "type": "text", "id": "bundle_2_note", "label": "Bundle 2 note", "default": "You + your ride-or-die · Free shipping" },
-    { "type": "range", "id": "bundle_2_pct", "label": "Bundle 2 discount %", "min": 0, "max": 50, "step": 1, "default": 15 },
-    { "type": "text", "id": "bundle_2_tag", "label": "Bundle 2 tag", "default": "Most popular" },
-    { "type": "text", "id": "bundle_3_label", "label": "Bundle 3 label", "default": "3 Masks" },
-    { "type": "text", "id": "bundle_3_note", "label": "Bundle 3 note", "default": "The whole squad · Free shipping" },
-    { "type": "range", "id": "bundle_3_pct", "label": "Bundle 3 discount %", "min": 0, "max": 50, "step": 1, "default": 25 },
-    { "type": "text", "id": "bundle_3_tag", "label": "Bundle 3 tag", "default": "Best value" },
-    { "type": "text", "id": "atc_label", "label": "Button label", "default": "Add to cart" },
-    { "type": "text", "id": "stock_line", "label": "Line under button", "default": "In stock — ships in 1–3 business days" },
-    { "type": "text", "id": "trust_1", "label": "Trust 1", "default": "Tracked shipping" },
-    { "type": "text", "id": "trust_2", "label": "Trust 2", "default": "30-day returns" },
-    { "type": "text", "id": "trust_3", "label": "Trust 3", "default": "Secure checkout" },
-    { "type": "richtext", "id": "materials", "label": "Materials & care", "default": "<p>Double-layer acrylic knit with a brushed fleece face panel. Hand wash cold, lay flat to dry. Do not tumble dry.</p>" },
-    { "type": "richtext", "id": "shipping", "label": "Shipping & returns", "default": "<p>Ships in 1–3 business days with tracking. Delivery to the US, Canada and EU typically takes 6–12 business days. Returns accepted within 30 days of delivery on unworn items.</p>" },
-
-    { "type": "header", "content": "Sections" },
-    { "type": "text", "id": "marquee", "label": "Benefit strip (separate with |)", "default": "Keeps you warm|Goggle friendly|Fits under helmets|Turns heads on every lift|Gift-ready pouch" },
-    { "type": "text", "id": "crew_eyebrow", "label": "Crew eyebrow", "default": "Pick your alter ego" },
-    { "type": "text", "id": "crew_heading", "label": "Crew heading", "default": "Meet the crew" },
-    { "type": "textarea", "id": "crew_text", "label": "Crew text", "default": "Five faces, one fit. Mix them across your group for the photo of the season." },
-    { "type": "text", "id": "features_eyebrow", "label": "Features eyebrow", "default": "Not just a costume" },
-    { "type": "text", "id": "features_heading", "label": "Features heading", "default": "Funny face. Serious mask." },
-    { "type": "image_picker", "id": "spec_image", "label": "Spec image" },
-    { "type": "text", "id": "spec_heading", "label": "Spec heading", "default": "The details" },
-    { "type": "text", "id": "compare_eyebrow", "label": "Comparison eyebrow", "default": "The difference" },
-    { "type": "text", "id": "compare_heading", "label": "Comparison heading", "default": "Why settle for a boring balaclava?" },
-    { "type": "text", "id": "compare_them", "label": "Comparison 'them' column", "default": "Plain balaclava" },
-    { "type": "text", "id": "reel_eyebrow", "label": "Video eyebrow", "default": "Spotted on the mountain" },
-    { "type": "text", "id": "reel_heading", "label": "Video heading", "default": "The lift line can't stop filming" },
-    { "type": "text", "id": "reviews_heading", "label": "Reviews heading", "default": "What the crew says" },
-    { "type": "text", "id": "guarantee_days", "label": "Guarantee days", "default": "30" },
-    { "type": "text", "id": "guarantee_heading", "label": "Guarantee heading", "default": "Try it on. Love it. Or send it back." },
-    { "type": "textarea", "id": "guarantee_text", "label": "Guarantee text", "default": "Wrong fit, wrong face, or just not your thing? Return it unworn within 30 days for a full refund. No awkward questions." },
-    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Questions? We've got answers." },
-    { "type": "text", "id": "final_heading", "label": "Final heading", "default": "Don't be the boring one in the photo." },
-    { "type": "text", "id": "final_text", "label": "Final text", "default": "Grab your face before the season does." },
-    { "type": "image_picker", "id": "final_image", "label": "Final image (wide)" }
+    {
+      "type": "text",
+      "id": "ticker",
+      "label": "Scrolling top bar (separate with |)",
+      "default": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_tones",
+      "label": "Illustration background tones",
+      "default": "#e7f1ea,#fbe9df,#e9f3e3,#fff1d6,#f6e3e3",
+      "info": "Background colours shown until photos are uploaded."
+    },
+    {
+      "type": "text",
+      "id": "art_order",
+      "label": "Illustration order (matches Face option order)",
+      "default": "gramps,cat,tiger,corgi,elf",
+      "info": "Options: gramps, cat, tiger, corgi, elf, mask."
+    },
+    {
+      "type": "header",
+      "content": "Buy box"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge (shown until you have reviews)",
+      "default": "New season drop"
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Intro",
+      "default": "The warm, goggle-friendly ski mask that turns every lift line into a show."
+    },
+    {
+      "type": "text",
+      "id": "hook_emoji",
+      "label": "Hook emoji",
+      "default": "😂"
+    },
+    {
+      "type": "text",
+      "id": "hook",
+      "label": "Hook line",
+      "default": "Warning: strangers will ask for selfies."
+    },
+    {
+      "type": "text",
+      "id": "swatch_option",
+      "label": "Option shown as picture swatches",
+      "default": "Face"
+    },
+    {
+      "type": "text",
+      "id": "bundle_heading",
+      "label": "Bundle heading",
+      "default": "Bring the crew & save"
+    },
+    {
+      "type": "range",
+      "id": "bundle_default",
+      "label": "Pre-selected bundle (1 = first)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "atc_label",
+      "label": "Button label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "stock_line",
+      "label": "Line under button",
+      "default": "In stock — ships in 1–3 business days"
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Trust 1",
+      "default": "Tracked shipping"
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Trust 2",
+      "default": "30-day returns"
+    },
+    {
+      "type": "text",
+      "id": "trust_3",
+      "label": "Trust 3",
+      "default": "Secure checkout"
+    },
+    {
+      "type": "richtext",
+      "id": "materials",
+      "label": "Materials & care",
+      "default": "<p>Double-layer acrylic knit with a brushed fleece face panel. Hand wash cold, lay flat to dry. Do not tumble dry.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping",
+      "label": "Shipping & returns",
+      "default": "<p>Ships in 1–3 business days with tracking. Delivery to the US, Canada and EU typically takes 6–12 business days. Returns accepted within 30 days of delivery on unworn items.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Sections"
+    },
+    {
+      "type": "text",
+      "id": "marquee",
+      "label": "Benefit strip (separate with |)",
+      "default": "Keeps you warm|Goggle friendly|Fits under helmets|Turns heads on every lift|Gift-ready pouch"
+    },
+    {
+      "type": "text",
+      "id": "crew_eyebrow",
+      "label": "Crew eyebrow",
+      "default": "Pick your alter ego"
+    },
+    {
+      "type": "text",
+      "id": "crew_heading",
+      "label": "Crew heading",
+      "default": "Meet the crew"
+    },
+    {
+      "type": "textarea",
+      "id": "crew_text",
+      "label": "Crew text",
+      "default": "Five faces, one fit. Mix them across your group for the photo of the season."
+    },
+    {
+      "type": "text",
+      "id": "features_eyebrow",
+      "label": "Features eyebrow",
+      "default": "Not just a costume"
+    },
+    {
+      "type": "text",
+      "id": "features_heading",
+      "label": "Features heading",
+      "default": "Funny face. Serious mask."
+    },
+    {
+      "type": "image_picker",
+      "id": "spec_image",
+      "label": "Spec image"
+    },
+    {
+      "type": "text",
+      "id": "spec_heading",
+      "label": "Spec heading",
+      "default": "The details"
+    },
+    {
+      "type": "text",
+      "id": "compare_eyebrow",
+      "label": "Comparison eyebrow",
+      "default": "The difference"
+    },
+    {
+      "type": "text",
+      "id": "compare_heading",
+      "label": "Comparison heading",
+      "default": "Why settle for a boring balaclava?"
+    },
+    {
+      "type": "text",
+      "id": "compare_them",
+      "label": "Comparison 'them' column",
+      "default": "Plain balaclava"
+    },
+    {
+      "type": "text",
+      "id": "reel_eyebrow",
+      "label": "Video eyebrow",
+      "default": "Spotted on the mountain"
+    },
+    {
+      "type": "text",
+      "id": "reel_heading",
+      "label": "Video heading",
+      "default": "The lift line can't stop filming"
+    },
+    {
+      "type": "text",
+      "id": "reviews_heading",
+      "label": "Reviews heading",
+      "default": "What the crew says"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_days",
+      "label": "Guarantee days",
+      "default": "30"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_heading",
+      "label": "Guarantee heading",
+      "default": "Try it on. Love it. Or send it back."
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "Wrong fit, wrong face, or just not your thing? Return it unworn within 30 days for a full refund. No awkward questions."
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ heading",
+      "default": "Questions? We've got answers."
+    },
+    {
+      "type": "text",
+      "id": "final_heading",
+      "label": "Final heading",
+      "default": "Don't be the boring one in the photo."
+    },
+    {
+      "type": "text",
+      "id": "final_text",
+      "label": "Final text",
+      "default": "Grab your face before the season does."
+    },
+    {
+      "type": "image_picker",
+      "id": "final_image",
+      "label": "Final image (wide)"
+    }
   ],
   "blocks": [
     {
-      "type": "character", "name": "Character", "limit": 10,
+      "type": "perk",
+      "name": "Image perk",
+      "limit": 4,
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image (4:5)" },
-        { "type": "select", "id": "art", "label": "Illustration (until image is set)", "default": "gramps", "options": [
-          { "value": "gramps", "label": "Gramps" }, { "value": "cat", "label": "Cat" }, { "value": "tiger", "label": "Tiger" },
-          { "value": "corgi", "label": "Corgi" }, { "value": "elf", "label": "Elf" }, { "value": "mask", "label": "Plain mask" } ] },
-        { "type": "text", "id": "name", "label": "Name", "default": "Gramps" },
-        { "type": "text", "id": "line", "label": "One-liner", "default": "Has opinions about your carving." },
-        { "type": "text", "id": "option_value", "label": "Variant value to select", "default": "Gramps", "info": "Must match the Face option value exactly. Leave empty to hide the button." }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Keeps you warm"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "snow",
+          "options": [
+            {
+              "value": "knit",
+              "label": "Knit"
+            },
+            {
+              "value": "snow",
+              "label": "Snowflake"
+            },
+            {
+              "value": "goggles",
+              "label": "Goggles"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "helmet",
+              "label": "Helmet"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            }
+          ]
+        }
       ]
     },
     {
-      "type": "feature", "name": "Feature", "limit": 8,
+      "type": "bundle",
+      "name": "Bundle offer",
+      "limit": 3,
       "settings": [
-        { "type": "select", "id": "icon", "label": "Icon", "default": "thermo", "options": [
-          { "value": "thermo", "label": "Warmth" }, { "value": "snow", "label": "Snowflake" }, { "value": "goggles", "label": "Goggles" }, { "value": "breath", "label": "Breathable" },
-          { "value": "helmet", "label": "Helmet" }, { "value": "gift", "label": "Gift" }, { "value": "wash", "label": "Washable" }, { "value": "knit", "label": "Knit" } ] },
-        { "type": "text", "id": "title", "label": "Title", "default": "Actually warm" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Dense knit with a fleece-lined face panel." }
+        {
+          "type": "range",
+          "id": "qty",
+          "label": "Quantity",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "2 Masks"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note",
+          "default": "Free shipping"
+        },
+        {
+          "type": "range",
+          "id": "pct",
+          "label": "Discount %",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "default": 15,
+          "info": "Must match an automatic discount in Shopify → Discounts."
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag"
+        }
       ]
     },
     {
-      "type": "spec", "name": "Spec row", "limit": 10,
+      "type": "character",
+      "name": "Character",
+      "limit": 10,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Shell" },
-        { "type": "text", "id": "value", "label": "Value", "default": "Double-layer acrylic knit" }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (4:5)"
+        },
+        {
+          "type": "select",
+          "id": "art",
+          "label": "Illustration (until image is set)",
+          "default": "gramps",
+          "options": [
+            {
+              "value": "gramps",
+              "label": "Gramps"
+            },
+            {
+              "value": "cat",
+              "label": "Cat"
+            },
+            {
+              "value": "tiger",
+              "label": "Tiger"
+            },
+            {
+              "value": "corgi",
+              "label": "Corgi"
+            },
+            {
+              "value": "elf",
+              "label": "Elf"
+            },
+            {
+              "value": "mask",
+              "label": "Plain mask"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Gramps"
+        },
+        {
+          "type": "text",
+          "id": "line",
+          "label": "One-liner",
+          "default": "Has opinions about your carving."
+        },
+        {
+          "type": "text",
+          "id": "option_value",
+          "label": "Variant value to select",
+          "default": "Gramps",
+          "info": "Must match the Face option value exactly. Leave empty to hide the button."
+        }
       ]
     },
     {
-      "type": "compare", "name": "Comparison row", "limit": 8,
+      "type": "feature",
+      "name": "Feature",
+      "limit": 8,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Gets you noticed" },
-        { "type": "checkbox", "id": "them", "label": "Plain balaclava also has this", "default": false }
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "thermo",
+          "options": [
+            {
+              "value": "thermo",
+              "label": "Warmth"
+            },
+            {
+              "value": "snow",
+              "label": "Snowflake"
+            },
+            {
+              "value": "goggles",
+              "label": "Goggles"
+            },
+            {
+              "value": "breath",
+              "label": "Breathable"
+            },
+            {
+              "value": "helmet",
+              "label": "Helmet"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "wash",
+              "label": "Washable"
+            },
+            {
+              "value": "knit",
+              "label": "Knit"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Actually warm"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Dense knit with a fleece-lined face panel."
+        }
       ]
     },
     {
-      "type": "video", "name": "Video", "limit": 8,
+      "type": "spec",
+      "name": "Spec row",
+      "limit": 10,
       "settings": [
-        { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
-        { "type": "image_picker", "id": "poster", "label": "Or an image" },
-        { "type": "text", "id": "caption", "label": "Caption", "default": "POV: Gramps drops in" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shell"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "Double-layer acrylic knit"
+        }
       ]
     },
     {
-      "type": "review", "name": "Review (real only)", "limit": 9,
+      "type": "compare",
+      "name": "Comparison row",
+      "limit": 8,
       "settings": [
-        { "type": "paragraph", "content": "Only publish genuine customer reviews. Fake reviews are illegal in the US (FTC) and the EU." },
-        { "type": "text", "id": "name", "label": "Customer name" },
-        { "type": "textarea", "id": "text", "label": "Review" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Gets you noticed"
+        },
+        {
+          "type": "checkbox",
+          "id": "them",
+          "label": "Plain balaclava also has this",
+          "default": false
+        }
       ]
     },
     {
-      "type": "faq", "name": "FAQ", "limit": 12,
+      "type": "video",
+      "name": "Video",
+      "limit": 8,
       "settings": [
-        { "type": "text", "id": "question", "label": "Question", "default": "Does it fit under a helmet?" },
-        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Yes. The crown is low-profile and sits comfortably under most ski and snowboard helmets.</p>" }
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video (vertical 9:16)"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Or an image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "default": "POV: Gramps drops in"
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review (real only)",
+      "limit": 9,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Only publish genuine customer reviews. Fake reviews are illegal in the US (FTC) and the EU."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Does it fit under a helmet?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Yes. The crown is low-profile and sits comfortably under most ski and snowboard helmets.</p>"
+        }
       ]
     }
   ],
-  "presets": [{ "name": "Jolly Haul product" }]
+  "presets": [
+    {
+      "name": "Jolly Haul product"
+    }
+  ]
 }
 {% endschema %}
