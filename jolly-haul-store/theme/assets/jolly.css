@@ -39,6 +39,13 @@
 
 .jh *, .jh *::before, .jh *::after { box-sizing: border-box; }
 .jh [hidden], .jh[hidden] { display: none !important; }
+/* Dawn hides every empty div (base.css "div:empty"); our decorative layers are intentionally empty. */
+.jh .jh-lights, .jh .jh-snow, .jh .jh-wheel__snow, .jh .jh-wheel__pointer, .jh .jh-wheel__backdrop { display: block; }
+.jh .jh-ph { display: grid; }
+/* Neutralise Dawn's global body/heading typography inside our sections. */
+.jh { letter-spacing: normal; }
+.jh h1, .jh h2, .jh h3 { font-family: var(--f); color: inherit; word-break: normal; }
+.jh h3 { letter-spacing: normal; }
 .jh :where(img, video) { display: block; max-width: 100%; }
 .jh :where(h1, h2, h3, p, ul, ol, figure, blockquote) { margin: 0; }
 .jh :where(button) { font: inherit; color: inherit; }
@@ -358,8 +365,8 @@
    ===================================================================== */
 .jh-hero { position: relative; background: var(--ice); overflow: hidden; }
 .jh-hero .jh-lights { position: absolute; top: 0; left: 0; right: 0; z-index: 1; }
-.jh-hero__grid { position: relative; z-index: 2; display: grid; gap: 36px; padding: 64px 0 56px; align-items: center; }
-@media (min-width: 990px) { .jh-hero__grid { grid-template-columns: 1.05fr 1fr; gap: 48px; padding: 96px 0 88px; } }
+.jh-hero__grid { position: relative; z-index: 2; display: grid; gap: 36px; padding-top: 64px; padding-bottom: 56px; align-items: center; }
+@media (min-width: 990px) { .jh-hero__grid { grid-template-columns: 1.05fr 1fr; gap: 48px; padding-top: 96px; padding-bottom: 88px; } }
 .jh-hero__title { font-weight: 900; font-size: clamp(42px, 6.6vw, 82px); line-height: .98; letter-spacing: -.035em; }
 .jh-hero__title em { font-style: normal; color: var(--pop); }
 .jh-hero__text { margin-top: 18px; font-size: 19px; color: var(--ink-2); max-width: 520px; }
@@ -572,7 +579,14 @@
 .jh-wheel__hub:disabled { cursor: default; color: var(--ink-3); transform: translate(-50%, -50%); }
 .jh-wheel__hub:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
-.jh-wheel__body { padding: 26px 24px 28px; display: grid; align-content: center; }
+.jh-wheel__body { padding: 26px 24px calc(28px + env(safe-area-inset-bottom)); display: grid; align-content: center; }
+@media (max-width: 749px) {
+  .jh-wheel__body { text-align: center; justify-items: center; padding-top: 22px; }
+  .jh-wheel__body > div { width: 100%; max-width: 420px; }
+  .jh-wheel__body .jh-eyebrow { justify-content: center; }
+  .jh-wheel__code { text-align: left; }
+  .jh-wheel__stage { padding: 44px 16px 26px; }
+}
 @media (min-width: 750px) { .jh-wheel__body { padding: 44px 40px; } }
 .jh-wheel__title { font-weight: 900; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.05; letter-spacing: -.025em; }
 .jh-wheel__text { margin-top: 10px; color: var(--ink-2); font-size: 16px; }

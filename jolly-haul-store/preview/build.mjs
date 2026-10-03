@@ -9,6 +9,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const theme = join(here, '..', 'theme');
 const read = (p) => readFileSync(join(theme, p), 'utf8');
 const css = read('assets/jolly.css');
+// Optional: emulate the live store by loading Dawn's global CSS first (DAWN_DIR=/path/to/dawn npm run build).
+const dawnDir = process.env.DAWN_DIR;
+const dawnCss = dawnDir ? readFileSync(join(dawnDir, 'assets', 'base.css'), 'utf8') : '';
+const dawnVars = dawnDir ? `:root { --font-body-family: Assistant, sans-serif; --font-body-style: normal; --font-body-weight: 400; --font-heading-family: Assistant, sans-serif; --font-heading-style: normal; --font-heading-weight: 400; --font-body-scale: 1; --font-heading-scale: 1; --color-foreground: 27,36,32; --color-background: 255,255,255; --page-width: 124rem; --spacing-sections-desktop: 0px; --spacing-sections-mobile: 0px; --grid-desktop-horizontal-spacing: 8px; --grid-mobile-horizontal-spacing: 4px; --buttons-radius: 14px; --inputs-radius: 12px; }` : '';
 const js = read('assets/jolly.js');
 
 // ---- engine with Shopify shims ----
@@ -106,7 +110,10 @@ const shell = (title, body, header) => `<!doctype html>
 <title>${title}</title>
 <meta name="description" content="Design preview of the Jolly Haul Shopify store, rendered from the real theme sections.">
 <style>
-${css}
+${(css.match(/@import url\([^)]*\);/) || [''])[0]}
+${dawnVars}
+${dawnCss}
+${css.replace(/@import url\([^)]*\);/, '')}
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
