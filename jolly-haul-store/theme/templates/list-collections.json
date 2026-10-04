@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "jolly-collections", "settings": {} }
+  },
+  "order": ["main"]
+}

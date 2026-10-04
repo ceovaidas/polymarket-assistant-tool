@@ -197,6 +197,7 @@ const renderHeader = (active) => engine.parseAndRender(headerSrc, {
   linklists: { 'main-menu': { links: [
     { title: 'Home', url: 'index.html', active: active === 'home' },
     { title: 'All gifts', url: 'collection.html', active: active === 'shop' },
+    { title: 'Categories', url: 'collections.html', active: active === 'cats' },
     { title: 'Bestsellers', url: 'collection.html', active: false },
     { title: 'Contact', url: '#', active: false },
   ] } },
@@ -210,7 +211,7 @@ home.section.settings.hero_cta_link = 'collection.html';
 home.section.settings.trending_collection.url = 'collection.html';
 // build_theme.py prepends an "All gifts" tile; mirror it here.
 home.section.blocks.unshift({ id: 'cat_all', type: 'category', shopify_attributes: '', settings: { ...home.section.blocks.find((b) => b.type === 'category').settings, title: 'All gifts', art: 'gift', link: 'collection.html' } });
-const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, collections: mockCollections, routes: { all_products_collection_url: 'collection.html' } });
+const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, collections: mockCollections, routes: { all_products_collection_url: 'collection.html', collections_url: 'collections.html' } });
 writeFileSync(join(here, 'index.html'), shell('Jolly Haul Preview', homeHtml, await renderHeader('home')));
 
 // ---- recommendations (real section; fallback collection = Bestsellers) ----
@@ -269,4 +270,7 @@ const sr = sectionData('jolly-search.liquid', 'search.json', 'main');
 const results = catalogue.slice(0, 3).map((p) => ({ ...p, object_type: 'product' })).concat([{ object_type: 'page', title: 'Shipping', url: '#' }]);
 writeFileSync(join(here, 'search.html'), shell('Jolly Haul Search Preview', await engine.parseAndRender(sr.src, { ...pageCtx, section: sr.section, search: { performed: true, terms: 'mask', results, results_count: results.length }, paginate: { pages: 1 } }), await renderHeader('other')));
 
-console.log('wrote preview/index.html, product.html, projector.html, collection.html, cart.html, page.html, contact.html, 404.html, search.html');
+const cl = sectionData('jolly-collections.liquid', 'list-collections.json', 'main');
+writeFileSync(join(here, 'collections.html'), shell('Jolly Haul Categories Preview', await engine.parseAndRender(cl.src, { ...pageCtx, section: cl.section }), await renderHeader('cats')));
+
+console.log('wrote collections.html, preview/index.html, product.html, projector.html, collection.html, cart.html, page.html, contact.html, 404.html, search.html');

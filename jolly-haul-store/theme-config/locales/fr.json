@@ -1,6 +1,10 @@
 {
   "jolly": {
+    "header": {
+      "menu": "Menu"
+    },
     "common": {
+      "all_categories": "Toutes les catégories",
       "home": "Accueil",
       "all_gifts": "Tous les cadeaux",
       "search": "Rechercher",

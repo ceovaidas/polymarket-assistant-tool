@@ -15,6 +15,7 @@ theme/
   sections/jolly-cart.liquid      # cart page (replaces Dawn's cart sections)
   sections/jolly-related.liquid   # "You may also like" (product page + cart, Shopify recommendations)
   sections/jolly-page.liquid      # content pages (+ jolly-contact, jolly-404, jolly-search)
+  sections/jolly-collections.liquid # all categories (/collections)
   sections/jolly-footer.liquid    # footer (replaces Dawn footer in the footer group)
   snippets/jolly-localization.liquid # country/currency/language picker
   sections/jolly-wheel.liquid     # Christmas prize wheel (footer group)

@@ -93,11 +93,14 @@
   {%- if visible_cats >= section.settings.cats_min -%}
     <section class="jh-section">
       <div class="jh-wrap">
-        <div class="jh-head">
-          <span class="jh-eyebrow">{{ section.settings.cats_eyebrow }}</span>
-          <h2 class="jh-h2">{{ section.settings.cats_heading }}</h2>
+        <div class="jh-grid-head">
+          <div>
+            <span class="jh-eyebrow">{{ section.settings.cats_eyebrow }}</span>
+            <h2 class="jh-h2">{{ section.settings.cats_heading }}</h2>
+          </div>
+          <a class="jh-link" href="{{ routes.collections_url }}">{{ 'jolly.common.all_categories' | t }} {% render 'jolly-icon', name: 'chev-right' %}</a>
         </div>
-        <div class="jh-cats">
+        <div class="jh-cats jh-cats--strip">
           {%- for block in cats -%}
             {%- assign coll = block.settings.collection -%}
             {%- if coll != blank and coll.products_count == 0 -%}{%- continue -%}{%- endif -%}

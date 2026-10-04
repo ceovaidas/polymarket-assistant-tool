@@ -1,0 +1,91 @@
+{%- comment -%}
+  Jolly Haul — all categories (/collections). Tiles use the collection image, or the first product photo in it.
+  Empty collections are skipped, so new categories appear here as soon as they have products.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign tones = section.settings.tones | split: ','
+  assign tone_count = tones.size
+  assign handles = section.settings.handles | remove: ' ' | split: ','
+  assign all_with_media = collections.all.products | where: 'featured_media'
+-%}
+
+<div class="jh">
+  <section class="jh-collhead">
+    <div class="jh-lights" aria-hidden="true"></div>
+    <div class="jh-wrap">
+      <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'jolly.common.home' | t }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ 'jolly.common.all_categories' | t }}</span>
+      </nav>
+      <h1 class="jh-h2">{{ section.settings.heading }}</h1>
+      {%- if section.settings.sub != blank -%}<p class="jh-sub">{{ section.settings.sub }}</p>{%- endif -%}
+    </div>
+  </section>
+
+  <section class="jh-section" style="padding-top:36px">
+    <div class="jh-wrap">
+      <div class="jh-cats jh-cats--grid">
+        {%- assign n = 0 -%}
+        {%- for h in handles -%}
+          {%- liquid
+            if h == 'all'
+              assign c = collections.all
+              assign c_title = 'jolly.common.all_gifts' | t
+              assign c_url = routes.all_products_collection_url
+            else
+              assign c = collections[h]
+              assign c_title = c.title
+              assign c_url = c.url
+            endif
+            if c == blank or c.products_count == 0
+              continue
+            endif
+            assign photo = c.image
+            if photo == blank
+              for cp in c.products limit: 8
+                if cp.featured_media
+                  assign photo = cp.featured_media
+                  break
+                endif
+              endfor
+            endif
+            if photo == blank and all_with_media.size > 0
+              assign pick = n | modulo: all_with_media.size
+              assign photo = all_with_media[pick].featured_media
+            endif
+            assign t = n | modulo: tone_count
+            assign n = n | plus: 1
+          -%}
+          <a class="jh-cat" href="{{ c_url }}">
+            <span class="jh-cat__media jh-media" style="--tone: {{ tones[t] | strip }}">
+              {%- if photo -%}
+                {{ photo | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 25vw, (min-width: 750px) 33vw, 50vw', alt: '' }}
+              {%- else -%}
+                <span class="jh-ph">{% render 'jolly-art', face: 'gift' %}</span>
+              {%- endif -%}
+            </span>
+            <span class="jh-cat__name">
+              <span>{{ c_title }}<span class="jh-cat__count">{{ 'jolly.collection.count' | t: count: c.products_count }}</span></span>
+              {% render 'jolly-icon', name: 'chev-right' %}
+            </span>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jolly categories",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by category" },
+    { "type": "text", "id": "sub", "label": "Subheading", "default": "Every viral Christmas find, sorted so you can get straight to the good stuff." },
+    { "type": "text", "id": "handles", "label": "Categories (collection handles, in order)", "default": "all,new-arrivals,trending,gifts-under-25,funny-masks,baby-kids,pets,cozy-travel,star-projectors,ugly-sweaters,lights-decor,stocking-stuffers", "info": "Comma-separated. Empty collections are hidden automatically. Add a collection image in Products → Collections to choose the tile photo." },
+    { "type": "text", "id": "tones", "label": "Tile background tones", "default": "#e7f1ea,#fbe9df,#fff1d6,#f6e3e3,#eef0e4,#f3ead8" }
+  ]
+}
+{% endschema %}

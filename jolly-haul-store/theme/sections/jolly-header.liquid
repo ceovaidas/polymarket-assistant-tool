@@ -8,20 +8,10 @@
 {%- assign menu = linklists[section.settings.menu] -%}
 <header class="jh jh-header">
   <div class="jh-wrap jh-header__in">
-    <details class="jh-header__drawer">
-      <summary class="jh-iconbtn" aria-label="Menu">
-        <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-        <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
-      </summary>
-      <div class="jh-header__mobile">
-        <nav aria-label="Main">
-          {%- for link in menu.links -%}
-            <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
-          {%- endfor -%}
-        </nav>
-        {% render 'jolly-localization', id: 'drawer' %}
-      </div>
-    </details>
+    <button type="button" class="jh-iconbtn jh-header__burger" aria-label="{{ 'jolly.header.menu' | t }}" aria-expanded="false" aria-controls="jh-menu-{{ section.id }}" data-jh-burger>
+      <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
 
     <a class="jh-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
       {%- if section.settings.logo -%}
@@ -49,22 +39,35 @@
       <a class="jh-iconbtn" href="{{ routes.cart_url }}" id="cart-icon-bubble">{% render 'jolly-cart-icon' %}</a>
     </div>
   </div>
+  <div class="jh-header__mobile" id="jh-menu-{{ section.id }}" data-jh-menu hidden>
+    <nav aria-label="Main">
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
+      {%- endfor -%}
+    </nav>
+    {% render 'jolly-localization', id: 'drawer' %}
+  </div>
 </header>
 
 
 
 <script>
   (function () {
-    var d = document.currentScript.previousElementSibling.querySelector('.jh-header__drawer');
-    if (!d || d.dataset.jhReady) return;
-    d.dataset.jhReady = '1';
-    var summary = d.querySelector('summary');
-    function set(open) { d.open = open; summary.setAttribute('aria-expanded', open); }
-    summary.setAttribute('aria-expanded', 'false');
-    summary.addEventListener('click', function (e) { e.preventDefault(); set(!d.open); });
-    d.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
-    document.addEventListener('click', function (e) { if (d.open && !d.contains(e.target)) set(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { set(false); summary.focus(); } });
+    var header = document.currentScript.previousElementSibling;
+    var btn = header && header.querySelector('[data-jh-burger]');
+    var menu = header && header.querySelector('[data-jh-menu]');
+    if (!btn || !menu || btn.dataset.jhReady) return;
+    btn.dataset.jhReady = '1';
+    function set(open) {
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.documentElement.classList.toggle('jh-menu-open', open);
+    }
+    btn.addEventListener('click', function (e) { e.stopPropagation(); set(menu.hidden); });
+    menu.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+    document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { set(false); btn.focus(); } });
+    window.addEventListener('resize', function () { if (window.innerWidth >= 990 && !menu.hidden) set(false); });
   })();
 </script>
 

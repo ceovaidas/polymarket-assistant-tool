@@ -1,6 +1,10 @@
 {
   "jolly": {
+    "header": {
+      "menu": "Menu"
+    },
     "common": {
+      "all_categories": "Alle categorieën",
       "home": "Home",
       "all_gifts": "Alle cadeaus",
       "search": "Zoeken",
