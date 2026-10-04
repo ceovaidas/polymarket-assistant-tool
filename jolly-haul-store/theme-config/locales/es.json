@@ -7,6 +7,7 @@
     },
     "product": {
       "add_qty": "Añadir [count] al carrito",
+      "choose": "Elegir",
       "why": "Por qué te encantará",
       "materials": "Materiales y cuidado",
       "shipping": "Envío y devoluciones",

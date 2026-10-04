@@ -7,6 +7,7 @@
     },
     "product": {
       "add_qty": "[count] in winkelwagen",
+      "choose": "Kies",
       "why": "Waarom je het geweldig vindt",
       "materials": "Materiaal & onderhoud",
       "shipping": "Verzending & retour",

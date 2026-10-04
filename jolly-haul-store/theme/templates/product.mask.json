@@ -169,6 +169,12 @@
             "question": "How do I wash it?",
             "answer": "<p>Hand wash in cold water and lay flat to dry.</p>"
           }
+        },
+        "faces": {
+          "type": "variant_faces",
+          "settings": {
+            "line": "One size, stretchy fit · fits under most helmets"
+          }
         }
       },
       "block_order": [
@@ -193,7 +199,8 @@
         "faq_3",
         "faq_4",
         "faq_5",
-        "faq_6"
+        "faq_6",
+        "faces"
       ],
       "settings": {
         "art_order": "",
@@ -214,7 +221,10 @@
         "final_heading": "Don't be the boring one in the photo.",
         "final_text": "Two masks ship free — grab one for your ride-or-die.",
         "ticker": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days",
-        "pick_heading": "Pick a face for each mask"
+        "pick_heading": "Pick a face for each mask",
+        "crew_eyebrow": "Every style, up close",
+        "crew_heading": "Pick your face",
+        "crew_text": "Tap a face to choose it. Mix them up across the group for the photo of the season."
       }
     },
     "related": {

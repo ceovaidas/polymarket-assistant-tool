@@ -7,6 +7,7 @@
     },
     "product": {
       "add_qty": "Add [count] to cart",
+      "choose": "Choose",
       "why": "Why you'll love it",
       "materials": "Materials & care",
       "shipping": "Shipping & returns",

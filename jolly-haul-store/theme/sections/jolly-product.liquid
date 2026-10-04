@@ -34,6 +34,25 @@
     endif
   endfor
   assign chars = section.blocks | where: 'type', 'character'
+  assign faces_block = section.blocks | where: 'type', 'variant_faces' | first
+  assign face_option = -1
+  if chars.size == 0 and faces_block
+    for option in product.options_with_values
+      if option.values.size < 2
+        continue
+      endif
+      assign oi = forloop.index0
+      for v in product.variants
+        if v.featured_media
+          assign face_option = oi
+          break
+        endif
+      endfor
+      if face_option > -1
+        break
+      endif
+    endfor
+  endif
   assign specs = section.blocks | where: 'type', 'spec'
   assign features = section.blocks | where: 'type', 'feature'
   assign videos = section.blocks | where: 'type', 'video'
@@ -351,7 +370,50 @@
               <h3 class="jh-char__name">{{ block.settings.name }}</h3>
               <p class="jh-char__line">{{ block.settings.line }}</p>
               {%- if block.settings.option_value != blank -%}
-                <button type="button" class="jh-char__btn" data-jh-pick="{{ block.settings.option_value | escape }}">Choose {{ block.settings.name }}</button>
+                <button type="button" class="jh-char__btn" data-jh-pick="{{ block.settings.option_value | escape }}">{{ 'jolly.product.choose' | t }} {{ block.settings.name }}</button>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= FACES FROM REAL VARIANTS (block: variant_faces) ================= {%- endcomment -%}
+  {%- if face_option > -1 -%}
+    {%- assign face_values = product.options_with_values[face_option].values -%}
+    <section class="jh-section jh-section--ice" id="jh-crew-{{ section.id }}" {{ faces_block.shopify_attributes }}>
+      <div class="jh-wrap jh-head">
+        <span class="jh-eyebrow">{{ section.settings.crew_eyebrow }}</span>
+        <h2 class="jh-h2">{{ section.settings.crew_heading }}</h2>
+        {%- if section.settings.crew_text != blank -%}<p class="jh-sub">{{ section.settings.crew_text }}</p>{%- endif -%}
+      </div>
+      <div class="jh-crew">
+        {%- for value in face_values -%}
+          {%- assign face_media = nil -%}
+          {%- assign face_variant = nil -%}
+          {%- for v in product.variants -%}
+            {%- if v.options[face_option] == value -%}
+              {%- assign face_variant = v -%}
+              {%- if v.featured_media -%}{%- assign face_media = v.featured_media -%}{%- break -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign t = forloop.index0 | modulo: tone_count -%}
+          <article class="jh-char">
+            <div class="jh-char__media jh-media" style="--tone: {{ tones[t] | strip }}">
+              {%- if face_media -%}
+                {{ face_media | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 20vw, 74vw', alt: value }}
+              {%- else -%}
+                <div class="jh-ph">{% render 'jolly-art', face: 'mask' %}</div>
+              {%- endif -%}
+            </div>
+            <div class="jh-char__body">
+              <h3 class="jh-char__name">{{ value }}</h3>
+              {%- if faces_block.settings.line != blank -%}<p class="jh-char__line">{{ faces_block.settings.line }}</p>{%- endif -%}
+              {%- if face_variant and face_variant.available -%}
+                <button type="button" class="jh-char__btn" data-jh-pick="{{ value | escape }}">{{ 'jolly.product.choose' | t }} {{ value }}</button>
+              {%- else -%}
+                <span class="jh-char__btn" aria-disabled="true">{{ 'jolly.product.sold_out' | t }}</span>
               {%- endif -%}
             </div>
           </article>
@@ -921,6 +983,15 @@
           "id": "tag",
           "label": "Tag"
         }
+      ]
+    },
+    {
+      "type": "variant_faces",
+      "name": "Faces from variants",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Shows every style of the product with its own variant photo and a Choose button (uses the Crew heading settings). Ignored when Character blocks exist." },
+        { "type": "text", "id": "line", "label": "Line under each name", "default": "One size, stretchy fit" }
       ]
     },
     {

@@ -14,6 +14,7 @@ K = {
  'card.added': ('Added to your cart', 'Zum Warenkorb hinzugefügt', 'Ajouté au panier', 'Añadido al carrito', 'Aggiunto al carrello', 'Toegevoegd aan je winkelwagen'),
  'card.view_cart': ('View cart', 'Warenkorb', 'Voir le panier', 'Ver carrito', 'Vedi carrello', 'Bekijk winkelwagen'),
  'cart.savings': ('You save', 'Du sparst', 'Vous économisez', 'Ahorras', 'Risparmi', 'Je bespaart'),
+ 'product.choose': ('Choose', 'Wählen', 'Choisir', 'Elegir', 'Scegli', 'Kies'),
  'header.menu': ('Menu', 'Menü', 'Menu', 'Menú', 'Menu', 'Menu'),
  'common.all_categories': ('All categories', 'Alle Kategorien', 'Toutes les catégories', 'Todas las categorías', 'Tutte le categorie', 'Alle categorieën'),
  'common.home': ('Home', 'Startseite', 'Accueil', 'Inicio', 'Home', 'Home'),
