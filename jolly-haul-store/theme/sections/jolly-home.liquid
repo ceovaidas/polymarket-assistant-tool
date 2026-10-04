@@ -110,7 +110,10 @@
             {%- if cat_link == blank and coll != blank -%}{%- assign cat_link = coll.url -%}{%- endif -%}
             {%- assign cat_photo = nil -%}
             {%- if coll != blank -%}
-              {%- for cp in coll.products limit: 8 -%}{%- if cp.featured_media -%}{%- assign cat_photo = cp.featured_media -%}{%- break -%}{%- endif -%}{%- endfor -%}
+              {%- assign cat_photo = coll.image -%}
+              {%- if cat_photo == blank -%}
+                {%- for cp in coll.products limit: 8 -%}{%- if cp.featured_media -%}{%- assign cat_photo = cp.featured_media -%}{%- break -%}{%- endif -%}{%- endfor -%}
+              {%- endif -%}
             {%- elsif block.settings.image == blank -%}
               {%- comment -%} No collection (e.g. "All gifts"): show one of the shop's own product photos. {%- endcomment -%}
               {%- assign all_with_media = collections.all.products | where: 'featured_media' -%}

@@ -119,7 +119,10 @@ def main(dawn_dir):
         dump_json(build / "sections" / "header-group.json", {
             "name": "t:sections.header.name",
             "type": "header",
-            "sections": {"header": {"type": "jolly-header", "settings": {"menu": "main-menu", "logo_width": 140, "show_account": False}}},
+            "sections": {"header": {"type": "jolly-header", "settings": {
+                "menu": "main-menu", "show_account": False,
+                # Logo + favicon live in Shopify Files (uploaded from the Higgsfield renders); missing files are simply ignored.
+                "logo": "shopify://shop_images/jollyhaul-logo-a.png", "logo_width": 170}}},
             "order": ["header"],
         })
 
@@ -152,6 +155,7 @@ def main(dawn_dir):
         for key, values in COLOR_SCHEMES.items():
             preset["color_schemes"][key]["settings"].update(values)
         preset.update(GLOBAL_SETTINGS)
+        preset["favicon"] = "shopify://shop_images/jollyhaul-favicon.png"
         dump_json(build / "config" / "settings_data.json", data)
 
         schema = load_json(build / "config" / "settings_schema.json")

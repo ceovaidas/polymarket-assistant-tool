@@ -15,7 +15,12 @@
 
     <a class="jh-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
       {%- if section.settings.logo -%}
-        <span class="jh-logo__img" style="width: {{ section.settings.logo_width }}px">{{ section.settings.logo | image_url: width: 480 | image_tag: alt: shop.name }}</span>
+        {%- comment -%} Wide artwork with empty space above/below (e.g. a 21:9 file): trim it to a 3.6:1 strip. {%- endcomment -%}
+        {%- if section.settings.logo.aspect_ratio < 3.2 and section.settings.logo.aspect_ratio > 1.6 -%}
+          <span class="jh-logo__img" style="width: {{ section.settings.logo_width }}px">{{ section.settings.logo | image_url: width: 720, height: 200, crop: 'center' | image_tag: alt: shop.name, width: 720, height: 200 }}</span>
+        {%- else -%}
+          <span class="jh-logo__img" style="width: {{ section.settings.logo_width }}px">{{ section.settings.logo | image_url: width: 480 | image_tag: alt: shop.name }}</span>
+        {%- endif -%}
       {%- else -%}
         <span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg>
       {%- endif -%}
