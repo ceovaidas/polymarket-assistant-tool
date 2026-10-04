@@ -1,0 +1,94 @@
+{%- comment -%}
+  Jolly Haul — search results. Products as Jolly cards, pages/articles as a simple list.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'jolly.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign tones = section.settings.tones | split: ','
+  assign tone_count = tones.size
+  assign picks = collections[section.settings.collection].products
+-%}
+
+<div class="jh">
+  <section class="jh-collhead">
+    <div class="jh-lights" aria-hidden="true"></div>
+    <div class="jh-wrap">
+      <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">Search</span>
+      </nav>
+      <h1 class="jh-h2">{% if search.performed %}Results for “{{ search.terms | escape }}”{% else %}Search the shop{% endif %}</h1>
+      <form class="jh-searchbar" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="jh-search-q">Search the shop</label>
+        <input id="jh-search-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search for gifts…" {% unless search.performed %}autofocus{% endunless %}>
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="jh-btn jh-btn--pop">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="jh-section" style="padding-top:32px">
+    <div class="jh-wrap">
+      {%- if search.performed and search.results_count > 0 -%}
+        {%- paginate search.results by section.settings.per_page -%}
+          <p class="jh-collbar__count">{{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %}</p>
+          <div class="jh-grid">
+            {%- assign n = 0 -%}
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {%- assign t = n | modulo: tone_count -%}
+                {% render 'jolly-card', card_product: item, tone: tones[t] %}
+                {%- assign n = n | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- assign others = search.results | where: 'object_type', 'page' -%}
+          {%- if others.size > 0 -%}
+            <ul class="jh-searchpages">
+              {%- for item in others -%}
+                <li><a href="{{ item.url }}">{{ item.title }}{% render 'jolly-icon', name: 'chev-right' %}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- if paginate.pages > 1 -%}
+            <nav class="jh-pages" aria-label="Pagination">
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="Previous page">{% render 'jolly-icon', name: 'chev-left' %}</a>{%- endif -%}
+              <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="Next page">{% render 'jolly-icon', name: 'chev-right' %}</a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- endpaginate -%}
+      {%- else -%}
+        {%- if search.performed -%}
+          <div class="jh-empty">
+            <h2>No matches for “{{ search.terms | escape }}”</h2>
+            <p>Check the spelling or try a broader word like “mask”, “baby” or “gift”.</p>
+          </div>
+        {%- endif -%}
+        {%- if picks.size > 0 -%}
+          <div class="jh-grid-head"><div><span class="jh-eyebrow">Need ideas?</span><h2 class="jh-h2">{{ section.settings.picks_heading }}</h2></div></div>
+          <div class="jh-grid">
+            {%- for p in picks limit: 8 -%}
+              {%- assign t = forloop.index0 | modulo: tone_count -%}
+              {% render 'jolly-card', card_product: p, tone: tones[t] %}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jolly search",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Results per page", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "collection", "id": "collection", "label": "Suggested products (no search / no results)" },
+    { "type": "text", "id": "picks_heading", "label": "Suggestions heading", "default": "Bestsellers" },
+    { "type": "text", "id": "tones", "label": "Card background tones", "default": "#e7f1ea,#fbe9df,#fff1d6,#f6e3e3,#eef0e4,#f3ead8" }
+  ]
+}
+{% endschema %}

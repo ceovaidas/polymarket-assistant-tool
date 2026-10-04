@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "jolly-404",
+      "settings": {
+        "collection": "trending"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

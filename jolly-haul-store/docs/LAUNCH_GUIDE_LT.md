@@ -159,6 +159,7 @@ Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…�
 | `theme/sections/jolly-cart.liquid` | Krepšelio puslapis |
 | `theme/sections/jolly-collection.liquid` | Kolekcijų / „Shop all“ puslapis |
 | `theme/sections/jolly-related.liquid` | Rekomenduojamos prekės (produkto puslapis, krepšelis) |
+| `theme/sections/jolly-page.liquid`, `jolly-contact.liquid`, `jolly-404.liquid`, `jolly-search.liquid` | Puslapiai (Shipping, Returns, FAQ, About – tekstą keisk Online Store → Pages), kontaktų forma, 404, paieška |
 | `theme/sections/jolly-footer.liquid` | Poraštė (kategorijos, pagalba, socialiniai tinklai – nuorodas įrašyk Customize → Footer) |
 | `theme/sections/jolly-wheel.liquid` | Kalėdų prizų ratas (poraštės grupėje) |
 | `theme/sections/jolly-home.liquid` | Pradinis puslapis (hero, kategorijos, trending, laikmatis, spotlight, dovanų paieška, DUK, naujienlaiškis) |

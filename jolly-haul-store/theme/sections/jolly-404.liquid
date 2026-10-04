@@ -1,0 +1,57 @@
+{%- comment -%}
+  Jolly Haul — 404. A friendly dead end that points straight back to the shop.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign tones = section.settings.tones | split: ','
+  assign tone_count = tones.size
+  assign picks = collections[section.settings.collection].products
+-%}
+
+<div class="jh">
+  <section class="jh-collhead jh-404">
+    <div class="jh-lights" aria-hidden="true"></div>
+    <div class="jh-wrap">
+      <p class="jh-404__code" aria-hidden="true">4<span>{% render 'jolly-art', face: 'ornament' %}</span>4</p>
+      <h1 class="jh-h2">{{ section.settings.heading }}</h1>
+      <p class="jh-sub">{{ section.settings.text }}</p>
+      <form class="jh-searchbar" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="jh-404-q">Search the shop</label>
+        <input id="jh-404-q" type="search" name="q" placeholder="Search for gifts…">
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="jh-btn jh-btn--pop">Search</button>
+      </form>
+      <a class="jh-link jh-404__home" href="{{ routes.all_products_collection_url }}">Browse all gifts {% render 'jolly-icon', name: 'chev-right' %}</a>
+    </div>
+  </section>
+
+  {%- if picks.size > 0 -%}
+    <section class="jh-section">
+      <div class="jh-wrap">
+        <div class="jh-grid-head"><div><span class="jh-eyebrow">Popular right now</span><h2 class="jh-h2">{{ section.settings.picks_heading }}</h2></div></div>
+        <div class="jh-grid">
+          {%- for p in picks limit: 4 -%}
+            {%- assign t = forloop.index0 | modulo: tone_count -%}
+            {% render 'jolly-card', card_product: p, tone: tones[t] %}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Jolly 404",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "This page went missing" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Probably wrapped up by an over-eager elf. Try a search, or start from our bestsellers." },
+    { "type": "collection", "id": "collection", "label": "Products to suggest" },
+    { "type": "text", "id": "picks_heading", "label": "Products heading", "default": "Bestsellers" },
+    { "type": "text", "id": "tones", "label": "Card background tones", "default": "#e7f1ea,#fbe9df,#fff1d6,#f6e3e3" }
+  ]
+}
+{% endschema %}

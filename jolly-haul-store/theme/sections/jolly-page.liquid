@@ -1,0 +1,48 @@
+{%- comment -%}
+  Jolly Haul — content pages (Shipping, Returns, FAQ, About…). Festive header, readable text column, help card.
+{%- endcomment -%}
+
+{{ 'jolly.css' | asset_url | stylesheet_tag }}
+
+<div class="jh">
+  <section class="jh-collhead">
+    <div class="jh-lights" aria-hidden="true"></div>
+    <div class="jh-wrap">
+      <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title }}</span>
+      </nav>
+      <h1 class="jh-h2">{{ page.title }}</h1>
+    </div>
+  </section>
+
+  <section class="jh-section jh-page">
+    <div class="jh-wrap jh-page__grid">
+      <div class="jh-prose">{{ page.content }}</div>
+      {%- if section.settings.show_help -%}
+        <aside class="jh-helpcard" aria-label="Need help?">
+          {% render 'jolly-icon', name: 'gift' %}
+          <h2>{{ section.settings.help_heading }}</h2>
+          <p>{{ section.settings.help_text }}</p>
+          {%- assign help_email = section.settings.email | default: shop.email -%}
+          <a class="jh-btn jh-btn--pop" href="{{ section.settings.help_link | default: '/pages/contact' }}">{{ section.settings.help_button }}</a>
+          {%- if help_email != blank -%}<a class="jh-helpcard__mail" href="mailto:{{ help_email }}">{{ help_email }}</a>{%- endif -%}
+        </aside>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jolly page",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_help", "label": "Show help card", "default": true },
+    { "type": "text", "id": "help_heading", "label": "Help card heading", "default": "Still have a question?" },
+    { "type": "text", "id": "help_text", "label": "Help card text", "default": "Message us and a real person will reply within 2 business days." },
+    { "type": "text", "id": "help_button", "label": "Help card button", "default": "Contact us" },
+    { "type": "url", "id": "help_link", "label": "Help card button link" },
+    { "type": "text", "id": "email", "label": "Support email", "info": "Defaults to the store email." }
+  ]
+}
+{% endschema %}

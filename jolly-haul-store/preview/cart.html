@@ -3693,6 +3693,8 @@ details-disclosure > details {
 /* Neutralise Dawn's global body/heading typography inside our sections. */
 .jh { letter-spacing: normal; }
 .jh h1, .jh h2, .jh h3 { font-family: var(--f); color: inherit; word-break: normal; }
+/* Dawn spaces headings out; reset early so component rules (.jh-h2 etc.) still win. */
+.jh :where(h1, h2, h3) { letter-spacing: normal; }
 .jh h3 { letter-spacing: normal; }
 .jh :where(img, video) { display: block; max-width: 100%; }
 .jh :where(h1, h2, h3, p, ul, ol, figure, blockquote) { margin: 0; }
@@ -4422,6 +4424,85 @@ html.jh-lock { overflow: hidden; }
   background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2420' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 16px; }
 .jh-pick select:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
 
+/* =====================================================================
+   Content pages, contact, search, 404
+   ===================================================================== */
+/* Shopify's own pages (policies, account) pick up the brand font too. */
+body, .shopify-policy__container { font-family: 'Rubik', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.shopify-policy__container { max-width: 760px; padding-top: 48px; padding-bottom: 64px; line-height: 1.65; }
+
+.jh-page { padding-top: 48px; }
+.jh-page__grid { display: grid; gap: 32px; align-items: start; }
+@media (min-width: 990px) { .jh-page__grid { grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; } }
+.jh-prose { max-width: 720px; font-size: 17px; line-height: 1.7; color: var(--ink-2); }
+.jh .jh-prose h2 { font-size: 24px; font-weight: 800; color: var(--ink); margin: 36px 0 10px; letter-spacing: -.01em; }
+.jh .jh-prose h3 { font-size: 19px; font-weight: 800; color: var(--ink); margin: 26px 0 8px; }
+.jh .jh-prose > :first-child { margin-top: 0; }
+.jh-prose p { margin: 0 0 14px; }
+.jh-prose ul, .jh-prose ol { margin: 0 0 16px; padding-left: 22px; }
+.jh-prose li { margin-bottom: 6px; }
+.jh-prose li::marker { color: var(--pop); }
+.jh-prose strong { color: var(--ink); }
+.jh-prose a { color: var(--brand); font-weight: 600; }
+.jh-prose table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 15px; }
+.jh-prose th, .jh-prose td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+.jh-prose th { color: var(--ink); background: var(--ice); }
+.jh-prose details { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 0 18px; margin-bottom: 10px; background: #fff; }
+.jh-prose summary { cursor: pointer; padding: 16px 0; font-weight: 700; color: var(--ink); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.jh-prose summary::-webkit-details-marker { display: none; }
+.jh-prose summary::after { content: "+"; font-size: 22px; line-height: 1; color: var(--pop); }
+.jh-prose details[open] summary::after { content: "–"; }
+.jh-prose details > :not(summary) { margin-top: 0; padding-bottom: 6px; }
+
+.jh-helpcard { position: sticky; top: 96px; padding: 26px; border-radius: var(--r); background: var(--ice); text-align: left; }
+.jh-helpcard > svg { width: 40px; height: 40px; color: var(--pop); margin-bottom: 12px; }
+.jh .jh-helpcard h2 { font-size: 20px; font-weight: 800; margin: 0 0 6px; }
+.jh-helpcard p { margin: 0 0 18px; color: var(--ink-2); font-size: 15px; }
+.jh-helpcard .jh-btn { width: 100%; }
+.jh-helpcard__mail { display: block; margin-top: 12px; text-align: center; font-size: 14px; font-weight: 600; color: var(--brand); word-break: break-all; }
+@media (max-width: 989px) { .jh-helpcard { position: static; } }
+
+.jh-contact { display: grid; gap: 32px; align-items: start; }
+@media (min-width: 990px) { .jh-contact { grid-template-columns: 1fr 1.25fr; gap: 48px; } }
+.jh-contact__info { display: grid; gap: 12px; }
+.jh-contact__card { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 18px; border-radius: var(--r-sm); background: var(--ice); }
+.jh-contact__card > svg { width: 44px; height: 44px; padding: 10px; border-radius: 12px; background: #fff; color: var(--pop); }
+.jh .jh-contact__card h2 { font-size: 17px; font-weight: 800; margin: 2px 0 4px; }
+.jh-contact__card p { margin: 0; font-size: 14px; color: var(--ink-2); }
+.jh-contact__card a { color: var(--brand); font-weight: 700; word-break: break-all; }
+.jh-contact__extra { margin-top: 12px; font-size: 15px; }
+.jh-contact__form form { display: grid; gap: 14px; padding: 28px; border-radius: var(--r); background: #fff; box-shadow: var(--shadow); border: 1px solid var(--line); }
+@media (max-width: 749px) { .jh-contact__form form { padding: 20px; } }
+.jh .jh-contact__title { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
+.jh-form__row { display: grid; gap: 14px; }
+@media (min-width: 750px) { .jh-form__row { grid-template-columns: 1fr 1fr; } }
+.jh-input { display: grid; gap: 6px; }
+.jh-input span { font-size: 14px; font-weight: 700; color: var(--ink); }
+.jh-input input, .jh-input textarea { width: 100%; min-width: 0; padding: 13px 14px; border: 2px solid var(--line); border-radius: 12px; font: 400 16px var(--f); color: var(--ink); background: #fff; }
+.jh-input textarea { resize: vertical; }
+.jh-input input:focus, .jh-input textarea:focus { outline: none; border-color: var(--brand); }
+.jh-contact__send { justify-self: start; }
+@media (max-width: 749px) { .jh-contact__send { justify-self: stretch; } }
+.jh-formmsg { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 12px; font-weight: 600; font-size: 15px; }
+.jh-formmsg svg { width: 20px; height: 20px; flex: none; }
+.jh-formmsg--ok { background: #e7f1ea; color: var(--brand-dark); }
+.jh-formmsg--err { background: #fbe4e6; color: var(--pop-dark); }
+
+.jh-searchbar { display: flex; gap: 8px; max-width: 560px; margin: 24px auto 0; }
+.jh-searchbar input { flex: 1; min-width: 0; padding: 14px 18px; border: 2px solid var(--line); border-radius: 14px; font: 500 16px var(--f); background: #fff; color: var(--ink); }
+.jh-searchbar input:focus { outline: none; border-color: var(--brand); }
+.jh-searchbar .jh-btn { padding: 14px 22px; }
+.jh-searchpages { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 8px; max-width: 640px; }
+.jh-searchpages a { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-radius: var(--r-sm); background: var(--ice); font-weight: 700; text-decoration: none; }
+.jh-searchpages svg { width: 18px; height: 18px; color: var(--pop); }
+.jh-collbar__count + .jh-grid { margin-top: 18px; }
+
+.jh-404 { padding-bottom: 56px; }
+.jh-404__code { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 0 0 8px; font-size: clamp(88px, 18vw, 150px); font-weight: 900; line-height: 1; letter-spacing: -.04em; color: var(--ink); }
+.jh-404__code span { display: inline-block; width: .82em; height: .82em; }
+.jh-404__code svg { width: 100%; height: 100%; }
+.jh-404__home { margin-top: 18px; }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -4567,7 +4648,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="289483">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="307172">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4576,7 +4657,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="85932">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="912718">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4585,7 +4666,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="933195">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="637216">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4594,7 +4675,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Light-Up Ornament Set (6)</a></h3>
     <div class="jh-card__price">
       <span>$24.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="342947">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="156184">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>

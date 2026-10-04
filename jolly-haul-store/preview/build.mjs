@@ -23,6 +23,7 @@ engine.registerFilter('money', (c) => '$' + (Number(c) / 100).toFixed(2));
 engine.registerTag('form', {
   parse(token, remain) {
     this.isCustomer = token.args.includes("'customer'");
+    this.isContact = token.args.includes("'contact'");
     this.tpls = [];
     const stream = this.liquid.parser.parseStream(remain)
       .on('tag:endform', () => stream.stop())
@@ -31,7 +32,7 @@ engine.registerTag('form', {
     stream.start();
   },
   * render(ctx, emitter) {
-    emitter.write(this.isCustomer
+    emitter.write(this.isContact ? '<form class="jh-contact-form" onsubmit="event.preventDefault(); alert(\'Preview only — in Shopify this sends the message.\')">' : this.isCustomer
       ? '<form class="jh-news__form" onsubmit="event.preventDefault(); alert(\'Preview only — in Shopify this subscribes the email.\')">'
       : '<form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert(\'Preview only — in Shopify this adds to cart.\')">');
     yield this.liquid.renderer.renderTemplates(this.tpls, ctx, emitter);
@@ -244,4 +245,18 @@ const cartHtml = await engine.parseAndRender(cartData.src, {
 const cartCtx = { item_count: 3, items: lines.map((l) => ({ ...l, product_id: l.product.id })) };
 writeFileSync(join(here, 'cart.html'), shell('Jolly Haul Cart Preview', cartHtml + await relatedFor('cart.json', { cart: cartCtx }), await renderHeader('cart')));
 
-console.log('wrote preview/index.html, product.html, projector.html, collection.html, cart.html');
+// ---- content page, contact, 404, search ----
+const pageCtx = { shop: { ...shop, email: 'hello@jollyhaul.com' }, collections: mockCollections, routes: { root_url: 'index.html', search_url: 'search.html', all_products_collection_url: 'collection.html' } };
+const faqPage = { title: 'FAQ', content: '<h2>Orders &amp; shipping</h2><details open><summary>Will my order arrive before Christmas?</summary><p>Order by December 10 for the best chance of delivery before Christmas.</p></details><details><summary>How much is shipping?</summary><p>Free on orders of $50 or more. Below that, standard shipping is $4.99.</p></details><h2>Shipping rates</h2><table><tr><th>Order total</th><th>Shipping</th></tr><tr><td>Under $50</td><td>$4.99</td></tr><tr><td>$50 and over</td><td><strong>Free</strong></td></tr></table><ul><li>Tracked on every order</li><li>Ships in 1–3 business days</li></ul>' };
+const pg = sectionData('jolly-page.liquid', 'page.json', 'main');
+writeFileSync(join(here, 'page.html'), shell('Jolly Haul Page Preview', await engine.parseAndRender(pg.src, { ...pageCtx, section: pg.section, page: faqPage }), await renderHeader('other')));
+const ct = sectionData('jolly-contact.liquid', 'page.contact.json', 'main');
+ct.section.settings.returns_link = '#';
+writeFileSync(join(here, 'contact.html'), shell('Jolly Haul Contact Preview', await engine.parseAndRender(ct.src.replace(/form\.posted_successfully\?/g, 'form.posted_successfully'), { ...pageCtx, section: ct.section, page: { title: 'Contact', content: '' }, form: {} }), await renderHeader('other')));
+const nf = sectionData('jolly-404.liquid', '404.json', 'main');
+writeFileSync(join(here, '404.html'), shell('Jolly Haul 404 Preview', await engine.parseAndRender(nf.src, { ...pageCtx, section: nf.section }), await renderHeader('other')));
+const sr = sectionData('jolly-search.liquid', 'search.json', 'main');
+const results = catalogue.slice(0, 3).map((p) => ({ ...p, object_type: 'product' })).concat([{ object_type: 'page', title: 'Shipping', url: '#' }]);
+writeFileSync(join(here, 'search.html'), shell('Jolly Haul Search Preview', await engine.parseAndRender(sr.src, { ...pageCtx, section: sr.section, search: { performed: true, terms: 'mask', results, results_count: results.length }, paginate: { pages: 1 } }), await renderHeader('other')));
+
+console.log('wrote preview/index.html, product.html, projector.html, collection.html, cart.html, page.html, contact.html, 404.html, search.html');
