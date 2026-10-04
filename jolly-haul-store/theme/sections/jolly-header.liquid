@@ -51,6 +51,23 @@
   </div>
 </header>
 
+
+
+<script>
+  (function () {
+    var d = document.currentScript.previousElementSibling.querySelector('.jh-header__drawer');
+    if (!d || d.dataset.jhReady) return;
+    d.dataset.jhReady = '1';
+    var summary = d.querySelector('summary');
+    function set(open) { d.open = open; summary.setAttribute('aria-expanded', open); }
+    summary.setAttribute('aria-expanded', 'false');
+    summary.addEventListener('click', function (e) { e.preventDefault(); set(!d.open); });
+    d.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+    document.addEventListener('click', function (e) { if (d.open && !d.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { set(false); summary.focus(); } });
+  })();
+</script>
+
 {%- if request.page_type == 'index' -%}
   <script type="application/ld+json">
     {
@@ -71,27 +88,13 @@
       "url": {{ shop.url | append: routes.root_url | json }},
       "potentialAction": {
         "@type": "SearchAction",
-        "target": {{ shop.url | append: routes.search_url | append: '?q={search_term_string}' | json }},
+        "target": "{{ shop.url }}{{ routes.search_url }}?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
   </script>
 {%- endif -%}
 
-<script>
-  (function () {
-    var d = document.currentScript.previousElementSibling.querySelector('.jh-header__drawer');
-    if (!d || d.dataset.jhReady) return;
-    d.dataset.jhReady = '1';
-    var summary = d.querySelector('summary');
-    function set(open) { d.open = open; summary.setAttribute('aria-expanded', open); }
-    summary.setAttribute('aria-expanded', 'false');
-    summary.addEventListener('click', function (e) { e.preventDefault(); set(!d.open); });
-    d.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
-    document.addEventListener('click', function (e) { if (d.open && !d.contains(e.target)) set(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { set(false); summary.focus(); } });
-  })();
-</script>
 
 {% schema %}
 {
