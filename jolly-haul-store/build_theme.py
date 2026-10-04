@@ -125,6 +125,8 @@ def main(dawn_dir):
 
         footer = load_json(build / "sections" / "footer-group.json")
         footer["sections"]["footer"]["settings"]["color_scheme"] = "scheme-3"
+        # Home page already has the Jolly newsletter block; Dawn's footer form would repeat it.
+        footer["sections"]["footer"]["settings"]["newsletter_enable"] = False
         # Prize wheel lives in the footer group so it is available on every page.
         footer["sections"]["jolly-wheel"] = json.loads((HERE / "theme-config" / "footer-wheel.json").read_text())
         footer["order"].append("jolly-wheel")
