@@ -5,34 +5,38 @@
       "categories": "Nach Kategorie",
       "menu": "Menü"
     },
-    "common": {
-      "all_categories": "Alle Kategorien",
-      "home": "Startseite",
-      "all_gifts": "Alle Geschenke",
-      "search": "Suchen",
-      "search_shop": "Im Shop suchen",
-      "search_placeholder": "Geschenke suchen…"
+    "product": {
+      "add_qty": "[count] in den Warenkorb",
+      "why": "Darum wirst du es lieben",
+      "materials": "Material & Pflege",
+      "shipping": "Versand & Rückgabe",
+      "sold_out": "Ausverkauft",
+      "unavailable": "Nicht verfügbar",
+      "save": "Spare [percent] %",
+      "reviews_count": {
+        "one": "{{ count }} Bewertung",
+        "other": "{{ count }} Bewertungen"
+      },
+      "reviews": "Bewertungen",
+      "verified": "Verifizierter Kauf",
+      "guarantee_html": "Tage<br>Garantie",
+      "faq": "FAQ",
+      "notify_title": "Gerade ausverkauft. Möchtest du eine E-Mail, wenn es wieder da ist?",
+      "notify_email": "Deine E-Mail",
+      "notify_button": "Benachrichtigen",
+      "notify_done": "Danke! Wir schreiben dir, sobald es wieder da ist."
     },
     "card": {
+      "added": "Zum Warenkorb hinzugefügt",
+      "view_cart": "Warenkorb",
       "viral": "Viral auf TikTok",
       "new": "Neu",
       "add": "In den Warenkorb",
       "options": "Optionen wählen",
       "sold_out": "Ausverkauft"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} Produkt",
-        "other": "{{ count }} Produkte"
-      },
-      "price_filter": "Preisfilter",
-      "remove_filter": "Preisfilter entfernen",
-      "sort": "Sortieren",
-      "empty_title": "Hier ist noch nichts",
-      "empty_text": "Probiere eine andere Preisspanne oder stöbere im ganzen Sortiment.",
-      "shop_all": "Alles ansehen"
-    },
     "cart": {
+      "savings": "Du sparst",
       "count": {
         "one": "{{ count }} Artikel",
         "other": "{{ count }} Artikel"
@@ -65,25 +69,25 @@
       "trust_returns": "30 Tage Rückgabe",
       "trust_secure": "Sichere Zahlung"
     },
-    "product": {
-      "why": "Darum wirst du es lieben",
-      "materials": "Material & Pflege",
-      "shipping": "Versand & Rückgabe",
-      "sold_out": "Ausverkauft",
-      "unavailable": "Nicht verfügbar",
-      "save": "Spare [percent] %",
-      "reviews_count": {
-        "one": "{{ count }} Bewertung",
-        "other": "{{ count }} Bewertungen"
+    "common": {
+      "all_categories": "Alle Kategorien",
+      "home": "Startseite",
+      "all_gifts": "Alle Geschenke",
+      "search": "Suchen",
+      "search_shop": "Im Shop suchen",
+      "search_placeholder": "Geschenke suchen…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
       },
-      "reviews": "Bewertungen",
-      "verified": "Verifizierter Kauf",
-      "guarantee_html": "Tage<br>Garantie",
-      "faq": "FAQ",
-      "notify_title": "Gerade ausverkauft. Möchtest du eine E-Mail, wenn es wieder da ist?",
-      "notify_email": "Deine E-Mail",
-      "notify_button": "Benachrichtigen",
-      "notify_done": "Danke! Wir schreiben dir, sobald es wieder da ist."
+      "price_filter": "Preisfilter",
+      "remove_filter": "Preisfilter entfernen",
+      "sort": "Sortieren",
+      "empty_title": "Hier ist noch nichts",
+      "empty_text": "Probiere eine andere Preisspanne oder stöbere im ganzen Sortiment.",
+      "shop_all": "Alles ansehen"
     },
     "footer": {
       "shop": "Shop",

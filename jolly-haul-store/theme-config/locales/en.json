@@ -5,34 +5,38 @@
       "categories": "Shop by category",
       "menu": "Menu"
     },
-    "common": {
-      "all_categories": "All categories",
-      "home": "Home",
-      "all_gifts": "All gifts",
-      "search": "Search",
-      "search_shop": "Search the shop",
-      "search_placeholder": "Search for gifts…"
+    "product": {
+      "add_qty": "Add [count] to cart",
+      "why": "Why you'll love it",
+      "materials": "Materials & care",
+      "shipping": "Shipping & returns",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "save": "Save [percent]%",
+      "reviews_count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
+      "reviews": "Reviews",
+      "verified": "Verified buyer",
+      "guarantee_html": "day<br>guarantee",
+      "faq": "FAQ",
+      "notify_title": "Sold out for now. Want an email when it’s back?",
+      "notify_email": "Your email",
+      "notify_button": "Notify me",
+      "notify_done": "Thanks! We'll email you as soon as it's back."
     },
     "card": {
+      "added": "Added to your cart",
+      "view_cart": "View cart",
       "viral": "Viral on TikTok",
       "new": "New",
       "add": "Add to cart",
       "options": "Choose options",
       "sold_out": "Sold out"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} product",
-        "other": "{{ count }} products"
-      },
-      "price_filter": "Price filter",
-      "remove_filter": "Remove price filter",
-      "sort": "Sort",
-      "empty_title": "Nothing here yet",
-      "empty_text": "Try another price range or browse everything.",
-      "shop_all": "Shop all"
-    },
     "cart": {
+      "savings": "You save",
       "count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"
@@ -65,25 +69,25 @@
       "trust_returns": "30-day returns",
       "trust_secure": "Secure checkout"
     },
-    "product": {
-      "why": "Why you'll love it",
-      "materials": "Materials & care",
-      "shipping": "Shipping & returns",
-      "sold_out": "Sold out",
-      "unavailable": "Unavailable",
-      "save": "Save [percent]%",
-      "reviews_count": {
-        "one": "{{ count }} review",
-        "other": "{{ count }} reviews"
+    "common": {
+      "all_categories": "All categories",
+      "home": "Home",
+      "all_gifts": "All gifts",
+      "search": "Search",
+      "search_shop": "Search the shop",
+      "search_placeholder": "Search for gifts…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
       },
-      "reviews": "Reviews",
-      "verified": "Verified buyer",
-      "guarantee_html": "day<br>guarantee",
-      "faq": "FAQ",
-      "notify_title": "Sold out for now. Want an email when it’s back?",
-      "notify_email": "Your email",
-      "notify_button": "Notify me",
-      "notify_done": "Thanks! We'll email you as soon as it's back."
+      "price_filter": "Price filter",
+      "remove_filter": "Remove price filter",
+      "sort": "Sort",
+      "empty_title": "Nothing here yet",
+      "empty_text": "Try another price range or browse everything.",
+      "shop_all": "Shop all"
     },
     "footer": {
       "shop": "Shop",

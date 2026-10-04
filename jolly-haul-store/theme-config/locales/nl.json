@@ -5,34 +5,38 @@
       "categories": "Per categorie",
       "menu": "Menu"
     },
-    "common": {
-      "all_categories": "Alle categorieën",
-      "home": "Home",
-      "all_gifts": "Alle cadeaus",
-      "search": "Zoeken",
-      "search_shop": "Zoek in de winkel",
-      "search_placeholder": "Zoek cadeaus…"
+    "product": {
+      "add_qty": "[count] in winkelwagen",
+      "why": "Waarom je het geweldig vindt",
+      "materials": "Materiaal & onderhoud",
+      "shipping": "Verzending & retour",
+      "sold_out": "Uitverkocht",
+      "unavailable": "Niet beschikbaar",
+      "save": "Bespaar [percent]%",
+      "reviews_count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
+      "reviews": "Reviews",
+      "verified": "Geverifieerde koper",
+      "guarantee_html": "dagen<br>garantie",
+      "faq": "Veelgestelde vragen",
+      "notify_title": "Tijdelijk uitverkocht. E-mail ontvangen als het terug is?",
+      "notify_email": "Je e-mail",
+      "notify_button": "Houd me op de hoogte",
+      "notify_done": "Bedankt! We mailen je zodra het terug is."
     },
     "card": {
+      "added": "Toegevoegd aan je winkelwagen",
+      "view_cart": "Bekijk winkelwagen",
       "viral": "Viral op TikTok",
       "new": "Nieuw",
       "add": "In winkelwagen",
       "options": "Kies opties",
       "sold_out": "Uitverkocht"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} product",
-        "other": "{{ count }} producten"
-      },
-      "price_filter": "Prijsfilter",
-      "remove_filter": "Prijsfilter verwijderen",
-      "sort": "Sorteren",
-      "empty_title": "Hier is nog niets",
-      "empty_text": "Probeer een andere prijsklasse of bekijk alles.",
-      "shop_all": "Alles bekijken"
-    },
     "cart": {
+      "savings": "Je bespaart",
       "count": {
         "one": "{{ count }} artikel",
         "other": "{{ count }} artikelen"
@@ -65,25 +69,25 @@
       "trust_returns": "30 dagen retour",
       "trust_secure": "Veilig afrekenen"
     },
-    "product": {
-      "why": "Waarom je het geweldig vindt",
-      "materials": "Materiaal & onderhoud",
-      "shipping": "Verzending & retour",
-      "sold_out": "Uitverkocht",
-      "unavailable": "Niet beschikbaar",
-      "save": "Bespaar [percent]%",
-      "reviews_count": {
-        "one": "{{ count }} review",
-        "other": "{{ count }} reviews"
+    "common": {
+      "all_categories": "Alle categorieën",
+      "home": "Home",
+      "all_gifts": "Alle cadeaus",
+      "search": "Zoeken",
+      "search_shop": "Zoek in de winkel",
+      "search_placeholder": "Zoek cadeaus…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} producten"
       },
-      "reviews": "Reviews",
-      "verified": "Geverifieerde koper",
-      "guarantee_html": "dagen<br>garantie",
-      "faq": "Veelgestelde vragen",
-      "notify_title": "Tijdelijk uitverkocht. E-mail ontvangen als het terug is?",
-      "notify_email": "Je e-mail",
-      "notify_button": "Houd me op de hoogte",
-      "notify_done": "Bedankt! We mailen je zodra het terug is."
+      "price_filter": "Prijsfilter",
+      "remove_filter": "Prijsfilter verwijderen",
+      "sort": "Sorteren",
+      "empty_title": "Hier is nog niets",
+      "empty_text": "Probeer een andere prijsklasse of bekijk alles.",
+      "shop_all": "Alles bekijken"
     },
     "footer": {
       "shop": "Winkel",

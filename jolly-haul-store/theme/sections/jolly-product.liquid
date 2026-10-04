@@ -153,7 +153,7 @@
         {%- if section.settings.lede != blank -%}<p class="jh-buy__lede">{{ section.settings.lede }}</p>{%- endif -%}
 
         <div class="jh-price">
-          <span class="jh-price__now" data-jh-price>{{ current_variant.price | money }}</span>
+          <span class="jh-price__now" data-jh-unit>{{ current_variant.price | money }}</span>
           <s class="jh-price__was" data-jh-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
           <span class="jh-price__save" data-jh-save hidden></span>
         </div>
@@ -175,7 +175,25 @@
               {%- assign option_index = forloop.index0 -%}
               {%- assign is_swatch = false -%}
               {%- if option.name == section.settings.swatch_option -%}{%- assign is_swatch = true -%}{%- endif -%}
-              <fieldset class="jh-field" data-jh-option>
+              {%- unless is_swatch or option.values.size < 2 -%}
+                {%- comment -%} Auto: show photo swatches when at least two values have different variant photos. {%- endcomment -%}
+                {%- assign seen_media = '' -%}
+                {%- assign distinct_media = 0 -%}
+                {%- for value in option.values -%}
+                  {%- for v in product.variants -%}
+                    {%- if v.options[option_index] == value and v.featured_media -%}
+                      {%- assign mkey = '|' | append: v.featured_media.id | append: '|' -%}
+                      {%- unless seen_media contains mkey -%}
+                        {%- assign seen_media = seen_media | append: mkey -%}
+                        {%- assign distinct_media = distinct_media | plus: 1 -%}
+                      {%- endunless -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endfor -%}
+                {%- if distinct_media >= 2 -%}{%- assign is_swatch = true -%}{%- endif -%}
+              {%- endunless -%}
+              <fieldset class="jh-field" data-jh-option{% if option.values.size < 2 %} hidden{% endif %}>
                 <legend class="jh-field__legend">{{ option.name }}: <span data-jh-option-value="{{ option_index }}">{{ option.selected_value }}</span></legend>
                 <div class="{% if is_swatch %}jh-swatches{% else %}jh-chips{% endif %}">
                   {%- for value in option.values -%}
@@ -519,6 +537,7 @@
       "cartAddUrl": {{ routes.cart_add_url | default: '/cart/add' | append: '.js' | json }},
       "strings": {
         "addToCart": {{ section.settings.atc_label | json }},
+        "addQty": {{ 'jolly.product.add_qty' | t | json }},
         "soldOut": {{ 'jolly.product.sold_out' | t | json }},
         "unavailable": {{ 'jolly.product.unavailable' | t | json }},
         "save": {{ 'jolly.product.save' | t | json }}

@@ -11,6 +11,9 @@
   assign shop_handles = section.settings.shop_links | remove: ' ' | split: ','
 -%}
 
+<div class="jh jh-toast-wrap"><div class="jh-toast" data-jh-toast role="status" aria-live="polite" hidden>
+  {% render 'jolly-icon', name: 'check' %}<span>{{ 'jolly.card.added' | t }}</span><a href="{{ routes.cart_url | default: '/cart' }}">{{ 'jolly.card.view_cart' | t }}</a>
+</div></div>
 <footer class="jh jh-footer">
   <div class="jh-lights jh-footer__lights" aria-hidden="true"></div>
   <div class="jh-wrap">

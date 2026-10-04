@@ -5,34 +5,38 @@
       "categories": "Por categoría",
       "menu": "Menú"
     },
-    "common": {
-      "all_categories": "Todas las categorías",
-      "home": "Inicio",
-      "all_gifts": "Todos los regalos",
-      "search": "Buscar",
-      "search_shop": "Buscar en la tienda",
-      "search_placeholder": "Buscar regalos…"
+    "product": {
+      "add_qty": "Añadir [count] al carrito",
+      "why": "Por qué te encantará",
+      "materials": "Materiales y cuidado",
+      "shipping": "Envío y devoluciones",
+      "sold_out": "Agotado",
+      "unavailable": "No disponible",
+      "save": "Ahorra un [percent] %",
+      "reviews_count": {
+        "one": "{{ count }} reseña",
+        "other": "{{ count }} reseñas"
+      },
+      "reviews": "Reseñas",
+      "verified": "Compra verificada",
+      "guarantee_html": "días<br>de garantía",
+      "faq": "Preguntas frecuentes",
+      "notify_title": "Agotado por ahora. ¿Te avisamos por email cuando vuelva?",
+      "notify_email": "Tu email",
+      "notify_button": "Avisarme",
+      "notify_done": "¡Gracias! Te escribiremos en cuanto vuelva."
     },
     "card": {
+      "added": "Añadido al carrito",
+      "view_cart": "Ver carrito",
       "viral": "Viral en TikTok",
       "new": "Nuevo",
       "add": "Añadir al carrito",
       "options": "Elegir opciones",
       "sold_out": "Agotado"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} producto",
-        "other": "{{ count }} productos"
-      },
-      "price_filter": "Filtro de precio",
-      "remove_filter": "Quitar filtro de precio",
-      "sort": "Ordenar",
-      "empty_title": "Aún no hay nada aquí",
-      "empty_text": "Prueba otro rango de precios o explora todo.",
-      "shop_all": "Ver todo"
-    },
     "cart": {
+      "savings": "Ahorras",
       "count": {
         "one": "{{ count }} artículo",
         "other": "{{ count }} artículos"
@@ -65,25 +69,25 @@
       "trust_returns": "Devoluciones en 30 días",
       "trust_secure": "Pago seguro"
     },
-    "product": {
-      "why": "Por qué te encantará",
-      "materials": "Materiales y cuidado",
-      "shipping": "Envío y devoluciones",
-      "sold_out": "Agotado",
-      "unavailable": "No disponible",
-      "save": "Ahorra un [percent] %",
-      "reviews_count": {
-        "one": "{{ count }} reseña",
-        "other": "{{ count }} reseñas"
+    "common": {
+      "all_categories": "Todas las categorías",
+      "home": "Inicio",
+      "all_gifts": "Todos los regalos",
+      "search": "Buscar",
+      "search_shop": "Buscar en la tienda",
+      "search_placeholder": "Buscar regalos…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} producto",
+        "other": "{{ count }} productos"
       },
-      "reviews": "Reseñas",
-      "verified": "Compra verificada",
-      "guarantee_html": "días<br>de garantía",
-      "faq": "Preguntas frecuentes",
-      "notify_title": "Agotado por ahora. ¿Te avisamos por email cuando vuelva?",
-      "notify_email": "Tu email",
-      "notify_button": "Avisarme",
-      "notify_done": "¡Gracias! Te escribiremos en cuanto vuelva."
+      "price_filter": "Filtro de precio",
+      "remove_filter": "Quitar filtro de precio",
+      "sort": "Ordenar",
+      "empty_title": "Aún no hay nada aquí",
+      "empty_text": "Prueba otro rango de precios o explora todo.",
+      "shop_all": "Ver todo"
     },
     "footer": {
       "shop": "Tienda",

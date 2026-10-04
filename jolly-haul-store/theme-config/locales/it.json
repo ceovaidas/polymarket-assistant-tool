@@ -5,34 +5,38 @@
       "categories": "Per categoria",
       "menu": "Menu"
     },
-    "common": {
-      "all_categories": "Tutte le categorie",
-      "home": "Home",
-      "all_gifts": "Tutti i regali",
-      "search": "Cerca",
-      "search_shop": "Cerca nel negozio",
-      "search_placeholder": "Cerca regali…"
+    "product": {
+      "add_qty": "Aggiungi [count] al carrello",
+      "why": "Perché ti piacerà",
+      "materials": "Materiali e cura",
+      "shipping": "Spedizione e resi",
+      "sold_out": "Esaurito",
+      "unavailable": "Non disponibile",
+      "save": "Risparmia il [percent]%",
+      "reviews_count": {
+        "one": "{{ count }} recensione",
+        "other": "{{ count }} recensioni"
+      },
+      "reviews": "Recensioni",
+      "verified": "Acquisto verificato",
+      "guarantee_html": "giorni<br>di garanzia",
+      "faq": "FAQ",
+      "notify_title": "Al momento esaurito. Vuoi un’email quando torna disponibile?",
+      "notify_email": "La tua email",
+      "notify_button": "Avvisami",
+      "notify_done": "Grazie! Ti scriveremo appena torna disponibile."
     },
     "card": {
+      "added": "Aggiunto al carrello",
+      "view_cart": "Vedi carrello",
       "viral": "Virale su TikTok",
       "new": "Novità",
       "add": "Aggiungi al carrello",
       "options": "Scegli le opzioni",
       "sold_out": "Esaurito"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} prodotto",
-        "other": "{{ count }} prodotti"
-      },
-      "price_filter": "Filtro prezzo",
-      "remove_filter": "Rimuovi filtro prezzo",
-      "sort": "Ordina",
-      "empty_title": "Ancora niente qui",
-      "empty_text": "Prova un’altra fascia di prezzo o sfoglia tutto.",
-      "shop_all": "Vedi tutto"
-    },
     "cart": {
+      "savings": "Risparmi",
       "count": {
         "one": "{{ count }} articolo",
         "other": "{{ count }} articoli"
@@ -65,25 +69,25 @@
       "trust_returns": "Resi entro 30 giorni",
       "trust_secure": "Pagamento sicuro"
     },
-    "product": {
-      "why": "Perché ti piacerà",
-      "materials": "Materiali e cura",
-      "shipping": "Spedizione e resi",
-      "sold_out": "Esaurito",
-      "unavailable": "Non disponibile",
-      "save": "Risparmia il [percent]%",
-      "reviews_count": {
-        "one": "{{ count }} recensione",
-        "other": "{{ count }} recensioni"
+    "common": {
+      "all_categories": "Tutte le categorie",
+      "home": "Home",
+      "all_gifts": "Tutti i regali",
+      "search": "Cerca",
+      "search_shop": "Cerca nel negozio",
+      "search_placeholder": "Cerca regali…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} prodotto",
+        "other": "{{ count }} prodotti"
       },
-      "reviews": "Recensioni",
-      "verified": "Acquisto verificato",
-      "guarantee_html": "giorni<br>di garanzia",
-      "faq": "FAQ",
-      "notify_title": "Al momento esaurito. Vuoi un’email quando torna disponibile?",
-      "notify_email": "La tua email",
-      "notify_button": "Avvisami",
-      "notify_done": "Grazie! Ti scriveremo appena torna disponibile."
+      "price_filter": "Filtro prezzo",
+      "remove_filter": "Rimuovi filtro prezzo",
+      "sort": "Ordina",
+      "empty_title": "Ancora niente qui",
+      "empty_text": "Prova un’altra fascia di prezzo o sfoglia tutto.",
+      "shop_all": "Vedi tutto"
     },
     "footer": {
       "shop": "Negozio",

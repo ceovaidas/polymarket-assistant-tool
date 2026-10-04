@@ -5,34 +5,38 @@
       "categories": "Par catégorie",
       "menu": "Menu"
     },
-    "common": {
-      "all_categories": "Toutes les catégories",
-      "home": "Accueil",
-      "all_gifts": "Tous les cadeaux",
-      "search": "Rechercher",
-      "search_shop": "Rechercher dans la boutique",
-      "search_placeholder": "Rechercher un cadeau…"
+    "product": {
+      "add_qty": "Ajouter [count] au panier",
+      "why": "Pourquoi vous allez l’adorer",
+      "materials": "Matières & entretien",
+      "shipping": "Livraison & retours",
+      "sold_out": "Épuisé",
+      "unavailable": "Indisponible",
+      "save": "Économisez [percent] %",
+      "reviews_count": {
+        "one": "{{ count }} avis",
+        "other": "{{ count }} avis"
+      },
+      "reviews": "Avis",
+      "verified": "Achat vérifié",
+      "guarantee_html": "jours<br>garantis",
+      "faq": "FAQ",
+      "notify_title": "Épuisé pour le moment. Être prévenu par e-mail du retour ?",
+      "notify_email": "Votre e-mail",
+      "notify_button": "M’avertir",
+      "notify_done": "Merci ! Nous vous écrirons dès son retour."
     },
     "card": {
+      "added": "Ajouté au panier",
+      "view_cart": "Voir le panier",
       "viral": "Viral sur TikTok",
       "new": "Nouveau",
       "add": "Ajouter au panier",
       "options": "Choisir les options",
       "sold_out": "Épuisé"
     },
-    "collection": {
-      "count": {
-        "one": "{{ count }} produit",
-        "other": "{{ count }} produits"
-      },
-      "price_filter": "Filtre de prix",
-      "remove_filter": "Retirer le filtre de prix",
-      "sort": "Trier",
-      "empty_title": "Rien ici pour le moment",
-      "empty_text": "Essayez une autre gamme de prix ou parcourez tout.",
-      "shop_all": "Tout voir"
-    },
     "cart": {
+      "savings": "Vous économisez",
       "count": {
         "one": "{{ count }} article",
         "other": "{{ count }} articles"
@@ -65,25 +69,25 @@
       "trust_returns": "Retours sous 30 jours",
       "trust_secure": "Paiement sécurisé"
     },
-    "product": {
-      "why": "Pourquoi vous allez l’adorer",
-      "materials": "Matières & entretien",
-      "shipping": "Livraison & retours",
-      "sold_out": "Épuisé",
-      "unavailable": "Indisponible",
-      "save": "Économisez [percent] %",
-      "reviews_count": {
-        "one": "{{ count }} avis",
-        "other": "{{ count }} avis"
+    "common": {
+      "all_categories": "Toutes les catégories",
+      "home": "Accueil",
+      "all_gifts": "Tous les cadeaux",
+      "search": "Rechercher",
+      "search_shop": "Rechercher dans la boutique",
+      "search_placeholder": "Rechercher un cadeau…"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} produit",
+        "other": "{{ count }} produits"
       },
-      "reviews": "Avis",
-      "verified": "Achat vérifié",
-      "guarantee_html": "jours<br>garantis",
-      "faq": "FAQ",
-      "notify_title": "Épuisé pour le moment. Être prévenu par e-mail du retour ?",
-      "notify_email": "Votre e-mail",
-      "notify_button": "M’avertir",
-      "notify_done": "Merci ! Nous vous écrirons dès son retour."
+      "price_filter": "Filtre de prix",
+      "remove_filter": "Retirer le filtre de prix",
+      "sort": "Trier",
+      "empty_title": "Rien ici pour le moment",
+      "empty_text": "Essayez une autre gamme de prix ou parcourez tout.",
+      "shop_all": "Tout voir"
     },
     "footer": {
       "shop": "Boutique",

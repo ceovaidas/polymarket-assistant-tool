@@ -4579,6 +4579,29 @@ html.jh-menu-open .jh-header-wrapper { z-index: 100; }
 .jh-drawer__help a { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--ink-2); text-decoration: none; }
 .jh-drawer__loc { margin-top: 20px; }
 
+/* Prize-wheel button on phones: a slim tab on the left edge instead of a round button over the content */
+@media (max-width: 749px) {
+  .jh-wheel__teaser { left: 0; bottom: 104px; width: 30px; height: 44px; border-radius: 0 12px 12px 0; box-shadow: 0 6px 18px rgba(20,81,58,.28); }
+  .jh-wheel__teaser svg { width: 20px; height: 20px; }
+}
+
+/* Comparison table on phones: room for the feature names */
+@media (max-width: 749px) {
+  .jh-compare table { table-layout: fixed; }
+  .jh-compare th:first-child, .jh-compare td:first-child { width: 52%; font-size: 15px; line-height: 1.3; word-break: normal; hyphens: auto; }
+  .jh-compare th, .jh-compare td { padding: 14px 10px; }
+  .jh-compare thead th { font-size: 13px; }
+}
+
+/* "Added to cart" toast */
+.jh-toast-wrap { position: fixed; left: 0; right: 0; bottom: 18px; z-index: 80; display: flex; justify-content: center; pointer-events: none; padding: 0 16px; }
+.jh-toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; max-width: 420px; width: 100%; padding: 12px 14px 12px 16px; border-radius: 16px; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; box-shadow: 0 14px 36px rgba(18,41,31,.3); transform: translateY(16px); opacity: 0; transition: transform .25s, opacity .25s; }
+.jh-toast.is-on { transform: none; opacity: 1; }
+.jh-toast svg { flex: none; width: 22px; height: 22px; color: var(--sun); }
+.jh-toast span { flex: 1; }
+.jh-toast a { flex: none; padding: 8px 12px; border-radius: 10px; background: var(--sun); color: var(--navy); text-decoration: none; font-size: 14px; }
+html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
+
 
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
@@ -4709,10 +4732,10 @@ body { margin: 0; background: #fff; }
         <div class="jh-buy__top"><span class="jh-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 3.5 3 2.5 3-2.5M9 20.5l3-2.5 3 2.5M3.6 10.6l3.7-1.3-.6-3.9M20.4 13.4l-3.7 1.3.6 3.9M3.6 13.4l3.7 1.3-.6 3.9M20.4 10.6l-3.7-1.3.6-3.9"/></svg>Christmas favourite</span></div>
 
         <h1 class="jh-buy__title">Snowfall Star Projector</h1><div class="jh-price">
-          <span class="jh-price__now" data-jh-price>$49.99</span>
+          <span class="jh-price__now" data-jh-unit>$49.99</span>
           <s class="jh-price__was" data-jh-compare hidden>$0.00</s>
           <span class="jh-price__save" data-jh-save hidden></span>
-        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="96475" data-jh-variant-id>
+        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="439086" data-jh-variant-id>
           <input type="hidden" name="quantity" value="1" data-jh-qty><button type="submit" name="add" class="jh-atc" data-jh-atc >
             <span data-jh-atc-label>Add to cart</span>
             <span class="jh-atc__price" data-jh-price>$49.99</span>
@@ -4780,12 +4803,13 @@ body { margin: 0; background: #fff; }
       "cartAddUrl": "/cart/add.js",
       "strings": {
         "addToCart": "Add to cart",
+        "addQty": "Add [count] to cart",
         "soldOut": "Sold out",
         "unavailable": "Unavailable",
         "save": "Save [percent]%"
       },
       "variants": [{
-            "id": 96475,
+            "id": 439086,
             "title": "Default Title",
             "options": ["Default Title"],
             "price": 4999,
@@ -4836,7 +4860,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="37366">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="28978">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4845,7 +4869,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="725146">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="908012">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4854,7 +4878,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="342107">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="950958">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4925,6 +4949,9 @@ body { margin: 0; background: #fff; }
     </script>
   </div>
 
+<div class="jh jh-toast-wrap"><div class="jh-toast" data-jh-toast role="status" aria-live="polite" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" opacity=".14"/><path d="m7.5 12.5 3 3 6-6.5"/></svg><span>Added to your cart</span><a href="/cart">View cart</a>
+</div></div>
 <footer class="jh jh-footer">
   <div class="jh-lights jh-footer__lights" aria-hidden="true"></div>
   <div class="jh-wrap">
@@ -5142,14 +5169,16 @@ body { margin: 0; background: #fff; }
       });
 
       var total = Math.round(variant.price * b.qty * (1 - b.pct / 100));
-      var compare = base * b.qty;
       each('[data-jh-price]', function (el) { el.textContent = money(total, data.moneyFormat); });
+      // Headline price is always one item (bundle totals live on the bundle rows and the button).
+      each('[data-jh-unit]', function (el) { el.textContent = money(variant.price, data.moneyFormat); });
 
       var was = root.querySelector('[data-jh-compare]');
-      if (was) { was.hidden = compare <= total; was.textContent = compare > total ? money(compare, data.moneyFormat) : ''; }
+      var onSale = variant.compare_at_price > variant.price;
+      if (was) { was.hidden = !onSale; was.textContent = onSale ? money(variant.compare_at_price, data.moneyFormat) : ''; }
       var save = root.querySelector('[data-jh-save]');
       if (save) {
-        var pct = compare > total ? Math.round((1 - total / compare) * 100) : 0;
+        var pct = onSale ? Math.round((1 - variant.price / variant.compare_at_price) * 100) : 0;
         save.hidden = pct <= 0;
         save.textContent = data.strings.save.replace('[percent]', pct);
       }
@@ -5163,7 +5192,8 @@ body { margin: 0; background: #fff; }
         var nv = notify.querySelector('[data-jh-notify-variant]');
         if (nv) nv.value = variant.title;
       }
-      each('[data-jh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
+      var addLabel = b.qty > 1 && data.strings.addQty ? data.strings.addQty.replace('[count]', b.qty) : data.strings.addToCart;
+      each('[data-jh-atc-label]', function (el) { el.textContent = variant.available ? addLabel : data.strings.soldOut; });
       if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' × ' + b.qty : '');
 
       if (changedOption) {
@@ -5225,7 +5255,8 @@ body { margin: 0; background: #fff; }
     if (el.dataset.jhReady) return;
     el.dataset.jhReady = '1';
     var parts = (el.dataset.jhCountdown || '').split('-');
-    var target = new Date(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1).getTime();
+    // Count to the END of that day: "order by Dec 10" still includes Dec 10.
+    var target = new Date(+parts[0], (+parts[1] || 1) - 1, (+parts[2] || 1) + 1).getTime();
     if (isNaN(target)) return;
     var d = el.querySelector('[data-jh-d]'), h = el.querySelector('[data-jh-h]'), m = el.querySelector('[data-jh-m]');
     function pad(n) { return n < 10 ? '0' + n : String(n); }
@@ -5417,12 +5448,46 @@ body { margin: 0; background: #fff; }
     }).catch(function () {});
   }
 
+  /* ---------- Product cards: add to cart in place, update the cart bubble, show a toast ---------- */
+  function quickAdd(form) {
+    if (form.dataset.jhReady) return;
+    form.dataset.jhReady = '1';
+    form.addEventListener('submit', function (e) {
+      if (!window.fetch) return;
+      e.preventDefault();
+      var btn = form.querySelector('button');
+      if (btn) btn.disabled = true;
+      fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+        .then(function (r) { if (!r.ok) throw r; return fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + '?sections=cart-icon-bubble'); })
+        .then(function (r) { return r.json(); })
+        .then(function (sections) {
+          var bubble = document.getElementById('cart-icon-bubble');
+          if (bubble && sections['cart-icon-bubble']) {
+            var tmp = document.createElement('div');
+            tmp.innerHTML = sections['cart-icon-bubble'];
+            var inner = tmp.querySelector('.shopify-section') || tmp;
+            bubble.innerHTML = inner.innerHTML;
+          }
+          var toast = document.querySelector('[data-jh-toast]');
+          if (toast) {
+            toast.hidden = false;
+            requestAnimationFrame(function () { toast.classList.add('is-on'); });
+            clearTimeout(toast._t);
+            toast._t = setTimeout(function () { toast.classList.remove('is-on'); setTimeout(function () { toast.hidden = true; }, 300); }, 3500);
+          }
+        })
+        .catch(function () { form.submit(); })
+        .then(function () { if (btn) btn.disabled = false; });
+    });
+  }
+
   function boot() {
     document.querySelectorAll('[data-jh-root]').forEach(init);
     document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
     document.querySelectorAll('[data-jh-wheel]').forEach(wheel);
     document.querySelectorAll('[data-jh-cart-form]').forEach(cartForm);
     document.querySelectorAll('[data-jh-related]').forEach(related);
+    document.querySelectorAll('.jh-card__form form').forEach(quickAdd);
     document.querySelectorAll('[data-jh-sort]').forEach(function (sel) {
       if (sel.dataset.jhReady) return;
       sel.dataset.jhReady = '1';

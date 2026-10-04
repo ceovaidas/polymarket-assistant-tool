@@ -139,6 +139,9 @@
                   <div class="jh-summary__row jh-summary__row--disc"><span>{{ d.title }}</span><span>−{{ d.total_allocated_amount | money }}</span></div>
                 {%- endfor -%}
               {%- endif -%}
+              {%- if cart.total_discount > 0 -%}
+                <div class="jh-summary__row jh-summary__row--disc"><span>{{ 'jolly.cart.savings' | t }}</span><span>−{{ cart.total_discount | money }}</span></div>
+              {%- endif -%}
               <div class="jh-summary__row jh-summary__row--total"><span>{{ 'jolly.cart.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
               <p class="jh-summary__note">{{ 'jolly.cart.taxes_note' | t }}</p>
             </div>
