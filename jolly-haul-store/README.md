@@ -13,6 +13,7 @@ theme/
   sections/jolly-home.liquid      # home page
   sections/jolly-collection.liquid # collection + shop-all pages
   sections/jolly-cart.liquid      # cart page (replaces Dawn's cart sections)
+  sections/jolly-related.liquid   # "You may also like" (product page + cart, Shopify recommendations)
   sections/jolly-wheel.liquid     # Christmas prize wheel (footer group)
   sections/cart-icon-bubble.liquid # overrides Dawn's so cart updates keep our icon
   sections/jolly-product.liquid   # product landing page

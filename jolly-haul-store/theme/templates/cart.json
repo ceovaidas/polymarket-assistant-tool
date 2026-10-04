@@ -3,9 +3,22 @@
     "main": {
       "type": "jolly-cart",
       "settings": {}
+    },
+    "related": {
+      "type": "jolly-related",
+      "settings": {
+        "source": "cart",
+        "intent": "related",
+        "fallback": "trending",
+        "limit": 4,
+        "eyebrow": "Before you check out",
+        "heading": "Add something extra",
+        "cream": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "related"
   ]
 }

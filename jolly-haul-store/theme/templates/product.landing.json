@@ -310,9 +310,22 @@
         "faq_7"
       ],
       "settings": {}
+    },
+    "related": {
+      "type": "jolly-related",
+      "settings": {
+        "source": "product",
+        "intent": "related",
+        "fallback": "trending",
+        "limit": 4,
+        "eyebrow": "Complete the haul",
+        "heading": "You may also like",
+        "cream": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "related"
   ]
 }

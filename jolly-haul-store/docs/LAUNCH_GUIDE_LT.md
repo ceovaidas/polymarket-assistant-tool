@@ -59,7 +59,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
 3. **Kolekcijos:** Products → Collections → *Create collection* → *Automated* → sąlyga *Product tag is equal to*:
    | Pavadinimas (tiksliai taip) | Žyma |
    |---|---|
-   | Trending | `trending` |
+   | Bestsellers (handle `trending`) | `trending` |
    | Funny masks | `cat-masks` |
    | Star projectors | `cat-projectors` |
    | Baby & kids | `cat-baby` |
@@ -67,7 +67,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
    | Lights & decor | `cat-decor` |
    | Stocking stuffers | `cat-stuffers` |
 4. **Kaukės puslapis:** Products → *Funny Face Ski Mask* → dešinėje *Theme template* → **landing** → Save.
-5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, Shop all (`/collections/all`), Funny masks (kolekcija), Gift finder (`/#jh-finder`).
+5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, All gifts (`/collections/all` – visas katalogas), Bestsellers (`/collections/trending`), Contact.
 6. **Nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt.
 7. **Kalėdų rato kodai (būtina!)** – Discounts → *Create discount* → *Amount off order* (arba *Free shipping*) → **Discount code**, kiekvienam: *Limit to one use per customer*, galioja iki 2026-12-31:
    | Kodas | Nuolaida |
@@ -80,7 +80,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
    | `JOLLYSHIP` | Nemokamas pristatymas |
    Ratą, prizus, tikimybes ir tekstus keisi Customize → poraštės grupėje **Jolly prize wheel**. Jei kodai nesukurti – išjunk ratą ten pat, kitaip pirkėjai gaus neveikiantį kodą.
 
-**Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelis – Jolly dizaino (`cart.json`: kiekiai, nemokamo pristatymo juosta, dovanos žinutė, rato kodo priminimas, express mokėjimai), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
+**Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelis – Jolly dizaino (`cart.json`: kiekiai, nemokamo pristatymo juosta, dovanos žinutė, rato kodo priminimas, express mokėjimai), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, produkto puslapyje ir krepšelyje rodomos **rekomenduojamos prekės** („You may also like“ / „Add something extra“ – kol Shopify neturi pardavimų duomenų, rodomi Bestsellers), **navigacijos kelias** (Home / kategorija / prekė), kolekcijų puslapiuose – kategorijų mygtukai (tuščios kategorijos paslepiamos), pradinio puslapio kategorijų plytelės rodo tavo prekių nuotraukas, o „All gifts“ plytelė veda į visą katalogą, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
 
 Zip'e jau sukonfigūruota: spalvos, apvalūs kampai, Jolly meniu juosta, tamsi poraštė, pradinis puslapis su nuorodomis į aukščiau išvardintas kolekcijas, krepšelio pastaba dovanai. Zip'ą galima sugeneruoti iš naujo: `python3 build_theme.py <dawn aplankas>`.
 
@@ -91,7 +91,7 @@ Zip'e jau sukonfigūruota: spalvos, apvalūs kampai, Jolly meniu juosta, tamsi p
    - `Snippets`: `jolly-icon`, `jolly-art`, `jolly-card` (iš `theme/snippets/`)
    - `Sections`: `jolly-header`, `jolly-home`, `jolly-product`
    - `Templates`: pakeisk `index.json` turinį į `theme/templates/index.json`; pridėk naują `product` šabloną `landing` ir įklijuok `product.landing.json`
-3. **Meniu juosta:** Online Store → Navigation → `Main menu`: 4 nuorodos (Home, Shop all, Funny masks, Gift finder → `/#jh-finder`). Tada Customize → viršuje *Header* grupėje paslėpk Dawn „Header“ ir „Announcement bar“ → *Add section* → **Jolly Haul header** → pasirink `Main menu`. Logotipas tekstinis, kol neįkelsi paveikslėlio.
+3. **Meniu juosta:** Online Store → Navigation → `Main menu`: 4 nuorodos (Home, All gifts → `/collections/all`, Bestsellers → `/collections/trending`, Contact). Tada Customize → viršuje *Header* grupėje paslėpk Dawn „Header“ ir „Announcement bar“ → *Add section* → **Jolly Haul header** → pasirink `Main menu`. Logotipas tekstinis, kol neįkelsi paveikslėlio.
 4. **Kolekcijos** (Products → Collections):
    - `Trending` – rankinė, sudėk 8 geriausius → pasirink ją pradinio puslapio „Trending“ nustatyme.
    - Po vieną kolekciją kiekvienai kategorijai (Funny masks, Star projectors, Baby & kids, Ugly sweaters, Lights & decor, Stocking stuffers) → įdėk nuorodas į kategorijų plyteles.
@@ -151,6 +151,7 @@ Kol neįkėlei nuotraukų, visur rodomos iliustracijos. Užrašai „upload…�
 | `theme/sections/jolly-header.liquid` | Meniu juosta (logotipas kairėje, meniu centre, piktogramos dešinėje; telefone – išskleidžiamas meniu) |
 | `theme/sections/jolly-cart.liquid` | Krepšelio puslapis |
 | `theme/sections/jolly-collection.liquid` | Kolekcijų / „Shop all“ puslapis |
+| `theme/sections/jolly-related.liquid` | Rekomenduojamos prekės (produkto puslapis, krepšelis) |
 | `theme/sections/jolly-wheel.liquid` | Kalėdų prizų ratas (poraštės grupėje) |
 | `theme/sections/jolly-home.liquid` | Pradinis puslapis (hero, kategorijos, trending, laikmatis, spotlight, dovanų paieška, DUK, naujienlaiškis) |
 | `theme/sections/jolly-product.liquid` | Produkto landing puslapis |

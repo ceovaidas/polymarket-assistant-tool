@@ -215,9 +215,22 @@
         "final_text": "Two masks ship free — grab one for your ride-or-die.",
         "ticker": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days"
       }
+    },
+    "related": {
+      "type": "jolly-related",
+      "settings": {
+        "source": "product",
+        "intent": "related",
+        "fallback": "trending",
+        "limit": 4,
+        "eyebrow": "Complete the haul",
+        "heading": "You may also like",
+        "cream": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "related"
   ]
 }

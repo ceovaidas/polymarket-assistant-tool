@@ -61,6 +61,15 @@
 
   {%- comment -%} ================= PRODUCT ================= {%- endcomment -%}
   <section class="jh-product">
+    <nav class="jh-wrap jh-crumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+      {%- if collection and collection.handle != 'all' -%}
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">All gifts</a>
+      {%- endif -%}
+      <span aria-hidden="true">/</span><span aria-current="page">{{ product.title }}</span>
+    </nav>
     <div class="jh-wrap jh-product__grid">
 
       <div class="jh-gallery">

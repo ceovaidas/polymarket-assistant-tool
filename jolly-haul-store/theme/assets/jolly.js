@@ -384,11 +384,26 @@
     }
   }
 
+  function related(box) {
+    var url = box.dataset.url;
+    if (!url || box.dataset.jhReady) return;
+    box.dataset.jhReady = '1';
+    fetch(url).then(function (r) { return r.ok ? r.text() : ''; }).then(function (html) {
+      if (!html) return;
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var fresh = doc.querySelector('[data-jh-related-grid]');
+      if (!fresh || !fresh.children.length) return;
+      box.querySelector('[data-jh-related-grid]').innerHTML = fresh.innerHTML;
+      box.hidden = false;
+    }).catch(function () {});
+  }
+
   function boot() {
     document.querySelectorAll('[data-jh-root]').forEach(init);
     document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
     document.querySelectorAll('[data-jh-wheel]').forEach(wheel);
     document.querySelectorAll('[data-jh-cart-form]').forEach(cartForm);
+    document.querySelectorAll('[data-jh-related]').forEach(related);
     document.querySelectorAll('[data-jh-sort]').forEach(function (sel) {
       if (sel.dataset.jhReady) return;
       sel.dataset.jhReady = '1';

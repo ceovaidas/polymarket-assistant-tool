@@ -4039,9 +4039,10 @@ details-disclosure > details {
 @media (max-width: 749px) { .jh-collage__sticker { width: 88px; height: 88px; font-size: 11px; } }
 
 /* Category tiles */
-.jh-cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-@media (min-width: 750px) { .jh-cats { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-@media (min-width: 1100px) { .jh-cats { grid-template-columns: repeat(6, 1fr); } }
+/* Flex so any number of tiles (empty categories hide themselves) stays centred. */
+.jh-cats { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.jh-cats > .jh-cat { flex: 0 0 calc(50% - 6px); min-width: 0; }
+@media (min-width: 750px) { .jh-cats { gap: 16px; } .jh-cats > .jh-cat { flex: 1 1 140px; max-width: 210px; } }
 .jh-cat { display: flex; flex-direction: column; border-radius: var(--r); overflow: hidden; text-decoration: none; background: #fff; box-shadow: var(--shadow); transition: transform .2s; }
 .jh-cat:hover { transform: translateY(-4px); }
 .jh-cat:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
@@ -4336,6 +4337,25 @@ html.jh-lock { overflow: hidden; }
 .jh-giftnote .jh-summary__note { margin-bottom: 10px; }
 .jh-cart-empty__art { width: 140px; margin: 0 auto 12px; }
 
+/* Breadcrumbs */
+.jh-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); margin-bottom: 16px; }
+.jh-crumbs a { color: inherit; text-decoration: none; font-weight: 600; }
+.jh-crumbs a:hover { color: var(--brand); text-decoration: underline; }
+.jh-crumbs [aria-current] { color: var(--ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60vw; }
+.jh-crumbs--center { justify-content: center; margin-bottom: 10px; }
+@media (min-width: 990px) { .jh-product .jh-crumbs { margin-bottom: 24px; } }
+
+/* Category pills on collection pages */
+.jh-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px; }
+.jh-pill { flex: none; padding: 9px 16px; border-radius: 999px; border: 2px solid var(--line); background: #fff; color: var(--ink); font-weight: 700; font-size: 14px; text-decoration: none; white-space: nowrap; transition: border-color .15s, background .15s; }
+.jh-pill:hover { border-color: var(--ink); }
+.jh-pill.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.jh-pill:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+@media (max-width: 749px) { .jh-pills { gap: 6px; } .jh-pill { padding: 7px 12px; font-size: 13px; } }
+
+/* Recommendations */
+.jh-related .jh-grid-head { margin-bottom: 22px; }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -4356,12 +4376,12 @@ body { margin: 0; background: #fff; }
         <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </summary>
-      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Shop all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="product.html" aria-current="page">Funny masks<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="index.html#jh-finder">Gift finder<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
+      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">All gifts<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Bestsellers<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Contact<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
     </details>
 
     <a class="jh-logo" href="index.html" aria-label="Jolly Haul"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
 
-    <nav class="jh-header__nav" aria-label="Main"><a href="index.html">Home</a><a href="collection.html">Shop all</a><a href="product.html" aria-current="page">Funny masks</a><a href="index.html#jh-finder">Gift finder</a></nav>
+    <nav class="jh-header__nav" aria-label="Main"><a href="index.html">Home</a><a href="collection.html">All gifts</a><a href="collection.html">Bestsellers</a><a href="#">Contact</a></nav>
 
     <div class="jh-header__icons">
       <a class="jh-iconbtn" href="#" aria-label="Search">
@@ -4378,6 +4398,9 @@ body { margin: 0; background: #fff; }
 <div class="jh" data-jh-root id="jh-main"><div class="jh-ticker" role="region" aria-label="Free shipping on 2+ masks · Order by Dec 10 for Christmas delivery · 30-day easy returns · Ships in 1–3 business days">
       <div class="jh-ticker__track" aria-hidden="true"><span>Free shipping on 2+ masks</span><span>Order by Dec 10 for Christmas delivery</span><span>30-day easy returns</span><span>Ships in 1–3 business days</span><span>Free shipping on 2+ masks</span><span>Order by Dec 10 for Christmas delivery</span><span>30-day easy returns</span><span>Ships in 1–3 business days</span><span>Free shipping on 2+ masks</span><span>Order by Dec 10 for Christmas delivery</span><span>30-day easy returns</span><span>Ships in 1–3 business days</span><span>Free shipping on 2+ masks</span><span>Order by Dec 10 for Christmas delivery</span><span>30-day easy returns</span><span>Ships in 1–3 business days</span></div>
     </div><section class="jh-product">
+    <nav class="jh-wrap jh-crumbs" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span aria-hidden="true">/</span><a href="collection.html">Funny masks</a><span aria-hidden="true">/</span><span aria-current="page">Funny Face Ski Mask</span>
+    </nav>
     <div class="jh-wrap jh-product__grid">
 
       <div class="jh-gallery">
@@ -4668,6 +4691,60 @@ body { margin: 0; background: #fff; }
 </div>
 
 
+
+<script src="" defer></script><div class="jh jh-related"
+    data-jh-related
+    data-url="#?section_id=related&product_id=1&limit=6&intent=related"
+    >
+    <section class="jh-section jh-section--ice">
+      <div class="jh-wrap">
+        <div class="jh-grid-head">
+          <div>
+            <span class="jh-eyebrow">Complete the haul</span>
+            <h2 class="jh-h2">You may also like</h2>
+          </div>
+          <a class="jh-link" href="collection.html">All gifts <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a>
+        </div>
+        <div class="jh-grid" data-jh-related-grid><article class="jh-card">
+  <a class="jh-card__media jh-media" href="projector.html" style="--tone: #e7f1ea" tabindex="-1" aria-hidden="true"><span class="jh-card__badge jh-card__badge--viral">Viral on TikTok</span><span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Christmas star projector illustration" xmlns="http://www.w3.org/2000/svg"><path d="M120 178 26 24H214Z" fill="#f2b33d" opacity=".22"/><polygon points="80.0,51.0 77.6,56.7 71.4,57.2 76.1,61.3 74.7,67.3 80.0,64.0 85.3,67.3 83.9,61.3 88.6,57.2 82.4,56.7" fill="#f2b33d"/><polygon points="150.0,37.0 148.1,41.5 143.3,41.8 147.0,45.0 145.9,49.7 150.0,47.1 154.1,49.7 153.0,45.0 156.7,41.8 151.9,41.5" fill="#f2b33d"/><polygon points="118.0,81.0 115.1,88.0 107.5,88.6 113.3,93.5 111.5,100.9 118.0,97.0 124.5,100.9 122.7,93.5 128.5,88.6 120.9,88.0" fill="#f2b33d"/><polygon points="176.0,78.0 174.4,81.8 170.3,82.1 173.4,84.8 172.5,88.9 176.0,86.7 179.5,88.9 178.6,84.8 181.7,82.1 177.6,81.8" fill="#f2b33d"/><polygon points="64.0,99.0 62.7,102.2 59.2,102.5 61.9,104.7 61.1,108.0 64.0,106.2 66.9,108.0 66.1,104.7 68.8,102.5 65.3,102.2" fill="#f2b33d"/><polygon points="140.0,122.0 138.4,125.8 134.3,126.1 137.4,128.8 136.5,132.9 140.0,130.7 143.5,132.9 142.6,128.8 145.7,126.1 141.6,125.8" fill="#f2b33d"/><rect x="72" y="232" width="96" height="22" rx="9" fill="#1b2420" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 236C64 162 176 162 176 236Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M84 200C96 186 144 186 156 200" fill="none" stroke="#fff" stroke-width="3" opacity=".5"/><circle cx="120" cy="188" r="18" fill="#1b2420" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="120" cy="188" r="8" fill="#ffe7a3"/><circle cx="86" cy="216" r="3.5" fill="#f2b33d"/><circle cx="104" cy="210" r="3.5" fill="#f2b33d"/><circle cx="136" cy="210" r="3.5" fill="#f2b33d"/><circle cx="154" cy="216" r="3.5" fill="#f2b33d"/></svg></span></a>
+  <div class="jh-card__body"><h3 class="jh-card__title"><a href="projector.html">Snowfall Star Projector</a></h3>
+    <div class="jh-card__price">
+      <span>$49.99</span></div>
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="263853">
+          <button type="submit" class="jh-card__add">Add to cart</button></form></div>
+  </div>
+</article>
+<article class="jh-card">
+  <a class="jh-card__media jh-media" href="#" style="--tone: #fbe9df" tabindex="-1" aria-hidden="true"><span class="jh-card__badge">New</span><span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Baby reindeer costume illustration" xmlns="http://www.w3.org/2000/svg"><path d="M72 128 40 168 62 182 82 158V250H114V228H126V250H158V158L178 182 200 168 168 128Z" fill="#9a6a43" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="120" cy="186" rx="24" ry="34" fill="#fff6e6" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M100 44C92 30 80 26 70 14M86 32 74 34M140 44C148 30 160 26 170 14M154 32 166 34" fill="none" stroke="#6b4628" stroke-width="7" stroke-linecap="round"/><ellipse cx="76" cy="70" rx="12" ry="7" fill="#9a6a43" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-25 76 70)"/><ellipse cx="164" cy="70" rx="12" ry="7" fill="#9a6a43" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(25 164 70)"/><circle cx="120" cy="84" r="42" fill="#9a6a43" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="104" cy="78" r="5" fill="#1b2420"/><circle cx="136" cy="78" r="5" fill="#1b2420"/><ellipse cx="120" cy="102" rx="22" ry="14" fill="#c08d62"/><circle cx="120" cy="98" r="10" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg></span></a>
+  <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
+    <div class="jh-card__price">
+      <span>$29.99</span></div>
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="266964">
+          <button type="submit" class="jh-card__add">Add to cart</button></form></div>
+  </div>
+</article>
+<article class="jh-card">
+  <a class="jh-card__media jh-media" href="#" style="--tone: #fff1d6" tabindex="-1" aria-hidden="true"><span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Ugly Christmas sweater illustration" xmlns="http://www.w3.org/2000/svg"><path d="M64 84 98 68C108 82 132 82 142 68L176 84 214 158 188 172 170 136V246H70V136L52 172 26 158Z" fill="#d62839" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 118H170V146H70Z" fill="#1f6b4e"/><path d="M70 132 80 122 90 142 100 122 110 142 120 122 130 142 140 122 150 142 160 122 170 132" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M120 160 96 214H144Z" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><polygon points="120.0,151.0 117.6,156.7 111.4,157.2 116.1,161.3 114.7,167.3 120.0,164.1 125.3,167.3 123.9,161.3 128.6,157.2 122.4,156.7" fill="#f2b33d"/><circle cx="86" cy="170" r="3" fill="#fff"/><circle cx="154" cy="176" r="3" fill="#fff"/><circle cx="90" cy="222" r="3" fill="#fff"/><circle cx="150" cy="226" r="3" fill="#fff"/><circle cx="106" cy="196" r="3" fill="#fff"/><circle cx="134" cy="190" r="3" fill="#fff"/><path d="M70 232H170V246H70Z" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M98 68C108 82 132 82 142 68" fill="none" stroke="#a81e2b" stroke-width="8"/></svg></span></a>
+  <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
+    <div class="jh-card__price">
+      <span>$44.99</span></div>
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="262728">
+          <button type="submit" class="jh-card__add">Add to cart</button></form></div>
+  </div>
+</article>
+<article class="jh-card">
+  <a class="jh-card__media jh-media" href="product.html" style="--tone: #f6e3e3" tabindex="-1" aria-hidden="true"><span class="jh-card__badge">New</span><span class="jh-ph"><svg viewBox="0 0 240 300" role="img" aria-label="Elf ski mask illustration" xmlns="http://www.w3.org/2000/svg"><path d="M62 138 L4 96 L64 188 Z" fill="#efd0ae" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M 178.0 138 L 236.0 96 L 176.0 188 Z" fill="#efd0ae" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="120" cy="34" r="14" fill="#c8372d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 292C70 264 58 248 54 222 44 162 46 94 78 56 98 32 142 32 162 56 194 94 196 162 186 222 182 248 170 264 170 292Z" fill="#3f7a50" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 252C100 262 140 262 176 252L172 292H68Z" fill="#3f7a50" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 266C104 274 136 274 170 266M70 279C104 287 136 287 170 279" fill="none" stroke="#141414" stroke-width="2" opacity=".35"/><path d="M96 62 104 76 112 62 120 76 128 62 136 76 144 62" fill="none" stroke="#f2efe9" stroke-width="3" opacity=".55"/><path d="M44 128H196" stroke="#141414" stroke-width="12" stroke-linecap="round"/><rect x="58" y="104" width="124" height="50" rx="25" fill="#23262d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 116C92 109 112 108 128 110L102 148C88 148 74 146 70 138Z" fill="#fff" opacity=".16"/><path d="M142 112 120 148" stroke="#fff" stroke-width="5" opacity=".1"/><ellipse cx="120" cy="206" rx="16" ry="9" fill="#2b1d18" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 238 74 262 88 238 104 262 120 238 136 262 152 238 166 262 180 238 176 252C140 266 100 266 64 252Z" fill="#c8372d" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="74" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="104" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="136" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="166" cy="263" r="5.5" fill="#d9a83a" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></span></a>
+  <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
+    <div class="jh-card__price">
+      <span>$39.99</span></div>
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="563646">
+          <button type="submit" class="jh-card__add">Add to cart</button></form></div>
+  </div>
+</article>
+</div>
+      </div>
+    </section>
+  </div>
 
 
   <div class="jh jh-wheel" data-jh-wheel data-delay="4" data-snooze="7" data-exit="true">
@@ -5123,11 +5200,26 @@ body { margin: 0; background: #fff; }
     }
   }
 
+  function related(box) {
+    var url = box.dataset.url;
+    if (!url || box.dataset.jhReady) return;
+    box.dataset.jhReady = '1';
+    fetch(url).then(function (r) { return r.ok ? r.text() : ''; }).then(function (html) {
+      if (!html) return;
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var fresh = doc.querySelector('[data-jh-related-grid]');
+      if (!fresh || !fresh.children.length) return;
+      box.querySelector('[data-jh-related-grid]').innerHTML = fresh.innerHTML;
+      box.hidden = false;
+    }).catch(function () {});
+  }
+
   function boot() {
     document.querySelectorAll('[data-jh-root]').forEach(init);
     document.querySelectorAll('[data-jh-countdown]').forEach(countdown);
     document.querySelectorAll('[data-jh-wheel]').forEach(wheel);
     document.querySelectorAll('[data-jh-cart-form]').forEach(cartForm);
+    document.querySelectorAll('[data-jh-related]').forEach(related);
     document.querySelectorAll('[data-jh-sort]').forEach(function (sel) {
       if (sel.dataset.jhReady) return;
       sel.dataset.jhReady = '1';

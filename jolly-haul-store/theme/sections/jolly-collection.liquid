@@ -10,6 +10,11 @@
   assign tones = section.settings.tones | split: ','
   assign tone_count = tones.size
   assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign coll_title = collection.title
+  if collection.handle == 'all'
+    assign coll_title = 'All gifts'
+  endif
+  assign chip_handles = section.settings.chips | remove: ' ' | split: ','
   assign clear_url = ''
   for filter in collection.filters
     if filter.type == 'price_range'
@@ -24,14 +29,29 @@
   <section class="jh-collhead">
     <div class="jh-lights" aria-hidden="true"></div>
     <div class="jh-wrap">
-      <span class="jh-eyebrow">{{ section.settings.eyebrow }}</span>
-      <h1 class="jh-h2">{{ collection.title }}</h1>
+      <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ coll_title }}</span>
+      </nav>
+      <h1 class="jh-h2">{{ coll_title }}</h1>
       {%- if collection.description != blank -%}<div class="jh-sub">{{ collection.description }}</div>{%- endif -%}
     </div>
   </section>
 
-  <section class="jh-section" style="padding-top:32px">
+  <section class="jh-section" style="padding-top:28px">
     <div class="jh-wrap">
+      {%- if chip_handles.size > 0 -%}
+        <nav class="jh-pills" aria-label="Shop by category">
+          {%- for h in chip_handles -%}
+            {%- if h == 'all' -%}
+              <a class="jh-pill{% if collection.handle == 'all' %} is-on{% endif %}" href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>All gifts</a>
+            {%- else -%}
+              {%- assign c = collections[h] -%}
+              {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+              <a class="jh-pill{% if collection.handle == c.handle %} is-on{% endif %}" href="{{ c.url }}"{% if collection.handle == c.handle %} aria-current="page"{% endif %}>{{ c.title }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
       {%- paginate collection.products by section.settings.per_page -%}
         <div class="jh-collbar">
           <p class="jh-collbar__count">
@@ -84,7 +104,7 @@
   "name": "Jolly collection",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Jolly Haul finds" },
+    { "type": "text", "id": "chips", "label": "Category links (collection handles)", "default": "all,trending,funny-masks,star-projectors,baby-kids,ugly-sweaters,lights-decor,stocking-stuffers", "info": "Comma-separated. Empty collections are hidden automatically." },
     { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 24 },
     { "type": "text", "id": "tones", "label": "Card background tones", "default": "#e7f1ea,#fbe9df,#fff1d6,#f6e3e3,#eef0e4,#f3ead8" }
   ]

@@ -101,12 +101,20 @@
           {%- for block in cats -%}
             {%- assign coll = block.settings.collection -%}
             {%- if coll != blank and coll.products_count == 0 -%}{%- continue -%}{%- endif -%}
-            {%- assign t = forloop.index0 | modulo: tone_count -%}
+            {%- assign cat_i = forloop.index0 -%}
+            {%- assign t = cat_i | modulo: tone_count -%}
             {%- assign cat_link = block.settings.link -%}
             {%- if cat_link == blank and coll != blank -%}{%- assign cat_link = coll.url -%}{%- endif -%}
             {%- assign cat_photo = nil -%}
             {%- if coll != blank -%}
               {%- for cp in coll.products limit: 8 -%}{%- if cp.featured_media -%}{%- assign cat_photo = cp.featured_media -%}{%- break -%}{%- endif -%}{%- endfor -%}
+            {%- elsif block.settings.image == blank -%}
+              {%- comment -%} No collection (e.g. "All gifts"): show one of the shop's own product photos. {%- endcomment -%}
+              {%- assign all_with_media = collections.all.products | where: 'featured_media' -%}
+              {%- if all_with_media.size > 0 -%}
+                {%- assign pick = cat_i | modulo: all_with_media.size -%}
+                {%- assign cat_photo = all_with_media[pick].featured_media -%}
+              {%- endif -%}
             {%- endif -%}
             <a class="jh-cat" href="{{ cat_link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
               <span class="jh-cat__media jh-media" style="--tone: {{ tones[t] | strip }}">

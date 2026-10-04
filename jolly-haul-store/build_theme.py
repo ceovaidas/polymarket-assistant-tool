@@ -92,6 +92,9 @@ def main(dawn_dir):
             if block["type"] == "category" and block["settings"]["title"] in CATEGORY_LINKS:
                 # Point the tile at its collection: it links there and hides itself while empty.
                 block["settings"]["collection"] = CATEGORY_LINKS[block["settings"]["title"]].split("/")[-1]
+        # "All gifts" tile first: the whole catalogue, shown with one of the shop's own product photos.
+        home["blocks"]["cat_all"] = {"type": "category", "settings": {"title": "All gifts", "art": "gift", "link": "shopify://collections/all"}}
+        home["block_order"].insert(home["block_order"].index("cat_1"), "cat_all")
         # Gift finder stays off until the catalogue spans several price points.
         for bid in [k for k, v in home["blocks"].items() if v["type"] == "price"]:
             del home["blocks"][bid]
@@ -100,8 +103,8 @@ def main(dawn_dir):
             "spotlight_product": "realistic-old-man-ski-mask",
             "spotlight_text": "The ski mask that makes the whole lift line look twice. Realistic printed face, stretchy one-size fit, thermal styles for colder days.",
             "spotlight_bullets": "Eight realistic looks\nThermal styles available\nTwo masks ship free",
-            "hero_cta2": "Funny masks",
-            "hero_cta2_link": "shopify://collections/funny-masks",
+            "hero_cta2": "Bestsellers",
+            "hero_cta2_link": "shopify://collections/trending",
             "hero_labels": "|",
         })
         dump_json(build / "templates" / "index.json", index)

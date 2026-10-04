@@ -60,7 +60,7 @@ engine.registerTag('schema', {
 
 // ---- section settings + blocks (schema defaults, overridden by the template) ----
 function sectionData(file, templateFile, key) {
-  const src = read(`sections/${file}`).replace(/posted_successfully\?/g, 'posted_successfully');
+  const src = read(`sections/${file}`).replace(/posted_successfully\?/g, 'posted_successfully').replace(/recommendations\.performed\?/g, 'recommendations.performed');
   const schema = JSON.parse(src.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
   const tpl = JSON.parse(read(`templates/${templateFile}`)).sections[key];
   const defaults = (list) => Object.fromEntries(list.filter((s) => s.id).map((s) => [s.id, s.default ?? null]));
@@ -74,9 +74,10 @@ function sectionData(file, templateFile, key) {
 
 // ---- mock catalogue (no photos yet → illustrations render) ----
 const noReviews = { reviews: { rating: { value: null }, rating_count: null } };
+let pid = 1;
 const mk = (title, price, tags, url = '#', extra = {}) => {
   const v = { id: Math.floor(Math.random() * 1e6), title: 'Default Title', options: ['Default Title'], price, compare_at_price: 0, available: true, featured_media: null };
-  return { title, url, price, compare_at_price: 0, price_varies: false, tags, available: true, has_only_default_variant: true,
+  return { id: pid++, title, url, price, compare_at_price: 0, price_varies: false, tags, available: true, has_only_default_variant: true,
     featured_media: null, media: [], variants: [v], selected_or_first_available_variant: v, metafields: noReviews, ...extra };
 };
 const faces = ['Gramps', 'The Cat', 'Tiger', 'Corgi', 'The Elf'];
@@ -98,6 +99,17 @@ const catalogue = [
   mk('Mystery Stocking Stuffer Box', 1999, ['viral', 'art-gift']),
   mk('Warm-White Curtain Lights', 3499, ['art-lights']),
 ];
+const mockColl = (handle, title, products) => ({ handle, title, url: 'collection.html', products, products_count: products.length });
+const mockCollections = {
+  all: mockColl('all', 'Products', catalogue),
+  trending: mockColl('trending', 'Bestsellers', catalogue),
+  'funny-masks': mockColl('funny-masks', 'Funny masks', catalogue.filter((p) => p.title.toLowerCase().includes('mask'))),
+  'star-projectors': mockColl('star-projectors', 'Star projectors', catalogue.slice(1, 2)),
+  'baby-kids': mockColl('baby-kids', 'Baby & kids', catalogue.slice(2, 3)),
+  'ugly-sweaters': mockColl('ugly-sweaters', 'Ugly sweaters', []),
+  'lights-decor': mockColl('lights-decor', 'Lights & decor', catalogue.slice(4, 5)),
+  'stocking-stuffers': mockColl('stocking-stuffers', 'Stocking stuffers', catalogue.slice(5, 7)),
+};
 const shop = { money_format: '${{amount}}', name: 'Jolly Haul' };
 
 // ---- shared page shell (stand-in for the theme header + footer, which Dawn renders) ----
@@ -166,9 +178,9 @@ const renderHeader = (active) => engine.parseAndRender(headerSrc, {
   routes: { root_url: 'index.html', search_url: '#', cart_url: '#', account_url: '#' },
   linklists: { 'main-menu': { links: [
     { title: 'Home', url: 'index.html', active: active === 'home' },
-    { title: 'Shop all', url: 'collection.html', active: active === 'shop' },
-    { title: 'Funny masks', url: 'product.html', active: active === 'product' },
-    { title: 'Gift finder', url: 'index.html#jh-finder', active: false },
+    { title: 'All gifts', url: 'collection.html', active: active === 'shop' },
+    { title: 'Bestsellers', url: 'collection.html', active: false },
+    { title: 'Contact', url: '#', active: false },
   ] } },
 });
 
@@ -178,25 +190,36 @@ home.section.settings.trending_collection = { url: '#', products: catalogue };
 home.section.settings.spotlight_product = mask;
 home.section.settings.hero_cta_link = 'collection.html';
 home.section.settings.trending_collection.url = 'collection.html';
-const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, routes: { all_products_collection_url: '#' } });
+// build_theme.py prepends an "All gifts" tile; mirror it here.
+home.section.blocks.unshift({ id: 'cat_all', type: 'category', shopify_attributes: '', settings: { ...home.section.blocks.find((b) => b.type === 'category').settings, title: 'All gifts', art: 'gift', link: 'collection.html' } });
+const homeHtml = await engine.parseAndRender(home.src, { section: home.section, shop, request: {}, collections: mockCollections, routes: { all_products_collection_url: 'collection.html' } });
 writeFileSync(join(here, 'index.html'), shell('Jolly Haul Preview', homeHtml, await renderHeader('home')));
+
+// ---- recommendations (real section; fallback collection = Bestsellers) ----
+const relatedFor = async (templateFile, ctx) => {
+  const rel = sectionData('jolly-related.liquid', templateFile, 'related');
+  rel.section.settings.fallback = 'trending';
+  return engine.parseAndRender(rel.src, { section: rel.section, shop, collections: mockCollections, recommendations: { performed: false, products_count: 0 },
+    routes: { product_recommendations_url: '#', all_products_collection_url: 'collection.html', root_url: 'index.html' }, cart: { item_count: 0, items: [] }, ...ctx });
+};
+const pRoutes = { root_url: 'index.html', all_products_collection_url: 'collection.html' };
 
 // ---- product ----
 const prod = sectionData('jolly-product.liquid', 'product.landing.json', 'main');
-const prodHtml = await engine.parseAndRender(prod.src, { product: mask, section: prod.section, shop, request: {} });
-writeFileSync(join(here, 'product.html'), shell('Jolly Haul Product Preview', prodHtml, await renderHeader('product')));
+const prodHtml = await engine.parseAndRender(prod.src, { product: mask, section: prod.section, shop, request: {}, routes: pRoutes, collection: mockCollections['funny-masks'] });
+writeFileSync(join(here, 'product.html'), shell('Jolly Haul Product Preview', prodHtml + await relatedFor('product.landing.json', { product: mask }), await renderHeader('product')));
 
 // ---- generic product (default product.json template) ----
 const gen = sectionData('jolly-product.liquid', 'product.json', 'main');
 const projector = catalogue[1];
-const genHtml = await engine.parseAndRender(gen.src, { product: projector, section: gen.section, shop, request: {} });
-writeFileSync(join(here, 'projector.html'), shell('Jolly Haul Projector Preview', genHtml, await renderHeader('other')));
+const genHtml = await engine.parseAndRender(gen.src, { product: projector, section: gen.section, shop, request: {}, routes: pRoutes });
+writeFileSync(join(here, 'projector.html'), shell('Jolly Haul Projector Preview', genHtml + await relatedFor('product.json', { product: projector }), await renderHeader('other')));
 
 // ---- collection (Shop all) ----
 const coll = sectionData('jolly-collection.liquid', 'collection.json', 'main');
 const collHtml = await engine.parseAndRender(coll.src, {
-  section: coll.section, shop, routes: { all_products_collection_url: 'collection.html' },
-  collection: { title: 'Shop all', description: '<p>Every viral Christmas find, in one place.</p>', products: catalogue, products_count: catalogue.length, filters: [],
+  section: coll.section, shop, collections: mockCollections, routes: { all_products_collection_url: 'collection.html', root_url: 'index.html' },
+  collection: { handle: 'all', title: 'Products', description: '<p>Every viral Christmas find, in one place.</p>', products: catalogue, products_count: catalogue.length, filters: [],
     sort_by: 'best-selling', sort_options: [{ value: 'best-selling', name: 'Best selling' }, { value: 'price-ascending', name: 'Price, low to high' }, { value: 'price-descending', name: 'Price, high to low' }, { value: 'created-descending', name: 'Newest' }] },
 });
 writeFileSync(join(here, 'collection.html'), shell('Jolly Haul Shop All Preview', collHtml, await renderHeader('shop')));
@@ -211,6 +234,7 @@ const cartHtml = await engine.parseAndRender(cartData.src, {
   section: cartData.section, shop, routes: { cart_url: '#', all_products_collection_url: 'collection.html' },
   cart: { item_count: 3, items: lines, total_price: cartTotal, items_subtotal_price: cartTotal, cart_level_discount_applications: [], note: '' },
 });
-writeFileSync(join(here, 'cart.html'), shell('Jolly Haul Cart Preview', cartHtml, await renderHeader('cart')));
+const cartCtx = { item_count: 3, items: lines.map((l) => ({ ...l, product_id: l.product.id })) };
+writeFileSync(join(here, 'cart.html'), shell('Jolly Haul Cart Preview', cartHtml + await relatedFor('cart.json', { cart: cartCtx }), await renderHeader('cart')));
 
 console.log('wrote preview/index.html, product.html, projector.html, collection.html, cart.html');
