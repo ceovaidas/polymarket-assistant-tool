@@ -85,7 +85,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
    | `JOLLY20` | 20% nuo užsakymo |
    | `JOLLY5OFF` | $5 nuo užsakymų nuo $30 |
    | `JOLLYSHIP` | Nemokamas pristatymas |
-   Ratą, prizus, tikimybes ir tekstus keisi Customize → poraštės grupėje **Jolly prize wheel**. Jei kodai nesukurti – išjunk ratą ten pat, kitaip pirkėjai gaus neveikiantį kodą.
+   Ratą, prizus, tikimybes ir tekstus keisi Customize → poraštės grupėje **Jolly prize wheel** (*Open after*: 0–60 s, numatyta 1 s – atsidaro vos užsikrovus puslapiui). Jei kodai nesukurti – išjunk ratą ten pat, kitaip pirkėjai gaus neveikiantį kodą.
 
 **Kas veikia automatiškai po zip įkėlimo:** visi produktai turi Jolly dizaino puslapį (`product.json`), kolekcijų ir „Shop all“ puslapiai – Jolly korteles su rūšiavimu (`collection.json`), krepšelis – Jolly dizaino (`cart.json`: kiekiai, nemokamo pristatymo juosta, dovanos žinutė, rato kodo priminimas, express mokėjimai), krepšelio piktograma atsinaujina keičiant kiekius krepšelyje, produkto puslapyje ir krepšelyje rodomos **rekomenduojamos prekės** („You may also like“ / „Add something extra“ – kol Shopify neturi pardavimų duomenų, rodomi Bestsellers), **navigacijos kelias** (Home / kategorija / prekė), kolekcijų puslapiuose – kategorijų mygtukai (tuščios kategorijos paslepiamos), pradinio puslapio kategorijų plytelės rodo tavo prekių nuotraukas, o „All gifts“ plytelė veda į visą katalogą, Kalėdų ratas rodomas visuose puslapiuose išskyrus krepšelį ir apmokėjimą.
 

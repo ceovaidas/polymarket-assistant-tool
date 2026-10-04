@@ -392,7 +392,8 @@
     if (snooze && snooze > Date.now()) return;
     var autoOpened = false;
     function autoOpen() { if (!autoOpened && !spun) { autoOpened = true; open(); } }
-    setTimeout(autoOpen, (+root.dataset.delay || 8) * 1000);
+    var delay = root.dataset.delay === undefined || root.dataset.delay === '' ? 1 : +root.dataset.delay;
+    setTimeout(autoOpen, Math.max(delay, 0) * 1000 + 300); // +300 ms so the page paints first
     if (root.dataset.exit === 'true' && window.matchMedia('(pointer: fine)').matches) {
       document.addEventListener('mouseout', function (e) { if (!e.relatedTarget && e.clientY <= 0) autoOpen(); });
     }
