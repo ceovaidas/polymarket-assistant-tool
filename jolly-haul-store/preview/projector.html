@@ -4372,6 +4372,56 @@ html.jh-lock { overflow: hidden; }
 .jh-mix { display: flex; align-items: center; gap: 10px; padding: 12px 14px; margin-bottom: 14px; border-radius: 12px; background: #fff1d6; font-size: 14px; }
 .jh-mix p { margin: 0; }
 
+/* =====================================================================
+   Footer
+   ===================================================================== */
+.jh-footer { position: relative; background: var(--navy); color: rgba(255,255,255,.78); padding: 64px 0 88px; font-size: 15px; } /* bottom room for the prize-wheel button */
+.jh .jh-footer__lights { position: absolute; top: 0; left: 0; right: 0; }
+.jh-footer a { color: inherit; text-decoration: none; }
+.jh-footer a:hover { color: #fff; }
+.jh-footer__grid { display: grid; gap: 36px; padding-bottom: 36px; border-bottom: 1px solid rgba(255,255,255,.12); }
+@media (min-width: 750px) { .jh-footer__grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 990px) { .jh-footer__grid { grid-template-columns: 1.5fr 1fr 1fr 1.3fr; gap: 40px; } }
+.jh-footer .jh-footer__logo, .jh-footer .jh-footer__logo:hover { color: #fff; font-size: 30px; }
+.jh-footer__tag { margin: 14px 0 18px; max-width: 320px; line-height: 1.55; }
+.jh-footer__promises { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.jh-footer__promises li { display: flex; align-items: center; gap: 10px; font-weight: 600; color: #fff; font-size: 14px; }
+.jh-footer__promises svg { width: 20px; height: 20px; color: var(--sun); flex: none; }
+.jh-footer__social { display: flex; gap: 10px; margin-top: 22px; }
+.jh-footer__social a { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.08); color: #fff; transition: background .15s; }
+.jh-footer__social a:hover { background: var(--pop); }
+.jh-footer__social svg { width: 20px; height: 20px; }
+.jh .jh-footer__h { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--sun); margin: 0 0 16px; }
+.jh-footer__col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+@media (max-width: 749px) {
+  .jh-footer__col:not(.jh-footer__card) ul { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+}
+.jh-footer__card { align-self: start; padding: 24px; border-radius: var(--r); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+.jh .jh-footer__card .jh-footer__h { color: #fff; font-size: 19px; letter-spacing: -.01em; text-transform: none; margin-bottom: 8px; }
+.jh-footer__card p { margin: 0 0 18px; line-height: 1.5; font-size: 14px; }
+.jh-btn--sun { border-color: var(--sun); background: var(--sun); color: var(--navy); box-shadow: 0 4px 0 #b9831d; padding: 13px 20px; font-size: 15px; }
+.jh-footer .jh-btn--sun, .jh-footer .jh-btn--sun:hover { color: var(--navy); }
+.jh-footer .jh-btn--sun:hover { transform: none; filter: brightness(1.05); }
+.jh-footer__bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding-top: 22px; font-size: 13px; color: rgba(255,255,255,.6); }
+.jh-footer__bottom p { margin: 0; }
+.jh-footer__pay, .jh-footer__legal { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.jh-footer__pay { gap: 6px; }
+.jh-footer__pay svg { display: block; height: 22px; width: auto; border-radius: 4px; }
+@media (max-width: 749px) {
+  .jh-footer__bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* Bundle: per-item style pickers */
+.jh-picks { margin: -4px 0 18px; padding: 16px; border-radius: var(--r-sm); background: var(--ice); }
+.jh-picks .jh-field__legend { margin-bottom: 10px; }
+.jh-picks__list { display: grid; gap: 8px; }
+.jh-pick { display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 10px; }
+.jh-pick__n { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; font-size: 14px; }
+.jh-pick__fixed { padding: 11px 14px; border-radius: 12px; border: 2px solid var(--line); background: #fff; font-weight: 700; font-size: 15px; }
+.jh-pick select { width: 100%; min-width: 0; padding: 11px 40px 11px 14px; border-radius: 12px; border: 2px solid var(--line); font: 600 15px var(--f); color: var(--ink); -webkit-appearance: none; appearance: none; cursor: pointer;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2420' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 16px; }
+.jh-pick select:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -4447,7 +4497,7 @@ body { margin: 0; background: #fff; }
           <span class="jh-price__now" data-jh-price>$49.99</span>
           <s class="jh-price__was" data-jh-compare hidden>$0.00</s>
           <span class="jh-price__save" data-jh-save hidden></span>
-        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="154051" data-jh-variant-id>
+        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="625290" data-jh-variant-id>
           <input type="hidden" name="quantity" value="1" data-jh-qty><button type="submit" name="add" class="jh-atc" data-jh-atc >
             <span data-jh-atc-label>Add to cart</span>
             <span class="jh-atc__price" data-jh-price>$49.99</span>
@@ -4502,6 +4552,8 @@ body { margin: 0; background: #fff; }
   <script type="application/json" data-jh-json>
     {
       "moneyFormat": "${{amount}}",
+      "cartUrl": "/cart",
+      "cartAddUrl": "/cart/add.js",
       "strings": {
         "addToCart": "Add to cart",
         "soldOut": "Sold out",
@@ -4509,7 +4561,7 @@ body { margin: 0; background: #fff; }
         "save": "Save [percent]%"
       },
       "variants": [{
-            "id": 154051,
+            "id": 625290,
             "title": "Default Title",
             "options": ["Default Title"],
             "price": 4999,
@@ -4549,7 +4601,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="485662">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="289483">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4558,7 +4610,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="801125">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="85932">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4567,7 +4619,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="271052">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="933195">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4638,11 +4690,44 @@ body { margin: 0; background: #fff; }
     </script>
   </div>
 
-<div class="jh"><footer class="pv-foot"><div class="jh-wrap pv-foot__in">
-  <a class="pv-logo" href="index.html">jolly<b>haul</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
-  <nav><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
-  <span>© 2026 Jolly Haul</span>
-</div></footer></div>
+<footer class="jh jh-footer">
+  <div class="jh-lights jh-footer__lights" aria-hidden="true"></div>
+  <div class="jh-wrap">
+    <div class="jh-footer__grid">
+      <div class="jh-footer__brand">
+        <a class="jh-logo jh-footer__logo" href="index.html" aria-label="Jolly Haul">
+          <span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg>
+        </a><p class="jh-footer__tag">Viral Christmas finds that make people laugh, gasp and ask where you got them.</p><ul class="jh-footer__promises">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6h12v10H2zM14 9h4l4 4v3h-8z"/><circle cx="6.5" cy="17.5" r="1.8" fill="var(--paper,#fff)"/><circle cx="17.5" cy="17.5" r="1.8" fill="var(--paper,#fff)"/></svg>Free shipping over $50</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H8"/><path d="M8 5 4 9l4 4"/></svg>30-day returns</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="10" width="16" height="11"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Secure checkout</li>
+        </ul><div class="jh-footer__social"><a href="#" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.7 5.7 0 1 0 4.9 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.2-1.6z"/></svg></a><a href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div>
+
+      <nav class="jh-footer__col" aria-label="Shop">
+        <h2 class="jh-footer__h">Shop</h2>
+        <ul><li><a href="collection.html">All gifts</a></li><li><a href="collection.html">Bestsellers</a></li><li><a href="collection.html">Funny masks</a></li><li><a href="collection.html">Baby & kids</a></li><li><a href="collection.html">Star projectors</a></li><li><a href="collection.html">Lights & decor</a></li><li><a href="collection.html">Stocking stuffers</a></li></ul>
+      </nav>
+
+      <nav class="jh-footer__col" aria-label="Help">
+        <h2 class="jh-footer__h">Help</h2>
+        <ul><li><a href="#">Search</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Privacy</a></li><li><a href="#">Contact</a></li></ul>
+      </nav>
+
+      <div class="jh-footer__col jh-footer__card">
+        <h2 class="jh-footer__h">Still hunting for the perfect gift?</h2>
+        <p>Mix & match: buy 2 gifts and save 10%, 3 or more and save 15%.</p>
+        <a class="jh-btn jh-btn--sun" href="collection.html">Shop all gifts</a>
+      </div>
+    </div>
+
+    <div class="jh-footer__bottom">
+      <p>© 2026 Jolly Haul. All rights reserved.</p><ul class="jh-footer__legal"><li><a href="#">Refund policy</a></li><li><a href="#">Privacy policy</a></li><li><a href="#">Terms of service</a></li><li><a href="#">Shipping policy</a></li></ul>
+    </div>
+  </div>
+</footer>
+
+
+
 <script>
 /* Jolly Haul — product page (gallery, swatches, bundles, crew buttons, sticky add-to-cart)
    and home page (Christmas countdown). Pairs with sections/jolly-product + jolly-home. No dependencies. */
@@ -4752,6 +4837,48 @@ body { margin: 0; background: #fff; }
       return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.dataset.label || '' } : { qty: 1, pct: 0, label: '' };
     }
 
+    /* ---------- Bundles: one style picker per item (2 masks = 2 faces) ---------- */
+    var picksBox = root.querySelector('[data-jh-picks]');
+    var picksList = root.querySelector('[data-jh-picks-list]');
+    var picks = []; // variant ids for items 2..n (item 1 follows the main picker)
+    var multiOpts = variants.length ? variants[0].options.map(function (_, i) {
+      return variants.some(function (v) { return v.options[i] !== variants[0].options[i]; });
+    }) : [];
+    function shortTitle(v) {
+      var parts = v.options.filter(function (_, i) { return multiOpts[i]; });
+      return parts.length ? parts.join(' / ') : v.title;
+    }
+    function renderPicks(qty, variant) {
+      if (!picksBox) return;
+      picksBox.hidden = qty < 2;
+      if (qty < 2) return;
+      picks.length = Math.min(picks.length, qty - 1);
+      while (picks.length < qty - 1) picks.push(variant.id);
+      var html = '<div class="jh-pick"><span class="jh-pick__n">1</span><span class="jh-pick__fixed">' + shortTitle(variant) + '</span></div>';
+      picks.forEach(function (id, i) {
+        html += '<label class="jh-pick"><span class="jh-pick__n">' + (i + 2) + '</span><span class="visually-hidden">Style for item ' + (i + 2) + '</span><select data-jh-pick-index="' + i + '">' +
+          variants.map(function (v) {
+            return '<option value="' + v.id + '"' + (String(v.id) === String(id) ? ' selected' : '') + (v.available ? '' : ' disabled') + '>' + shortTitle(v) + (v.available ? '' : ' (sold out)') + '</option>';
+          }).join('') + '</select></label>';
+      });
+      picksList.innerHTML = html;
+    }
+    if (picksList) picksList.addEventListener('change', function (e) {
+      var sel = e.target.closest('[data-jh-pick-index]');
+      if (sel) picks[+sel.dataset.jhPickIndex] = sel.value;
+    });
+    if (form && picksBox) form.addEventListener('submit', function (e) {
+      var qty = bundle().qty;
+      if (qty < 2 || !picks.some(function (id) { return String(id) !== idInput.value; })) return; // all the same: normal submit
+      e.preventDefault();
+      var counts = {};
+      [idInput.value].concat(picks.slice(0, qty - 1)).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; });
+      var items = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
+      fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+        .then(function (r) { if (!r.ok) throw r; window.location.href = data.cartUrl || '/cart'; })
+        .catch(function () { form.submit(); });
+    });
+
     function render(changedOption) {
       var values = selectedOptions();
       var variant = findVariant(values);
@@ -4767,6 +4894,7 @@ body { margin: 0; background: #fff; }
 
       idInput.value = variant.id;
       qtyInput.value = b.qty;
+      renderPicks(b.qty, variant);
 
       var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
       each('[data-jh-bundle] input', function (input) {

@@ -106,6 +106,48 @@
       return c ? { qty: +c.value || 1, pct: +c.dataset.pct || 0, label: c.dataset.label || '' } : { qty: 1, pct: 0, label: '' };
     }
 
+    /* ---------- Bundles: one style picker per item (2 masks = 2 faces) ---------- */
+    var picksBox = root.querySelector('[data-jh-picks]');
+    var picksList = root.querySelector('[data-jh-picks-list]');
+    var picks = []; // variant ids for items 2..n (item 1 follows the main picker)
+    var multiOpts = variants.length ? variants[0].options.map(function (_, i) {
+      return variants.some(function (v) { return v.options[i] !== variants[0].options[i]; });
+    }) : [];
+    function shortTitle(v) {
+      var parts = v.options.filter(function (_, i) { return multiOpts[i]; });
+      return parts.length ? parts.join(' / ') : v.title;
+    }
+    function renderPicks(qty, variant) {
+      if (!picksBox) return;
+      picksBox.hidden = qty < 2;
+      if (qty < 2) return;
+      picks.length = Math.min(picks.length, qty - 1);
+      while (picks.length < qty - 1) picks.push(variant.id);
+      var html = '<div class="jh-pick"><span class="jh-pick__n">1</span><span class="jh-pick__fixed">' + shortTitle(variant) + '</span></div>';
+      picks.forEach(function (id, i) {
+        html += '<label class="jh-pick"><span class="jh-pick__n">' + (i + 2) + '</span><span class="visually-hidden">Style for item ' + (i + 2) + '</span><select data-jh-pick-index="' + i + '">' +
+          variants.map(function (v) {
+            return '<option value="' + v.id + '"' + (String(v.id) === String(id) ? ' selected' : '') + (v.available ? '' : ' disabled') + '>' + shortTitle(v) + (v.available ? '' : ' (sold out)') + '</option>';
+          }).join('') + '</select></label>';
+      });
+      picksList.innerHTML = html;
+    }
+    if (picksList) picksList.addEventListener('change', function (e) {
+      var sel = e.target.closest('[data-jh-pick-index]');
+      if (sel) picks[+sel.dataset.jhPickIndex] = sel.value;
+    });
+    if (form && picksBox) form.addEventListener('submit', function (e) {
+      var qty = bundle().qty;
+      if (qty < 2 || !picks.some(function (id) { return String(id) !== idInput.value; })) return; // all the same: normal submit
+      e.preventDefault();
+      var counts = {};
+      [idInput.value].concat(picks.slice(0, qty - 1)).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; });
+      var items = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
+      fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+        .then(function (r) { if (!r.ok) throw r; window.location.href = data.cartUrl || '/cart'; })
+        .catch(function () { form.submit(); });
+    });
+
     function render(changedOption) {
       var values = selectedOptions();
       var variant = findVariant(values);
@@ -121,6 +163,7 @@
 
       idInput.value = variant.id;
       qtyInput.value = b.qty;
+      renderPicks(b.qty, variant);
 
       var base = variant.compare_at_price > variant.price ? variant.compare_at_price : variant.price;
       each('[data-jh-bundle] input', function (input) {

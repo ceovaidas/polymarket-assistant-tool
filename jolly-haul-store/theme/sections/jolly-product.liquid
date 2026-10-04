@@ -230,6 +230,12 @@
                 {%- endfor -%}
               </div>
             </fieldset>
+            {%- unless product.has_only_default_variant -%}
+              <div class="jh-picks" data-jh-picks hidden>
+                <p class="jh-field__legend">{{ section.settings.pick_heading }}</p>
+                <div class="jh-picks__list" data-jh-picks-list></div>
+              </div>
+            {%- endunless -%}
           {%- endif -%}
 
           <button type="submit" name="add" class="jh-atc" data-jh-atc {% unless current_variant.available %}disabled{% endunless %}>
@@ -478,6 +484,8 @@
   <script type="application/json" data-jh-json>
     {
       "moneyFormat": {{ shop.money_format | json }},
+      "cartUrl": {{ routes.cart_url | default: '/cart' | json }},
+      "cartAddUrl": {{ routes.cart_add_url | default: '/cart/add' | append: '.js' | json }},
       "strings": {
         "addToCart": {{ section.settings.atc_label | json }},
         "soldOut": "Sold out",
@@ -562,6 +570,7 @@
       "default": "Face"
     },
     { "type": "text", "id": "promo", "label": "Offer line under the price", "info": "Only advertise discounts that are set up in Shopify → Discounts." },
+    { "type": "text", "id": "pick_heading", "label": "Bundle: heading above the per-item style pickers", "default": "Choose a style for each" },
     {
       "type": "text",
       "id": "bundle_heading",

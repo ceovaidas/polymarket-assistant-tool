@@ -142,11 +142,7 @@ body { margin: 0; background: #fff; }
 <div class="jh-header-wrapper">${header}</div>
 ${body.replace(/<script src="[^"]*" defer><\/script>/, '')}
 ${wheelHtml.replace(/<script src="[^"]*" defer><\/script>/, '')}
-<div class="jh"><footer class="pv-foot"><div class="jh-wrap pv-foot__in">
-  ${logo}
-  <nav><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
-  <span>© 2026 Jolly Haul</span>
-</div></footer></div>
+${footerHtml}
 <script>
 ${js}
 </script>
@@ -165,6 +161,17 @@ const wheelHtml = await engine.parseAndRender(wheelSrc, {
     settings: { ...wDefaults(wheelSchema.settings), ...wheelCfg.settings, delay: 4 },
     blocks: wheelCfg.block_order.map((id) => ({ id, type: 'prize', shopify_attributes: '', settings: { ...wDefaults(wheelSchema.blocks[0].settings), ...wheelCfg.blocks[id].settings } })),
   },
+});
+
+// ---- footer (real section) ----
+const footerSrc = read('sections/jolly-footer.liquid');
+const footerSchema = JSON.parse(footerSrc.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
+const footerHtml = await engine.parseAndRender(footerSrc, {
+  section: { id: 'footer', settings: { ...Object.fromEntries(footerSchema.settings.filter((x) => x.id).map((x) => [x.id, x.default ?? null])), help_menu: 'footer', tiktok: '#', instagram: '#' } },
+  shop: { ...shop, enabled_payment_types: [], policies: [{ title: 'Refund policy', url: '#' }, { title: 'Privacy policy', url: '#' }, { title: 'Terms of service', url: '#' }, { title: 'Shipping policy', url: '#' }] },
+  collections: mockCollections,
+  routes: { root_url: 'index.html', all_products_collection_url: 'collection.html' },
+  linklists: { footer: { links: ['Search', 'Shipping', 'Returns', 'Privacy', 'Contact'].map((title) => ({ title, url: '#' })) } },
 });
 
 // ---- header (real section) ----
@@ -202,7 +209,7 @@ const relatedFor = async (templateFile, ctx) => {
   return engine.parseAndRender(rel.src, { section: rel.section, shop, collections: mockCollections, recommendations: { performed: false, products_count: 0 },
     routes: { product_recommendations_url: '#', all_products_collection_url: 'collection.html', root_url: 'index.html' }, cart: { item_count: 0, items: [] }, ...ctx });
 };
-const pRoutes = { root_url: 'index.html', all_products_collection_url: 'collection.html' };
+const pRoutes = { root_url: 'index.html', all_products_collection_url: 'collection.html', cart_url: '/cart', cart_add_url: '/cart/add' };
 
 // ---- product ----
 const prod = sectionData('jolly-product.liquid', 'product.landing.json', 'main');
