@@ -131,6 +131,22 @@ def main(dawn_dir):
         footer["order"].append("jolly-wheel")
         dump_json(build / "sections" / "footer-group.json", footer)
 
+        # Storefront strings of the Jolly sections (jolly.*) for English + translations.
+        lang_files = {"en": "en.default.json", "de": "de.json", "fr": "fr.json", "es": "es.json", "it": "it.json", "nl": "nl.json"}
+        for lang, fname in lang_files.items():
+            target = build / "locales" / fname
+            loc = load_json(target)
+            loc.update(json.loads((HERE / "theme-config" / "locales" / f"{lang}.json").read_text(encoding="utf-8")))
+            dump_json(target, loc)
+        # Other Dawn languages: English fallback so every locale has the same keys (Translate & Adapt can translate them).
+        en_strings = json.loads((HERE / "theme-config" / "locales" / "en.json").read_text(encoding="utf-8"))
+        for target in (build / "locales").glob("*.json"):
+            if target.name.endswith(".schema.json") or target.name in lang_files.values():
+                continue
+            loc = load_json(target)
+            loc.update(en_strings)
+            dump_json(target, loc)
+
         data = load_json(build / "config" / "settings_data.json")
         preset = data["presets"]["Dawn"]
         for key, values in COLOR_SCHEMES.items():

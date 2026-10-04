@@ -854,3 +854,30 @@ body, .shopify-policy__container { font-family: 'Rubik', system-ui, -apple-syste
 .jh-404__code span { display: inline-block; width: .82em; height: .82em; }
 .jh-404__code svg { width: 100%; height: 100%; }
 .jh-404__home { margin-top: 18px; }
+
+/* Country / currency / language picker */
+.jh-header__mobile nav { display: grid; }
+.jh-header__mobile .jh-loc { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.jh-loc { display: flex; flex-wrap: wrap; gap: 8px; }
+.jh-loc__field { position: relative; display: inline-flex; align-items: center; }
+.jh-loc__field svg { position: absolute; left: 12px; width: 16px; height: 16px; pointer-events: none; }
+.jh-loc select { max-width: 100%; padding: 9px 34px 9px 36px; border-radius: 999px; border: 1px solid var(--line); font: 600 14px var(--f); color: var(--ink); cursor: pointer; -webkit-appearance: none; appearance: none;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2420' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 14px; }
+.jh-loc__field:not(:has(svg)) select { padding-left: 14px; }
+.jh-loc select:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.jh-footer .jh-loc select { background-color: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
+.jh-footer .jh-loc option { color: var(--ink); }
+.jh-footer .jh-loc svg { color: #fff; }
+
+/* Back-in-stock */
+.jh-notify { margin-top: 14px; padding: 16px; border-radius: var(--r-sm); background: var(--ice); }
+.jh-notify__title { margin: 0 0 10px; font-weight: 700; font-size: 15px; }
+.jh-notify__row { display: flex; gap: 8px; }
+.jh-notify__row input { flex: 1; min-width: 0; padding: 12px 14px; border: 2px solid var(--line); border-radius: 12px; font: 400 16px var(--f); background: #fff; }
+.jh-notify__row input:focus { outline: none; border-color: var(--brand); }
+.jh-notify__row .jh-btn { padding: 12px 18px; font-size: 15px; }
+@media (max-width: 400px) { .jh-notify__row { flex-direction: column; } }
+
+/* App blocks (reviews etc.) */
+.jh-apps { padding-top: 24px; padding-bottom: 24px; }

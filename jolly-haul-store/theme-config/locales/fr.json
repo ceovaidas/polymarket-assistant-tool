@@ -1,0 +1,140 @@
+{
+  "jolly": {
+    "common": {
+      "home": "Accueil",
+      "all_gifts": "Tous les cadeaux",
+      "search": "Rechercher",
+      "search_shop": "Rechercher dans la boutique",
+      "search_placeholder": "Rechercher un cadeau…"
+    },
+    "card": {
+      "viral": "Viral sur TikTok",
+      "new": "Nouveau",
+      "add": "Ajouter au panier",
+      "options": "Choisir les options",
+      "sold_out": "Épuisé"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} produit",
+        "other": "{{ count }} produits"
+      },
+      "price_filter": "Filtre de prix",
+      "remove_filter": "Retirer le filtre de prix",
+      "sort": "Trier",
+      "empty_title": "Rien ici pour le moment",
+      "empty_text": "Essayez une autre gamme de prix ou parcourez tout.",
+      "shop_all": "Tout voir"
+    },
+    "cart": {
+      "count": {
+        "one": "{{ count }} article",
+        "other": "{{ count }} articles"
+      },
+      "continue": "Continuer mes achats",
+      "empty_title": "Votre panier est vide",
+      "empty_text": "Remédions à cela — les trouvailles de Noël préférées d’Internet sont à un clic.",
+      "empty_button": "Découvrir",
+      "remove": "Supprimer",
+      "update": "Mettre à jour le panier",
+      "mix_applied": "Remise cadeaux appliquée.",
+      "mix_more_html": {
+        "one": "Ajoutez encore {{ count }} cadeau pour économiser <b>{{ pct }} %</b>",
+        "other": "Ajoutez encore {{ count }} cadeaux pour économiser <b>{{ pct }} %</b>"
+      },
+      "mix_done_html": "<b>Remise mix &amp; match appliquée</b> · la meilleure offre est choisie au paiement",
+      "ship_away_html": "Plus que <b>{{ amount }}</b> pour la livraison gratuite",
+      "ship_done": "Livraison gratuite débloquée !",
+      "items_label": "Articles",
+      "subtotal": "Sous-total",
+      "taxes_note": "Livraison et taxes calculées au paiement.",
+      "wheel_prize": "Votre gain de la roue",
+      "wheel_apply": "à utiliser au paiement",
+      "note_add": "Ajouter un mot cadeau",
+      "note_label": "Mot cadeau",
+      "note_placeholder": "Joyeux Noël ! Avec amour, …",
+      "note_hint": "Aucun prix dans le colis.",
+      "checkout": "Paiement",
+      "trust_ship": "Expédié sous 1 à 3 jours",
+      "trust_returns": "Retours sous 30 jours",
+      "trust_secure": "Paiement sécurisé"
+    },
+    "product": {
+      "why": "Pourquoi vous allez l’adorer",
+      "materials": "Matières & entretien",
+      "shipping": "Livraison & retours",
+      "sold_out": "Épuisé",
+      "unavailable": "Indisponible",
+      "save": "Économisez [percent] %",
+      "reviews_count": {
+        "one": "{{ count }} avis",
+        "other": "{{ count }} avis"
+      },
+      "reviews": "Avis",
+      "verified": "Achat vérifié",
+      "guarantee_html": "jours<br>garantis",
+      "faq": "FAQ",
+      "notify_title": "Épuisé pour le moment. Être prévenu par e-mail du retour ?",
+      "notify_email": "Votre e-mail",
+      "notify_button": "M’avertir",
+      "notify_done": "Merci ! Nous vous écrirons dès son retour."
+    },
+    "footer": {
+      "shop": "Boutique",
+      "help": "Aide",
+      "rights": "Tous droits réservés.",
+      "promise_ship": "Livraison gratuite dès 50 $"
+    },
+    "contact": {
+      "email_us": "Écrivez-nous",
+      "reply_time": "Réponse sous 2 jours ouvrés.",
+      "order_title": "Où est ma commande ?",
+      "order_text": "Le lien de suivi se trouve dans l’e-mail de confirmation d’expédition. Indiquez votre numéro de commande.",
+      "returns_title": "Retours",
+      "returns_text": "30 jours pour changer d’avis.",
+      "returns_link": "Comment retourner un article",
+      "success": "Merci ! Votre message est envoyé. Réponse sous 2 jours ouvrés.",
+      "form_title": "Envoyez-nous un message",
+      "name": "Nom",
+      "email": "E-mail",
+      "order": "Numéro de commande (facultatif)",
+      "message": "Message",
+      "send": "Envoyer"
+    },
+    "search": {
+      "results_for": "Résultats pour « {{ terms }} »",
+      "count": {
+        "one": "{{ count }} résultat",
+        "other": "{{ count }} résultats"
+      },
+      "no_match": "Aucun résultat pour « {{ terms }} »",
+      "no_match_text": "Vérifiez l’orthographe ou essayez un mot plus large comme « masque », « bébé » ou « cadeau ».",
+      "ideas": "Besoin d’idées ?",
+      "popular": "Populaire en ce moment",
+      "browse_all": "Voir tous les cadeaux"
+    },
+    "wheel": {
+      "spin": "Tourner",
+      "spin_label": "Faire tourner la roue",
+      "no_thanks": "Non merci",
+      "spinning_eyebrow": "On croise les doigts",
+      "spinning": "Ça tourne…",
+      "spinning_text": "Le Père Noël vérifie sa liste.",
+      "won": "Vous avez gagné",
+      "saved": "Votre code est enregistré sur cet appareil — touchez le cadeau pour le revoir.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "your_code": "Votre code :",
+      "apply": "Appliquer à ma commande",
+      "joined": "Vous êtes inscrit aux offres de Noël.",
+      "email_placeholder": "E-mail pour les offres (facultatif)",
+      "join": "S’inscrire",
+      "keep": "Continuer mes achats"
+    },
+    "loc": {
+      "country": "Pays/région",
+      "language": "Langue",
+      "update": "Mettre à jour"
+    }
+  }
+}

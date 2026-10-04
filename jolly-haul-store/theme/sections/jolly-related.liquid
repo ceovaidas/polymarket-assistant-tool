@@ -52,7 +52,7 @@
             <span class="jh-eyebrow">{{ section.settings.eyebrow }}</span>
             <h2 class="jh-h2">{{ section.settings.heading }}</h2>
           </div>
-          <a class="jh-link" href="{{ routes.all_products_collection_url }}">All gifts {% render 'jolly-icon', name: 'chev-right' %}</a>
+          <a class="jh-link" href="{{ routes.all_products_collection_url }}">{{ 'jolly.common.all_gifts' | t }} {% render 'jolly-icon', name: 'chev-right' %}</a>
         </div>
         <div class="jh-grid" data-jh-related-grid>
           {%- assign n = 0 -%}

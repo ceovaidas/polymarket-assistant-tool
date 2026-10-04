@@ -18,19 +18,19 @@
       <h1 class="jh-h2">{{ section.settings.heading }}</h1>
       <p class="jh-sub">{{ section.settings.text }}</p>
       <form class="jh-searchbar" action="{{ routes.search_url }}" method="get" role="search">
-        <label class="visually-hidden" for="jh-404-q">Search the shop</label>
-        <input id="jh-404-q" type="search" name="q" placeholder="Search for gifts…">
+        <label class="visually-hidden" for="jh-404-q">{{ 'jolly.common.search_shop' | t }}</label>
+        <input id="jh-404-q" type="search" name="q" placeholder="{{ 'jolly.common.search_placeholder' | t }}">
         <input type="hidden" name="type" value="product">
-        <button type="submit" class="jh-btn jh-btn--pop">Search</button>
+        <button type="submit" class="jh-btn jh-btn--pop">{{ 'jolly.common.search' | t }}</button>
       </form>
-      <a class="jh-link jh-404__home" href="{{ routes.all_products_collection_url }}">Browse all gifts {% render 'jolly-icon', name: 'chev-right' %}</a>
+      <a class="jh-link jh-404__home" href="{{ routes.all_products_collection_url }}">{{ 'jolly.search.browse_all' | t }} {% render 'jolly-icon', name: 'chev-right' %}</a>
     </div>
   </section>
 
   {%- if picks.size > 0 -%}
     <section class="jh-section">
       <div class="jh-wrap">
-        <div class="jh-grid-head"><div><span class="jh-eyebrow">Popular right now</span><h2 class="jh-h2">{{ section.settings.picks_heading }}</h2></div></div>
+        <div class="jh-grid-head"><div><span class="jh-eyebrow">{{ 'jolly.search.popular' | t }}</span><h2 class="jh-h2">{{ section.settings.picks_heading }}</h2></div></div>
         <div class="jh-grid">
           {%- for p in picks limit: 4 -%}
             {%- assign t = forloop.index0 | modulo: tone_count -%}

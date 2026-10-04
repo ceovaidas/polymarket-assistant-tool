@@ -12,7 +12,7 @@
   assign sort_by = collection.sort_by | default: collection.default_sort_by
   assign coll_title = collection.title
   if collection.handle == 'all'
-    assign coll_title = 'All gifts'
+    assign coll_title = 'jolly.common.all_gifts' | t
   endif
   assign chip_handles = section.settings.chips | remove: ' ' | split: ','
   assign clear_url = ''
@@ -30,7 +30,7 @@
     <div class="jh-lights" aria-hidden="true"></div>
     <div class="jh-wrap">
       <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
-        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ coll_title }}</span>
+        <a href="{{ routes.root_url }}">{{ 'jolly.common.home' | t }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ coll_title }}</span>
       </nav>
       <h1 class="jh-h2">{{ coll_title }}</h1>
       {%- if collection.description != blank -%}<div class="jh-sub">{{ collection.description }}</div>{%- endif -%}
@@ -43,7 +43,7 @@
         <nav class="jh-pills" aria-label="Shop by category">
           {%- for h in chip_handles -%}
             {%- if h == 'all' -%}
-              <a class="jh-pill{% if collection.handle == 'all' %} is-on{% endif %}" href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>All gifts</a>
+              <a class="jh-pill{% if collection.handle == 'all' %} is-on{% endif %}" href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>{{ 'jolly.common.all_gifts' | t }}</a>
             {%- else -%}
               {%- assign c = collections[h] -%}
               {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
@@ -55,11 +55,11 @@
       {%- paginate collection.products by section.settings.per_page -%}
         <div class="jh-collbar">
           <p class="jh-collbar__count">
-            {{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}
-            {%- if clear_url != blank %} · <a class="jh-chipfilter" href="{{ clear_url }}">Price filter <span aria-hidden="true">✕</span><span class="visually-hidden">Remove price filter</span></a>{%- endif -%}
+            {{ 'jolly.collection.count' | t: count: collection.products_count }}
+            {%- if clear_url != blank %} · <a class="jh-chipfilter" href="{{ clear_url }}">{{ 'jolly.collection.price_filter' | t }} <span aria-hidden="true">✕</span><span class="visually-hidden">{{ 'jolly.collection.remove_filter' | t }}</span></a>{%- endif -%}
           </p>
           <div class="jh-sort">
-            <label for="jh-sort-{{ section.id }}">Sort</label>
+            <label for="jh-sort-{{ section.id }}">{{ 'jolly.collection.sort' | t }}</label>
             <select id="jh-sort-{{ section.id }}" data-jh-sort>
               {%- for option in collection.sort_options -%}
                 <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
@@ -77,9 +77,9 @@
           </div>
         {%- else -%}
           <div class="jh-empty">
-            <h2>Nothing here yet</h2>
-            <p>Try another price range or browse everything.</p>
-            <a class="jh-btn jh-btn--pop" href="{{ routes.all_products_collection_url }}">Shop all</a>
+            <h2>{{ 'jolly.collection.empty_title' | t }}</h2>
+            <p>{{ 'jolly.collection.empty_text' | t }}</p>
+            <a class="jh-btn jh-btn--pop" href="{{ routes.all_products_collection_url }}">{{ 'jolly.collection.shop_all' | t }}</a>
           </div>
         {%- endif -%}
 

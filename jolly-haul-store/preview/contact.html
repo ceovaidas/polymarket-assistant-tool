@@ -4503,6 +4503,33 @@ body, .shopify-policy__container { font-family: 'Rubik', system-ui, -apple-syste
 .jh-404__code svg { width: 100%; height: 100%; }
 .jh-404__home { margin-top: 18px; }
 
+/* Country / currency / language picker */
+.jh-header__mobile nav { display: grid; }
+.jh-header__mobile .jh-loc { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.jh-loc { display: flex; flex-wrap: wrap; gap: 8px; }
+.jh-loc__field { position: relative; display: inline-flex; align-items: center; }
+.jh-loc__field svg { position: absolute; left: 12px; width: 16px; height: 16px; pointer-events: none; }
+.jh-loc select { max-width: 100%; padding: 9px 34px 9px 36px; border-radius: 999px; border: 1px solid var(--line); font: 600 14px var(--f); color: var(--ink); cursor: pointer; -webkit-appearance: none; appearance: none;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2420' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 14px; }
+.jh-loc__field:not(:has(svg)) select { padding-left: 14px; }
+.jh-loc select:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.jh-footer .jh-loc select { background-color: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
+.jh-footer .jh-loc option { color: var(--ink); }
+.jh-footer .jh-loc svg { color: #fff; }
+
+/* Back-in-stock */
+.jh-notify { margin-top: 14px; padding: 16px; border-radius: var(--r-sm); background: var(--ice); }
+.jh-notify__title { margin: 0 0 10px; font-weight: 700; font-size: 15px; }
+.jh-notify__row { display: flex; gap: 8px; }
+.jh-notify__row input { flex: 1; min-width: 0; padding: 12px 14px; border: 2px solid var(--line); border-radius: 12px; font: 400 16px var(--f); background: #fff; }
+.jh-notify__row input:focus { outline: none; border-color: var(--brand); }
+.jh-notify__row .jh-btn { padding: 12px 18px; font-size: 15px; }
+@media (max-width: 400px) { .jh-notify__row { flex-direction: column; } }
+
+/* App blocks (reviews etc.) */
+.jh-apps { padding-top: 24px; padding-bottom: 24px; }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -4523,7 +4550,10 @@ body { margin: 0; background: #fff; }
         <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </summary>
-      <nav class="jh-header__mobile" aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">All gifts<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Bestsellers<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Contact<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
+      <div class="jh-header__mobile">
+        <nav aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">All gifts<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Bestsellers<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Contact<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
+        
+      </div>
     </details>
 
     <a class="jh-logo" href="index.html" aria-label="Jolly Haul"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
@@ -4537,9 +4567,7 @@ body { margin: 0; background: #fff; }
 <span class="visually-hidden">Cart,  items</span></a>
     </div>
   </div>
-</header>
-
-<script>
+</header><script>
   (function () {
     var d = document.currentScript.previousElementSibling.querySelector('.jh-header__drawer');
     if (!d || d.dataset.jhReady) return;
@@ -4597,7 +4625,7 @@ body { margin: 0; background: #fff; }
 
 
 
-  <div class="jh jh-wheel" data-jh-wheel data-delay="4" data-snooze="7" data-exit="true">
+  <div class="jh jh-wheel" data-jh-wheel data-delay="4" data-snooze="7" data-exit="true" data-t-code="Your code:" data-t-copy="Copy" data-t-copied="Copied">
     <button type="button" class="jh-wheel__teaser" data-jh-wheel-open hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM2 7h20v4H2zM12 7v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7C10 3 5.5 3.5 6.5 6S12 7 12 7s4-4.5 6-2-6 2-6 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <span data-jh-teaser>Your Christmas spin</span>
@@ -4689,7 +4717,8 @@ body { margin: 0; background: #fff; }
     </div>
 
     <div class="jh-footer__bottom">
-      <p>© 2026 Jolly Haul. All rights reserved.</p><ul class="jh-footer__legal"><li><a href="#">Refund policy</a></li><li><a href="#">Privacy policy</a></li><li><a href="#">Terms of service</a></li><li><a href="#">Shipping policy</a></li></ul>
+      <p>© 2026 Jolly Haul. All rights reserved.</p>
+      <ul class="jh-footer__legal"><li><a href="#">Refund policy</a></li><li><a href="#">Privacy policy</a></li><li><a href="#">Terms of service</a></li><li><a href="#">Shipping policy</a></li></ul>
     </div>
   </div>
 </footer>
@@ -4887,6 +4916,14 @@ body { margin: 0; background: #fff; }
       }
 
       each('[data-jh-atc]', function (btn) { btn.disabled = !variant.available; });
+      var stockLine = root.querySelector('[data-jh-stock]');
+      if (stockLine) stockLine.hidden = !variant.available;
+      var notify = root.querySelector('[data-jh-notify]');
+      if (notify) {
+        notify.hidden = variant.available;
+        var nv = notify.querySelector('[data-jh-notify-variant]');
+        if (nv) nv.value = variant.title;
+      }
       each('[data-jh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
       if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' × ' + b.qty : '');
 
@@ -5019,7 +5056,7 @@ body { margin: 0; background: #fff; }
       root.querySelector('[data-jh-apply]').href = '/discount/' + encodeURIComponent(win.code) + '?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
       spinBtns.forEach(function (btn) { btn.disabled = true; });
       show('win');
-      teaserText.textContent = 'Your code: ' + win.code;
+      teaserText.textContent = (root.dataset.tCode || 'Your code:') + ' ' + win.code;
     }
 
     function trap(e) {
@@ -5073,7 +5110,7 @@ body { margin: 0; background: #fff; }
     teaser.addEventListener('click', open);
     root.querySelector('[data-jh-copy]').addEventListener('click', function (e) {
       var code = root.querySelector('[data-jh-code]').textContent, btn = e.currentTarget;
-      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); };
+      var done = function () { btn.textContent = (root.dataset.tCopied || 'Copied'); setTimeout(function () { btn.textContent = (root.dataset.tCopy || 'Copy'); }, 1800); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done);
       else { var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (err) {} t.remove(); done(); }
     });
@@ -5091,7 +5128,8 @@ body { margin: 0; background: #fff; }
     if (snooze && snooze > Date.now()) return;
     var autoOpened = false;
     function autoOpen() { if (!autoOpened && !spun) { autoOpened = true; open(); } }
-    setTimeout(autoOpen, (+root.dataset.delay || 8) * 1000);
+    var delay = root.dataset.delay === undefined || root.dataset.delay === '' ? 1 : +root.dataset.delay;
+    setTimeout(autoOpen, Math.max(delay, 0) * 1000 + 300); // +300 ms so the page paints first
     if (root.dataset.exit === 'true' && window.matchMedia('(pointer: fine)').matches) {
       document.addEventListener('mouseout', function (e) { if (!e.relatedTarget && e.clientY <= 0) autoOpen(); });
     }

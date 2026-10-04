@@ -62,11 +62,11 @@
   {%- comment -%} ================= PRODUCT ================= {%- endcomment -%}
   <section class="jh-product">
     <nav class="jh-wrap jh-crumbs" aria-label="Breadcrumb">
-      <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+      <a href="{{ routes.root_url }}">{{ 'jolly.common.home' | t }}</a><span aria-hidden="true">/</span>
       {%- if collection and collection.handle != 'all' -%}
         <a href="{{ collection.url }}">{{ collection.title }}</a>
       {%- else -%}
-        <a href="{{ routes.all_products_collection_url }}">All gifts</a>
+        <a href="{{ routes.all_products_collection_url }}">{{ 'jolly.common.all_gifts' | t }}</a>
       {%- endif -%}
       <span aria-hidden="true">/</span><span aria-current="page">{{ product.title }}</span>
     </nav>
@@ -143,7 +143,7 @@
       <div class="jh-buy">
         <div class="jh-buy__top">
           {%- if rating != blank -%}
-            <span class="jh-rating">{% render 'jolly-icon', name: 'stars' %}{{ rating.rating | round: 1 }} · {{ rating_count }} reviews</span>
+            <span class="jh-rating">{% render 'jolly-icon', name: 'stars' %}{{ rating.rating | round: 1 }} · {{ 'jolly.product.reviews_count' | t: count: rating_count.value }}</span>
           {%- elsif section.settings.badge != blank -%}
             <span class="jh-pill">{% render 'jolly-icon', name: 'snow' %}{{ section.settings.badge }}</span>
           {%- endif -%}
@@ -239,14 +239,35 @@
           {%- endif -%}
 
           <button type="submit" name="add" class="jh-atc" data-jh-atc {% unless current_variant.available %}disabled{% endunless %}>
-            <span data-jh-atc-label>{% if current_variant.available %}{{ section.settings.atc_label }}{% else %}Sold out{% endif %}</span>
+            <span data-jh-atc-label>{% if current_variant.available %}{{ section.settings.atc_label }}{% else %}{{ 'jolly.product.sold_out' | t }}{% endif %}</span>
             <span class="jh-atc__price" data-jh-price>{{ current_variant.price | money }}</span>
           </button>
           {%- if section.settings.stock_line != blank -%}
-            <p class="jh-stock"><span class="jh-stock__dot"></span>{{ section.settings.stock_line }}</p>
+            <p class="jh-stock" data-jh-stock{% unless current_variant.available %} hidden{% endunless %}><span class="jh-stock__dot"></span>{{ section.settings.stock_line }}</p>
           {%- endif -%}
           {{ form | payment_terms }}
         {%- endform -%}
+
+        {%- unless product.gift_card? -%}
+          <div class="jh-notify" data-jh-notify {% if current_variant.available %}hidden{% endif %}>
+            {%- form 'contact', id: 'jh-notify-form', class: 'jh-notify__form' -%}
+              {%- if form.posted_successfully? -%}
+                <p class="jh-formmsg jh-formmsg--ok" role="status">{% render 'jolly-icon', name: 'check' %}<span>{{ 'jolly.product.notify_done' | t }}</span></p>
+              {%- else -%}
+                <p class="jh-notify__title">{{ 'jolly.product.notify_title' | t }}</p>
+                <input type="hidden" name="contact[subject]" value="Back in stock request">
+                <input type="hidden" name="contact[product]" value="{{ product.title | escape }}">
+                <input type="hidden" name="contact[variant]" value="{{ current_variant.title | escape }}" data-jh-notify-variant>
+                <input type="hidden" name="contact[url]" value="{{ shop.url }}{{ product.url }}">
+                <div class="jh-notify__row">
+                  <label class="visually-hidden" for="jh-notify-email-{{ section.id }}">{{ 'jolly.product.notify_email' | t }}</label>
+                  <input id="jh-notify-email-{{ section.id }}" type="email" name="contact[email]" required autocomplete="email" placeholder="{{ 'jolly.product.notify_email' | t }}">
+                  <button type="submit" class="jh-btn">{{ 'jolly.product.notify_button' | t }}</button>
+                </div>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endunless -%}
 
         <div class="jh-trust">
           <div>{% render 'jolly-icon', name: 'truck' %}{{ section.settings.trust_1 }}</div>
@@ -256,18 +277,28 @@
 
         <div class="jh-acc">
           {%- if product.description != blank -%}
-            <details open><summary>Why you'll love it</summary><div class="jh-acc__body">{{ product.description }}</div></details>
+            <details open><summary>{{ 'jolly.product.why' | t }}</summary><div class="jh-acc__body">{{ product.description }}</div></details>
           {%- endif -%}
           {%- if section.settings.materials != blank -%}
-            <details><summary>Materials &amp; care</summary><div class="jh-acc__body">{{ section.settings.materials }}</div></details>
+            <details><summary>{{ 'jolly.product.materials' | t }}</summary><div class="jh-acc__body">{{ section.settings.materials }}</div></details>
           {%- endif -%}
           {%- if section.settings.shipping != blank -%}
-            <details><summary>Shipping &amp; returns</summary><div class="jh-acc__body">{{ section.settings.shipping }}</div></details>
+            <details><summary>{{ 'jolly.product.shipping' | t }}</summary><div class="jh-acc__body">{{ section.settings.shipping }}</div></details>
           {%- endif -%}
         </div>
       </div>
     </div>
   </section>
+
+  {%- comment -%} ================= APP BLOCKS (e.g. Judge.me reviews) ================= {%- endcomment -%}
+  {%- assign app_blocks = section.blocks | where: 'type', '@app' -%}
+  {%- if app_blocks.size > 0 -%}
+    <section class="jh-section jh-apps">
+      <div class="jh-wrap">
+        {%- for block in app_blocks -%}{% render block %}{%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
 
   {%- comment -%} ================= MARQUEE ================= {%- endcomment -%}
   {%- if section.settings.marquee != blank -%}
@@ -407,13 +438,13 @@
   {%- if reviews.size > 0 -%}
     <section class="jh-section jh-section--ice">
       <div class="jh-wrap">
-        <div class="jh-head"><span class="jh-eyebrow">Reviews</span><h2 class="jh-h2">{{ section.settings.reviews_heading }}</h2></div>
+        <div class="jh-head"><span class="jh-eyebrow">{{ 'jolly.product.reviews' | t }}</span><h2 class="jh-h2">{{ section.settings.reviews_heading }}</h2></div>
         <div class="jh-reviews">
           {%- for block in reviews -%}
             <figure class="jh-review" {{ block.shopify_attributes }}>
               {% render 'jolly-icon', name: 'stars' %}
               <blockquote>“{{ block.settings.text }}”</blockquote>
-              <figcaption>{{ block.settings.name }}<span>✓ Verified buyer</span></figcaption>
+              <figcaption>{{ block.settings.name }}<span>✓ {{ 'jolly.product.verified' | t }}</span></figcaption>
             </figure>
           {%- endfor -%}
         </div>
@@ -426,7 +457,7 @@
     <section class="jh-section">
       <div class="jh-wrap">
         <div class="jh-guarantee">
-          <div class="jh-seal"><span><b>{{ section.settings.guarantee_days }}</b>day<br>guarantee</span></div>
+          <div class="jh-seal"><span><b>{{ section.settings.guarantee_days }}</b>{{ 'jolly.product.guarantee_html' | t }}</span></div>
           <div>
             <h2 class="jh-h2">{{ section.settings.guarantee_heading }}</h2>
             <p>{{ section.settings.guarantee_text }}</p>
@@ -440,7 +471,7 @@
   {%- if faqs.size > 0 -%}
     <section class="jh-section jh-section--ice">
       <div class="jh-wrap">
-        <div class="jh-head"><span class="jh-eyebrow">FAQ</span><h2 class="jh-h2">{{ section.settings.faq_heading }}</h2></div>
+        <div class="jh-head"><span class="jh-eyebrow">{{ 'jolly.product.faq' | t }}</span><h2 class="jh-h2">{{ section.settings.faq_heading }}</h2></div>
         <div class="jh-faq">
           {%- for block in faqs -%}
             <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="jh-faq__a">{{ block.settings.answer }}</div></details>
@@ -488,9 +519,9 @@
       "cartAddUrl": {{ routes.cart_add_url | default: '/cart/add' | append: '.js' | json }},
       "strings": {
         "addToCart": {{ section.settings.atc_label | json }},
-        "soldOut": "Sold out",
-        "unavailable": "Unavailable",
-        "save": "Save [percent]%"
+        "soldOut": {{ 'jolly.product.sold_out' | t | json }},
+        "unavailable": {{ 'jolly.product.unavailable' | t | json }},
+        "save": {{ 'jolly.product.save' | t | json }}
       },
       "variants": [
         {%- for v in product.variants -%}
@@ -508,6 +539,24 @@
     }
   </script>
 </div>
+
+<script type="application/ld+json">{{ product | structured_data }}</script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ shop.url | append: routes.root_url | json }} },
+      {%- if collection and collection.handle != 'all' -%}
+        { "@type": "ListItem", "position": 2, "name": {{ collection.title | json }}, "item": {{ shop.url | append: collection.url | json }} },
+        { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+      {%- else -%}
+        { "@type": "ListItem", "position": 2, "name": "All gifts", "item": {{ shop.url | append: routes.all_products_collection_url | json }} },
+        { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+      {%- endif -%}
+    ]
+  }
+</script>
 
 {% schema %}
 {
@@ -758,6 +807,7 @@
     }
   ],
   "blocks": [
+    { "type": "@app" },
     {
       "type": "perk",
       "name": "Image perk",

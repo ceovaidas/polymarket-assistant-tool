@@ -13,11 +13,14 @@
         <svg class="jh-header__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="jh-header__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </summary>
-      <nav class="jh-header__mobile" aria-label="Main">
-        {%- for link in menu.links -%}
-          <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
-        {%- endfor -%}
-      </nav>
+      <div class="jh-header__mobile">
+        <nav aria-label="Main">
+          {%- for link in menu.links -%}
+            <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
+          {%- endfor -%}
+        </nav>
+        {% render 'jolly-localization', id: 'drawer' %}
+      </div>
     </details>
 
     <a class="jh-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
@@ -47,6 +50,33 @@
     </div>
   </div>
 </header>
+
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | append: routes.root_url | json }}
+      {%- if section.settings.logo -%},
+        "logo": {{ section.settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+      {%- endif %}
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | append: routes.root_url | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ shop.url | append: routes.search_url | append: '?q={search_term_string}' | json }},
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{%- endif -%}
 
 <script>
   (function () {

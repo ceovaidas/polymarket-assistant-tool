@@ -1,0 +1,140 @@
+{
+  "jolly": {
+    "common": {
+      "home": "Home",
+      "all_gifts": "Tutti i regali",
+      "search": "Cerca",
+      "search_shop": "Cerca nel negozio",
+      "search_placeholder": "Cerca regali…"
+    },
+    "card": {
+      "viral": "Virale su TikTok",
+      "new": "Novità",
+      "add": "Aggiungi al carrello",
+      "options": "Scegli le opzioni",
+      "sold_out": "Esaurito"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} prodotto",
+        "other": "{{ count }} prodotti"
+      },
+      "price_filter": "Filtro prezzo",
+      "remove_filter": "Rimuovi filtro prezzo",
+      "sort": "Ordina",
+      "empty_title": "Ancora niente qui",
+      "empty_text": "Prova un’altra fascia di prezzo o sfoglia tutto.",
+      "shop_all": "Vedi tutto"
+    },
+    "cart": {
+      "count": {
+        "one": "{{ count }} articolo",
+        "other": "{{ count }} articoli"
+      },
+      "continue": "Continua lo shopping",
+      "empty_title": "Il tuo carrello è vuoto",
+      "empty_text": "Rimediamo: i regali di Natale preferiti del web sono a un clic.",
+      "empty_button": "Scopri i regali",
+      "remove": "Rimuovi",
+      "update": "Aggiorna carrello",
+      "mix_applied": "Sconto regali applicato.",
+      "mix_more_html": {
+        "one": "Aggiungi ancora {{ count }} regalo e risparmia il <b>{{ pct }}%</b>",
+        "other": "Aggiungi ancora {{ count }} regali e risparmia il <b>{{ pct }}%</b>"
+      },
+      "mix_done_html": "<b>Sconto mix &amp; match applicato</b> · l’offerta migliore viene scelta al pagamento",
+      "ship_away_html": "Mancano <b>{{ amount }}</b> alla spedizione gratuita",
+      "ship_done": "Spedizione gratuita sbloccata!",
+      "items_label": "Articoli",
+      "subtotal": "Subtotale",
+      "taxes_note": "Spedizione e tasse calcolate al pagamento.",
+      "wheel_prize": "Il tuo premio della ruota",
+      "wheel_apply": "usalo al pagamento",
+      "note_add": "Aggiungi un biglietto",
+      "note_label": "Biglietto regalo",
+      "note_placeholder": "Buon Natale! Con affetto, …",
+      "note_hint": "Nel pacco non mettiamo i prezzi.",
+      "checkout": "Vai alla cassa",
+      "trust_ship": "Spedito in 1–3 giorni",
+      "trust_returns": "Resi entro 30 giorni",
+      "trust_secure": "Pagamento sicuro"
+    },
+    "product": {
+      "why": "Perché ti piacerà",
+      "materials": "Materiali e cura",
+      "shipping": "Spedizione e resi",
+      "sold_out": "Esaurito",
+      "unavailable": "Non disponibile",
+      "save": "Risparmia il [percent]%",
+      "reviews_count": {
+        "one": "{{ count }} recensione",
+        "other": "{{ count }} recensioni"
+      },
+      "reviews": "Recensioni",
+      "verified": "Acquisto verificato",
+      "guarantee_html": "giorni<br>di garanzia",
+      "faq": "FAQ",
+      "notify_title": "Al momento esaurito. Vuoi un’email quando torna disponibile?",
+      "notify_email": "La tua email",
+      "notify_button": "Avvisami",
+      "notify_done": "Grazie! Ti scriveremo appena torna disponibile."
+    },
+    "footer": {
+      "shop": "Negozio",
+      "help": "Aiuto",
+      "rights": "Tutti i diritti riservati.",
+      "promise_ship": "Spedizione gratuita sopra i 50 $"
+    },
+    "contact": {
+      "email_us": "Scrivici",
+      "reply_time": "Rispondiamo entro 2 giorni lavorativi.",
+      "order_title": "Dov’è il mio ordine?",
+      "order_text": "Il link di tracciamento è nell’email di conferma spedizione. Indica il numero d’ordine.",
+      "returns_title": "Resi",
+      "returns_text": "30 giorni per cambiare idea.",
+      "returns_link": "Come funzionano i resi",
+      "success": "Grazie! Il tuo messaggio è stato inviato. Risponderemo entro 2 giorni lavorativi.",
+      "form_title": "Inviaci un messaggio",
+      "name": "Nome",
+      "email": "Email",
+      "order": "Numero d’ordine (facoltativo)",
+      "message": "Messaggio",
+      "send": "Invia messaggio"
+    },
+    "search": {
+      "results_for": "Risultati per “{{ terms }}”",
+      "count": {
+        "one": "{{ count }} risultato",
+        "other": "{{ count }} risultati"
+      },
+      "no_match": "Nessun risultato per “{{ terms }}”",
+      "no_match_text": "Controlla l’ortografia o prova una parola più generica come “maschera”, “baby” o “regalo”.",
+      "ideas": "Ti servono idee?",
+      "popular": "Più popolari ora",
+      "browse_all": "Sfoglia tutti i regali"
+    },
+    "wheel": {
+      "spin": "Gira",
+      "spin_label": "Gira la ruota",
+      "no_thanks": "No, grazie",
+      "spinning_eyebrow": "Incrociamo le dita",
+      "spinning": "Gira…",
+      "spinning_text": "Babbo Natale controlla la lista.",
+      "won": "Hai vinto",
+      "saved": "Il codice è salvato su questo dispositivo: tocca il regalo per rivederlo.",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "your_code": "Il tuo codice:",
+      "apply": "Applica al mio ordine",
+      "joined": "Sei nella lista delle offerte di Natale.",
+      "email_placeholder": "Email per le offerte (facoltativa)",
+      "join": "Iscriviti",
+      "keep": "Continua lo shopping"
+    },
+    "loc": {
+      "country": "Paese/regione",
+      "language": "Lingua",
+      "update": "Aggiorna"
+    }
+  }
+}

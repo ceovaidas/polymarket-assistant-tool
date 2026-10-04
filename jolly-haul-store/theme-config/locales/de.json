@@ -1,0 +1,140 @@
+{
+  "jolly": {
+    "common": {
+      "home": "Startseite",
+      "all_gifts": "Alle Geschenke",
+      "search": "Suchen",
+      "search_shop": "Im Shop suchen",
+      "search_placeholder": "Geschenke suchen…"
+    },
+    "card": {
+      "viral": "Viral auf TikTok",
+      "new": "Neu",
+      "add": "In den Warenkorb",
+      "options": "Optionen wählen",
+      "sold_out": "Ausverkauft"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
+      },
+      "price_filter": "Preisfilter",
+      "remove_filter": "Preisfilter entfernen",
+      "sort": "Sortieren",
+      "empty_title": "Hier ist noch nichts",
+      "empty_text": "Probiere eine andere Preisspanne oder stöbere im ganzen Sortiment.",
+      "shop_all": "Alles ansehen"
+    },
+    "cart": {
+      "count": {
+        "one": "{{ count }} Artikel",
+        "other": "{{ count }} Artikel"
+      },
+      "continue": "Weiter einkaufen",
+      "empty_title": "Dein Warenkorb ist leer",
+      "empty_text": "Das ändern wir — die beliebtesten Weihnachtsfunde des Internets sind nur einen Klick entfernt.",
+      "empty_button": "Jetzt stöbern",
+      "remove": "Entfernen",
+      "update": "Warenkorb aktualisieren",
+      "mix_applied": "Geschenkrabatt angewendet.",
+      "mix_more_html": {
+        "one": "Noch {{ count }} Geschenk hinzufügen und <b>{{ pct }} %</b> sparen",
+        "other": "Noch {{ count }} Geschenke hinzufügen und <b>{{ pct }} %</b> sparen"
+      },
+      "mix_done_html": "<b>Mix-&amp;-Match-Rabatt angewendet</b> · das beste Angebot wird an der Kasse gewählt",
+      "ship_away_html": "Noch <b>{{ amount }}</b> bis zum kostenlosen Versand",
+      "ship_done": "Kostenloser Versand freigeschaltet!",
+      "items_label": "Artikel",
+      "subtotal": "Zwischensumme",
+      "taxes_note": "Versand und Steuern werden an der Kasse berechnet.",
+      "wheel_prize": "Dein Glücksrad-Gewinn",
+      "wheel_apply": "an der Kasse einlösen",
+      "note_add": "Geschenknachricht hinzufügen",
+      "note_label": "Geschenknachricht",
+      "note_placeholder": "Frohe Weihnachten! Alles Liebe, …",
+      "note_hint": "Preise legen wir nicht ins Paket.",
+      "checkout": "Zur Kasse",
+      "trust_ship": "Versand in 1–3 Tagen",
+      "trust_returns": "30 Tage Rückgabe",
+      "trust_secure": "Sichere Zahlung"
+    },
+    "product": {
+      "why": "Darum wirst du es lieben",
+      "materials": "Material & Pflege",
+      "shipping": "Versand & Rückgabe",
+      "sold_out": "Ausverkauft",
+      "unavailable": "Nicht verfügbar",
+      "save": "Spare [percent] %",
+      "reviews_count": {
+        "one": "{{ count }} Bewertung",
+        "other": "{{ count }} Bewertungen"
+      },
+      "reviews": "Bewertungen",
+      "verified": "Verifizierter Kauf",
+      "guarantee_html": "Tage<br>Garantie",
+      "faq": "FAQ",
+      "notify_title": "Gerade ausverkauft. Möchtest du eine E-Mail, wenn es wieder da ist?",
+      "notify_email": "Deine E-Mail",
+      "notify_button": "Benachrichtigen",
+      "notify_done": "Danke! Wir schreiben dir, sobald es wieder da ist."
+    },
+    "footer": {
+      "shop": "Shop",
+      "help": "Hilfe",
+      "rights": "Alle Rechte vorbehalten.",
+      "promise_ship": "Kostenloser Versand ab 50 $"
+    },
+    "contact": {
+      "email_us": "Schreib uns",
+      "reply_time": "Wir antworten innerhalb von 2 Werktagen.",
+      "order_title": "Wo ist meine Bestellung?",
+      "order_text": "Den Tracking-Link findest du in der Versandbestätigung. Gib beim Schreiben deine Bestellnummer an.",
+      "returns_title": "Rückgabe",
+      "returns_text": "30 Tage Bedenkzeit.",
+      "returns_link": "So funktioniert die Rückgabe",
+      "success": "Danke! Deine Nachricht ist unterwegs. Wir antworten innerhalb von 2 Werktagen.",
+      "form_title": "Schick uns eine Nachricht",
+      "name": "Name",
+      "email": "E-Mail",
+      "order": "Bestellnummer (optional)",
+      "message": "Nachricht",
+      "send": "Nachricht senden"
+    },
+    "search": {
+      "results_for": "Ergebnisse für „{{ terms }}“",
+      "count": {
+        "one": "{{ count }} Ergebnis",
+        "other": "{{ count }} Ergebnisse"
+      },
+      "no_match": "Keine Treffer für „{{ terms }}“",
+      "no_match_text": "Prüfe die Schreibweise oder versuche ein allgemeineres Wort wie „Maske“, „Baby“ oder „Geschenk“.",
+      "ideas": "Brauchst du Ideen?",
+      "popular": "Gerade beliebt",
+      "browse_all": "Alle Geschenke ansehen"
+    },
+    "wheel": {
+      "spin": "Drehen",
+      "spin_label": "Glücksrad drehen",
+      "no_thanks": "Nein, danke",
+      "spinning_eyebrow": "Daumen drücken",
+      "spinning": "Dreht sich…",
+      "spinning_text": "Der Weihnachtsmann prüft seine Liste.",
+      "won": "Du hast gewonnen",
+      "saved": "Dein Code ist auf diesem Gerät gespeichert — tippe jederzeit auf das Geschenk, um ihn wieder zu sehen.",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "your_code": "Dein Code:",
+      "apply": "Auf meine Bestellung anwenden",
+      "joined": "Du bist für Weihnachtsangebote eingetragen.",
+      "email_placeholder": "E-Mail für Angebote (optional)",
+      "join": "Anmelden",
+      "keep": "Weiter einkaufen"
+    },
+    "loc": {
+      "country": "Land/Region",
+      "language": "Sprache",
+      "update": "Aktualisieren"
+    }
+  }
+}

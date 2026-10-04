@@ -188,6 +188,14 @@
       }
 
       each('[data-jh-atc]', function (btn) { btn.disabled = !variant.available; });
+      var stockLine = root.querySelector('[data-jh-stock]');
+      if (stockLine) stockLine.hidden = !variant.available;
+      var notify = root.querySelector('[data-jh-notify]');
+      if (notify) {
+        notify.hidden = variant.available;
+        var nv = notify.querySelector('[data-jh-notify-variant]');
+        if (nv) nv.value = variant.title;
+      }
       each('[data-jh-atc-label]', function (el) { el.textContent = variant.available ? data.strings.addToCart : data.strings.soldOut; });
       if (stickySub) stickySub.textContent = variant.title + (b.qty > 1 ? ' × ' + b.qty : '');
 
@@ -320,7 +328,7 @@
       root.querySelector('[data-jh-apply]').href = '/discount/' + encodeURIComponent(win.code) + '?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
       spinBtns.forEach(function (btn) { btn.disabled = true; });
       show('win');
-      teaserText.textContent = 'Your code: ' + win.code;
+      teaserText.textContent = (root.dataset.tCode || 'Your code:') + ' ' + win.code;
     }
 
     function trap(e) {
@@ -374,7 +382,7 @@
     teaser.addEventListener('click', open);
     root.querySelector('[data-jh-copy]').addEventListener('click', function (e) {
       var code = root.querySelector('[data-jh-code]').textContent, btn = e.currentTarget;
-      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); };
+      var done = function () { btn.textContent = (root.dataset.tCopied || 'Copied'); setTimeout(function () { btn.textContent = (root.dataset.tCopy || 'Copy'); }, 1800); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, done);
       else { var t = document.createElement('textarea'); t.value = code; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (err) {} t.remove(); done(); }
     });

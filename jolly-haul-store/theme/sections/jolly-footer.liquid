@@ -21,9 +21,9 @@
         </a>
         {%- if section.settings.tagline != blank -%}<p class="jh-footer__tag">{{ section.settings.tagline }}</p>{%- endif -%}
         <ul class="jh-footer__promises">
-          <li>{% render 'jolly-icon', name: 'truck' %}Free shipping over $50</li>
-          <li>{% render 'jolly-icon', name: 'return' %}30-day returns</li>
-          <li>{% render 'jolly-icon', name: 'lock' %}Secure checkout</li>
+          <li>{% render 'jolly-icon', name: 'truck' %}{{ 'jolly.footer.promise_ship' | t }}</li>
+          <li>{% render 'jolly-icon', name: 'return' %}{{ 'jolly.cart.trust_returns' | t }}</li>
+          <li>{% render 'jolly-icon', name: 'lock' %}{{ 'jolly.cart.trust_secure' | t }}</li>
         </ul>
         {%- if section.settings.instagram != blank or section.settings.tiktok != blank or section.settings.facebook != blank -%}
           <div class="jh-footer__social">
@@ -41,11 +41,11 @@
       </div>
 
       <nav class="jh-footer__col" aria-label="Shop">
-        <h2 class="jh-footer__h">Shop</h2>
+        <h2 class="jh-footer__h">{{ 'jolly.footer.shop' | t }}</h2>
         <ul>
           {%- for h in shop_handles -%}
             {%- if h == 'all' -%}
-              <li><a href="{{ routes.all_products_collection_url }}">All gifts</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">{{ 'jolly.common.all_gifts' | t }}</a></li>
             {%- else -%}
               {%- assign c = collections[h] -%}
               {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
@@ -56,7 +56,7 @@
       </nav>
 
       <nav class="jh-footer__col" aria-label="Help">
-        <h2 class="jh-footer__h">Help</h2>
+        <h2 class="jh-footer__h">{{ 'jolly.footer.help' | t }}</h2>
         <ul>
           {%- for link in help_menu.links -%}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>
@@ -75,7 +75,8 @@
     </div>
 
     <div class="jh-footer__bottom">
-      <p>© {{ 'now' | date: '%Y' }} {{ brand }}. All rights reserved.</p>
+      <p>© {{ 'now' | date: '%Y' }} {{ brand }}. {{ 'jolly.footer.rights' | t }}</p>
+      {% render 'jolly-localization', id: 'footer' %}
       {%- if section.settings.show_payments and shop.enabled_payment_types.size > 0 -%}
         <ul class="jh-footer__pay" aria-label="Payment methods">
           {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}

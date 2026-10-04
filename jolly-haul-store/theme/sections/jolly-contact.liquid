@@ -10,7 +10,7 @@
     <div class="jh-lights" aria-hidden="true"></div>
     <div class="jh-wrap">
       <nav class="jh-crumbs jh-crumbs--center" aria-label="Breadcrumb">
-        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title }}</span>
+        <a href="{{ routes.root_url }}">{{ 'jolly.common.home' | t }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ page.title }}</span>
       </nav>
       <h1 class="jh-h2">{{ section.settings.heading | default: page.title }}</h1>
       {%- if section.settings.sub != blank -%}<p class="jh-sub">{{ section.settings.sub }}</p>{%- endif -%}
@@ -22,15 +22,15 @@
       <div class="jh-contact__info">
         <div class="jh-contact__card">
           {% render 'jolly-icon', name: 'gift' %}
-          <div><h2>Email us</h2>{%- if help_email != blank -%}<a href="mailto:{{ help_email }}">{{ help_email }}</a>{%- endif -%}<p>We reply within 2 business days.</p></div>
+          <div><h2>{{ 'jolly.contact.email_us' | t }}</h2>{%- if help_email != blank -%}<a href="mailto:{{ help_email }}">{{ help_email }}</a>{%- endif -%}<p>{{ 'jolly.contact.reply_time' | t }}</p></div>
         </div>
         <div class="jh-contact__card">
           {% render 'jolly-icon', name: 'truck' %}
-          <div><h2>Where's my order?</h2><p>Your tracking link is in the shipping confirmation email. Include your order number when you write.</p></div>
+          <div><h2>{{ 'jolly.contact.order_title' | t }}</h2><p>{{ 'jolly.contact.order_text' | t }}</p></div>
         </div>
         <div class="jh-contact__card">
           {% render 'jolly-icon', name: 'return' %}
-          <div><h2>Returns</h2><p>30 days to change your mind. <a href="{{ section.settings.returns_link | default: '/pages/returns' }}">How returns work</a></p></div>
+          <div><h2>{{ 'jolly.contact.returns_title' | t }}</h2><p>{{ 'jolly.contact.returns_text' | t }} <a href="{{ section.settings.returns_link | default: '/pages/returns' }}">{{ 'jolly.contact.returns_link' | t }}</a></p></div>
         </div>
         {%- if page.content != blank -%}<div class="jh-prose jh-contact__extra">{{ page.content }}</div>{%- endif -%}
       </div>
@@ -38,18 +38,18 @@
       <div class="jh-contact__form">
         {%- form 'contact', id: 'jh-contact-form' -%}
           {%- if form.posted_successfully? -%}
-            <div class="jh-formmsg jh-formmsg--ok" role="status">{% render 'jolly-icon', name: 'check' %}<span>Thanks! Your message is on its way. We'll reply within 2 business days.</span></div>
+            <div class="jh-formmsg jh-formmsg--ok" role="status">{% render 'jolly-icon', name: 'check' %}<span>{{ 'jolly.contact.success' | t }}</span></div>
           {%- elsif form.errors -%}
             <div class="jh-formmsg jh-formmsg--err" role="alert">{{ form.errors | default_errors }}</div>
           {%- endif -%}
-          <h2 class="jh-contact__title">Send us a message</h2>
+          <h2 class="jh-contact__title">{{ 'jolly.contact.form_title' | t }}</h2>
           <div class="jh-form__row">
-            <label class="jh-input"><span>Name</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
-            <label class="jh-input"><span>Email *</span><input type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"></label>
+            <label class="jh-input"><span>{{ 'jolly.contact.name' | t }}</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
+            <label class="jh-input"><span>{{ 'jolly.contact.email' | t }} *</span><input type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"></label>
           </div>
-          <label class="jh-input"><span>Order number (optional)</span><input type="text" name="contact[order]" placeholder="#1001" value="{{ form.order }}"></label>
-          <label class="jh-input"><span>Message *</span><textarea name="contact[body]" rows="6" required>{{ form.body }}</textarea></label>
-          <button type="submit" class="jh-btn jh-btn--pop jh-contact__send">Send message</button>
+          <label class="jh-input"><span>{{ 'jolly.contact.order' | t }}</span><input type="text" name="contact[order]" placeholder="#1001" value="{{ form.order }}"></label>
+          <label class="jh-input"><span>{{ 'jolly.contact.message' | t }} *</span><textarea name="contact[body]" rows="6" required>{{ form.body }}</textarea></label>
+          <button type="submit" class="jh-btn jh-btn--pop jh-contact__send">{{ 'jolly.contact.send' | t }}</button>
         {%- endform -%}
       </div>
     </div>

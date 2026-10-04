@@ -22,9 +22,9 @@
     {%- if on_sale -%}
       <span class="jh-card__badge jh-card__badge--sale">Save {{ p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price }}%</span>
     {%- elsif p.tags contains 'viral' -%}
-      <span class="jh-card__badge jh-card__badge--viral">Viral on TikTok</span>
+      <span class="jh-card__badge jh-card__badge--viral">{{ 'jolly.card.viral' | t }}</span>
     {%- elsif p.tags contains 'new' -%}
-      <span class="jh-card__badge">New</span>
+      <span class="jh-card__badge">{{ 'jolly.card.new' | t }}</span>
     {%- endif -%}
     {%- if p.featured_media -%}
       {{ p.featured_media | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', alt: p.featured_media.alt | default: p.title }}
@@ -46,12 +46,12 @@
       {%- if p.available and p.has_only_default_variant -%}
         {%- form 'product', p -%}
           <input type="hidden" name="id" value="{{ v.id }}">
-          <button type="submit" class="jh-card__add">Add to cart</button>
+          <button type="submit" class="jh-card__add">{{ 'jolly.card.add' | t }}</button>
         {%- endform -%}
       {%- elsif p.available -%}
-        <a class="jh-card__add" href="{{ p.url }}">Choose options</a>
+        <a class="jh-card__add" href="{{ p.url }}">{{ 'jolly.card.options' | t }}</a>
       {%- else -%}
-        <span class="jh-card__add" aria-disabled="true">Sold out</span>
+        <span class="jh-card__add" aria-disabled="true">{{ 'jolly.card.sold_out' | t }}</span>
       {%- endif -%}
     </div>
   </div>

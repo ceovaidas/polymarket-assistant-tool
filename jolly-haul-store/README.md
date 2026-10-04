@@ -16,6 +16,7 @@ theme/
   sections/jolly-related.liquid   # "You may also like" (product page + cart, Shopify recommendations)
   sections/jolly-page.liquid      # content pages (+ jolly-contact, jolly-404, jolly-search)
   sections/jolly-footer.liquid    # footer (replaces Dawn footer in the footer group)
+  snippets/jolly-localization.liquid # country/currency/language picker
   sections/jolly-wheel.liquid     # Christmas prize wheel (footer group)
   sections/cart-icon-bubble.liquid # overrides Dawn's so cart updates keep our icon
   sections/jolly-product.liquid   # product landing page

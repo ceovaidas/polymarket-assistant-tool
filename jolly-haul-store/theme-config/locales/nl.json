@@ -1,0 +1,140 @@
+{
+  "jolly": {
+    "common": {
+      "home": "Home",
+      "all_gifts": "Alle cadeaus",
+      "search": "Zoeken",
+      "search_shop": "Zoek in de winkel",
+      "search_placeholder": "Zoek cadeaus…"
+    },
+    "card": {
+      "viral": "Viral op TikTok",
+      "new": "Nieuw",
+      "add": "In winkelwagen",
+      "options": "Kies opties",
+      "sold_out": "Uitverkocht"
+    },
+    "collection": {
+      "count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} producten"
+      },
+      "price_filter": "Prijsfilter",
+      "remove_filter": "Prijsfilter verwijderen",
+      "sort": "Sorteren",
+      "empty_title": "Hier is nog niets",
+      "empty_text": "Probeer een andere prijsklasse of bekijk alles.",
+      "shop_all": "Alles bekijken"
+    },
+    "cart": {
+      "count": {
+        "one": "{{ count }} artikel",
+        "other": "{{ count }} artikelen"
+      },
+      "continue": "Verder winkelen",
+      "empty_title": "Je winkelwagen is leeg",
+      "empty_text": "Daar doen we wat aan — de favoriete kerstvondsten van internet zijn één klik verwijderd.",
+      "empty_button": "Bekijk cadeaus",
+      "remove": "Verwijderen",
+      "update": "Winkelwagen bijwerken",
+      "mix_applied": "Cadeaukorting toegepast.",
+      "mix_more_html": {
+        "one": "Voeg nog {{ count }} cadeau toe en bespaar <b>{{ pct }}%</b>",
+        "other": "Voeg nog {{ count }} cadeaus toe en bespaar <b>{{ pct }}%</b>"
+      },
+      "mix_done_html": "<b>Mix-&amp;-match-korting toegepast</b> · de beste deal wordt bij het afrekenen gekozen",
+      "ship_away_html": "Nog <b>{{ amount }}</b> tot gratis verzending",
+      "ship_done": "Gratis verzending ontgrendeld!",
+      "items_label": "Artikelen",
+      "subtotal": "Subtotaal",
+      "taxes_note": "Verzending en belastingen worden bij het afrekenen berekend.",
+      "wheel_prize": "Je prijs van het rad",
+      "wheel_apply": "gebruik hem bij het afrekenen",
+      "note_add": "Cadeaubericht toevoegen",
+      "note_label": "Cadeaubericht",
+      "note_placeholder": "Vrolijk kerstfeest! Liefs, …",
+      "note_hint": "We sturen geen prijzen mee in het pakket.",
+      "checkout": "Afrekenen",
+      "trust_ship": "Verzonden binnen 1–3 dagen",
+      "trust_returns": "30 dagen retour",
+      "trust_secure": "Veilig afrekenen"
+    },
+    "product": {
+      "why": "Waarom je het geweldig vindt",
+      "materials": "Materiaal & onderhoud",
+      "shipping": "Verzending & retour",
+      "sold_out": "Uitverkocht",
+      "unavailable": "Niet beschikbaar",
+      "save": "Bespaar [percent]%",
+      "reviews_count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
+      "reviews": "Reviews",
+      "verified": "Geverifieerde koper",
+      "guarantee_html": "dagen<br>garantie",
+      "faq": "Veelgestelde vragen",
+      "notify_title": "Tijdelijk uitverkocht. E-mail ontvangen als het terug is?",
+      "notify_email": "Je e-mail",
+      "notify_button": "Houd me op de hoogte",
+      "notify_done": "Bedankt! We mailen je zodra het terug is."
+    },
+    "footer": {
+      "shop": "Winkel",
+      "help": "Hulp",
+      "rights": "Alle rechten voorbehouden.",
+      "promise_ship": "Gratis verzending vanaf $50"
+    },
+    "contact": {
+      "email_us": "Mail ons",
+      "reply_time": "We reageren binnen 2 werkdagen.",
+      "order_title": "Waar is mijn bestelling?",
+      "order_text": "De trackinglink staat in de verzendbevestiging. Vermeld je bestelnummer.",
+      "returns_title": "Retourneren",
+      "returns_text": "30 dagen bedenktijd.",
+      "returns_link": "Zo werkt retourneren",
+      "success": "Bedankt! Je bericht is verstuurd. We reageren binnen 2 werkdagen.",
+      "form_title": "Stuur ons een bericht",
+      "name": "Naam",
+      "email": "E-mail",
+      "order": "Bestelnummer (optioneel)",
+      "message": "Bericht",
+      "send": "Bericht versturen"
+    },
+    "search": {
+      "results_for": "Resultaten voor ‘{{ terms }}’",
+      "count": {
+        "one": "{{ count }} resultaat",
+        "other": "{{ count }} resultaten"
+      },
+      "no_match": "Geen resultaten voor ‘{{ terms }}’",
+      "no_match_text": "Controleer de spelling of probeer een breder woord zoals ‘masker’, ‘baby’ of ‘cadeau’.",
+      "ideas": "Ideeën nodig?",
+      "popular": "Nu populair",
+      "browse_all": "Bekijk alle cadeaus"
+    },
+    "wheel": {
+      "spin": "Draai",
+      "spin_label": "Draai aan het rad",
+      "no_thanks": "Nee, bedankt",
+      "spinning_eyebrow": "Duimen maar",
+      "spinning": "Draait…",
+      "spinning_text": "De Kerstman checkt zijn lijstje.",
+      "won": "Je hebt gewonnen",
+      "saved": "Je code is op dit apparaat bewaard — tik op het cadeau om hem terug te zien.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "your_code": "Je code:",
+      "apply": "Toepassen op mijn bestelling",
+      "joined": "Je staat op de lijst voor kerstdeals.",
+      "email_placeholder": "E-mail voor deals (optioneel)",
+      "join": "Aanmelden",
+      "keep": "Verder winkelen"
+    },
+    "loc": {
+      "country": "Land/regio",
+      "language": "Taal",
+      "update": "Bijwerken"
+    }
+  }
+}

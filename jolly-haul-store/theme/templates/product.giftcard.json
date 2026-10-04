@@ -1,0 +1,83 @@
+{
+  "sections": {
+    "main": {
+      "type": "jolly-product",
+      "blocks": {
+        "perk_1": {
+          "type": "perk",
+          "settings": {
+            "label": "Arrives by email",
+            "icon": "gift"
+          }
+        },
+        "perk_2": {
+          "type": "perk",
+          "settings": {
+            "label": "Never expires",
+            "icon": "check"
+          }
+        },
+        "perk_3": {
+          "type": "perk",
+          "settings": {
+            "label": "Use on anything",
+            "icon": "stars"
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How is the gift card delivered?",
+            "answer": "<p>By email, within a few minutes of your purchase. Forward it to the recipient, print it, or write the code in a Christmas card.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Does it expire?",
+            "answer": "<p>No. Any balance that's left stays on the card for next time.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "How do they use it?",
+            "answer": "<p>They add their favourite finds to the cart and enter the gift card code at checkout.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "perk_1",
+        "perk_2",
+        "perk_3",
+        "faq_1",
+        "faq_2",
+        "faq_3"
+      ],
+      "settings": {
+        "art_order": "",
+        "badge": "Instant delivery",
+        "lede": "",
+        "hook_emoji": "🎁",
+        "hook": "Last-minute? Gift cards arrive by email within minutes — no shipping needed.",
+        "swatch_option": "",
+        "bundle_heading": "",
+        "materials": "",
+        "marquee": "Delivered by email|Never expires|Use on anything|The perfect last-minute gift",
+        "guarantee_heading": "",
+        "guarantee_text": "Not quite right? Return unused items within 30 days of delivery for a full refund.",
+        "final_heading": "Can't decide? Let them choose.",
+        "final_text": "Delivered by email within minutes — even on Christmas Eve.",
+        "ticker": "Delivered by email in minutes|Never expires|Use on anything in the shop",
+        "trust_1": "Delivered by email in minutes",
+        "trust_2": "Never expires",
+        "trust_3": "Secure checkout",
+        "stock_line": "",
+        "shipping": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -10,7 +10,7 @@
   <script src="{{ 'jolly.js' | asset_url }}" defer></script>
 
   {%- assign prizes = section.blocks | where: 'type', 'prize' -%}
-  <div class="jh jh-wheel" data-jh-wheel data-delay="{{ section.settings.delay }}" data-snooze="{{ section.settings.snooze_days }}" data-exit="{{ section.settings.exit_intent }}">
+  <div class="jh jh-wheel" data-jh-wheel data-delay="{{ section.settings.delay }}" data-snooze="{{ section.settings.snooze_days }}" data-exit="{{ section.settings.exit_intent }}" data-t-code="{{ 'jolly.wheel.your_code' | t | escape }}" data-t-copy="{{ 'jolly.wheel.copy' | t | escape }}" data-t-copied="{{ 'jolly.wheel.copied' | t | escape }}">
     <button type="button" class="jh-wheel__teaser" data-jh-wheel-open hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM2 7h20v4H2zM12 7v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7C10 3 5.5 3.5 6.5 6S12 7 12 7s4-4.5 6-2-6 2-6 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <span data-jh-teaser>{{ section.settings.teaser }}</span>
@@ -27,7 +27,7 @@
           <div class="jh-wheel__snow" aria-hidden="true"></div>
           <div class="jh-wheel__pointer" aria-hidden="true"></div>
           <svg class="jh-wheel__svg" viewBox="-110 -110 220 220" aria-hidden="true"><g data-jh-wheel-disc></g></svg>
-          <button type="button" class="jh-wheel__hub" data-jh-spin aria-label="Spin the wheel">Spin</button>
+          <button type="button" class="jh-wheel__hub" data-jh-spin aria-label="{{ 'jolly.wheel.spin_label' | t }}">{{ 'jolly.wheel.spin' | t }}</button>
         </div>
 
         <div class="jh-wheel__body">
@@ -36,39 +36,39 @@
             <h2 class="jh-wheel__title" id="jh-wheel-title-{{ section.id }}">{{ section.settings.heading }}</h2>
             <p class="jh-wheel__text">{{ section.settings.text }}</p>
             <button type="button" class="jh-btn jh-btn--pop jh-wheel__cta" data-jh-spin>{{ section.settings.button }}</button>
-            <button type="button" class="jh-wheel__no" data-jh-wheel-close>No thanks</button>
+            <button type="button" class="jh-wheel__no" data-jh-wheel-close>{{ 'jolly.wheel.no_thanks' | t }}</button>
             <p class="jh-wheel__fine">{{ section.settings.fine_print }}</p>
           </div>
 
           <div data-jh-step="spinning" hidden>
-            <span class="jh-eyebrow">Fingers crossed</span>
-            <h2 class="jh-wheel__title">Spinning…</h2>
-            <p class="jh-wheel__text" aria-live="polite">Santa's checking the list.</p>
+            <span class="jh-eyebrow">{{ 'jolly.wheel.spinning_eyebrow' | t }}</span>
+            <h2 class="jh-wheel__title">{{ 'jolly.wheel.spinning' | t }}</h2>
+            <p class="jh-wheel__text" aria-live="polite">{{ 'jolly.wheel.spinning_text' | t }}</p>
           </div>
 
           <div data-jh-step="win" hidden>
-            <span class="jh-eyebrow">You won</span>
+            <span class="jh-eyebrow">{{ 'jolly.wheel.won' | t }}</span>
             <h2 class="jh-wheel__title" data-jh-prize aria-live="polite"></h2>
             <p class="jh-wheel__text" data-jh-prize-note></p>
-            <p class="jh-wheel__fine">Your code is saved on this device — tap the gift button anytime to see it again.</p>
+            <p class="jh-wheel__fine">{{ 'jolly.wheel.saved' | t }}</p>
             <div class="jh-wheel__code">
               <code data-jh-code></code>
-              <button type="button" data-jh-copy>Copy</button>
+              <button type="button" data-jh-copy>{{ 'jolly.wheel.copy' | t }}</button>
             </div>
-            <a class="jh-btn jh-btn--pop jh-wheel__cta" href="#" data-jh-apply>Apply to my order</a>
+            <a class="jh-btn jh-btn--pop jh-wheel__cta" href="#" data-jh-apply>{{ 'jolly.wheel.apply' | t }}</a>
             {%- if section.settings.collect_email -%}
               {%- form 'customer', class: 'jh-wheel__email' -%}
                 {%- if form.posted_successfully? -%}
-                  <p class="jh-wheel__fine">You're on the list for Christmas deals.</p>
+                  <p class="jh-wheel__fine">{{ 'jolly.wheel.joined' | t }}</p>
                 {%- else -%}
                   <input type="hidden" name="contact[tags]" value="newsletter,prize-wheel">
-                  <label class="visually-hidden" for="jh-wheel-email-{{ section.id }}">Email</label>
-                  <input id="jh-wheel-email-{{ section.id }}" type="email" name="contact[email]" placeholder="Email for deals (optional)" autocomplete="email" required>
-                  <button type="submit">Join</button>
+                  <label class="visually-hidden" for="jh-wheel-email-{{ section.id }}">{{ 'jolly.contact.email' | t }}</label>
+                  <input id="jh-wheel-email-{{ section.id }}" type="email" name="contact[email]" placeholder="{{ 'jolly.wheel.email_placeholder' | t }}" autocomplete="email" required>
+                  <button type="submit">{{ 'jolly.wheel.join' | t }}</button>
                 {%- endif -%}
               {%- endform -%}
             {%- endif -%}
-            <button type="button" class="jh-wheel__no" data-jh-wheel-close>Keep shopping</button>
+            <button type="button" class="jh-wheel__no" data-jh-wheel-close>{{ 'jolly.wheel.keep' | t }}</button>
           </div>
         </div>
       </div>

@@ -19,6 +19,16 @@ const js = read('assets/jolly.js');
 const engine = new Liquid({ root: [join(theme, 'snippets')], extname: '.liquid' });
 const noop = () => '';
 engine.registerFilter('money', (c) => '$' + (Number(c) / 100).toFixed(2));
+// Shopify's `t` filter: jolly.* keys from theme-config/locales/en.json (plurals via count, {{ var }} params).
+const enLocale = JSON.parse(readFileSync(join(here, '..', 'theme-config', 'locales', 'en.json'), 'utf8'));
+engine.registerFilter('t', (key, ...args) => {
+  let v = key.split('.').reduce((o, k) => (o == null ? o : o[k]), enLocale);
+  const params = {};
+  for (const a of args) if (Array.isArray(a)) params[a[0]] = a[1];
+  if (v && typeof v === 'object') v = Number(params.count) === 1 ? v.one : v.other;
+  if (v == null) return key;
+  return String(v).replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k) => params[k] ?? '');
+});
 ['asset_url', 'stylesheet_tag', 'image_url', 'image_tag', 'video_tag', 'media_tag', 'payment_terms'].forEach((f) => engine.registerFilter(f, noop));
 engine.registerTag('form', {
   parse(token, remain) {
@@ -61,7 +71,7 @@ engine.registerTag('schema', {
 
 // ---- section settings + blocks (schema defaults, overridden by the template) ----
 function sectionData(file, templateFile, key) {
-  const src = read(`sections/${file}`).replace(/posted_successfully\?/g, 'posted_successfully').replace(/recommendations\.performed\?/g, 'recommendations.performed');
+  const src = read(`sections/${file}`).replace(/posted_successfully\?/g, 'posted_successfully').replace(/recommendations\.performed\?/g, 'recommendations.performed').replace(/gift_card\?/g, 'gift_card');
   const schema = JSON.parse(src.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
   const tpl = JSON.parse(read(`templates/${templateFile}`)).sections[key];
   const defaults = (list) => Object.fromEntries(list.filter((s) => s.id).map((s) => [s.id, s.default ?? null]));
