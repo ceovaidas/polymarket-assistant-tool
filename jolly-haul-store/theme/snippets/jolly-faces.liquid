@@ -1,0 +1,69 @@
+{%- comment -%}
+  "Pick your face": every value of the first multi-value option that has variant photos,
+  shown with its photo, name and a Choose button. Renders nothing if no such option exists.
+  Params: product, block (variant_faces), section_id, eyebrow, heading, text, tones (array)
+{%- endcomment -%}
+{%- liquid
+  assign face_option = -1
+  for option in product.options_with_values
+    if option.values.size < 2
+      continue
+    endif
+    assign oi = forloop.index0
+    for v in product.variants
+      if v.featured_media
+        assign face_option = oi
+        break
+      endif
+    endfor
+    if face_option > -1
+      break
+    endif
+  endfor
+  assign tone_count = tones.size
+-%}
+{%- if face_option > -1 -%}
+  <section class="jh-section jh-section--ice" id="jh-crew-{{ section_id }}" {{ block.shopify_attributes }}>
+    <div class="jh-wrap jh-head">
+      <span class="jh-eyebrow">{{ eyebrow }}</span>
+      <h2 class="jh-h2">{{ heading }}</h2>
+      {%- if text != blank -%}<p class="jh-sub">{{ text }}</p>{%- endif -%}
+    </div>
+    <div class="jh-crew">
+      {%- for value in product.options_with_values[face_option].values -%}
+        {%- liquid
+          assign face_media = nil
+          assign face_variant = nil
+          for v in product.variants
+            if v.options[face_option] == value
+              assign face_variant = v
+              if v.featured_media
+                assign face_media = v.featured_media
+                break
+              endif
+            endif
+          endfor
+          assign t = forloop.index0 | modulo: tone_count
+        -%}
+        <article class="jh-char">
+          <div class="jh-char__media jh-media" style="--tone: {{ tones[t] | strip }}">
+            {%- if face_media -%}
+              {{ face_media | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 1100px) 20vw, 74vw', alt: value }}
+            {%- else -%}
+              <div class="jh-ph">{% render 'jolly-art', face: 'mask' %}</div>
+            {%- endif -%}
+          </div>
+          <div class="jh-char__body">
+            <h3 class="jh-char__name">{{ value }}</h3>
+            {%- if block.settings.line != blank -%}<p class="jh-char__line">{{ block.settings.line }}</p>{%- endif -%}
+            {%- if face_variant and face_variant.available -%}
+              <button type="button" class="jh-char__btn" data-jh-pick="{{ value | escape }}">{{ 'jolly.product.choose' | t }} {{ value }}</button>
+            {%- else -%}
+              <span class="jh-char__btn" aria-disabled="true">{{ 'jolly.product.sold_out' | t }}</span>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
