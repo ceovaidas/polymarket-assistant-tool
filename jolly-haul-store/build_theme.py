@@ -95,6 +95,12 @@ def main(dawn_dir):
         # "All gifts" tile first: the whole catalogue, shown with one of the shop's own product photos.
         home["blocks"]["cat_all"] = {"type": "category", "settings": {"title": "All gifts", "art": "gift", "link": "shopify://collections/all"}}
         home["block_order"].insert(home["block_order"].index("cat_1"), "cat_all")
+        # Newer categories, placed after Baby & kids. Empty ones hide themselves on the storefront.
+        after = home["block_order"].index("cat_3") + 1
+        for bid, title, handle, art in [("cat_pets", "Pets", "pets", "cat"), ("cat_cozy", "Cozy & travel", "cozy-travel", "gift")]:
+            home["blocks"][bid] = {"type": "category", "settings": {"title": title, "art": art, "collection": handle}}
+            home["block_order"].insert(after, bid)
+            after += 1
         # Gift finder stays off until the catalogue spans several price points.
         for bid in [k for k, v in home["blocks"].items() if v["type"] == "price"]:
             del home["blocks"][bid]

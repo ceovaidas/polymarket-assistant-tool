@@ -66,6 +66,12 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
    | Ugly sweaters | `cat-sweaters` |
    | Lights & decor | `cat-decor` |
    | Stocking stuffers | `cat-stuffers` |
+   | Pets | `cat-pets` |
+   | Cozy & travel | `cat-cozy` |
+   | New arrivals | `new` |
+   | Gifts under $25 | sąlyga *Variant price is less than* 25 |
+
+   **Pridedant naują prekę** užtenka uždėti žymas: kategorijos žymą (`cat-...`), o jei nori – `trending` (Bestsellers), `new` (New arrivals), `viral` (ženkliukas „Viral on TikTok“). Prekė pati atsiras reikiamose grupėse, plytelėse ir rekomendacijose. Nauja kategorija = nauja automatinė kolekcija su nauja `cat-` žyma, tada jos handle pridėk Customize → Collection → *Category links*.
 4. **Kaukės puslapis:** Products → *Funny Face Ski Mask* → dešinėje *Theme template* → **landing** → Save.
 5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, All gifts (`/collections/all` – visas katalogas), Bestsellers (`/collections/trending`), Contact.
 6. **Nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt.
