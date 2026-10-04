@@ -39,13 +39,69 @@
       <a class="jh-iconbtn" href="{{ routes.cart_url }}" id="cart-icon-bubble">{% render 'jolly-cart-icon' %}</a>
     </div>
   </div>
-  <div class="jh-header__mobile" id="jh-menu-{{ section.id }}" data-jh-menu hidden>
-    <nav aria-label="Main">
-      {%- for link in menu.links -%}
-        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}{% render 'jolly-icon', name: 'chev-right' %}</a>
-      {%- endfor -%}
-    </nav>
-    {% render 'jolly-localization', id: 'drawer' %}
+  <div class="jh-drawer" id="jh-menu-{{ section.id }}" data-jh-menu hidden>
+    <div class="jh-drawer__scrim" data-jh-menu-close></div>
+    <div class="jh-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'jolly.header.menu' | t }}">
+      <div class="jh-drawer__top">
+        <a class="jh-logo jh-drawer__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
+        <button type="button" class="jh-drawer__close" data-jh-menu-close aria-label="{{ 'jolly.header.close' | t }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="jh-drawer__body">
+        <form class="jh-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <label class="visually-hidden" for="jh-drawer-q-{{ section.id }}">{{ 'jolly.common.search_shop' | t }}</label>
+          <input id="jh-drawer-q-{{ section.id }}" type="search" name="q" placeholder="{{ 'jolly.common.search_placeholder' | t }}">
+        </form>
+
+        <nav class="jh-drawer__nav" aria-label="Main">
+          {%- for link in menu.links -%}
+            <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}><span>{{ link.title }}</span>{% render 'jolly-icon', name: 'chev-right' %}</a>
+          {%- endfor -%}
+        </nav>
+
+        {%- assign drawer_handles = section.settings.drawer_collections | remove: ' ' | split: ',' -%}
+        {%- if drawer_handles.size > 0 -%}
+          <p class="jh-drawer__label">{{ 'jolly.header.categories' | t }}</p>
+          <div class="jh-drawer__cats">
+            {%- for h in drawer_handles -%}
+              {%- assign c = collections[h] -%}
+              {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+              {%- assign photo = c.image -%}
+              {%- if photo == blank -%}
+                {%- for cp in c.products limit: 8 -%}{%- if cp.featured_media -%}{%- assign photo = cp.featured_media -%}{%- break -%}{%- endif -%}{%- endfor -%}
+              {%- endif -%}
+              <a class="jh-drawer__cat" href="{{ c.url }}">
+                <span class="jh-drawer__thumb">
+                  {%- if photo -%}{{ photo | image_url: width: 160 | image_tag: loading: 'lazy', alt: '', width: 80, height: 80 }}{%- else -%}{% render 'jolly-art', face: 'gift' %}{%- endif -%}
+                </span>
+                <span>{{ c.title }}</span>
+              </a>
+            {%- endfor -%}
+          </div>
+          <a class="jh-drawer__all" href="{{ routes.collections_url }}">{{ 'jolly.common.all_categories' | t }} {% render 'jolly-icon', name: 'chev-right' %}</a>
+        {%- endif -%}
+
+        {%- if section.settings.drawer_offer != blank -%}
+          <a class="jh-drawer__offer" href="{{ section.settings.drawer_offer_link | default: routes.all_products_collection_url }}">
+            {% render 'jolly-icon', name: 'gift' %}
+            <span>{{ section.settings.drawer_offer }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- assign help_menu = linklists[section.settings.drawer_menu] -%}
+        {%- if help_menu.links.size > 0 -%}
+          <p class="jh-drawer__label">{{ 'jolly.footer.help' | t }}</p>
+          <nav class="jh-drawer__help" aria-label="{{ 'jolly.footer.help' | t }}">
+            {%- for link in help_menu.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
+          </nav>
+        {%- endif -%}
+
+        <div class="jh-drawer__loc">{% render 'jolly-localization', id: 'drawer' %}</div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -58,14 +114,24 @@
     var menu = header && header.querySelector('[data-jh-menu]');
     if (!btn || !menu || btn.dataset.jhReady) return;
     btn.dataset.jhReady = '1';
+    var closeTimer;
     function set(open) {
-      menu.hidden = !open;
+      clearTimeout(closeTimer);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.documentElement.classList.toggle('jh-menu-open', open);
+      if (open) {
+        menu.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { menu.classList.add('is-open'); }); });
+        var close = menu.querySelector('.jh-drawer__close');
+        if (close) setTimeout(function () { close.focus({ preventScroll: true }); }, 50);
+      } else {
+        menu.classList.remove('is-open');
+        closeTimer = setTimeout(function () { menu.hidden = true; }, 280);
+      }
     }
-    btn.addEventListener('click', function (e) { e.stopPropagation(); set(menu.hidden); });
-    menu.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
-    document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) set(false); });
+    btn.addEventListener('click', function () { set(menu.hidden || !menu.classList.contains('is-open')); });
+    menu.querySelectorAll('[data-jh-menu-close]').forEach(function (el) { el.addEventListener('click', function () { set(false); btn.focus({ preventScroll: true }); }); });
+    menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { set(false); btn.focus(); } });
     window.addEventListener('resize', function () { if (window.innerWidth >= 990 && !menu.hidden) set(false); });
   })();
@@ -108,7 +174,12 @@
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "4–5 links look best." },
     { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Leave empty to use the text logo." },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 240, "step": 10, "unit": "px", "default": 140 },
-    { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": false }
+    { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": false },
+    { "type": "header", "content": "Mobile menu" },
+    { "type": "text", "id": "drawer_collections", "label": "Categories (collection handles)", "default": "new-arrivals,trending,gifts-under-25,funny-masks,baby-kids,pets,cozy-travel,star-projectors,lights-decor,stocking-stuffers", "info": "Empty collections are hidden automatically." },
+    { "type": "text", "id": "drawer_offer", "label": "Offer card", "default": "Mix & match: buy 2 gifts, save 10% · 3+ save 15%" },
+    { "type": "url", "id": "drawer_offer_link", "label": "Offer card link" },
+    { "type": "link_list", "id": "drawer_menu", "label": "Help links", "default": "footer" }
   ]
 }
 {% endschema %}

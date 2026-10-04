@@ -1,6 +1,8 @@
 {
   "jolly": {
     "header": {
+      "close": "Sluiten",
+      "categories": "Per categorie",
       "menu": "Menu"
     },
     "common": {

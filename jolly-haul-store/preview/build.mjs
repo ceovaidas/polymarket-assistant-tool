@@ -193,8 +193,9 @@ const renderHeader = (active) => engine.parseAndRender(headerSrc, {
   section: { id: 'header', settings: headerSettings },
   shop: { ...shop, customer_accounts_enabled: true },
   cart: { item_count: 2 },
-  routes: { root_url: 'index.html', search_url: '#', cart_url: '#', account_url: '#' },
-  linklists: { 'main-menu': { links: [
+  routes: { root_url: 'index.html', search_url: 'search.html', cart_url: '#', account_url: '#', collections_url: 'collections.html', all_products_collection_url: 'collection.html' },
+  collections: mockCollections,
+  linklists: { footer: { links: ['Shipping', 'Returns & refunds', 'FAQ', 'About us', 'Contact'].map((title) => ({ title, url: 'page.html' })) }, 'main-menu': { links: [
     { title: 'Home', url: 'index.html', active: active === 'home' },
     { title: 'All gifts', url: 'collection.html', active: active === 'shop' },
     { title: 'Categories', url: 'collections.html', active: active === 'cats' },

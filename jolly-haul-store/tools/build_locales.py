@@ -8,6 +8,8 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # key: (en, de, fr, es, it, nl). Plural keys use dicts {one, other}.
 K = {
+ 'header.close': ('Close', 'Schließen', 'Fermer', 'Cerrar', 'Chiudi', 'Sluiten'),
+ 'header.categories': ('Shop by category', 'Nach Kategorie', 'Par catégorie', 'Por categoría', 'Per categoria', 'Per categorie'),
  'header.menu': ('Menu', 'Menü', 'Menu', 'Menú', 'Menu', 'Menu'),
  'common.all_categories': ('All categories', 'Alle Kategorien', 'Toutes les catégories', 'Todas las categorías', 'Tutte le categorie', 'Alle categorieën'),
  'common.home': ('Home', 'Startseite', 'Accueil', 'Inicio', 'Home', 'Home'),

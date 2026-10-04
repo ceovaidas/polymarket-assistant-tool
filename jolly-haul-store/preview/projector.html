@@ -4167,7 +4167,7 @@ details-disclosure > details {
 .jh-header__in { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; grid-template-areas: "menu logo icons"; align-items: center; height: 64px; }
 @media (min-width: 990px) {
   .jh-header__in { grid-template-areas: "logo nav icons"; height: 76px; }
-  .jh-header__burger, .jh .jh-header__mobile { display: none !important; }
+  .jh-header__burger, .jh .jh-drawer { display: none !important; }
 }
 .jh-header__burger { grid-area: menu; justify-self: start; border: 0; background: none; padding: 0; cursor: pointer; color: inherit; -webkit-tap-highlight-color: transparent; }
 .jh-logo { grid-area: logo; justify-self: center; display: inline-flex; align-items: flex-start; gap: 2px; text-decoration: none; font-weight: 900; font-size: 26px; letter-spacing: -.045em; line-height: 1; }
@@ -4198,11 +4198,6 @@ details-disclosure > details {
 .jh-header__close { display: none; }
 .jh-header__burger[aria-expanded="true"] .jh-header__open { display: none; }
 .jh-header__burger[aria-expanded="true"] .jh-header__close { display: block; }
-.jh-header__mobile { position: absolute; z-index: 40; -webkit-transform: translateZ(0); left: 0; right: 0; top: 100%; max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain; padding: 8px var(--gutter) 20px; background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 16px 30px rgba(27,36,32,.08); display: block; }
-.jh-header__mobile a { display: flex; justify-content: space-between; align-items: center; padding: 15px 4px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: 17px; text-decoration: none; }
-.jh-header__mobile a:last-child { border-bottom: 0; }
-.jh-header__mobile a[aria-current="page"] { color: var(--pop); }
-.jh-header__mobile svg { width: 18px; height: 18px; color: var(--ink-3); }
 
 /* =====================================================================
    Prize wheel
@@ -4518,8 +4513,6 @@ body, .shopify-policy__container { font-family: 'Rubik', system-ui, -apple-syste
 .jh-404__home { margin-top: 18px; }
 
 /* Country / currency / language picker */
-.jh-header__mobile nav { display: grid; }
-.jh-header__mobile .jh-loc { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
 .jh-loc { display: flex; flex-wrap: wrap; gap: 8px; }
 .jh-loc__field { position: relative; display: inline-flex; align-items: center; }
 .jh-loc__field svg { position: absolute; left: 12px; width: 16px; height: 16px; pointer-events: none; }
@@ -4543,6 +4536,49 @@ body, .shopify-policy__container { font-family: 'Rubik', system-ui, -apple-syste
 
 /* App blocks (reviews etc.) */
 .jh-apps { padding-top: 24px; padding-bottom: 24px; }
+
+/* =====================================================================
+   Mobile menu (off-canvas drawer)
+   ===================================================================== */
+html.jh-menu-open { overflow: hidden; }
+html.jh-menu-open .jh-header-wrapper { z-index: 100; }
+.jh-drawer { position: fixed; inset: 0; z-index: 100; }
+.jh-drawer__scrim { position: absolute; inset: 0; background: rgba(18,41,31,.45); opacity: 0; transition: opacity .25s ease; -webkit-tap-highlight-color: transparent; }
+.jh .jh-drawer__scrim { display: block; }
+.jh-drawer__panel { position: absolute; top: 0; bottom: 0; left: 0; width: min(88vw, 400px); display: flex; flex-direction: column; background: #fff;
+  box-shadow: 12px 0 40px rgba(18,41,31,.18); border-radius: 0 22px 22px 0; transform: translateX(-102%); transition: transform .28s cubic-bezier(.2,.8,.2,1); }
+.jh-drawer.is-open .jh-drawer__scrim { opacity: 1; }
+.jh-drawer.is-open .jh-drawer__panel { transform: none; }
+@media (prefers-reduced-motion: reduce) { .jh-drawer__panel, .jh-drawer__scrim { transition: none; } }
+.jh-drawer__top { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px 20px; border-bottom: 1px solid var(--line); }
+.jh-drawer__logo { font-size: 24px; }
+.jh-drawer__close { display: grid; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--ice); color: var(--ink); cursor: pointer; }
+.jh-drawer__close svg { width: 20px; height: 20px; }
+.jh-drawer__body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+.jh-drawer__search { position: relative; margin-bottom: 8px; }
+.jh-drawer__search svg { position: absolute; left: 14px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+.jh-drawer__search input { width: 100%; padding: 13px 14px 13px 42px; border: 0; border-radius: 14px; background: var(--ice); font: 500 16px var(--f); color: var(--ink); }
+.jh-drawer__search input:focus { outline: 2px solid var(--brand); }
+.jh-drawer__nav { display: grid; }
+.jh-drawer__nav a { display: flex; align-items: center; justify-content: space-between; padding: 14px 2px; border-bottom: 1px solid var(--line); font-size: 19px; font-weight: 800; letter-spacing: -.01em; color: var(--ink); text-decoration: none; }
+.jh-drawer__nav a:last-child { border-bottom: 0; }
+.jh-drawer__nav a[aria-current="page"] { color: var(--pop); }
+.jh-drawer__nav svg { width: 18px; height: 18px; color: var(--ink-3); }
+.jh-drawer__label { margin: 22px 0 10px; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); }
+.jh-drawer__cats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.jh-drawer__cat { display: flex; align-items: center; gap: 8px; padding: 5px 6px 5px 5px; border-radius: 14px; background: var(--ice); font-size: 13px; font-weight: 700; line-height: 1.2; color: var(--ink); text-decoration: none; min-width: 0; }
+.jh-drawer__cat > span:last-child { min-width: 0; overflow-wrap: break-word; }
+.jh-drawer__thumb { flex: none; width: 36px; height: 36px; border-radius: 10px; overflow: hidden; background: #fff; display: grid; place-items: center; }
+.jh-drawer__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.jh-drawer__thumb svg { width: 80%; height: 80%; }
+.jh-drawer__all { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-size: 14px; font-weight: 700; color: var(--brand); text-decoration: none; }
+.jh-drawer__all svg { width: 16px; height: 16px; }
+.jh-drawer__offer { display: flex; align-items: center; gap: 12px; margin-top: 22px; padding: 14px 16px; border-radius: 16px; background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; line-height: 1.35; text-decoration: none; }
+.jh-drawer__offer svg { flex: none; width: 26px; height: 26px; color: var(--sun); }
+.jh-drawer__help { display: flex; flex-wrap: wrap; gap: 8px; }
+.jh-drawer__help a { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--ink-2); text-decoration: none; }
+.jh-drawer__loc { margin-top: 20px; }
+
 
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
@@ -4569,15 +4605,56 @@ body { margin: 0; background: #fff; }
     <nav class="jh-header__nav" aria-label="Main"><a href="index.html">Home</a><a href="collection.html">All gifts</a><a href="collections.html">Categories</a><a href="collection.html">Bestsellers</a><a href="#">Contact</a></nav>
 
     <div class="jh-header__icons">
-      <a class="jh-iconbtn" href="#" aria-label="Search">
+      <a class="jh-iconbtn" href="search.html" aria-label="Search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
       </a><a class="jh-iconbtn" href="#" id="cart-icon-bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8a3 3 0 0 1 6 0"/></svg>
 <span class="visually-hidden">Cart,  items</span></a>
     </div>
   </div>
-  <div class="jh-header__mobile" id="jh-menu-header" data-jh-menu hidden>
-    <nav aria-label="Main"><a href="index.html">Home<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">All gifts<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collections.html">Categories<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html">Bestsellers<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#">Contact<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav>
-    
+  <div class="jh-drawer" id="jh-menu-header" data-jh-menu hidden>
+    <div class="jh-drawer__scrim" data-jh-menu-close></div>
+    <div class="jh-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="jh-drawer__top">
+        <a class="jh-logo jh-drawer__logo" href="index.html" aria-label="Jolly Haul"><span>jolly<b>haul</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 16.4 6.4 19.7l1.5-6.3L3 9.1l6.4-.6z" fill="#f2b33d"/></svg></a>
+        <button type="button" class="jh-drawer__close" data-jh-menu-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="jh-drawer__body">
+        <form class="jh-drawer__search" action="search.html" method="get" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <label class="visually-hidden" for="jh-drawer-q-header">Search the shop</label>
+          <input id="jh-drawer-q-header" type="search" name="q" placeholder="Search for gifts…">
+        </form>
+
+        <nav class="jh-drawer__nav" aria-label="Main"><a href="index.html"><span>Home</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html"><span>All gifts</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collections.html"><span>Categories</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="collection.html"><span>Bestsellers</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="#"><span>Contact</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></nav><p class="jh-drawer__label">Shop by category</p>
+          <div class="jh-drawer__cats"><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Bestsellers</span>
+              </a><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Funny masks</span>
+              </a><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Baby & kids</span>
+              </a><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Star projectors</span>
+              </a><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Lights & decor</span>
+              </a><a class="jh-drawer__cat" href="collection.html">
+                <span class="jh-drawer__thumb"><svg viewBox="0 0 240 300" role="img" aria-label="Gift box illustration" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="124" width="140" height="122" rx="6" fill="#1f6b4e" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="40" y="98" width="160" height="34" rx="6" fill="#2a8a64" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 98H132V246H108Z" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="96" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-20 96 82)"/><ellipse cx="144" cy="82" rx="26" ry="14" fill="#e0313f" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" transform="rotate(20 144 82)"/><circle cx="120" cy="94" r="11" fill="#a81e2b" stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 150V230M180 150V230" stroke="#fff" stroke-width="3" opacity=".25"/></svg></span>
+                <span>Stocking stuffers</span>
+              </a></div>
+          <a class="jh-drawer__all" href="collections.html">All categories <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a class="jh-drawer__offer" href="collection.html">
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg>
+            <span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span>
+          </a><p class="jh-drawer__label">Help</p>
+          <nav class="jh-drawer__help" aria-label="Help"><a href="page.html">Shipping</a><a href="page.html">Returns & refunds</a><a href="page.html">FAQ</a><a href="page.html">About us</a><a href="page.html">Contact</a></nav><div class="jh-drawer__loc"></div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -4590,14 +4667,24 @@ body { margin: 0; background: #fff; }
     var menu = header && header.querySelector('[data-jh-menu]');
     if (!btn || !menu || btn.dataset.jhReady) return;
     btn.dataset.jhReady = '1';
+    var closeTimer;
     function set(open) {
-      menu.hidden = !open;
+      clearTimeout(closeTimer);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.documentElement.classList.toggle('jh-menu-open', open);
+      if (open) {
+        menu.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { menu.classList.add('is-open'); }); });
+        var close = menu.querySelector('.jh-drawer__close');
+        if (close) setTimeout(function () { close.focus({ preventScroll: true }); }, 50);
+      } else {
+        menu.classList.remove('is-open');
+        closeTimer = setTimeout(function () { menu.hidden = true; }, 280);
+      }
     }
-    btn.addEventListener('click', function (e) { e.stopPropagation(); set(menu.hidden); });
-    menu.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
-    document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) set(false); });
+    btn.addEventListener('click', function () { set(menu.hidden || !menu.classList.contains('is-open')); });
+    menu.querySelectorAll('[data-jh-menu-close]').forEach(function (el) { el.addEventListener('click', function () { set(false); btn.focus({ preventScroll: true }); }); });
+    menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { set(false); btn.focus(); } });
     window.addEventListener('resize', function () { if (window.innerWidth >= 990 && !menu.hidden) set(false); });
   })();
@@ -4625,7 +4712,7 @@ body { margin: 0; background: #fff; }
           <span class="jh-price__now" data-jh-price>$49.99</span>
           <s class="jh-price__was" data-jh-compare hidden>$0.00</s>
           <span class="jh-price__save" data-jh-save hidden></span>
-        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="876143" data-jh-variant-id>
+        </div><p class="jh-promo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h18v12H5zM3 8h22v4H3zM14 8v16"/><path d="M14 8c-2-4-7-4-6-1s6 1 6 1 4-5 6-2-6 2-6 2"/></svg><span>Mix & match: buy 2 gifts, save 10% · 3+ save 15%</span></p><div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">🎁</span><span>Gift tip: add a gift note at checkout — we leave prices out of the parcel.</span></div><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="96475" data-jh-variant-id>
           <input type="hidden" name="quantity" value="1" data-jh-qty><button type="submit" name="add" class="jh-atc" data-jh-atc >
             <span data-jh-atc-label>Add to cart</span>
             <span class="jh-atc__price" data-jh-price>$49.99</span>
@@ -4698,7 +4785,7 @@ body { margin: 0; background: #fff; }
         "save": "Save [percent]%"
       },
       "variants": [{
-            "id": 876143,
+            "id": 96475,
             "title": "Default Title",
             "options": ["Default Title"],
             "price": 4999,
@@ -4749,7 +4836,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="715620">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="37366">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4758,7 +4845,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="849046">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="725146">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -4767,7 +4854,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="954468">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="342107">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
