@@ -86,12 +86,24 @@ def main(dawn_dir):
         home = index["sections"]["home"]
         home["settings"].update({
             "trending_collection": "trending",
-            "spotlight_product": "funny-face-ski-mask",
             "hero_cta_link": "shopify://collections/all",
         })
         for block in home["blocks"].values():
             if block["type"] == "category" and block["settings"]["title"] in CATEGORY_LINKS:
-                block["settings"]["link"] = CATEGORY_LINKS[block["settings"]["title"]]
+                # Point the tile at its collection: it links there and hides itself while empty.
+                block["settings"]["collection"] = CATEGORY_LINKS[block["settings"]["title"]].split("/")[-1]
+        # Gift finder stays off until the catalogue spans several price points.
+        for bid in [k for k, v in home["blocks"].items() if v["type"] == "price"]:
+            del home["blocks"][bid]
+            home["block_order"].remove(bid)
+        home["settings"].update({
+            "spotlight_product": "realistic-old-man-ski-mask",
+            "spotlight_text": "The ski mask that makes the whole lift line look twice. Realistic printed face, stretchy one-size fit, thermal styles for colder days.",
+            "spotlight_bullets": "Eight realistic looks\nThermal styles available\nTwo masks ship free",
+            "hero_cta2": "Funny masks",
+            "hero_cta2_link": "shopify://collections/funny-masks",
+            "hero_labels": "|",
+        })
         dump_json(build / "templates" / "index.json", index)
 
         # Header group: Jolly header replaces Dawn's announcement bar + header.

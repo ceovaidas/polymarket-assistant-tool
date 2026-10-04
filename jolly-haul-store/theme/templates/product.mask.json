@@ -1,0 +1,223 @@
+{
+  "sections": {
+    "main": {
+      "type": "jolly-product",
+      "blocks": {
+        "perk_1": {
+          "type": "perk",
+          "settings": {
+            "label": "Turns heads",
+            "icon": "check"
+          }
+        },
+        "perk_2": {
+          "type": "perk",
+          "settings": {
+            "label": "Stretchy fit",
+            "icon": "globe"
+          }
+        },
+        "perk_3": {
+          "type": "perk",
+          "settings": {
+            "label": "Ships in 1–3 days",
+            "icon": "truck"
+          }
+        },
+        "perk_4": {
+          "type": "perk",
+          "settings": {
+            "label": "Great gift",
+            "icon": "gift"
+          }
+        },
+        "bundle_1": {
+          "type": "bundle",
+          "settings": {
+            "qty": 1,
+            "label": "1 Mask",
+            "note": "Solo legend",
+            "pct": 0,
+            "tag": ""
+          }
+        },
+        "bundle_2": {
+          "type": "bundle",
+          "settings": {
+            "qty": 2,
+            "label": "2 Masks",
+            "note": "You + your ride-or-die · Free shipping",
+            "pct": 15,
+            "tag": "Most popular"
+          }
+        },
+        "bundle_3": {
+          "type": "bundle",
+          "settings": {
+            "qty": 3,
+            "label": "3 Masks",
+            "note": "The whole squad · Free shipping",
+            "pct": 25,
+            "tag": "Best value"
+          }
+        },
+        "feat_1": {
+          "type": "feature",
+          "settings": {
+            "icon": "snow",
+            "title": "Instant laughs",
+            "text": "The easiest way to win the group photo — on the slopes or at the party."
+          }
+        },
+        "feat_2": {
+          "type": "feature",
+          "settings": {
+            "icon": "breath",
+            "title": "Breathable",
+            "text": "Stretchy fabric you can wear all day without overheating."
+          }
+        },
+        "feat_3": {
+          "type": "feature",
+          "settings": {
+            "icon": "knit",
+            "title": "One size",
+            "text": "Stretches to fit most adults, men and women."
+          }
+        },
+        "feat_4": {
+          "type": "feature",
+          "settings": {
+            "icon": "gift",
+            "title": "Gift-ready",
+            "text": "The funny Christmas gift they'll actually wear."
+          }
+        },
+        "compare_1": {
+          "type": "compare",
+          "settings": {
+            "label": "Gets you noticed in the lift line",
+            "them": false
+          }
+        },
+        "compare_2": {
+          "type": "compare",
+          "settings": {
+            "label": "Full face and neck coverage",
+            "them": true
+          }
+        },
+        "compare_3": {
+          "type": "compare",
+          "settings": {
+            "label": "Stretchy one-size fit",
+            "them": true
+          }
+        },
+        "compare_4": {
+          "type": "compare",
+          "settings": {
+            "label": "Instant group-photo upgrade",
+            "them": false
+          }
+        },
+        "compare_5": {
+          "type": "compare",
+          "settings": {
+            "label": "Conversation starter",
+            "them": false
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Will it fit me?",
+            "answer": "<p>It's a stretchy one-size balaclava that fits most adults, men and women.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I wear it skiing?",
+            "answer": "<p>Yes — it covers your face and neck and works with goggles. For very cold days, choose a Thermal style where available.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Will it arrive before Christmas?",
+            "answer": "<p>Order by December 10 for the best chance of delivery before Christmas. You'll get a tracking link when it ships.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "How much is shipping?",
+            "answer": "<p>$4.99, and free on orders of $50 or more — so two masks ship free.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "What if it's not right?",
+            "answer": "<p>Return it unworn within 30 days of delivery. See our returns policy for details.</p>"
+          }
+        },
+        "faq_6": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I wash it?",
+            "answer": "<p>Hand wash in cold water and lay flat to dry.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "perk_1",
+        "perk_2",
+        "perk_3",
+        "perk_4",
+        "bundle_1",
+        "bundle_2",
+        "bundle_3",
+        "feat_1",
+        "feat_2",
+        "feat_3",
+        "feat_4",
+        "compare_1",
+        "compare_2",
+        "compare_3",
+        "compare_4",
+        "compare_5",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
+      "settings": {
+        "art_order": "",
+        "swatch_option": "",
+        "badge": "Christmas bestseller",
+        "lede": "The funny ski mask that turns every lift line, party and group photo into a show.",
+        "hook_emoji": "😂",
+        "hook": "Warning: strangers will ask for selfies.",
+        "bundle_heading": "Bring the crew & save",
+        "bundle_default": 2,
+        "materials": "",
+        "marquee": "Turns heads on every lift|Stretchy one-size fit|Free shipping on 2+ masks|30-day returns|Order by Dec 10 for Christmas",
+        "features_eyebrow": "Why you'll love it",
+        "features_heading": "Funny face. Real mask.",
+        "compare_heading": "Why settle for a boring balaclava?",
+        "guarantee_heading": "Try it on. Love it. Or send it back.",
+        "guarantee_text": "Not quite right? Return it unworn within 30 days of delivery.",
+        "final_heading": "Don't be the boring one in the photo.",
+        "final_text": "Two masks ship free — grab one for your ride-or-die.",
+        "ticker": "Free shipping on 2+ masks|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
