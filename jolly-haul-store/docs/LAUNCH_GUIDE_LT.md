@@ -75,6 +75,7 @@ Taisyklė viral produktui: **(1)** suprantamas per 2 sekundes video, **(2)** „
 4. **Kaukės puslapis:** Products → *Funny Face Ski Mask* → dešinėje *Theme template* → **landing** → Save.
 5. **Meniu:** Online Store → Navigation → *Main menu* → nuorodos: Home, All gifts (`/collections/all` – visas katalogas), Bestsellers (`/collections/trending`), Contact.
 6. **Nuolaidos kaukėms:** Discounts → Automatic → 15% nuo 2 vnt., 25% nuo 3 vnt.
+   **Mix & match visai parduotuvei:** Discounts → Automatic → „Mix & match: 10% off 2 gifts“ (min. 2 prekės, visos prekės) ir „15% off 3+ gifts“ (min. 3). Nuolaidos nesideda viena su kita – Shopify pats pritaiko pirkėjui geriausią. Jei keisi procentus, pakeisk ir Customize → Cart → *Mix & match tiers* bei produkto puslapio *Offer line*.
 7. **Kalėdų rato kodai (būtina!)** – Discounts → *Create discount* → *Amount off order* (arba *Free shipping*) → **Discount code**, kiekvienam: *Limit to one use per customer*, galioja iki 2026-12-31:
    | Kodas | Nuolaida |
    |---|---|

@@ -717,3 +717,9 @@ html.jh-lock { overflow: hidden; }
 
 /* Recommendations */
 .jh-related .jh-grid-head { margin-bottom: 22px; }
+
+/* Offer line (product) + mix & match nudge (cart) */
+.jh-promo { display: flex; align-items: center; gap: 10px; margin: 12px 0 4px; padding: 10px 14px; border-radius: 12px; background: #fff1d6; color: var(--ink); font-size: 14px; font-weight: 600; }
+.jh-promo svg, .jh-mix svg { width: 20px; height: 20px; flex: none; color: var(--pop); }
+.jh-mix { display: flex; align-items: center; gap: 10px; padding: 12px 14px; margin-bottom: 14px; border-radius: 12px; background: #fff1d6; font-size: 14px; }
+.jh-mix p { margin: 0; }

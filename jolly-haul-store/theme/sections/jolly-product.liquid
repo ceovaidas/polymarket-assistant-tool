@@ -157,6 +157,9 @@
           <s class="jh-price__was" data-jh-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
           <span class="jh-price__save" data-jh-save hidden></span>
         </div>
+        {%- if section.settings.promo != blank -%}
+          <p class="jh-promo">{% render 'jolly-icon', name: 'gift' %}<span>{{ section.settings.promo }}</span></p>
+        {%- endif -%}
 
         {%- if section.settings.hook != blank -%}
           <div class="jh-hook"><span class="jh-hook__emoji" aria-hidden="true">{{ section.settings.hook_emoji }}</span><span>{{ section.settings.hook }}</span></div>
@@ -558,6 +561,7 @@
       "label": "Option shown as picture swatches",
       "default": "Face"
     },
+    { "type": "text", "id": "promo", "label": "Offer line under the price", "info": "Only advertise discounts that are set up in Shopify → Discounts." },
     {
       "type": "text",
       "id": "bundle_heading",

@@ -51,6 +51,26 @@
             "question": "What if it's not right?",
             "answer": "<p>Return unused items within 30 days of delivery for a refund. Just email us with your order number.</p>"
           }
+        },
+        "bundle_1": {
+          "type": "bundle",
+          "settings": {
+            "qty": 1,
+            "label": "1 Cape",
+            "note": "One festive friend",
+            "pct": 0,
+            "tag": ""
+          }
+        },
+        "bundle_2": {
+          "type": "bundle",
+          "settings": {
+            "qty": 2,
+            "label": "2 Capes",
+            "note": "For the whole pet crew · 10% off",
+            "pct": 10,
+            "tag": "Most popular"
+          }
         }
       },
       "block_order": [
@@ -60,7 +80,9 @@
         "faq_1",
         "faq_2",
         "faq_3",
-        "faq_4"
+        "faq_4",
+        "bundle_1",
+        "bundle_2"
       ],
       "settings": {
         "art_order": "",
@@ -69,7 +91,7 @@
         "hook_emoji": "🎁",
         "hook": "Gift tip: add a gift note at checkout — we leave prices out of the parcel.",
         "swatch_option": "",
-        "bundle_heading": "",
+        "bundle_heading": "Choose your bundle",
         "materials": "",
         "marquee": "Ships in 1–3 days|30-day returns|Gift-ready|Secure checkout|Order by Dec 10 for Christmas",
         "guarantee_heading": "Love it, or send it back.",
@@ -77,7 +99,8 @@
         "final_heading": "The gift they'll actually talk about.",
         "final_text": "Order by December 10 for delivery before Christmas.",
         "ticker": "Free shipping over $50|Order by Dec 10 for Christmas delivery|30-day easy returns|Ships in 1–3 business days",
-        "promo": "Mix & match: buy 2 gifts, save 10% · 3+ save 15%"
+        "promo": "Mix & match: buy 2 gifts, save 10% · 3+ save 15%",
+        "bundle_default": 1
       }
     },
     "related": {
