@@ -96,6 +96,10 @@
       "rights": "Alle Rechte vorbehalten.",
       "promise_ship": "Kostenloser Versand ab 50 $"
     },
+    "home": {
+      "faq_label": "Gut zu wissen",
+      "faq_more_html": "Noch Fragen? <a href=\"{{ url }}\">Schreib uns</a>, ein echter Mensch antwortet innerhalb von 2 Werktagen."
+    },
     "contact": {
       "email_us": "Schreib uns",
       "reply_time": "Wir antworten innerhalb von 2 Werktagen.",

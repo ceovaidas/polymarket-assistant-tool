@@ -96,6 +96,10 @@
       "rights": "Tutti i diritti riservati.",
       "promise_ship": "Spedizione gratuita sopra i 50 $"
     },
+    "home": {
+      "faq_label": "Buono a sapersi",
+      "faq_more_html": "Ancora dubbi? <a href=\"{{ url }}\">Scrivici</a>: una persona vera risponde entro 2 giorni lavorativi."
+    },
     "contact": {
       "email_us": "Scrivici",
       "reply_time": "Rispondiamo entro 2 giorni lavorativi.",

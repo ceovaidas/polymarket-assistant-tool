@@ -96,6 +96,10 @@
       "rights": "Todos los derechos reservados.",
       "promise_ship": "Envío gratis desde 50 $"
     },
+    "home": {
+      "faq_label": "Conviene saber",
+      "faq_more_html": "¿Dudas? <a href=\"{{ url }}\">Escríbenos</a> y una persona real te responde en 2 días hábiles."
+    },
     "contact": {
       "email_us": "Escríbenos",
       "reply_time": "Respondemos en 2 días hábiles.",

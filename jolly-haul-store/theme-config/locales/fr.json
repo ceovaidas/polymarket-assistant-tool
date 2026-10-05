@@ -96,6 +96,10 @@
       "rights": "Tous droits réservés.",
       "promise_ship": "Livraison gratuite dès 50 $"
     },
+    "home": {
+      "faq_label": "Bon à savoir",
+      "faq_more_html": "Encore un doute ? <a href=\"{{ url }}\">Écrivez-nous</a>, une vraie personne répond sous 2 jours ouvrés."
+    },
     "contact": {
       "email_us": "Écrivez-nous",
       "reply_time": "Réponse sous 2 jours ouvrés.",

@@ -96,6 +96,10 @@
       "rights": "All rights reserved.",
       "promise_ship": "Free shipping over $50"
     },
+    "home": {
+      "faq_label": "Good to know",
+      "faq_more_html": "Still unsure? <a href=\"{{ url }}\">Message us</a> and a real person replies within 2 business days."
+    },
     "contact": {
       "email_us": "Email us",
       "reply_time": "We reply within 2 business days.",

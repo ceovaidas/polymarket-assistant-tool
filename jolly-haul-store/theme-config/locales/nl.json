@@ -96,6 +96,10 @@
       "rights": "Alle rechten voorbehouden.",
       "promise_ship": "Gratis verzending vanaf $50"
     },
+    "home": {
+      "faq_label": "Goed om te weten",
+      "faq_more_html": "Nog vragen? <a href=\"{{ url }}\">Stuur ons een bericht</a>, een echt mens reageert binnen 2 werkdagen."
+    },
     "contact": {
       "email_us": "Mail ons",
       "reply_time": "We reageren binnen 2 werkdagen.",

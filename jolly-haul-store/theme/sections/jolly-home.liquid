@@ -241,11 +241,17 @@
   {%- if faqs.size > 0 -%}
     <section class="jh-section">
       <div class="jh-wrap">
-        <div class="jh-head"><span class="jh-eyebrow">FAQ</span><h2 class="jh-h2">{{ section.settings.faq_heading }}</h2></div>
-        <div class="jh-faq">
-          {%- for block in faqs -%}
-            <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="jh-faq__a">{{ block.settings.answer }}</div></details>
-          {%- endfor -%}
+        <div class="jh-faqwrap">
+          <div class="jh-head">
+            <span class="jh-eyebrow">{{ 'jolly.home.faq_label' | t }}</span>
+            <h2 class="jh-h2">{{ section.settings.faq_heading }}</h2>
+            <p>{%- assign contact_url = pages.contact.url | default: '/pages/contact' -%}{{ 'jolly.home.faq_more_html' | t: url: contact_url }}</p>
+          </div>
+          <div class="jh-faq">
+            {%- for block in faqs -%}
+              <details {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="jh-faq__a">{{ block.settings.answer }}</div></details>
+            {%- endfor -%}
+          </div>
         </div>
       </div>
     </section>
