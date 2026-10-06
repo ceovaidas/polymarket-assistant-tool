@@ -106,9 +106,11 @@ def main(dawn_dir):
             del home["blocks"][bid]
             home["block_order"].remove(bid)
         home["settings"].update({
-            "spotlight_product": "realistic-old-man-ski-mask",
-            "spotlight_text": "The ski mask that makes the whole lift line look twice. Realistic printed face, stretchy one-size fit, thermal styles for colder days.",
-            "spotlight_bullets": "Eight realistic looks\nThermal styles available\nTwo masks ship free",
+            "spotlight_product": "bald-guy-ugly-christmas-sweater",
+            "spotlight_eyebrow": "This season's most-shared sweater",
+            "spotlight_text": "One look and the whole party is crying with laughter. The ugly Christmas sweater made for every shiny bald head (and everyone who loves one).",
+            "spotlight_bullets": "5 colourways, sizes S to 4XL\nSoft knit, machine washable\nThe gag gift every bald dad needs",
+            "spotlight_cta": "Get the sweater",
             "hero_cta2": "Bestsellers",
             "hero_cta2_link": "shopify://collections/trending",
             "hero_labels": "|",
