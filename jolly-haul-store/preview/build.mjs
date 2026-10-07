@@ -110,6 +110,7 @@ const catalogue = [
   mk('Mystery Stocking Stuffer Box', 1999, ['viral', 'art-gift']),
   mk('Warm-White Curtain Lights', 3499, ['art-lights']),
 ];
+catalogue.forEach((p, i) => { if (!p.handle) p.handle = 'demo-' + (p.id || i); });
 const mockColl = (handle, title, products) => ({ handle, title, url: 'collection.html', products, products_count: products.length });
 const mockCollections = {
   all: mockColl('all', 'Products', catalogue),
@@ -248,11 +249,12 @@ writeFileSync(join(here, 'collection.html'), shell('Jolly Haul Shop All Preview'
 const cartData = sectionData('jolly-cart.liquid', 'cart.json', 'main');
 const line = (prod, v, qty, i) => ({ index: i + 1, quantity: qty, url: prod.url, product: prod, variant: v, image: null, properties: {}, line_level_discount_allocations: [],
   original_line_price: v.price * qty, final_line_price: v.price * qty, url_to_remove: '#' });
-const lines = [line(mask, mask.variants[2], 2, 0), line(catalogue[1], catalogue[1].variants[0], 1, 1)];
+const lines = [line(mask, mask.variants[2], 1, 0)];
 const cartTotal = lines.reduce((a, l) => a + l.final_line_price, 0);
 const cartHtml = await engine.parseAndRender(cartData.src, {
-  section: cartData.section, shop, routes: { cart_url: '#', all_products_collection_url: 'collection.html' },
-  cart: { item_count: 3, items: lines, total_price: cartTotal, items_subtotal_price: cartTotal, cart_level_discount_applications: [], note: '' },
+  section: cartData.section, shop, routes: { cart_url: '#', cart_add_url: '/cart/add', all_products_collection_url: 'collection.html' },
+  collections: { ...mockCollections, all: { products: catalogue } }, all_products: Object.fromEntries(catalogue.map((p) => [p.handle, p])),
+  cart: { item_count: 1, items: lines.map((l) => ({ ...l, product_id: l.product.id })), total_price: cartTotal, items_subtotal_price: cartTotal, cart_level_discount_applications: [], note: '' },
 });
 const cartCtx = { item_count: 3, items: lines.map((l) => ({ ...l, product_id: l.product.id })) };
 writeFileSync(join(here, 'cart.html'), shell('Jolly Haul Cart Preview', cartHtml + await relatedFor('cart.json', { cart: cartCtx }), await renderHeader('cart')));

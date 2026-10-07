@@ -4746,6 +4746,24 @@ html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
 .jh .jh-acc__body { padding: 0 2px 20px; max-width: 62ch; }
 .jh .jh-bundle__row { transition: border-color .2s, background .2s; }
 
+/* Free-shipping helpers under the progress bar */
+.jh .jh-shipup { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.jh .jh-shipup__title { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+.jh .jh-shipup__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.jh .jh-shipup__item { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 8px; border-radius: var(--r-sm); background: #fff; }
+.jh .jh-shipup__media { width: 52px; height: 52px; border-radius: 10px; overflow: hidden; background: var(--ice); display: block; }
+.jh .jh-shipup__media img { width: 100%; height: 100%; object-fit: cover; }
+.jh .jh-shipup__name { display: block; font-weight: 600; font-size: 14px; line-height: 1.25; text-decoration: none; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.jh .jh-shipup__price { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.jh .jh-shipup__price b { color: var(--brand-dark); }
+.jh .jh-shipup__add { display: inline-flex; align-items: center; gap: 4px; padding: 9px 14px; border: 0; border-radius: 999px; background: var(--brand); color: #fff; font: 700 13px/1 var(--f); cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .2s, transform .15s; }
+.jh .jh-shipup__add:hover { background: var(--brand-dark); }
+.jh .jh-shipup__add:active { transform: scale(.97); }
+.jh .jh-shipup__add:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.jh .jh-shipup__add svg { width: 14px; height: 14px; }
+.jh .jh-shipup__add--link { background: var(--ice-2); color: var(--ink); }
+.jh .jh-shipup__add--link:hover { background: var(--line); }
+
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
 .pv-logo b { color: var(--pop); font-weight: 900; }
@@ -5198,7 +5216,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="projector.html">Snowfall Star Projector</a></h3>
     <div class="jh-card__price">
       <span>$49.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="594809">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="420760">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -5207,7 +5225,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">Baby Reindeer Onesie</a></h3>
     <div class="jh-card__price">
       <span>$29.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="26590">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="199334">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -5216,7 +5234,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="#">“Sleigh Queen” Ugly Sweater</a></h3>
     <div class="jh-card__price">
       <span>$44.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="301000">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="665972">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
@@ -5225,7 +5243,7 @@ body { margin: 0; background: #fff; }
   <div class="jh-card__body"><h3 class="jh-card__title"><a href="product.html">Elf Ski Mask</a></h3>
     <div class="jh-card__price">
       <span>$39.99</span></div>
-    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="817964">
+    <div class="jh-card__form"><form method="post" action="/cart/add" data-jh-form="true" onsubmit="event.preventDefault(); alert('Preview only — in Shopify this adds to cart.')"><input type="hidden" name="id" value="181149">
           <button type="submit" class="jh-card__add">Add to cart</button></form></div>
   </div>
 </article>
