@@ -29,6 +29,7 @@
     },
     "card": {
       "added": "Añadido al carrito",
+      "added_short": "Añadido ✓",
       "view_cart": "Ver carrito",
       "viral": "Viral en TikTok",
       "new": "Nuevo",

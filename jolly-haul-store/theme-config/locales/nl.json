@@ -29,6 +29,7 @@
     },
     "card": {
       "added": "Toegevoegd aan je winkelwagen",
+      "added_short": "Toegevoegd ✓",
       "view_cart": "Bekijk winkelwagen",
       "viral": "Viral op TikTok",
       "new": "Nieuw",

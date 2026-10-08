@@ -4599,7 +4599,7 @@ html.jh-menu-open .jh-header-wrapper { z-index: 100; }
 .jh-toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; max-width: 420px; width: 100%; padding: 12px 14px 12px 16px; border-radius: 16px; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; box-shadow: 0 14px 36px rgba(18,41,31,.3); transform: translateY(16px); opacity: 0; transition: transform .25s, opacity .25s; }
 .jh-toast.is-on { transform: none; opacity: 1; }
 .jh-toast svg { flex: none; width: 22px; height: 22px; color: var(--sun); }
-.jh-toast span { flex: 1; }
+.jh-toast .jh-toast__thumb, .jh-toast .jh-toast__icon { flex: none; }
 .jh-toast a { flex: none; padding: 8px 12px; border-radius: 10px; background: var(--sun); color: var(--navy); text-decoration: none; font-size: 14px; }
 html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
 
@@ -4763,6 +4763,34 @@ html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
 .jh .jh-shipup__add svg { width: 14px; height: 14px; }
 .jh .jh-shipup__add--link { background: var(--ice-2); color: var(--ink); }
 .jh .jh-shipup__add--link:hover { background: var(--line); }
+.jh .jh-shipup__price b { white-space: nowrap; }
+
+/* ---------- Added-to-cart feedback ---------- */
+.jh-fly { position: fixed; z-index: 120; object-fit: cover; pointer-events: none; border-radius: 18px; box-shadow: 0 18px 40px rgba(18,41,31,.35); will-change: transform, opacity; }
+#cart-icon-bubble.is-bump { animation: jh-bump .65s cubic-bezier(.3,1.6,.5,1); }
+#cart-icon-bubble.is-bump .jh-cartcount { animation: jh-pop .65s cubic-bezier(.3,1.8,.5,1); }
+@keyframes jh-bump { 0% { transform: scale(1); } 30% { transform: scale(1.28) rotate(-10deg); } 55% { transform: scale(.92) rotate(6deg); } 100% { transform: none; } }
+@keyframes jh-pop { 0% { transform: scale(.4); } 50% { transform: scale(1.45); background: var(--sun); color: var(--navy); } 100% { transform: none; } }
+.jh .jh-atc, .jh .jh-card__add { position: relative; overflow: visible; }
+.jh .jh-atc.is-added, .jh .jh-card__add.is-added { background: var(--brand); color: #fff; box-shadow: 0 4px 0 var(--brand-dark), 0 14px 30px -12px rgba(31,107,78,.6); animation: jh-press .45s cubic-bezier(.3,1.6,.5,1); }
+@keyframes jh-press { 0% { transform: scale(1); } 35% { transform: scale(.95); } 70% { transform: scale(1.04); } 100% { transform: none; } }
+.jh-sparks { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; }
+.jh-sparks i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--sun); clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); opacity: 0; animation: jh-spark .8s ease-out var(--d) forwards; }
+.jh-sparks i:nth-child(3n) { background: var(--pop); width: 6px; height: 6px; }
+.jh-sparks i:nth-child(3n+1) { background: #fff; }
+@keyframes jh-spark { 0% { transform: translate(0,0) scale(.3) rotate(0); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(1.2) rotate(140deg); opacity: 0; } }
+.jh .jh-toast { gap: 12px; padding: 10px 12px; }
+.jh .jh-toast__thumb { flex: none; width: 48px; height: 48px; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,.1); }
+.jh .jh-toast__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.jh .jh-toast__thumb:not([hidden]) + .jh-toast__icon { display: none; }
+.jh .jh-toast__icon { display: grid; }
+.jh .jh-toast__text { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+.jh .jh-toast__text small { font-weight: 500; font-size: 13px; color: rgba(255,255,255,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jh .jh-toast__text small:empty { display: none; }
+.jh .jh-toast__cta { flex: none; padding: 9px 14px; border-radius: 999px; background: var(--sun); color: var(--navy); font-weight: 800; font-size: 14px; text-decoration: none; }
+.jh .jh-toast.is-on { animation: jh-toast-in .5s cubic-bezier(.3,1.5,.5,1); }
+@keyframes jh-toast-in { 0% { transform: translateY(30px) scale(.9); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { #cart-icon-bubble.is-bump, #cart-icon-bubble.is-bump .jh-cartcount, .jh .jh-atc.is-added, .jh .jh-toast.is-on { animation: none; } }
 
 /* preview-only stand-in for the theme footer */
 .pv-logo { display: inline-flex; align-items: flex-start; gap: 2px; font-weight: 900; font-size: 28px; letter-spacing: -.045em; text-decoration: none; }
@@ -4960,8 +4988,11 @@ body { margin: 0; background: #fff; }
     </script>
   </div>
 
-<div class="jh jh-toast-wrap"><div class="jh-toast" data-jh-toast role="status" aria-live="polite" hidden>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" opacity=".14"/><path d="m7.5 12.5 3 3 6-6.5"/></svg><span>Added to your cart</span><a href="/cart">View cart</a>
+<div class="jh jh-toast-wrap"><div class="jh-toast" data-jh-toast data-jh-added="Added ✓" role="status" aria-live="polite" hidden>
+  <span class="jh-toast__thumb" data-jh-toast-thumb hidden><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" width="48" height="48"></span>
+  <span class="jh-toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" opacity=".14"/><path d="m7.5 12.5 3 3 6-6.5"/></svg></span>
+  <span class="jh-toast__text"><b>Added to your cart</b><small data-jh-toast-title></small></span>
+  <a class="jh-toast__cta" href="/cart">View cart</a>
 </div></div>
 <footer class="jh jh-footer">
   <div class="jh-lights jh-footer__lights" aria-hidden="true"></div>
@@ -5149,7 +5180,25 @@ body { margin: 0; background: #fff; }
       [idInput.value].concat(picks.slice(0, qty - 1)).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; });
       var items = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
       fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
-        .then(function (r) { if (!r.ok) throw r; window.location.href = data.cartUrl || '/cart'; })
+        .then(function (r) { if (!r.ok) throw r; productAdded(); })
+        .catch(function () { form.submit(); });
+    });
+
+    /* Main add to cart: stay on the page and celebrate instead of jumping to /cart */
+    var mainBtn = form && form.querySelector('[data-jh-atc]');
+    function productAdded() {
+      var slide = (track && track.children[currentSlide()]) || hero;
+      var img = slide && slide.querySelector('img');
+      var titleEl = root.querySelector('.jh-buy__title');
+      addedFx({ btn: mainBtn, img: img && (img.currentSrc || img.src), from: img || slide, title: titleEl && titleEl.textContent.trim() });
+      if (mainBtn) mainBtn.disabled = false;
+    }
+    if (form) form.addEventListener('submit', function (e) {
+      if (e.defaultPrevented || !window.fetch || !window.FormData) return;
+      e.preventDefault();
+      if (mainBtn) mainBtn.disabled = true;
+      fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+        .then(function (r) { if (!r.ok) throw r; productAdded(); })
         .catch(function () { form.submit(); });
     });
 
@@ -5459,7 +5508,114 @@ body { margin: 0; background: #fff; }
     }).catch(function () {});
   }
 
-  /* ---------- Product cards: add to cart in place, update the cart bubble, show a toast ---------- */
+  /* ---------- "Added to cart" feedback: fly-to-cart, cart bump, button pop, toast ---------- */
+  var root_url = (window.Shopify && Shopify.routes ? Shopify.routes.root : '/');
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function refreshBubble() {
+    return fetch(root_url + '?sections=cart-icon-bubble').then(function (r) { return r.json(); }).then(function (sections) {
+      var bubble = document.getElementById('cart-icon-bubble');
+      if (bubble && sections['cart-icon-bubble']) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = sections['cart-icon-bubble'];
+        var inner = tmp.querySelector('.shopify-section') || tmp;
+        bubble.innerHTML = inner.innerHTML;
+      }
+      return bubble;
+    }).catch(function () { return document.getElementById('cart-icon-bubble'); });
+  }
+
+  function bump(icon) {
+    if (!icon) return;
+    icon.classList.remove('is-bump');
+    void icon.offsetWidth;
+    icon.classList.add('is-bump');
+    setTimeout(function () { icon.classList.remove('is-bump'); }, 700);
+  }
+
+  function fly(imgSrc, fromEl, toEl, done) {
+    var from = fromEl && fromEl.getBoundingClientRect();
+    var to = toEl && toEl.getBoundingClientRect();
+    if (reduceMotion || !imgSrc || !from || !to || !from.width || !document.body.animate) return done();
+    var size = Math.min(from.width, from.height, 220);
+    var ghost = document.createElement('img');
+    ghost.src = imgSrc;
+    ghost.alt = '';
+    ghost.className = 'jh-fly';
+    ghost.style.width = ghost.style.height = size + 'px';
+    var sx = from.left + from.width / 2 - size / 2, sy = from.top + from.height / 2 - size / 2;
+    var tx = to.left + to.width / 2 - size / 2, ty = to.top + to.height / 2 - size / 2;
+    if (to.bottom < 0 || to.top > innerHeight) { tx = innerWidth - size / 2 - 40; ty = -size / 2; }
+    ghost.style.left = sx + 'px';
+    ghost.style.top = sy + 'px';
+    document.body.appendChild(ghost);
+    var dx = tx - sx, dy = ty - sy;
+    var anim = ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1, borderRadius: '18px' },
+      { transform: 'translate(' + dx * 0.45 + 'px,' + (dy * 0.45 - 60) + 'px) scale(.6) rotate(-8deg)', opacity: 1, offset: 0.5 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12) rotate(12deg)', opacity: 0.4, borderRadius: '50%' }
+    ], { duration: 750, easing: 'cubic-bezier(.5,0,.3,1)' });
+    anim.onfinish = function () { ghost.remove(); done(); };
+  }
+
+  function sparkle(btn) {
+    if (reduceMotion || !btn) return;
+    var box = document.createElement('span');
+    box.className = 'jh-sparks';
+    box.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 10; i++) {
+      var sp = document.createElement('i');
+      var a = (Math.PI * 2 * i) / 10, r = 46 + Math.random() * 26;
+      sp.style.setProperty('--x', Math.cos(a) * r + 'px');
+      sp.style.setProperty('--y', Math.sin(a) * r * 0.6 + 'px');
+      sp.style.setProperty('--d', (Math.random() * 90) + 'ms');
+      box.appendChild(sp);
+    }
+    btn.appendChild(box);
+    setTimeout(function () { box.remove(); }, 1000);
+  }
+
+  function buttonDone(btn, label) {
+    if (!btn) return;
+    var labelEl = btn.querySelector('[data-jh-atc-label]') || btn.querySelector('span:not(.jh-sparks)') || btn;
+    if (!btn._jhLabel) btn._jhLabel = labelEl.textContent;
+    labelEl.textContent = label;
+    btn.classList.add('is-added');
+    sparkle(btn);
+    clearTimeout(btn._jhT);
+    btn._jhT = setTimeout(function () {
+      btn.classList.remove('is-added');
+      labelEl.textContent = btn._jhLabel;
+      btn._jhLabel = null;
+    }, 1900);
+  }
+
+  function showToast(imgSrc, title) {
+    var toast = document.querySelector('[data-jh-toast]');
+    if (!toast) return;
+    var thumb = toast.querySelector('[data-jh-toast-thumb]');
+    var name = toast.querySelector('[data-jh-toast-title]');
+    if (thumb) { thumb.hidden = !imgSrc; if (imgSrc) thumb.querySelector('img').src = imgSrc; }
+    if (name) name.textContent = title || '';
+    toast.hidden = false;
+    toast.classList.remove('is-on');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { toast.classList.add('is-on'); }); });
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { toast.classList.remove('is-on'); setTimeout(function () { toast.hidden = true; }, 300); }, 4500);
+  }
+
+  function addedFx(o) {
+    var toast = document.querySelector('[data-jh-toast]');
+    var addedLabel = (toast && toast.dataset.jhAdded) || 'Added';
+    buttonDone(o.btn, addedLabel);
+    var bubbleReady = refreshBubble();
+    fly(o.img, o.from, document.getElementById('cart-icon-bubble'), function () {
+      bubbleReady.then(function (icon) { bump(icon); });
+    });
+    showToast(o.img, o.title);
+  }
+
+  /* ---------- Product cards: add to cart in place ---------- */
   function quickAdd(form) {
     if (form.dataset.jhReady) return;
     form.dataset.jhReady = '1';
@@ -5468,27 +5624,16 @@ body { margin: 0; background: #fff; }
       e.preventDefault();
       var btn = form.querySelector('button');
       if (btn) btn.disabled = true;
-      fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
-        .then(function (r) { if (!r.ok) throw r; return fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + '?sections=cart-icon-bubble'); })
-        .then(function (r) { return r.json(); })
-        .then(function (sections) {
-          var bubble = document.getElementById('cart-icon-bubble');
-          if (bubble && sections['cart-icon-bubble']) {
-            var tmp = document.createElement('div');
-            tmp.innerHTML = sections['cart-icon-bubble'];
-            var inner = tmp.querySelector('.shopify-section') || tmp;
-            bubble.innerHTML = inner.innerHTML;
-          }
-          var toast = document.querySelector('[data-jh-toast]');
-          if (toast) {
-            toast.hidden = false;
-            requestAnimationFrame(function () { toast.classList.add('is-on'); });
-            clearTimeout(toast._t);
-            toast._t = setTimeout(function () { toast.classList.remove('is-on'); setTimeout(function () { toast.hidden = true; }, 300); }, 3500);
-          }
+      var card = form.closest('.jh-card');
+      var img = card && card.querySelector('.jh-card__media img');
+      var title = card && card.querySelector('.jh-card__title');
+      fetch(root_url + 'cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+        .then(function (r) { if (!r.ok) throw r; })
+        .then(function () {
+          if (btn) btn.disabled = false;
+          addedFx({ btn: btn, img: img && (img.currentSrc || img.src), from: img || (card && card.querySelector('.jh-card__media')), title: title && title.textContent.trim() });
         })
-        .catch(function () { form.submit(); })
-        .then(function () { if (btn) btn.disabled = false; });
+        .catch(function () { form.submit(); });
     });
   }
 

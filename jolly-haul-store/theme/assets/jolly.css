@@ -951,7 +951,7 @@ html.jh-menu-open .jh-header-wrapper { z-index: 100; }
 .jh-toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; max-width: 420px; width: 100%; padding: 12px 14px 12px 16px; border-radius: 16px; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; box-shadow: 0 14px 36px rgba(18,41,31,.3); transform: translateY(16px); opacity: 0; transition: transform .25s, opacity .25s; }
 .jh-toast.is-on { transform: none; opacity: 1; }
 .jh-toast svg { flex: none; width: 22px; height: 22px; color: var(--sun); }
-.jh-toast span { flex: 1; }
+.jh-toast .jh-toast__thumb, .jh-toast .jh-toast__icon { flex: none; }
 .jh-toast a { flex: none; padding: 8px 12px; border-radius: 10px; background: var(--sun); color: var(--navy); text-decoration: none; font-size: 14px; }
 html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
 
@@ -1116,3 +1116,30 @@ html.jh-sticky-on .jh-toast-wrap { bottom: 96px; }
 .jh .jh-shipup__add--link { background: var(--ice-2); color: var(--ink); }
 .jh .jh-shipup__add--link:hover { background: var(--line); }
 .jh .jh-shipup__price b { white-space: nowrap; }
+
+/* ---------- Added-to-cart feedback ---------- */
+.jh-fly { position: fixed; z-index: 120; object-fit: cover; pointer-events: none; border-radius: 18px; box-shadow: 0 18px 40px rgba(18,41,31,.35); will-change: transform, opacity; }
+#cart-icon-bubble.is-bump { animation: jh-bump .65s cubic-bezier(.3,1.6,.5,1); }
+#cart-icon-bubble.is-bump .jh-cartcount { animation: jh-pop .65s cubic-bezier(.3,1.8,.5,1); }
+@keyframes jh-bump { 0% { transform: scale(1); } 30% { transform: scale(1.28) rotate(-10deg); } 55% { transform: scale(.92) rotate(6deg); } 100% { transform: none; } }
+@keyframes jh-pop { 0% { transform: scale(.4); } 50% { transform: scale(1.45); background: var(--sun); color: var(--navy); } 100% { transform: none; } }
+.jh .jh-atc, .jh .jh-card__add { position: relative; overflow: visible; }
+.jh .jh-atc.is-added, .jh .jh-card__add.is-added { background: var(--brand); color: #fff; box-shadow: 0 4px 0 var(--brand-dark), 0 14px 30px -12px rgba(31,107,78,.6); animation: jh-press .45s cubic-bezier(.3,1.6,.5,1); }
+@keyframes jh-press { 0% { transform: scale(1); } 35% { transform: scale(.95); } 70% { transform: scale(1.04); } 100% { transform: none; } }
+.jh-sparks { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; }
+.jh-sparks i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--sun); clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); opacity: 0; animation: jh-spark .8s ease-out var(--d) forwards; }
+.jh-sparks i:nth-child(3n) { background: var(--pop); width: 6px; height: 6px; }
+.jh-sparks i:nth-child(3n+1) { background: #fff; }
+@keyframes jh-spark { 0% { transform: translate(0,0) scale(.3) rotate(0); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(1.2) rotate(140deg); opacity: 0; } }
+.jh .jh-toast { gap: 12px; padding: 10px 12px; }
+.jh .jh-toast__thumb { flex: none; width: 48px; height: 48px; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,.1); }
+.jh .jh-toast__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.jh .jh-toast__thumb:not([hidden]) + .jh-toast__icon { display: none; }
+.jh .jh-toast__icon { display: grid; }
+.jh .jh-toast__text { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+.jh .jh-toast__text small { font-weight: 500; font-size: 13px; color: rgba(255,255,255,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jh .jh-toast__text small:empty { display: none; }
+.jh .jh-toast__cta { flex: none; padding: 9px 14px; border-radius: 999px; background: var(--sun); color: var(--navy); font-weight: 800; font-size: 14px; text-decoration: none; }
+.jh .jh-toast.is-on { animation: jh-toast-in .5s cubic-bezier(.3,1.5,.5,1); }
+@keyframes jh-toast-in { 0% { transform: translateY(30px) scale(.9); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { #cart-icon-bubble.is-bump, #cart-icon-bubble.is-bump .jh-cartcount, .jh .jh-atc.is-added, .jh .jh-toast.is-on { animation: none; } }

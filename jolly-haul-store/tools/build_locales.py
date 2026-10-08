@@ -12,6 +12,7 @@ K = {
  'header.categories': ('Shop by category', 'Nach Kategorie', 'Par catégorie', 'Por categoría', 'Per categoria', 'Per categorie'),
  'product.add_qty': ('Add [count] to cart', '[count] in den Warenkorb', 'Ajouter [count] au panier', 'Añadir [count] al carrito', 'Aggiungi [count] al carrello', '[count] in winkelwagen'),
  'card.added': ('Added to your cart', 'Zum Warenkorb hinzugefügt', 'Ajouté au panier', 'Añadido al carrito', 'Aggiunto al carrello', 'Toegevoegd aan je winkelwagen'),
+ 'card.added_short': ('Added ✓', 'Hinzugefügt ✓', 'Ajouté ✓', 'Añadido ✓', 'Aggiunto ✓', 'Toegevoegd ✓'),
  'card.view_cart': ('View cart', 'Warenkorb', 'Voir le panier', 'Ver carrito', 'Vedi carrello', 'Bekijk winkelwagen'),
  'cart.savings': ('You save', 'Du sparst', 'Vous économisez', 'Ahorras', 'Risparmi', 'Je bespaart'),
  'product.choose': ('Choose', 'Wählen', 'Choisir', 'Elegir', 'Scegli', 'Kies'),

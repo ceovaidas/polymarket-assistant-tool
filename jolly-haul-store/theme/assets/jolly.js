@@ -144,7 +144,25 @@
       [idInput.value].concat(picks.slice(0, qty - 1)).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; });
       var items = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
       fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
-        .then(function (r) { if (!r.ok) throw r; window.location.href = data.cartUrl || '/cart'; })
+        .then(function (r) { if (!r.ok) throw r; productAdded(); })
+        .catch(function () { form.submit(); });
+    });
+
+    /* Main add to cart: stay on the page and celebrate instead of jumping to /cart */
+    var mainBtn = form && form.querySelector('[data-jh-atc]');
+    function productAdded() {
+      var slide = (track && track.children[currentSlide()]) || hero;
+      var img = slide && slide.querySelector('img');
+      var titleEl = root.querySelector('.jh-buy__title');
+      addedFx({ btn: mainBtn, img: img && (img.currentSrc || img.src), from: img || slide, title: titleEl && titleEl.textContent.trim() });
+      if (mainBtn) mainBtn.disabled = false;
+    }
+    if (form) form.addEventListener('submit', function (e) {
+      if (e.defaultPrevented || !window.fetch || !window.FormData) return;
+      e.preventDefault();
+      if (mainBtn) mainBtn.disabled = true;
+      fetch(data.cartAddUrl || '/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+        .then(function (r) { if (!r.ok) throw r; productAdded(); })
         .catch(function () { form.submit(); });
     });
 
@@ -454,7 +472,114 @@
     }).catch(function () {});
   }
 
-  /* ---------- Product cards: add to cart in place, update the cart bubble, show a toast ---------- */
+  /* ---------- "Added to cart" feedback: fly-to-cart, cart bump, button pop, toast ---------- */
+  var root_url = (window.Shopify && Shopify.routes ? Shopify.routes.root : '/');
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function refreshBubble() {
+    return fetch(root_url + '?sections=cart-icon-bubble').then(function (r) { return r.json(); }).then(function (sections) {
+      var bubble = document.getElementById('cart-icon-bubble');
+      if (bubble && sections['cart-icon-bubble']) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = sections['cart-icon-bubble'];
+        var inner = tmp.querySelector('.shopify-section') || tmp;
+        bubble.innerHTML = inner.innerHTML;
+      }
+      return bubble;
+    }).catch(function () { return document.getElementById('cart-icon-bubble'); });
+  }
+
+  function bump(icon) {
+    if (!icon) return;
+    icon.classList.remove('is-bump');
+    void icon.offsetWidth;
+    icon.classList.add('is-bump');
+    setTimeout(function () { icon.classList.remove('is-bump'); }, 700);
+  }
+
+  function fly(imgSrc, fromEl, toEl, done) {
+    var from = fromEl && fromEl.getBoundingClientRect();
+    var to = toEl && toEl.getBoundingClientRect();
+    if (reduceMotion || !imgSrc || !from || !to || !from.width || !document.body.animate) return done();
+    var size = Math.min(from.width, from.height, 220);
+    var ghost = document.createElement('img');
+    ghost.src = imgSrc;
+    ghost.alt = '';
+    ghost.className = 'jh-fly';
+    ghost.style.width = ghost.style.height = size + 'px';
+    var sx = from.left + from.width / 2 - size / 2, sy = from.top + from.height / 2 - size / 2;
+    var tx = to.left + to.width / 2 - size / 2, ty = to.top + to.height / 2 - size / 2;
+    if (to.bottom < 0 || to.top > innerHeight) { tx = innerWidth - size / 2 - 40; ty = -size / 2; }
+    ghost.style.left = sx + 'px';
+    ghost.style.top = sy + 'px';
+    document.body.appendChild(ghost);
+    var dx = tx - sx, dy = ty - sy;
+    var anim = ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1, borderRadius: '18px' },
+      { transform: 'translate(' + dx * 0.45 + 'px,' + (dy * 0.45 - 60) + 'px) scale(.6) rotate(-8deg)', opacity: 1, offset: 0.5 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12) rotate(12deg)', opacity: 0.4, borderRadius: '50%' }
+    ], { duration: 750, easing: 'cubic-bezier(.5,0,.3,1)' });
+    anim.onfinish = function () { ghost.remove(); done(); };
+  }
+
+  function sparkle(btn) {
+    if (reduceMotion || !btn) return;
+    var box = document.createElement('span');
+    box.className = 'jh-sparks';
+    box.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 10; i++) {
+      var sp = document.createElement('i');
+      var a = (Math.PI * 2 * i) / 10, r = 46 + Math.random() * 26;
+      sp.style.setProperty('--x', Math.cos(a) * r + 'px');
+      sp.style.setProperty('--y', Math.sin(a) * r * 0.6 + 'px');
+      sp.style.setProperty('--d', (Math.random() * 90) + 'ms');
+      box.appendChild(sp);
+    }
+    btn.appendChild(box);
+    setTimeout(function () { box.remove(); }, 1000);
+  }
+
+  function buttonDone(btn, label) {
+    if (!btn) return;
+    var labelEl = btn.querySelector('[data-jh-atc-label]') || btn.querySelector('span:not(.jh-sparks)') || btn;
+    if (!btn._jhLabel) btn._jhLabel = labelEl.textContent;
+    labelEl.textContent = label;
+    btn.classList.add('is-added');
+    sparkle(btn);
+    clearTimeout(btn._jhT);
+    btn._jhT = setTimeout(function () {
+      btn.classList.remove('is-added');
+      labelEl.textContent = btn._jhLabel;
+      btn._jhLabel = null;
+    }, 1900);
+  }
+
+  function showToast(imgSrc, title) {
+    var toast = document.querySelector('[data-jh-toast]');
+    if (!toast) return;
+    var thumb = toast.querySelector('[data-jh-toast-thumb]');
+    var name = toast.querySelector('[data-jh-toast-title]');
+    if (thumb) { thumb.hidden = !imgSrc; if (imgSrc) thumb.querySelector('img').src = imgSrc; }
+    if (name) name.textContent = title || '';
+    toast.hidden = false;
+    toast.classList.remove('is-on');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { toast.classList.add('is-on'); }); });
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { toast.classList.remove('is-on'); setTimeout(function () { toast.hidden = true; }, 300); }, 4500);
+  }
+
+  function addedFx(o) {
+    var toast = document.querySelector('[data-jh-toast]');
+    var addedLabel = (toast && toast.dataset.jhAdded) || 'Added';
+    buttonDone(o.btn, addedLabel);
+    var bubbleReady = refreshBubble();
+    fly(o.img, o.from, document.getElementById('cart-icon-bubble'), function () {
+      bubbleReady.then(function (icon) { bump(icon); });
+    });
+    showToast(o.img, o.title);
+  }
+
+  /* ---------- Product cards: add to cart in place ---------- */
   function quickAdd(form) {
     if (form.dataset.jhReady) return;
     form.dataset.jhReady = '1';
@@ -463,27 +588,16 @@
       e.preventDefault();
       var btn = form.querySelector('button');
       if (btn) btn.disabled = true;
-      fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
-        .then(function (r) { if (!r.ok) throw r; return fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + '?sections=cart-icon-bubble'); })
-        .then(function (r) { return r.json(); })
-        .then(function (sections) {
-          var bubble = document.getElementById('cart-icon-bubble');
-          if (bubble && sections['cart-icon-bubble']) {
-            var tmp = document.createElement('div');
-            tmp.innerHTML = sections['cart-icon-bubble'];
-            var inner = tmp.querySelector('.shopify-section') || tmp;
-            bubble.innerHTML = inner.innerHTML;
-          }
-          var toast = document.querySelector('[data-jh-toast]');
-          if (toast) {
-            toast.hidden = false;
-            requestAnimationFrame(function () { toast.classList.add('is-on'); });
-            clearTimeout(toast._t);
-            toast._t = setTimeout(function () { toast.classList.remove('is-on'); setTimeout(function () { toast.hidden = true; }, 300); }, 3500);
-          }
+      var card = form.closest('.jh-card');
+      var img = card && card.querySelector('.jh-card__media img');
+      var title = card && card.querySelector('.jh-card__title');
+      fetch(root_url + 'cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+        .then(function (r) { if (!r.ok) throw r; })
+        .then(function () {
+          if (btn) btn.disabled = false;
+          addedFx({ btn: btn, img: img && (img.currentSrc || img.src), from: img || (card && card.querySelector('.jh-card__media')), title: title && title.textContent.trim() });
         })
-        .catch(function () { form.submit(); })
-        .then(function () { if (btn) btn.disabled = false; });
+        .catch(function () { form.submit(); });
     });
   }
 
