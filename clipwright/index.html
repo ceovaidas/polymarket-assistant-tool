@@ -259,6 +259,33 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var
 @media (max-width: 640px) { .ex__scenes { grid-template-columns: 54px repeat(var(--n, 5), minmax(0, 1fr)); gap: 5px; } .ex__scenes .hd { font-size: 9px; } .ex__scenes .hd b { font-size: 11px; } .ex__scenes .rl { font-size: 9px; } }
 .ex__note { margin: 14px auto 0; max-width: 860px; font-size: 13px; color: var(--fg-3); }
 
+
+/* ---------- People in the video (cast swap) ---------- */
+.cast { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.people { display: grid; gap: 10px; margin-top: 10px; }
+.person { display: grid; grid-template-columns: 64px 14px 64px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.face { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--panel-2); display: block; }
+.person .arrow { color: var(--fg-3); text-align: center; }
+.slot { position: relative; width: 64px; height: 64px; border-radius: 50%; border: 2px dashed var(--line); display: grid; place-items: center; text-align: center; font: 700 10px/1.15 var(--f-body); color: var(--fg-3); cursor: pointer; overflow: hidden; background: var(--bg); }
+.slot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.slot.is-set { border-style: solid; border-color: var(--ok); }
+.slot--ai { border-style: solid; background: var(--slate); color: var(--slate-ink); font-size: 22px; cursor: default; }
+.person__info { display: grid; gap: 6px; min-width: 0; }
+.person__info b { font-size: 15px; }
+.person__info small { color: var(--fg-3); font-size: 12px; }
+.person__info .warn { color: var(--tally); font-weight: 600; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 12px; font-weight: 700; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.person select { font-size: 13px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); max-width: 100%; }
+.consent { margin-top: 12px; font-size: 13px; color: var(--fg-2); display: flex; gap: 8px; align-items: flex-start; }
+.consent input { margin-top: 3px; }
+.scene-people { display: flex; flex-wrap: wrap; gap: 8px; }
+.scene-people span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--panel); }
+.scene-people img, .scene-people i { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; display: inline-grid; place-items: center; font-style: normal; background: var(--slate); }
+@media (max-width: 480px) { .person { grid-template-columns: 52px 10px 52px minmax(0, 1fr); gap: 8px; } .face, .slot { width: 52px; height: 52px; } }
+
 /* ---------- Account (demo auth) ---------- */
 .acct { display: flex; align-items: center; gap: 8px; }
 .acct .btn--sm { white-space: nowrap; }
@@ -394,6 +421,12 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
             <div>
               <div class="row"><p class="eyebrow">Detected scenes</p><button class="btn btn--sm" id="to-remix">Remix these scenes →</button></div>
               <div class="strip" id="strip"></div>
+              <div class="cast" id="cast-box">
+                <div class="row"><p class="eyebrow">People in this video</p><span class="pill mono" id="cast-count">–</span></div>
+                <p class="status" id="cast-status">Upload a video (or split one of the templates above) and we find every person in it. Then give each one a new face: your own photo or an AI character.</p>
+                <div class="people" id="people"></div>
+                <label class="consent" id="consent-wrap" hidden><input type="checkbox" id="consent"> <span>Everyone in my uploaded photos agreed to appear in this video, and I have the right to use their photos.</span></label>
+              </div>
             </div>
           </div>
         </div>
@@ -428,13 +461,14 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
                 </div>
                 <div class="field">
                   <label for="cast">Cast</label>
+                  <div class="scene-people" id="scene-people" hidden></div>
                   <select id="cast">
                     <option>Saved character: Grandpa, 70, grey moustache</option>
                     <option>New AI person: woman, 25, gym wear</option>
                     <option>New AI person: man, 35, office look</option>
                     <option>Keep framing, replace every person with a new AI cast</option>
                   </select>
-                  <small>Only AI-generated people. Real faces from the source are never reused.</small>
+                  <small id="cast-note">Faces from the source video are never copied. Use AI characters, or photos of people who agreed to appear.</small>
                 </div>
                 <div class="field">
                   <label for="extra">Direction for this scene</label>
@@ -512,7 +546,7 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
           <button class="btn btn--rec" id="render-btn">Render all scenes</button>
         </div>
       </div>
-      <p class="status" style="text-align:center">Prototype. Scene detection is real; the remix previews and renders are simulated.</p>
+      <p class="status" style="text-align:center">Prototype. Scene detection and people detection are real and run in your browser; the remix previews and renders are simulated.</p>
     </div>
   </section>
 
@@ -523,7 +557,7 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
       <div class="feats">
         <div class="feat"><span class="mono">SPLIT</span><div><h3>Automatic scene detection</h3><p>Finds every cut, pulls a clean start frame for each scene and keeps the original timing.</p></div></div>
         <div class="feat"><span class="mono">SWAP</span><div><h3>Product swap that stays identical</h3><p>Connect Shopify once. Your product is locked across all scenes, colours and angles.</p></div></div>
-        <div class="feat"><span class="mono">CAST</span><div><h3>Saved AI characters</h3><p>Create a character once and reuse it in every video, so your account has recurring faces.</p></div></div>
+        <div class="feat"><span class="mono">CAST</span><div><h3>Finds every person, you pick the new face</h3><p>We detect each person in the video. Swap them for your own photos (with their permission) or a saved AI character you reuse across videos.</p></div></div>
         <div class="feat"><span class="mono">SET</span><div><h3>New location per scene</h3><p>Elevator, gym, ski lift, mall Santa. Or describe your own in one line.</p></div></div>
         <div class="feat"><span class="mono">HOOK</span><div><h3>Hook library with live ranking</h3><p>Text hooks sorted by this week's performance, burned in with TikTok-style captions.</p></div></div>
         <div class="feat"><span class="mono">A/B</span><div><h3>Variants in one click</h3><p>Same video, five different hooks. Post them all and keep the winner.</p></div></div>
@@ -754,15 +788,159 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
         bg.drawImage(v, sx, 0, Math.min(sw, vw), vh, 0, 0, 270, 480);
         scenes.push({ start: bounds[j], end: bounds[j + 1], env: ENVS[j % ENVS.length][0], orig: 'upload', source: 'upload', before: big.toDataURL('image/jpeg', .8), prompt: '' });
       }
+      state.people = []; renderPeople();
       state.scenes = scenes; state.duration = dur; state.source = 'upload'; state.sel = 0; state.rendered = false;
       v.currentTime = 0;
       $('#status').innerHTML = 'Found <b>' + scenes.length + ' scene' + (scenes.length > 1 ? 's' : '') + '</b> in ' + fmt(dur) + ' s. Click a scene to jump to it.';
       renderSource();
+      findPeople(v, dur);
     } catch (e) {
       $('#status').textContent = 'This file could not be read in the browser. Try an MP4 exported from TikTok or Instagram.';
     }
   }
   $('#video').addEventListener('timeupdate', function () { $('#tc').textContent = tcode($('#video').currentTime) + ' / ' + tcode(state.duration); });
+
+
+  /* ---------- People in the video: find faces, group them into people, assign new faces ---------- */
+  state.people = [];
+  var AI_CAST = ['Grandpa, 70, grey moustache', 'Woman, 25, gym wear', 'Man, 35, office look', 'Teen girl, 15, casual'];
+  var FA_SRC = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.15/dist/face-api.js';
+  var MODEL_DIRS = ['models/', 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.15/model/'];
+  var faReady = null, peopleRun = 0;
+  function loadFaceApi() {
+    if (faReady) return faReady;
+    faReady = new Promise(function (res, rej) {
+      if (window.faceapi) return res();
+      var sc = document.createElement('script'); sc.src = FA_SRC; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
+    }).then(function () {
+      // Model weights are published as base64 text next to the page (the host serves no .bin files)
+      if (!window.__cwFetch) {
+        var nf = window.__cwFetch = window.fetch.bind(window);
+        window.fetch = function (url, init) {
+          var u = typeof url === 'string' ? url : (url && url.url) || '';
+          if (/(^|\/)models\/[^/]+\.bin$/.test(u) && u.indexOf('jsdelivr') < 0) {
+            return nf(u + '.txt').then(function (r) { if (!r.ok) throw new Error('model ' + r.status); return r.text(); }).then(function (t) {
+              var bin = atob(t.trim()), out = new Uint8Array(bin.length);
+              for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+              return new Response(out, { status: 200, headers: { 'Content-Type': 'application/octet-stream' } });
+            });
+          }
+          return nf(url, init);
+        };
+      }
+    }).then(function tryDir(_, i) {
+      i = i || 0;
+      var dir = MODEL_DIRS[i];
+      return Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(dir), faceapi.nets.faceLandmark68TinyNet.loadFromUri(dir), faceapi.nets.faceRecognitionNet.loadFromUri(dir)])
+        .catch(function (e) { if (i + 1 < MODEL_DIRS.length) return tryDir(null, i + 1); throw e; });
+    });
+    faReady.catch(function () { faReady = null; });
+    return faReady;
+  }
+  function detectOpts() { return new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.5 }); }
+  function cropFace(cv, box) {
+    var c = document.createElement('canvas'); c.width = c.height = 160;
+    var size = Math.max(box.width, box.height) * 1.5, cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+    c.getContext('2d').drawImage(cv, cx - size / 2, cy - size / 2, size, size, 0, 0, 160, 160);
+    return c.toDataURL('image/jpeg', .85);
+  }
+  function sceneIndexAt(t) { for (var i = state.scenes.length - 1; i >= 0; i--) if (t >= state.scenes[i].start) return i; return 0; }
+  async function findPeople(v, dur) {
+    var run = ++peopleRun;
+    $('#cast-status').textContent = 'Loading the face model…'; $('#cast-count').textContent = '…';
+    try { await loadFaceApi(); } catch (e) { if (run === peopleRun) $('#cast-status').textContent = 'Face detection could not load here. You can still pick an AI cast per scene in step 2.'; $('#cast-count').textContent = '–'; return; }
+    var cv = document.createElement('canvas'), g = cv.getContext('2d'), W = 480;
+    var step = Math.max(0.4, dur / 36), clusters = [], samples = 0;
+    for (var t = 0.15; t < dur; t += step) {
+      if (run !== peopleRun) return;
+      v.currentTime = t; await once(v, 'seeked');
+      cv.width = W; cv.height = Math.round(W * v.videoHeight / v.videoWidth);
+      g.drawImage(v, 0, 0, cv.width, cv.height);
+      var found = await faceapi.detectAllFaces(cv, detectOpts()).withFaceLandmarks(true).withFaceDescriptors();
+      samples++;
+      found.forEach(function (r) {
+        var d = r.descriptor, best = null, bd = 1;
+        clusters.forEach(function (c) { var dd = faceapi.euclideanDistance(d, c.mean); if (dd < bd) { bd = dd; best = c; } });
+        if (!best || bd > 0.55) { best = { sum: new Float32Array(128), n: 0, mean: d, scenes: {}, score: 0, crop: null }; clusters.push(best); }
+        for (var k = 0; k < 128; k++) best.sum[k] += d[k];
+        best.n++; best.mean = best.sum.map(function (x) { return x / best.n; });
+        best.scenes[sceneIndexAt(t)] = 1;
+        var b = r.detection.box, sc = b.width * b.height * r.detection.score;
+        if (sc > best.score) { best.score = sc; best.crop = cropFace(cv, b); }
+      });
+      $('#cast-status').innerHTML = 'Looking for people… <b>' + Math.round(t / dur * 100) + '%</b>';
+    }
+    if (run !== peopleRun) return;
+    v.currentTime = 0;
+    var minHits = samples > 4 ? 2 : 1;
+    state.people = clusters.filter(function (c) { return c.n >= minHits; })
+      .sort(function (a, b) { return b.n - a.n; }).slice(0, 6)
+      .map(function (c, i) { return { id: i, crop: c.crop, scenes: Object.keys(c.scenes).map(Number).sort(function (a, b) { return a - b; }), share: Math.min(1, c.n / samples), mode: 'photo', photo: null, ai: AI_CAST[i % AI_CAST.length], warn: '' }; });
+    var n = state.people.length;
+    $('#cast-status').textContent = n ? 'Found ' + n + ' ' + (n === 1 ? 'person' : 'different people') + '. Give each one a new face. Your photo is used only as a reference for this video.' : 'No people found. Product-only videos work too.';
+    renderPeople();
+  }
+  function renderPeople() {
+    var box = $('#people'); box.innerHTML = '';
+    $('#cast-count').textContent = state.people.length ? state.people.length + (state.people.length === 1 ? ' person' : ' people') : '–';
+    state.people.forEach(function (p) {
+      var el = document.createElement('div'); el.className = 'person';
+      var slot = p.mode === 'photo'
+        ? '<label class="slot' + (p.photo ? ' is-set' : '') + '" title="Upload a photo for Person ' + (p.id + 1) + '"><input type="file" accept="image/*" aria-label="Upload a photo for Person ' + (p.id + 1) + '">' + (p.photo ? '<img alt="">' : '+ Your<br>photo') + '</label>'
+        : '<span class="slot slot--ai" aria-hidden="true">' + (p.mode === 'ai' ? '★' : '✦') + '</span>';
+      el.innerHTML = '<img class="face" alt="Person ' + (p.id + 1) + ' as found in the video"><span class="arrow" aria-hidden="true">→</span>' + slot +
+        '<div class="person__info"><b>Person ' + (p.id + 1) + '</b><small>In scene' + (p.scenes.length > 1 ? 's ' : ' ') + p.scenes.map(function (i) { return i + 1; }).join(', ') + ' · on screen ' + Math.round(p.share * 100) + '%</small>' +
+        '<div class="seg" role="group" aria-label="New face for Person ' + (p.id + 1) + '"><button type="button" data-m="photo">Your photo</button><button type="button" data-m="ai">Saved character</button><button type="button" data-m="new">New AI person</button></div>' +
+        (p.mode === 'ai' ? '<select aria-label="Saved character">' + AI_CAST.map(function (c) { return '<option' + (c === p.ai ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select>' : '') +
+        (p.warn ? '<small class="warn">' + p.warn + '</small>' : '') + '</div>';
+      el.querySelector('.face').src = p.crop;
+      if (p.photo) el.querySelector('.slot img').src = p.photo;
+      $$('.seg button', el).forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.m === p.mode));
+        b.addEventListener('click', function () { p.mode = b.dataset.m; renderPeople(); });
+      });
+      var sel = el.querySelector('select'); if (sel) sel.addEventListener('change', function () { p.ai = sel.value; renderScenePeople(); });
+      var inp = el.querySelector('input[type=file]');
+      if (inp) inp.addEventListener('change', function () { if (inp.files[0]) usePhoto(p, inp.files[0]); });
+      box.appendChild(el);
+    });
+    $('#consent-wrap').hidden = !state.people.some(function (p) { return p.mode === 'photo'; });
+    renderScenePeople();
+  }
+  function usePhoto(p, f) {
+    if (!/^image\//.test(f.type)) { toast('Please choose an image file'); return; }
+    var rd = new FileReader();
+    rd.onload = async function () {
+      p.photo = rd.result; p.warn = ''; renderPeople();
+      if (!window.faceapi || !faReady) return;
+      var im = new Image(); im.src = rd.result; await im.decode().catch(function () {});
+      var faces = await faceapi.detectAllFaces(im, detectOpts());
+      p.warn = !faces.length ? 'No face found in this photo. Use a clear, front-facing photo.' : faces.length > 1 ? 'This photo has ' + faces.length + ' faces. Crop it to one person.' : '';
+      renderPeople();
+    };
+    rd.readAsDataURL(f);
+  }
+  function castLabel(i) {
+    var ps = state.people.filter(function (p) { return p.scenes.indexOf(i) > -1; });
+    if (!state.people.length) return $('#cast').value.split(':').pop().trim();
+    if (!ps.length) return 'no people';
+    return ps.map(function (p) { return p.mode === 'photo' ? 'your photo' : p.mode === 'ai' ? p.ai.split(',')[0] : 'new AI person'; }).join(' + ');
+  }
+  function renderScenePeople() {
+    var box = $('#scene-people'), has = state.people.length > 0;
+    box.hidden = !has; $('#cast').hidden = has;
+    if (!has || !state.scenes[state.sel]) return;
+    var ps = state.people.filter(function (p) { return p.scenes.indexOf(state.sel) > -1; });
+    box.innerHTML = ps.length ? '' : '<small>No people in this scene.</small>';
+    ps.forEach(function (p) {
+      var sp = document.createElement('span');
+      var to = p.mode === 'photo' ? (p.photo ? '<img alt="">' : '<i>?</i>') : '<i>' + (p.mode === 'ai' ? '★' : '✦') + '</i>';
+      sp.innerHTML = '<img alt="">→' + to + 'Person ' + (p.id + 1) + ' · ' + (p.mode === 'photo' ? (p.photo ? 'your photo' : 'photo missing') : p.mode === 'ai' ? p.ai.split(',')[0] : 'new AI person');
+      var imgs = sp.querySelectorAll('img'); imgs[0].src = p.crop; if (imgs[1]) imgs[1].src = p.photo;
+      box.appendChild(sp);
+    });
+    if ($('#ed-after .remix-tag')) $('#ed-after .remix-tag').textContent = envLabel(state.scenes[state.sel].env) + ' · ' + castLabel(state.sel);
+  }
 
   /* ---------- Step 2: editor ---------- */
   function renderEditor() {
@@ -786,6 +964,7 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
       chips.appendChild(b);
     });
     $('#extra').value = s.prompt || '';
+    renderScenePeople();
   }
   function drawAfter() {
     var s = state.scenes[state.sel];
@@ -794,7 +973,7 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
     var img = wrap.querySelector('img');
     img.src = afterImg(s);
     if (s.source === 'upload') img.style.filter = 'saturate(1.3) hue-rotate(' + (ENVS.findIndex(function (e) { return e[0] === s.env; }) * 40) + 'deg)';
-    wrap.querySelector('.remix-tag').textContent = envLabel(s.env) + ' · ' + $('#cast').value.split(':').pop().trim();
+    wrap.querySelector('.remix-tag').textContent = envLabel(s.env) + ' · ' + castLabel(state.sel);
   }
   function saveEditor() { var s = state.scenes[state.sel]; if (s) s.prompt = $('#extra').value; }
   $('#extra').addEventListener('input', saveEditor);
@@ -892,6 +1071,9 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
   $('#render-btn').addEventListener('click', function render() {
     go(3);
     if (state.rendered) { toast('Already rendered. Change a scene to render again.'); return; }
+    var miss = state.people.filter(function (p) { return p.mode === 'photo' && !p.photo; })[0];
+    if (miss) { go(1); toast('Add a photo for Person ' + (miss.id + 1) + ', or switch them to an AI character'); $('#cast-box').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (state.people.some(function (p) { return p.mode === 'photo'; }) && !$('#consent').checked) { go(1); toast('Please confirm you have permission to use the photos'); $('#consent-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     if (!user) { openAuth('signup', 'Create a free account to render. You get 50 credits to start.', render); return; }
     var need = $$('#jobs .job').length * 12;
     if (user.credits < need) { toast('You need ' + need + ' credits, you have ' + user.credits + '. Pick a pack below.'); $('#plans').scrollIntoView({ behavior: 'smooth' }); return; }
