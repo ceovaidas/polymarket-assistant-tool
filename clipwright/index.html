@@ -217,7 +217,12 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var
 .ex__head h2 { font: 900 clamp(34px, 5vw, 60px)/.92 var(--f-display); text-transform: uppercase; }
 .ex__head p { color: var(--fg-2); max-width: 58ch; margin-top: 10px; }
 .ex__ctl { display: flex; flex-wrap: wrap; gap: 8px; }
-.ex__phones { display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 300px); gap: 16px; margin-top: 26px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.ex__tabs { display: flex; gap: 8px; margin-top: 22px; overflow-x: auto; padding-bottom: 2px; }
+.ex__tabs button { flex: none; display: grid; gap: 2px; text-align: left; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; }
+.ex__tabs button b { font-size: 15px; }
+.ex__tabs button span { font: 600 11px/1.3 var(--f-mono); color: var(--fg-3); letter-spacing: .04em; }
+.ex__tabs button[aria-selected="true"] { border-color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); }
+.ex__phones { margin-top: 18px; display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 300px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
 @media (min-width: 900px) { .ex__phones { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; } }
 .ex__col { scroll-snap-align: start; display: grid; gap: 12px; align-content: start; }
 .ex__tag { display: flex; align-items: center; gap: 8px; font: 600 12px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-3); }
@@ -244,14 +249,14 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var
 .ex__meta dt, .ex__meta .k { font: 600 11px/1.6 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
 .ex__meta .v { color: var(--fg-2); }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1px solid rgba(0,0,0,.2); }
-.ex__scenes { margin: 36px auto 0; max-width: 860px; display: grid; grid-template-columns: 78px repeat(5, minmax(0, 1fr)); gap: 8px; align-items: center; }
+.ex__scenes { margin: 36px auto 0; max-width: 860px; display: grid; grid-template-columns: 78px repeat(var(--n, 5), minmax(0, 1fr)); gap: 8px; align-items: center; }
 .ex__scenes .rl { font: 600 11px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg-3); }
 .ex__scenes button { padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: var(--panel-2); cursor: pointer; aspect-ratio: 9 / 16; position: relative; }
 .ex__scenes button img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ex__scenes button.is-on { border-color: var(--tally); }
 .ex__scenes .hd { font: 600 11px/1.3 var(--f-mono); color: var(--fg-2); text-align: center; }
 .ex__scenes .hd b { display: block; color: var(--fg); font-family: var(--f-body); font-size: 13px; }
-@media (max-width: 640px) { .ex__scenes { grid-template-columns: 54px repeat(5, minmax(0, 1fr)); gap: 5px; } .ex__scenes .hd { font-size: 9px; } .ex__scenes .hd b { font-size: 11px; } .ex__scenes .rl { font-size: 9px; } }
+@media (max-width: 640px) { .ex__scenes { grid-template-columns: 54px repeat(var(--n, 5), minmax(0, 1fr)); gap: 5px; } .ex__scenes .hd { font-size: 9px; } .ex__scenes .hd b { font-size: 11px; } .ex__scenes .rl { font-size: 9px; } }
 .ex__note { margin: 14px auto 0; max-width: 860px; font-size: 13px; color: var(--fg-3); }
 
 /* ---------- Account (demo auth) ---------- */
@@ -339,9 +344,9 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
     <div class="wrap">
       <div class="ex__head">
         <div>
-          <p class="eyebrow">Real example · 10.5 s · 5 scenes found</p>
+          <p class="eyebrow" id="ex-eyebrow">Real examples · pick a template</p>
           <h2 id="ex-title">One viral video in.<br>New versions out.</h2>
-          <p>We took a sweater video that went viral, split it into its 5 scenes and rebuilt every scene with a different sweater, a different cast, new locations and a new hook. Same pacing, same structure, nobody can tell it's the same template.</p>
+          <p>Each template is a real video that went viral. We split it into scenes and rebuilt every scene with your product, a different cast, new locations and a new hook. Same pacing, same structure, nobody can tell it's the same template.</p>
         </div>
         <div class="ex__ctl">
           <button class="btn btn--sm" type="button" id="ex-play">❚❚ Pause</button>
@@ -350,44 +355,8 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
         </div>
       </div>
 
-      <div class="ex__phones">
-        <div class="ex__col">
-          <p class="ex__tag"><b>Original</b> what you upload</p>
-          <div class="ex__phone">
-            <video id="ex-video" src="media/source.mp4" poster="media/orig-1.jpg" muted loop playsinline autoplay preload="auto"></video>
-            <div class="ex__bar" data-bar></div>
-            <button class="ex__sound" type="button" id="ex-sound" aria-label="Turn sound on">🔇</button>
-          </div>
-          <dl class="ex__meta">
-            <div><dt>Sweater</dt><dd class="v"><span class="swatch" style="background:#2a4fa8"></span>Blue "hairy chest" sweater</dd></div>
-            <div><dt>Cast</dt><dd class="v">Bald guy in his 40s, office team</dd></div>
-            <div><dt>Sets</dt><dd class="v">Couch, office, airport, party, gym</dd></div>
-            <div><dt>Hook</dt><dd class="v">"Men are hard to gift"</dd></div>
-          </dl>
-        </div>
-
-        <div class="ex__col ex__col--remix" data-remix="a">
-          <p class="ex__tag"><b>Remix A</b> grandpa edition</p>
-          <div class="ex__phone" data-phone></div>
-          <dl class="ex__meta">
-            <div><dt>Sweater</dt><dd class="v"><span class="swatch" style="background:#b3262e"></span>Classic Red (your Shopify product)</dd></div>
-            <div><dt>Cast</dt><dd class="v">Saved character: bald grandpa, grey moustache</dd></div>
-            <div><dt>Sets</dt><dd class="v">Fireplace, hardware store, ski lift, bowling, snowy porch</dd></div>
-            <div><dt>Hook</dt><dd class="v" data-hook-label></dd></div>
-          </dl>
-        </div>
-
-        <div class="ex__col ex__col--remix" data-remix="b">
-          <p class="ex__tag"><b>Remix B</b> ginger beard edition</p>
-          <div class="ex__phone" data-phone></div>
-          <dl class="ex__meta">
-            <div><dt>Sweater</dt><dd class="v"><span class="swatch" style="background:#1d2a4d"></span>Midnight Navy + Elf Green</dd></div>
-            <div><dt>Cast</dt><dd class="v">Bald 30-something with ginger beard, friends</dd></div>
-            <div><dt>Sets</dt><dd class="v">Kitchen, garage, subway, house party, golf range</dd></div>
-            <div><dt>Hook</dt><dd class="v" data-hook-label></dd></div>
-          </dl>
-        </div>
-      </div>
+      <div class="ex__tabs" role="tablist" aria-label="Templates" id="ex-tabs"></div>
+      <div class="ex__phones" id="ex-phones"></div>
 
       <div class="ex__scenes" id="ex-scenes" aria-label="Scene by scene"></div>
       <p class="ex__note">Remix frames generated with Seedream from the scene layout of the original. In the full app each frame is animated into a video clip, then the clips are joined with the hook and music.</p>
@@ -995,88 +964,131 @@ dialog.auth::backdrop { background: rgba(10,12,14,.55); backdrop-filter: blur(3p
   });
 
 
-  /* ---------- Example: original video drives two remix players ---------- */
+  /* ---------- Examples: each original video drives its remix players ---------- */
   (function () {
-    var CUTS = [0, 3.9, 5.9, 7.4, 8.9, 10.5];
-    var REMIX = {
-      a: { hooks: ['Grandpa said he wants NOTHING this year 🙄', 'POV: you found grandpa\'s new personality', 'Grandma is NOT okay with this 😭', 'He hasn\'t taken it off since Christmas Eve'],
-           cta: 'Comment "GRANDPA" if he needs one 👴', music: 'Jingle Bell Rock (sped up)' },
-      b: { hooks: ['My boyfriend is impossible to buy for… was 😏', 'Bought this as a joke. He wears it EVERYWHERE', 'When the gift is funnier than the party 💀', 'Bald guys, this one\'s for you'],
-           cta: 'Comment "BALD" and I\'ll send the link 👀', music: 'Funny Bones · comedy sting' }
-    };
-    var vid = $('#ex-video'), playing = true, clock = 0, last = performance.now(), cur = { a: -1, b: -1 }, hookIx = { a: 0, b: 0 };
-    function sceneAt(t) { for (var i = CUTS.length - 2; i >= 0; i--) if (t >= CUTS[i]) return i; return 0; }
-    function bars(root) { var b = root.querySelector('[data-bar]'); for (var i = 0; i < 5; i++) b.appendChild(document.createElement('span')).appendChild(document.createElement('i')); }
-    bars(vid.parentNode);
-    Object.keys(REMIX).forEach(function (k) {
-      var ph = $('[data-remix="' + k + '"] [data-phone]');
-      for (var i = 1; i <= 5; i++) { var im = document.createElement('img'); im.className = 'ex__frame'; im.alt = ''; im.src = 'media/' + k + i + '.jpg'; ph.appendChild(im); }
-      ph.insertAdjacentHTML('beforeend', '<div class="ex__bar" data-bar></div><p class="ex__hook"></p><p class="ex__cta"></p><p class="ex__music"><i>♫</i><span></span></p>');
-      bars(ph);
-      ph.querySelector('.ex__cta').textContent = REMIX[k].cta;
-      ph.querySelector('.ex__music span').textContent = REMIX[k].music;
-      setHook(k);
-    });
-    function setHook(k) {
-      var h = REMIX[k].hooks[hookIx[k]];
-      $('[data-remix="' + k + '"] .ex__hook').textContent = h;
-      $('[data-remix="' + k + '"] [data-hook-label]').textContent = '"' + h + '"';
+    var TEMPLATES = [
+      { id: 'gift', tab: 'Gift reaction', info: '10.5 s · 5 scenes', video: 'media/source.mp4', orig: 'orig-',
+        cuts: [0, 3.9, 5.9, 7.4, 8.9, 10.5], labels: ['Gift reveal', 'Wears it to…', 'Out in public', 'Group moment', 'CTA shot'],
+        meta: [['Product', '#2a4fa8', 'Blue "hairy chest" sweater'], ['Cast', '', 'Bald guy in his 40s, office team'], ['Sets', '', 'Couch, office, airport, party, gym'], ['Hook', '', '"Men are hard to gift"']],
+        remixes: [
+          { title: 'Remix A', sub: 'grandpa edition', img: 'a',
+            meta: [['Product', '#b3262e', 'Classic Red (your Shopify product)'], ['Cast', '', 'Saved character: bald grandpa, grey moustache'], ['Sets', '', 'Fireplace, hardware store, ski lift, bowling, snowy porch']],
+            hooks: ['Grandpa said he wants NOTHING this year 🙄', 'POV: you found grandpa\'s new personality', 'Grandma is NOT okay with this 😭', 'He hasn\'t taken it off since Christmas Eve'],
+            cta: 'Comment "GRANDPA" if he needs one 👴', music: 'Jingle Bell Rock (sped up)' },
+          { title: 'Remix B', sub: 'ginger beard edition', img: 'b',
+            meta: [['Product', '#1d2a4d', 'Midnight Navy + Elf Green'], ['Cast', '', 'Bald 30-something with ginger beard, friends'], ['Sets', '', 'Kitchen, garage, subway, house party, golf range']],
+            hooks: ['My boyfriend is impossible to buy for… was 😏', 'Bought this as a joke. He wears it EVERYWHERE', 'When the gift is funnier than the party 💀', 'Bald guys, this one\'s for you'],
+            cta: 'Comment "BALD" and I\'ll send the link 👀', music: 'Funny Bones · comedy sting' }
+        ] },
+      { id: 'truck', tab: 'Truck drop unboxing', info: '6.8 s · 4 scenes', video: 'media/source2.mp4', orig: 't2orig-',
+        cuts: [0, 4.0, 5.2, 6.1, 6.8], labels: ['Truck + box flies', 'Box lands', 'Opening', 'Product reveal'],
+        meta: [['Product', '#c0283a', 'Red slogan hoodie'], ['Cast', '', 'Young guy, hands only'], ['Sets', '', 'Motorway overpass, grey day'], ['Hook', '', '"The truck almost got me smh 💀"']],
+        remixes: [
+          { title: 'Remix A', sub: 'snowy motorway', img: 't2a',
+            meta: [['Product', '#b3262e', 'Your Christmas sweater, Classic Red'], ['Cast', '', 'Young guy, hands only'], ['Sets', '', 'Same overpass in snow, winter light']],
+            hooks: ['The truck almost got me… but LOOK what fell off 💀🎄', 'Santa\'s delivery truck has terrible aim 😭', 'When your Christmas gift arrives a little too fast', 'Me waiting for my order like 👀'],
+            cta: 'Comment "TRUCK" for the sweater link 🚚', music: 'Last Christmas (slowed)' },
+          { title: 'Remix B', sub: 'grandpa at dusk', img: 't2b',
+            meta: [['Product', '#1d2a4d', 'Your Christmas sweater, Midnight Navy'], ['Cast', '', 'Saved character: bald grandpa, grey moustache'], ['Sets', '', 'City footbridge at dusk, Christmas lights']],
+            hooks: ['Grandpa caught Santa\'s truck mid-drop 😳', 'Nobody believed grandpa until THIS', 'POV: the gift found grandpa first 🎁', 'He said it fell from the sky. It did.'],
+            cta: 'Comment "GRANDPA" for the link 👴', music: 'Funny Bones · comedy sting' }
+        ] }
+    ];
+    var T = TEMPLATES[0], vid, playing = true, clock = 0, last = performance.now(), cur = [], hookIx = [];
+    var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    function n() { return T.cuts.length - 1; }
+    function sceneAt(t) { for (var i = n() - 1; i >= 0; i--) if (t >= T.cuts[i]) return i; return 0; }
+    function metaHtml(rows, hookRow) {
+      return '<dl class="ex__meta">' + rows.map(function (r) {
+        return '<div><dt>' + r[0] + '</dt><dd class="v">' + (r[1] ? '<span class="swatch" style="background:' + r[1] + '"></span>' : '') + esc(r[2]) + '</dd></div>';
+      }).join('') + (hookRow ? '<div><dt>Hook</dt><dd class="v" data-hook-label></dd></div>' : '') + '</dl>';
     }
-    // scene table
-    var tbl = $('#ex-scenes'), LBL = ['Gift reveal', 'Wears it to…', 'Out in public', 'Group moment', 'CTA shot'];
-    tbl.insertAdjacentHTML('beforeend', '<span></span>');
-    LBL.forEach(function (l, i) { tbl.insertAdjacentHTML('beforeend', '<p class="hd"><b>' + l + '</b>' + CUTS[i].toFixed(1) + '–' + CUTS[i + 1].toFixed(1) + ' s</p>'); });
-    [['orig', 'Original', 'orig-'], ['a', 'Remix A', 'a'], ['b', 'Remix B', 'b']].forEach(function (r) {
-      tbl.insertAdjacentHTML('beforeend', '<p class="rl">' + r[1] + '</p>');
-      for (var i = 1; i <= 5; i++) {
-        var b = document.createElement('button'); b.type = 'button'; b.dataset.scene = i - 1;
-        b.setAttribute('aria-label', r[1] + ', scene ' + i + ': ' + LBL[i - 1]);
-        b.innerHTML = '<img alt="" loading="lazy" src="media/' + r[2] + i + '.jpg">';
-        b.addEventListener('click', function () { seek(CUTS[+this.dataset.scene] + 0.05); });
-        tbl.appendChild(b);
-      }
+    function barHtml() { var h = ''; for (var i = 0; i < n(); i++) h += '<span><i></i></span>'; return '<div class="ex__bar" data-bar>' + h + '</div>'; }
+    function setHook(r) {
+      var h = T.remixes[r].hooks[hookIx[r]], col = $('[data-remix="' + r + '"]');
+      $('.ex__hook', col).textContent = h; $('[data-hook-label]', col).textContent = '"' + h + '"';
+    }
+    function build() {
+      var box = $('#ex-phones');
+      var html = '<div class="ex__col"><p class="ex__tag"><b>Original</b> what you upload</p><div class="ex__phone">' +
+        '<video id="ex-video" src="' + T.video + '" poster="media/' + T.orig + '1.jpg" muted loop playsinline autoplay preload="auto"></video>' + barHtml() +
+        '<button class="ex__sound" type="button" id="ex-sound" aria-label="Turn sound on">🔇</button></div>' + metaHtml(T.meta) + '</div>';
+      T.remixes.forEach(function (r, ri) {
+        var frames = ''; for (var i = 1; i <= n(); i++) frames += '<img class="ex__frame" alt="" src="media/' + r.img + i + '.jpg">';
+        html += '<div class="ex__col ex__col--remix" data-remix="' + ri + '"><p class="ex__tag"><b>' + r.title + '</b> ' + esc(r.sub) + '</p><div class="ex__phone">' + frames + barHtml() +
+          '<p class="ex__hook"></p><p class="ex__cta">' + esc(r.cta) + '</p><p class="ex__music"><i>♫</i><span>' + esc(r.music) + '</span></p></div>' + metaHtml(r.meta, true) + '</div>';
+      });
+      box.innerHTML = html;
+      cur = T.remixes.map(function () { return -1; }); hookIx = T.remixes.map(function () { return 0; });
+      T.remixes.forEach(function (r, ri) { setHook(ri); });
+      vid = $('#ex-video'); clock = 0;
+      $('#ex-sound').addEventListener('click', function () {
+        vid.muted = !vid.muted; this.textContent = vid.muted ? '🔇' : '🔊'; this.setAttribute('aria-label', vid.muted ? 'Turn sound on' : 'Mute');
+        if (!playing) togglePlay();
+      });
+      if (playing) { var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      // scene table
+      var tbl = $('#ex-scenes'); tbl.style.setProperty('--n', n()); tbl.innerHTML = '<span></span>';
+      T.labels.forEach(function (l, i) { tbl.insertAdjacentHTML('beforeend', '<p class="hd"><b>' + esc(l) + '</b>' + T.cuts[i].toFixed(1) + '–' + T.cuts[i + 1].toFixed(1) + ' s</p>'); });
+      [['Original', T.orig]].concat(T.remixes.map(function (r) { return [r.title, r.img]; })).forEach(function (row) {
+        tbl.insertAdjacentHTML('beforeend', '<p class="rl">' + row[0] + '</p>');
+        for (var i = 1; i <= n(); i++) {
+          var b = document.createElement('button'); b.type = 'button'; b.dataset.scene = i - 1;
+          b.setAttribute('aria-label', row[0] + ', scene ' + i + ': ' + T.labels[i - 1]);
+          b.innerHTML = '<img alt="" loading="lazy" src="media/' + row[1] + i + '.jpg">';
+          b.addEventListener('click', function () { seek(T.cuts[+this.dataset.scene] + 0.05); });
+          tbl.appendChild(b);
+        }
+      });
+      $$('#ex-tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.id === T.id)); });
+    }
+    var tabs = $('#ex-tabs');
+    TEMPLATES.forEach(function (t, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.id = t.id;
+      b.innerHTML = '<b>Template ' + (i + 1) + ' · ' + esc(t.tab) + '</b><span>' + esc(t.info) + '</span>';
+      b.addEventListener('click', function () { T = t; build(); });
+      tabs.appendChild(b);
     });
+    function live() { return vid && vid.readyState > 1 && !vid.error; }
     function seek(t) { clock = t; if (vid.readyState > 0) try { vid.currentTime = t; } catch (e) {} if (!playing) togglePlay(); }
-    function now() { return (vid.readyState > 1 && !vid.error) ? vid.currentTime : clock; }
+    function now() { return live() ? vid.currentTime : clock; }
     function paint() {
-      var t = now(), i = sceneAt(t), p = Math.min(1, (t - CUTS[i]) / (CUTS[i + 1] - CUTS[i]));
+      var t = now(), i = sceneAt(t), p = Math.min(1, (t - T.cuts[i]) / (T.cuts[i + 1] - T.cuts[i]));
       $$('#example [data-bar]').forEach(function (b) { $$('i', b).forEach(function (el, j) { el.style.width = (j < i ? 100 : j > i ? 0 : p * 100) + '%'; }); });
-      Object.keys(REMIX).forEach(function (k) {
+      T.remixes.forEach(function (r, k) {
         if (cur[k] === i) return; cur[k] = i;
-        $$('[data-remix="' + k + '"] .ex__frame').forEach(function (im, j) { im.classList.toggle('is-on', j === i); });
-        $('[data-remix="' + k + '"] .ex__cta').classList.toggle('is-on', i === 4);
+        var col = $('[data-remix="' + k + '"]');
+        $$('.ex__frame', col).forEach(function (im, j) { im.classList.toggle('is-on', j === i); });
+        $('.ex__cta', col).classList.toggle('is-on', i === n() - 1);
       });
       $$('#ex-scenes button').forEach(function (b) { b.classList.toggle('is-on', +b.dataset.scene === i); });
     }
     function tick(ts) {
       var dt = (ts - last) / 1000; last = ts;
-      if (playing && !(vid.readyState > 1 && !vid.error)) { clock = (clock + dt) % CUTS[5]; }
+      if (playing && !live()) clock = (clock + dt) % T.cuts[n()];
       paint(); requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
     function togglePlay() {
       playing = !playing;
       if (playing) { var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); } else vid.pause();
       $('#ex-play').textContent = playing ? '❚❚ Pause' : '▶ Play';
     }
     $('#ex-play').addEventListener('click', togglePlay);
-    $('#ex-sound').addEventListener('click', function () {
-      vid.muted = !vid.muted; this.textContent = vid.muted ? '🔇' : '🔊'; this.setAttribute('aria-label', vid.muted ? 'Turn sound on' : 'Mute');
-      if (!playing) togglePlay();
-    });
     $('#ex-hook').addEventListener('click', function () {
-      Object.keys(REMIX).forEach(function (k) { hookIx[k] = (hookIx[k] + 1) % REMIX[k].hooks.length; setHook(k); });
+      T.remixes.forEach(function (r, k) { hookIx[k] = (hookIx[k] + 1) % r.hooks.length; setHook(k); });
       seek(0);
     });
-    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { togglePlay(); }
-    var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {});
-    // Run the real scene detector on this example
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) playing = false;
+    build();
+    if (!playing) $('#ex-play').textContent = '▶ Play';
+    requestAnimationFrame(tick);
+    // Run the real scene detector on the selected example
     $('#ex-try').addEventListener('click', function () {
       $('#studio').scrollIntoView({ behavior: 'smooth' });
       go(1);
       $('#status').textContent = 'Loading the example video…';
-      fetch('media/source.mp4').then(function (r) { if (!r.ok) throw new Error(); return r.blob(); })
-        .then(function (b) { loadVideo(new File([b], 'viral-sweater-example.mp4', { type: 'video/mp4' })); })
+      fetch(T.video).then(function (r) { if (!r.ok) throw new Error(); return r.blob(); })
+        .then(function (b) { loadVideo(new File([b], T.id + '-template.mp4', { type: 'video/mp4' })); })
         .catch(function () { $('#status').textContent = 'Could not load the example. Upload your own clip instead.'; });
     });
   })();
