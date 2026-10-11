@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clipwright Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: an editing-suite page. Hero thesis, then the working studio (source + timeline | scene editor | finish rail), then economics and plans. */
+:root {
+  --bg: #f2f3ef;
+  --panel: #ffffff;
+  --panel-2: #e9ebe5;
+  --line: #d7dad2;
+  --fg: #16181a;
+  --fg-2: #50554f;
+  --fg-3: #858a83;
+  --tally: #e0352b;          /* recording / primary action */
+  --tally-ink: #ffffff;
+  --slate: #f4c542;          /* clapperboard yellow, used sparingly */
+  --slate-ink: #1d1a10;
+  --ok: #1f8a5b;
+  --run: #2f6fd6;
+  --shadow: 0 1px 0 rgba(22,24,26,.04), 0 12px 32px -18px rgba(22,24,26,.28);
+  --f-display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  --f-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111315; --panel: #191c1f; --panel-2: #22262a; --line: #30353a; --fg: #eceee9; --fg-2: #b2b7b0; --fg-3: #7d837d;
+  --tally: #ff5147; --slate: #f4c542; --ok: #3ccf8e; --run: #6ea2ff; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 16px 36px -20px rgba(0,0,0,.8); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111315; --panel: #191c1f; --panel-2: #22262a; --line: #30353a; --fg: #eceee9; --fg-2: #b2b7b0; --fg-3: #7d837d;
+  --tally: #ff5147; --slate: #f4c542; --ok: #3ccf8e; --run: #6ea2ff; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 16px 36px -20px rgba(0,0,0,.8); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--f-body); margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--run); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 600 12px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+
+/* ---------- Nav ---------- */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 20px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; font: 900 26px/1 var(--f-display); letter-spacing: .01em; text-transform: uppercase; }
+.logo i { width: 12px; height: 12px; border-radius: 50%; background: var(--tally); box-shadow: 0 0 0 4px color-mix(in srgb, var(--tally) 22%, transparent); animation: rec 1.6s ease-in-out infinite; }
+@keyframes rec { 50% { opacity: .35; } }
+.nav nav { display: flex; gap: 18px; margin-left: auto; font-weight: 600; font-size: 15px; }
+.nav nav a { color: var(--fg-2); text-decoration: none; }
+.nav nav a:hover { color: var(--fg); }
+.credits { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); font: 600 13px/1 var(--f-mono); }
+.credits b { color: var(--tally); }
+@media (max-width: 720px) { .nav nav { display: none; } .credits { margin-left: auto; } }
+
+/* ---------- Hero ---------- */
+.hero { padding-block: 56px 28px; }
+.hero__grid { display: grid; gap: 28px; align-items: end; }
+@media (min-width: 900px) { .hero__grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
+.hero h1 { font: 900 clamp(48px, 8.4vw, 112px)/.86 var(--f-display); text-transform: uppercase; letter-spacing: -.005em; }
+.hero h1 em { font-style: normal; color: var(--tally); }
+.hero__side { display: grid; gap: 18px; }
+.hero__side p { font-size: 18px; color: var(--fg-2); max-width: 46ch; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 600 13px/1 var(--f-mono); }
+.flow span { padding: 8px 10px; border: 1px dashed var(--line); border-radius: 8px; background: var(--panel); }
+.flow b { color: var(--fg-3); font-weight: 400; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 20px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); font-weight: 700; text-decoration: none; cursor: pointer; transition: transform .15s, background .2s; }
+.btn:hover { background: var(--panel-2); }
+.btn:active { transform: translateY(1px); }
+.btn--rec { background: var(--tally); color: var(--tally-ink); border-color: var(--tally); }
+.btn--rec:hover { background: color-mix(in srgb, var(--tally) 88%, #000); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn--sm { padding: 8px 12px; font-size: 14px; border-radius: 8px; }
+
+/* ---------- Studio ---------- */
+.studio { padding-block: 12px 56px; }
+.studio__frame { border: 1px solid var(--line); border-radius: 18px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; }
+.steps { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; border-bottom: 1px solid var(--line); background: var(--panel-2); }
+.step { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px; border: 0; background: transparent; font-weight: 700; font-size: 14px; color: var(--fg-2); cursor: pointer; }
+.step i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: var(--line); font: 600 12px/1 var(--f-mono); font-style: normal; color: var(--fg); }
+.step[aria-current="step"] { background: var(--panel); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.step[aria-current="step"] i { background: var(--tally); color: var(--tally-ink); }
+.step.is-done i { background: var(--ok); color: #fff; }
+.pane { padding: 20px; }
+.pane[hidden] { display: none; }
+.grid-2 { display: grid; gap: 20px; }
+@media (min-width: 980px) { .grid-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); } }
+
+/* Source */
+.drop { position: relative; display: grid; place-items: center; gap: 6px; padding: 22px; border: 2px dashed var(--line); border-radius: var(--r); text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+.drop:hover, .drop.is-over { border-color: var(--tally); background: color-mix(in srgb, var(--tally) 6%, transparent); }
+.drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.drop strong { font-size: 16px; }
+.drop small { color: var(--fg-3); font-size: 13px; }
+.player { position: relative; margin-top: 14px; border-radius: var(--r); overflow: hidden; background: #0d0f10; aspect-ratio: 16 / 10; max-width: 100%; display: grid; place-items: center; }
+.player video { width: 100%; height: 100%; object-fit: contain; display: block; }
+.player .sample { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+.player .sample div { display: grid; align-content: end; padding: 10px; color: #fff; font: 600 12px/1.2 var(--f-mono); }
+.tc { position: absolute; top: 10px; right: 10px; padding: 4px 8px; border-radius: 6px; background: rgba(0,0,0,.6); color: #fff; font: 600 12px/1 var(--f-mono); }
+.timeline { position: relative; display: flex; gap: 3px; height: 38px; margin-top: 12px; }
+.timeline button { position: relative; flex: 1; border: 0; border-radius: 6px; background: var(--panel-2); cursor: pointer; overflow: hidden; font: 600 11px/1 var(--f-mono); color: var(--fg-2); }
+.timeline button::after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: var(--line); }
+.timeline button[aria-pressed="true"] { background: color-mix(in srgb, var(--tally) 14%, var(--panel-2)); color: var(--fg); }
+.timeline button[aria-pressed="true"]::after { background: var(--tally); }
+.ruler { display: flex; justify-content: space-between; margin-top: 6px; font: 400 11px/1 var(--f-mono); color: var(--fg-3); }
+.status { margin-top: 12px; font-size: 14px; color: var(--fg-2); min-height: 1.5em; }
+.status b { color: var(--fg); }
+
+/* Scene strip */
+.strip { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-top: 16px; }
+.scene { display: grid; gap: 8px; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); text-align: left; cursor: pointer; transition: border-color .2s, transform .15s; }
+.scene:hover { transform: translateY(-2px); }
+.scene[aria-pressed="true"] { border-color: var(--tally); box-shadow: 0 0 0 2px color-mix(in srgb, var(--tally) 30%, transparent); }
+.thumb { position: relative; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 8px; overflow: hidden; background: var(--panel-2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slate { position: absolute; left: 6px; top: 6px; padding: 3px 6px; border-radius: 4px; background: var(--slate); color: var(--slate-ink); font: 600 10px/1 var(--f-mono); letter-spacing: .04em; }
+.scene__meta { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
+.scene__meta span:last-child { font: 400 12px/1.4 var(--f-mono); color: var(--fg-3); }
+
+/* Editor */
+.editor h3 { font: 800 28px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; }
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.ba figure { margin: 0; display: grid; gap: 6px; }
+.ba figcaption { font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
+.ba .thumb { aspect-ratio: 9 / 13; }
+.remix-tag { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 8px 8px; background: linear-gradient(transparent, rgba(0,0,0,.72)); color: #fff; font-size: 12px; line-height: 1.3; }
+.fields { display: grid; gap: 14px; margin-top: 18px; }
+.field { display: grid; gap: 6px; }
+.field label, .field .lbl { font-weight: 700; font-size: 14px; }
+.field small { color: var(--fg-3); font-size: 12px; }
+select, textarea, input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+textarea { resize: vertical; min-height: 70px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); font-size: 13px; font-weight: 600; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.toggle { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.toggle input { width: 38px; height: 22px; appearance: none; border-radius: 999px; background: var(--line); position: relative; cursor: pointer; transition: background .2s; }
+.toggle input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.toggle input:checked { background: var(--ok); }
+.toggle input:checked::after { transform: translateX(16px); }
+
+/* Render */
+.renderbar { display: grid; gap: 14px; padding: 16px 20px; border-top: 1px solid var(--line); background: var(--panel-2); }
+@media (min-width: 820px) { .renderbar { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
+.est { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; color: var(--fg-2); }
+.est b { display: block; font: 800 26px/1 var(--f-display); color: var(--fg); letter-spacing: .01em; }
+.jobs { display: grid; gap: 10px; }
+.job { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.job .thumb { aspect-ratio: 9 / 12; }
+.job__name { font-weight: 700; }
+.job__sub { font: 400 12px/1.4 var(--f-mono); color: var(--fg-3); }
+.bar { height: 6px; margin-top: 8px; border-radius: 999px; background: var(--panel-2); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--run); transition: width .3s; }
+.pill { padding: 5px 10px; border-radius: 999px; font: 600 12px/1 var(--f-mono); background: var(--panel-2); color: var(--fg-2); white-space: nowrap; }
+.pill--run { background: color-mix(in srgb, var(--run) 16%, transparent); color: var(--run); }
+.pill--ok { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.downloads { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+/* Finish */
+.finish { display: grid; gap: 20px; }
+@media (min-width: 980px) { .finish { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); } }
+.phone { position: relative; width: min(100%, 300px); aspect-ratio: 9 / 16; margin-inline: auto; border-radius: 28px; overflow: hidden; background: #0d0f10; border: 8px solid #1b1e21; }
+.phone img { width: 100%; height: 100%; object-fit: cover; }
+.phone .hook { position: absolute; left: 10px; right: 10px; top: 16%; color: #fff; font: 800 18px/1.15 var(--f-body); text-align: center; text-shadow: 0 2px 0 #000, 0 0 6px rgba(0,0,0,.8); -webkit-text-stroke: .6px #000; }
+.phone .cap { position: absolute; left: 14px; right: 14px; bottom: 18%; text-align: center; }
+.phone .cap span { display: inline; padding: 3px 6px; border-radius: 6px; background: #fff; color: #111; font: 800 15px/1.6 var(--f-body); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.phone .music { position: absolute; left: 10px; bottom: 10px; right: 10px; display: flex; align-items: center; gap: 6px; color: #fff; font: 600 11px/1.2 var(--f-mono); }
+.phone .music i { width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; animation: spin 3s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.tracks { display: grid; gap: 6px; }
+.track { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); cursor: pointer; text-align: left; }
+.track[aria-pressed="true"] { border-color: var(--tally); }
+.track .mono { font-size: 12px; color: var(--fg-3); }
+.track .hot { font: 600 11px/1 var(--f-mono); color: var(--tally); }
+
+/* Sections below the studio */
+section.block { padding-block: 56px; border-top: 1px solid var(--line); }
+.block h2 { font: 900 clamp(34px, 5vw, 60px)/.92 var(--f-display); text-transform: uppercase; }
+.block .lead { margin-top: 12px; color: var(--fg-2); max-width: 62ch; font-size: 17px; }
+.feats { display: grid; gap: 0; margin-top: 28px; border-top: 1px solid var(--line); }
+@media (min-width: 820px) { .feats { grid-template-columns: 1fr 1fr; column-gap: 40px; } }
+.feat { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 14px; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.feat .mono { font-size: 12px; color: var(--tally); padding-top: 4px; }
+.feat h3 { font-size: 18px; }
+.feat p { color: var(--fg-2); font-size: 15px; margin-top: 2px; }
+.cmp { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 15px; }
+.cmp-wrap { overflow-x: auto; }
+.cmp th, .cmp td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.cmp th { font: 600 12px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
+.cmp td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.cmp tr td:last-child { font-weight: 700; color: var(--ok); }
+.plans { display: grid; gap: 14px; margin-top: 28px; }
+@media (min-width: 820px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+.plan { display: grid; gap: 10px; align-content: start; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.plan--hot { border-color: var(--tally); box-shadow: 0 0 0 1px var(--tally); }
+.plan h3 { font: 800 26px/1 var(--f-display); text-transform: uppercase; }
+.plan .price { font: 900 44px/1 var(--f-display); }
+.plan .price small { font: 500 15px var(--f-body); color: var(--fg-3); }
+.plan ul { margin: 0; padding-left: 18px; color: var(--fg-2); font-size: 15px; display: grid; gap: 4px; }
+.plan .btn { margin-top: 6px; }
+footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var(--fg-3); font-size: 13px; }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; padding: 12px 16px; border-radius: 12px; background: var(--fg); color: var(--bg); font-weight: 600; font-size: 14px; max-width: calc(100% - 32px); transition: opacity .25s, transform .25s; z-index: 50; pointer-events: none; }
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <div class="logo"><i aria-hidden="true"></i>Clipwright</div>
+    <nav aria-label="Main"><a href="#studio">Studio</a><a href="#features">Features</a><a href="#economics">Why it's cheaper</a><a href="#plans">Plans</a></nav>
+    <span class="credits mono" title="Example balance"><b id="credit-balance">420</b> credits</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <h1>Drop a viral video.<br>Get <em>your</em> version.</h1>
+      <div class="hero__side">
+        <p>Built for organic dropshippers. Upload a reference clip, we split it into scenes, rebuild every scene with your product, your cast and a new location, then hand back the finished video with a hook and music.</p>
+        <div class="flow" aria-label="How it works">
+          <span>Upload</span><b>→</b><span>Scene split</span><b>→</b><span>Remix</span><b>→</b><span>Render</span><b>→</b><span>Hook + music</span>
+        </div>
+        <div class="btns"><a class="btn btn--rec" href="#studio">Open the studio</a><a class="btn" href="#economics">See the savings</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="studio" id="studio">
+    <div class="wrap">
+      <div class="studio__frame">
+        <div class="steps" role="tablist" aria-label="Studio steps">
+          <button class="step" role="tab" id="tab-1" aria-controls="pane-1" aria-current="step" data-step="1"><i>1</i>Import &amp; split</button>
+          <button class="step" role="tab" id="tab-2" aria-controls="pane-2" data-step="2"><i>2</i>Remix scenes</button>
+          <button class="step" role="tab" id="tab-3" aria-controls="pane-3" data-step="3"><i>3</i>Render</button>
+          <button class="step" role="tab" id="tab-4" aria-controls="pane-4" data-step="4"><i>4</i>Hook, music &amp; export</button>
+        </div>
+
+        <!-- 1. Import -->
+        <div class="pane" id="pane-1" role="tabpanel" aria-labelledby="tab-1">
+          <div class="grid-2">
+            <div>
+              <label class="drop" id="drop">
+                <input type="file" id="file" accept="video/*">
+                <strong>Drop a TikTok, Reel or Short here</strong>
+                <small>MP4 or MOV up to 60 s. Scene detection runs right in your browser.</small>
+              </label>
+              <div class="player" id="player">
+                <video id="video" playsinline muted controls hidden></video>
+                <div class="sample" id="sample-strip" aria-hidden="true"></div>
+                <span class="tc" id="tc">00:00:00 / 00:11:16</span>
+              </div>
+              <div class="timeline" id="timeline" aria-label="Detected scenes"></div>
+              <div class="ruler mono" id="ruler"></div>
+              <p class="status" id="status">Example loaded: <b>3 scenes</b> found in an 11.6 s prank video. Upload your own clip to try real detection.</p>
+            </div>
+            <div>
+              <div class="row"><p class="eyebrow">Detected scenes</p><button class="btn btn--sm" id="to-remix">Remix these scenes →</button></div>
+              <div class="strip" id="strip"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Remix -->
+        <div class="pane" id="pane-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+          <div class="grid-2">
+            <div>
+              <p class="eyebrow">Scenes</p>
+              <div class="strip" id="strip-2"></div>
+            </div>
+            <div class="editor">
+              <div class="row"><h3 id="ed-title">Scene 1</h3><span class="pill mono" id="ed-time">0.0–3.8 s</span></div>
+              <div class="ba">
+                <figure><figcaption>Original frame</figcaption><div class="thumb" id="ed-before"></div></figure>
+                <figure><figcaption>Your remix (preview)</figcaption><div class="thumb" id="ed-after"></div></figure>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <span class="lbl">Location</span>
+                  <div class="chips" id="env-chips"></div>
+                </div>
+                <div class="field">
+                  <label for="product">Product</label>
+                  <select id="product">
+                    <option>Bald Guy Ugly Christmas Sweater (Classic Red)</option>
+                    <option>Realistic Old Man Ski Mask</option>
+                    <option>Christmas Tree Pet Cape</option>
+                    <option>Upload a product photo…</option>
+                  </select>
+                  <small>Pulled from your connected Shopify store. The product stays identical in every scene.</small>
+                </div>
+                <div class="field">
+                  <label for="cast">Cast</label>
+                  <select id="cast">
+                    <option>Saved character: Grandpa, 70, grey moustache</option>
+                    <option>New AI person: woman, 25, gym wear</option>
+                    <option>New AI person: man, 35, office look</option>
+                    <option>Keep framing, replace every person with a new AI cast</option>
+                  </select>
+                  <small>Only AI-generated people. Real faces from the source are never reused.</small>
+                </div>
+                <div class="field">
+                  <label for="extra">Direction for this scene</label>
+                  <textarea id="extra">Grandpa rubs his bald head and grins while the gym girl walks out laughing.</textarea>
+                </div>
+                <div class="row">
+                  <label class="toggle"><input type="checkbox" id="keep-motion" checked> Keep the original camera move</label>
+                  <label class="field" style="min-width:200px" for="model"><span class="sr" hidden>Model</span>
+                    <select id="model">
+                      <option value="kling">Kling 3.0 · fast · ≈ $0.10/s</option>
+                      <option value="seedance" selected>Seedance 2.0 · realistic · ≈ $0.25/s</option>
+                      <option value="veo">Veo 3.1 · talking · ≈ $0.30/s</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="btns"><button class="btn btn--sm" id="apply-all">Apply cast &amp; product to all scenes</button><button class="btn btn--sm btn--rec" id="to-render">Continue to render →</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Render -->
+        <div class="pane" id="pane-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+          <div class="row"><p class="eyebrow">Render queue</p><span class="pill mono" id="queue-sum">3 scenes · 11.6 s</span></div>
+          <div class="jobs" id="jobs" style="margin-top:12px"></div>
+          <div class="downloads" id="downloads">
+            <button class="btn btn--sm" data-dl="scenes.zip" disabled>Download scenes (ZIP)</button>
+            <button class="btn btn--sm" data-dl="frames.zip" disabled>Download start frames</button>
+            <button class="btn btn--sm btn--rec" id="to-finish" disabled>Add hook &amp; music →</button>
+          </div>
+        </div>
+
+        <!-- 4. Finish -->
+        <div class="pane" id="pane-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+          <div class="finish">
+            <div class="phone" id="phone">
+              <img id="phone-img" alt="Preview of the finished video">
+              <div class="hook" id="phone-hook">DO NOT show this to a BALD GRANDPA… 🤣</div>
+              <div class="cap" id="phone-cap"><span>he really wore it to the mall</span></div>
+              <div class="music"><i aria-hidden="true"></i><span id="phone-music">Jingle Bell Rock (sped up)</span></div>
+            </div>
+            <div class="fields" style="margin-top:0">
+              <div class="field">
+                <label for="hook">Hook</label>
+                <input type="text" id="hook" value="DO NOT show this to a BALD GRANDPA… 🤣">
+                <div class="chips" id="hook-chips"></div>
+                <small>Templates are ranked by how hooks like them performed this week.</small>
+              </div>
+              <div class="field">
+                <span class="lbl">Music</span>
+                <div class="tracks" id="tracks"></div>
+              </div>
+              <div class="row">
+                <label class="toggle"><input type="checkbox" id="captions" checked> Auto captions</label>
+                <label class="field" for="variants" style="min-width:220px"><span class="lbl">A/B variants</span>
+                  <select id="variants"><option value="1">1 video</option><option value="3" selected>3 hooks × same video</option><option value="5">5 hooks × same video</option></select>
+                </label>
+              </div>
+              <div class="chips" aria-label="Format"><button class="chip" aria-pressed="true">9:16 TikTok / Reels</button><button class="chip" aria-pressed="false">1:1 Feed</button><button class="chip" aria-pressed="false">16:9 YouTube</button></div>
+              <div class="btns">
+                <button class="btn btn--rec" data-dl="final_video.mp4">Export final video</button>
+                <button class="btn" data-dl="tiktok">Post to TikTok</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="renderbar">
+          <div class="est">
+            <div>Scenes<b id="est-scenes">3</b></div>
+            <div>Length<b id="est-len">11.6 s</b></div>
+            <div>Est. AI cost<b id="est-cost">$3.20</b></div>
+            <div>Ready in<b id="est-time">~6 min</b></div>
+          </div>
+          <button class="btn btn--rec" id="render-btn">Render all scenes</button>
+        </div>
+      </div>
+      <p class="status" style="text-align:center">Prototype. Scene detection is real; the remix previews and renders are simulated.</p>
+    </div>
+  </section>
+
+  <section class="block" id="features">
+    <div class="wrap">
+      <p class="eyebrow">What's inside</p>
+      <h2>Everything between a viral clip and a posted video</h2>
+      <div class="feats">
+        <div class="feat"><span class="mono">SPLIT</span><div><h3>Automatic scene detection</h3><p>Finds every cut, pulls a clean start frame for each scene and keeps the original timing.</p></div></div>
+        <div class="feat"><span class="mono">SWAP</span><div><h3>Product swap that stays identical</h3><p>Connect Shopify once. Your product is locked across all scenes, colours and angles.</p></div></div>
+        <div class="feat"><span class="mono">CAST</span><div><h3>Saved AI characters</h3><p>Create a character once and reuse it in every video, so your account has recurring faces.</p></div></div>
+        <div class="feat"><span class="mono">SET</span><div><h3>New location per scene</h3><p>Elevator, gym, ski lift, mall Santa. Or describe your own in one line.</p></div></div>
+        <div class="feat"><span class="mono">HOOK</span><div><h3>Hook library with live ranking</h3><p>Text hooks sorted by this week's performance, burned in with TikTok-style captions.</p></div></div>
+        <div class="feat"><span class="mono">A/B</span><div><h3>Variants in one click</h3><p>Same video, five different hooks. Post them all and keep the winner.</p></div></div>
+        <div class="feat"><span class="mono">PARTS</span><div><h3>Download by scene</h3><p>Grab each scene or each start frame and finish it in CapCut if you prefer.</p></div></div>
+        <div class="feat"><span class="mono">POST</span><div><h3>Post straight to TikTok</h3><p>Schedule to connected TikTok and Instagram accounts with the AI-content label set.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="economics">
+    <div class="wrap">
+      <p class="eyebrow">Per 12-second video, 3 scenes</p>
+      <h2>Faster and cheaper than doing it by hand</h2>
+      <p class="lead">Estimates based on current public model prices. Doing it by hand means prompting each tool separately, re-rolling bad takes and editing in CapCut.</p>
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead><tr><th>Step</th><th>By hand</th><th>Clipwright</th></tr></thead>
+          <tbody>
+            <tr><td>Find cuts, grab frames</td><td class="num">15 min</td><td class="num">10 s</td></tr>
+            <tr><td>Write prompts per scene</td><td class="num">25 min</td><td class="num">Prefilled</td></tr>
+            <tr><td>Generate frames and video</td><td class="num">$6–9, 2–3 re-rolls</td><td class="num">$2.50–3.50</td></tr>
+            <tr><td>Edit, hook, captions, music</td><td class="num">30 min in CapCut</td><td class="num">1 click</td></tr>
+            <tr><td>Total</td><td class="num">≈ 75 min · $6–9</td><td class="num">≈ 8 min · $3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="plans">
+    <div class="wrap">
+      <p class="eyebrow">Example pricing</p>
+      <h2>Plans</h2>
+      <div class="plans">
+        <div class="plan"><h3>Starter</h3><p class="price">$19<small>/month</small></p><ul><li>15 finished videos</li><li>720p, 9:16</li><li>Hook library</li></ul><button class="btn" data-dl="plan">Start free trial</button></div>
+        <div class="plan plan--hot"><h3>Creator</h3><p class="price">$49<small>/month</small></p><ul><li>50 finished videos</li><li>Saved characters</li><li>A/B hook variants</li><li>Shopify product sync</li></ul><button class="btn btn--rec" data-dl="plan">Start free trial</button></div>
+        <div class="plan"><h3>Agency</h3><p class="price">$149<small>/month</small></p><ul><li>200 finished videos</li><li>1080p and 4K</li><li>Team seats and brand kits</li><li>Scheduled posting</li></ul><button class="btn" data-dl="plan">Talk to us</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Clipwright is a working name. Prototype for review, October 2026.</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- Sample scene art (drawn on canvas so the page has no external images) ---------- */
+  function sceneArt(kind, remix) {
+    var c = document.createElement('canvas'); c.width = 270; c.height = 480;
+    var g = c.getContext('2d');
+    var pal = {
+      elevator: ['#9aa3a8', '#d9dde0', '#5f676c'],
+      cooking:  ['#3a2a1d', '#c78b4a', '#f2d7a8'],
+      santa:    ['#1e3b2b', '#b8333a', '#f1e1c6'],
+      gym:      ['#202428', '#5b6b78', '#cfd8de'],
+      ski:      ['#cfe3f2', '#ffffff', '#5b8db5'],
+      store:    ['#e9e2d6', '#c9b79c', '#7b6a55'],
+      street:   ['#1d2633', '#3d5a80', '#f4c542']
+    }[kind] || ['#333', '#777', '#bbb'];
+    var grd = g.createLinearGradient(0, 0, 0, 480); grd.addColorStop(0, pal[1]); grd.addColorStop(1, pal[0]);
+    g.fillStyle = grd; g.fillRect(0, 0, 270, 480);
+    g.fillStyle = 'rgba(0,0,0,.12)';
+    for (var i = 0; i < 6; i++) g.fillRect(20 + i * 42, 60, 4, 260);
+    // figure: body + head (+ sweater block)
+    g.fillStyle = remix ? '#c33a32' : pal[2]; g.beginPath(); g.roundRect ? g.roundRect(95, 230, 90, 170, 30) : g.rect(95, 230, 90, 170); g.fill();
+    if (remix) { g.fillStyle = '#f2b33d'; g.fillRect(105, 270, 70, 10); g.fillRect(105, 360, 70, 10); }
+    g.fillStyle = '#e6b997'; g.beginPath(); g.arc(140, 200, 34, 0, Math.PI * 2); g.fill();
+    if (remix) { g.fillStyle = '#eee'; g.fillRect(122, 210, 36, 8); }
+    g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(0, 400, 270, 80);
+    return c.toDataURL('image/jpeg', .82);
+  }
+
+  var ENVS = [['elevator', 'Apartment elevator'], ['gym', 'Gym'], ['ski', 'Ski lift'], ['store', 'Clothing store'], ['santa', 'Mall Santa'], ['cooking', 'Cooking demo'], ['street', 'Christmas market']];
+  var envLabel = function (k) { for (var i = 0; i < ENVS.length; i++) if (ENVS[i][0] === k) return ENVS[i][1]; return k; };
+
+  var state = {
+    duration: 11.6,
+    source: 'sample',
+    scenes: [
+      { start: 0, end: 3.8, env: 'elevator', orig: 'elevator', prompt: 'Grandpa rubs his bald head and grins while the gym girl walks out laughing.' },
+      { start: 3.8, end: 7.9, env: 'cooking', orig: 'cooking', prompt: 'Grandpa stands deadpan at the mall cooking demo, the crowd tries not to laugh.' },
+      { start: 7.9, end: 11.6, env: 'santa', orig: 'santa', prompt: 'Grandpa poses next to Santa, rubs his head, Santa chuckles into his beard.' }
+    ],
+    sel: 0, rendered: false
+  };
+  state.scenes.forEach(function (s) { s.before = sceneArt(s.orig, false); });
+
+  var fmt = function (t) { return t.toFixed(1); };
+  var tcode = function (t) { var s = Math.floor(t), f = Math.round((t - s) * 30); return '00:' + String(s).padStart(2, '0') + ':' + String(Math.min(f, 29)).padStart(2, '0'); };
+
+  function toast(msg) {
+    var t = $('#toast'); t.textContent = msg; t.classList.add('is-on');
+    clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove('is-on'); }, 2600);
+  }
+
+  /* ---------- Steps ---------- */
+  function go(n) {
+    $$('.step').forEach(function (b) {
+      var k = +b.dataset.step;
+      if (k === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      b.classList.toggle('is-done', k < n);
+    });
+    $$('.pane').forEach(function (p, i) { p.hidden = (i + 1) !== n; });
+    if (n === 2) renderEditor();
+    if (n === 3) renderJobs();
+    if (n === 4) renderFinish();
+    $('#studio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $$('.step').forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.step); }); });
+  $('#to-remix').addEventListener('click', function () { go(2); });
+  $('#to-render').addEventListener('click', function () { go(3); });
+  $('#to-finish').addEventListener('click', function () { go(4); });
+
+  /* ---------- Step 1: timeline + strip ---------- */
+  function afterImg(s) { return s.after || (s.after = s.source === 'upload' ? s.before : sceneArt(s.env, true)); }
+  function sceneCard(s, i, sel) {
+    var b = document.createElement('button');
+    b.className = 'scene'; b.type = 'button'; b.setAttribute('aria-pressed', String(i === sel));
+    b.innerHTML = '<div class="thumb"><img alt=""><span class="slate">SC ' + String(i + 1).padStart(2, '0') + '</span></div>' +
+      '<div class="scene__meta"><span>' + envLabel(s.env) + '</span><span>' + fmt(s.start) + '–' + fmt(s.end) + 's</span></div>';
+    b.querySelector('img').src = s.before;
+    return b;
+  }
+  function renderSource() {
+    var tl = $('#timeline'); tl.innerHTML = '';
+    state.scenes.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.style.flex = String(s.end - s.start);
+      b.setAttribute('aria-pressed', String(i === state.sel));
+      b.setAttribute('aria-label', 'Scene ' + (i + 1) + ', ' + fmt(s.start) + ' to ' + fmt(s.end) + ' seconds');
+      b.textContent = 'SC' + (i + 1);
+      b.addEventListener('click', function () { state.sel = i; seekTo(s.start); renderSource(); });
+      tl.appendChild(b);
+    });
+    var r = $('#ruler'); r.innerHTML = '';
+    [0, .25, .5, .75, 1].forEach(function (p) { var sp = document.createElement('span'); sp.textContent = fmt(state.duration * p) + 's'; r.appendChild(sp); });
+    var st = $('#strip'); st.innerHTML = '';
+    state.scenes.forEach(function (s, i) {
+      var c = sceneCard(s, i, state.sel);
+      c.addEventListener('click', function () { state.sel = i; seekTo(s.start); renderSource(); });
+      st.appendChild(c);
+    });
+    if (state.source === 'sample') {
+      var ss = $('#sample-strip'); ss.innerHTML = '';
+      state.scenes.forEach(function (s, i) {
+        var d = document.createElement('div');
+        d.style.background = 'url(' + s.before + ') center/cover';
+        d.textContent = 'SC' + (i + 1) + ' · ' + envLabel(s.orig);
+        ss.appendChild(d);
+      });
+    }
+    updateEstimate();
+  }
+  function seekTo(t) { var v = $('#video'); if (!v.hidden && v.duration) { v.currentTime = t; } }
+
+  /* ---------- Real scene detection for uploaded clips ---------- */
+  var file = $('#file'), drop = $('#drop');
+  ['dragenter', 'dragover'].forEach(function (e) { drop.addEventListener(e, function () { drop.classList.add('is-over'); }); });
+  ['dragleave', 'drop'].forEach(function (e) { drop.addEventListener(e, function () { drop.classList.remove('is-over'); }); });
+  file.addEventListener('change', function () { if (file.files[0]) loadVideo(file.files[0]); });
+
+  function once(el, ev) { return new Promise(function (res) { el.addEventListener(ev, function h() { el.removeEventListener(ev, h); res(); }); }); }
+
+  async function loadVideo(f) {
+    var v = $('#video');
+    v.src = URL.createObjectURL(f); v.hidden = false; $('#sample-strip').hidden = true;
+    $('#status').innerHTML = 'Reading <b>' + f.name.replace(/[<>&]/g, '') + '</b>…';
+    try {
+      await once(v, 'loadedmetadata');
+      if (!isFinite(v.duration) || v.duration <= 0) throw new Error('no duration');
+      var dur = Math.min(v.duration, 60);
+      var cw = 64, ch = 36, cv = document.createElement('canvas'); cv.width = cw; cv.height = ch;
+      var g = cv.getContext('2d', { willReadFrequently: true });
+      var step = dur > 30 ? 0.5 : 0.25, prev = null, diffs = [];
+      for (var t = 0; t < dur; t += step) {
+        v.currentTime = t; await once(v, 'seeked');
+        g.drawImage(v, 0, 0, cw, ch);
+        var px = g.getImageData(0, 0, cw, ch).data, d = 0;
+        if (prev) { for (var k = 0; k < px.length; k += 4) d += Math.abs(px[k] - prev[k]) + Math.abs(px[k + 1] - prev[k + 1]) + Math.abs(px[k + 2] - prev[k + 2]); diffs.push({ t: t, d: d }); }
+        prev = px;
+        $('#status').innerHTML = 'Finding cuts… <b>' + Math.round(t / dur * 100) + '%</b>';
+      }
+      var vals = diffs.map(function (x) { return x.d; });
+      var mean = vals.reduce(function (a, b) { return a + b; }, 0) / Math.max(1, vals.length);
+      var sd = Math.sqrt(vals.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / Math.max(1, vals.length));
+      var cuts = [];
+      diffs.slice().sort(function (a, b) { return b.d - a.d; }).forEach(function (x) {
+        if (x.d > mean + 1.6 * sd && cuts.length < 7 && cuts.every(function (c) { return Math.abs(c - x.t) >= 1; }) && x.t > .8 && x.t < dur - .8) cuts.push(x.t);
+      });
+      cuts.sort(function (a, b) { return a - b; });
+      if (!cuts.length) { var n = Math.max(1, Math.round(dur / 4)); for (var i = 1; i < n; i++) cuts.push(dur * i / n); }
+      var bounds = [0].concat(cuts, [dur]);
+      var big = document.createElement('canvas'); big.width = 270; big.height = 480; var bg = big.getContext('2d');
+      var scenes = [];
+      for (var j = 0; j < bounds.length - 1; j++) {
+        var mid = bounds[j] + Math.min(0.4, (bounds[j + 1] - bounds[j]) / 3);
+        v.currentTime = mid; await once(v, 'seeked');
+        var vw = v.videoWidth, vh = v.videoHeight, sw = vh * 9 / 16, sx = Math.max(0, (vw - sw) / 2);
+        if (sw > vw) { sw = vw; sx = 0; }
+        bg.fillStyle = '#000'; bg.fillRect(0, 0, 270, 480);
+        bg.drawImage(v, sx, 0, Math.min(sw, vw), vh, 0, 0, 270, 480);
+        scenes.push({ start: bounds[j], end: bounds[j + 1], env: ENVS[j % ENVS.length][0], orig: 'upload', source: 'upload', before: big.toDataURL('image/jpeg', .8), prompt: '' });
+      }
+      state.scenes = scenes; state.duration = dur; state.source = 'upload'; state.sel = 0; state.rendered = false;
+      v.currentTime = 0;
+      $('#status').innerHTML = 'Found <b>' + scenes.length + ' scene' + (scenes.length > 1 ? 's' : '') + '</b> in ' + fmt(dur) + ' s. Click a scene to jump to it.';
+      renderSource();
+    } catch (e) {
+      $('#status').textContent = 'This file could not be read in the browser. Try an MP4 exported from TikTok or Instagram.';
+    }
+  }
+  $('#video').addEventListener('timeupdate', function () { $('#tc').textContent = tcode($('#video').currentTime) + ' / ' + tcode(state.duration); });
+
+  /* ---------- Step 2: editor ---------- */
+  function renderEditor() {
+    var st = $('#strip-2'); st.innerHTML = '';
+    state.scenes.forEach(function (s, i) {
+      var c = sceneCard(s, i, state.sel);
+      c.addEventListener('click', function () { saveEditor(); state.sel = i; renderEditor(); });
+      st.appendChild(c);
+    });
+    var s = state.scenes[state.sel];
+    $('#ed-title').textContent = 'Scene ' + (state.sel + 1);
+    $('#ed-time').textContent = fmt(s.start) + '–' + fmt(s.end) + ' s';
+    $('#ed-before').innerHTML = '<img alt="Original frame of scene ' + (state.sel + 1) + '">';
+    $('#ed-before img').src = s.before;
+    drawAfter();
+    var chips = $('#env-chips'); chips.innerHTML = '';
+    ENVS.forEach(function (e) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = e[1];
+      b.setAttribute('aria-pressed', String(s.env === e[0]));
+      b.addEventListener('click', function () { s.env = e[0]; s.after = null; renderEditor(); updateEstimate(); });
+      chips.appendChild(b);
+    });
+    $('#extra').value = s.prompt || '';
+  }
+  function drawAfter() {
+    var s = state.scenes[state.sel];
+    var wrap = $('#ed-after');
+    wrap.innerHTML = '<img alt="Remix preview"><div class="remix-tag"></div>';
+    var img = wrap.querySelector('img');
+    img.src = afterImg(s);
+    if (s.source === 'upload') img.style.filter = 'saturate(1.3) hue-rotate(' + (ENVS.findIndex(function (e) { return e[0] === s.env; }) * 40) + 'deg)';
+    wrap.querySelector('.remix-tag').textContent = envLabel(s.env) + ' · ' + $('#cast').value.split(':').pop().trim();
+  }
+  function saveEditor() { var s = state.scenes[state.sel]; if (s) s.prompt = $('#extra').value; }
+  $('#extra').addEventListener('input', saveEditor);
+  $('#cast').addEventListener('change', drawAfter);
+  $('#model').addEventListener('change', updateEstimate);
+  $('#apply-all').addEventListener('click', function () { toast('Cast and product applied to all ' + state.scenes.length + ' scenes'); });
+
+  /* ---------- Estimate ---------- */
+  function updateEstimate() {
+    var rate = { kling: .10, seedance: .25, veo: .30 }[$('#model').value] || .25;
+    var secs = state.scenes.reduce(function (a, s) { return a + (s.end - s.start); }, 0);
+    var cost = secs * rate + state.scenes.length * 0.10;
+    $('#est-scenes').textContent = state.scenes.length;
+    $('#est-len').textContent = fmt(secs) + ' s';
+    $('#est-cost').textContent = '$' + cost.toFixed(2);
+    $('#est-time').textContent = '~' + Math.max(3, Math.round(2 + state.scenes.length * 1.4)) + ' min';
+    $('#queue-sum').textContent = state.scenes.length + ' scenes · ' + fmt(secs) + ' s';
+  }
+
+  /* ---------- Step 3: simulated render ---------- */
+  function renderJobs() {
+    var box = $('#jobs'); box.innerHTML = '';
+    state.scenes.forEach(function (s, i) {
+      var j = document.createElement('div'); j.className = 'job';
+      j.innerHTML = '<div class="thumb"><img alt=""></div><div><div class="job__name">Scene ' + (i + 1) + ' · ' + envLabel(s.env) + '</div><div class="job__sub">' + fmt(s.end - s.start) + ' s · ' + $('#model').selectedOptions[0].textContent.split('·')[0].trim() + '</div><div class="bar"><span></span></div></div><span class="pill">' + (state.rendered ? 'Done' : 'Queued') + '</span>';
+      j.querySelector('img').src = state.rendered ? afterImg(s) : s.before;
+      if (state.rendered) { j.querySelector('.bar span').style.width = '100%'; j.querySelector('.pill').className = 'pill pill--ok'; }
+      box.appendChild(j);
+    });
+    $$('#downloads button').forEach(function (b) { b.disabled = !state.rendered; });
+  }
+  $('#render-btn').addEventListener('click', function () {
+    go(3);
+    if (state.rendered) { toast('Already rendered. Change a scene to render again.'); return; }
+    var btn = $('#render-btn'); btn.disabled = true; btn.textContent = 'Rendering…';
+    var jobs = $$('#jobs .job');
+    var done = 0;
+    jobs.forEach(function (j, i) {
+      var p = 0, bar = j.querySelector('.bar span'), pill = j.querySelector('.pill');
+      setTimeout(function () {
+        pill.className = 'pill pill--run'; pill.textContent = 'Frame';
+        var iv = setInterval(function () {
+          p += 4 + Math.random() * 7;
+          if (p > 30) pill.textContent = 'Video';
+          if (p >= 100) {
+            p = 100; clearInterval(iv);
+            pill.className = 'pill pill--ok'; pill.textContent = 'Done';
+            j.querySelector('img').src = afterImg(state.scenes[i]);
+            if (++done === jobs.length) {
+              state.rendered = true; btn.disabled = false; btn.textContent = 'Render all scenes';
+              $$('#downloads button').forEach(function (b) { b.disabled = false; });
+              var bal = $('#credit-balance'); bal.textContent = Math.max(0, +bal.textContent - jobs.length * 12);
+              toast('All scenes rendered');
+            }
+          }
+          bar.style.width = p + '%';
+        }, 160);
+      }, i * 500);
+    });
+  });
+
+  /* ---------- Step 4: hook, music, export ---------- */
+  var HOOKS = ['DO NOT show this to a BALD GRANDPA… 🤣', 'He really wore THAT in public', 'The perfect gift doesn\'t exist… or does it', 'POV: grandpa found the group chat sweater', 'Nobody was ready for this 💀'];
+  var TRACKS = [['Jingle Bell Rock (sped up)', '0:15', 'Trending #3'], ['Funny Bones – comedy sting', '0:12', ''], ['All I Want For Christmas (remix)', '0:20', 'Trending #1'], ['Elevator jazz loop', '0:30', '']];
+  var trackSel = 0;
+  function renderFinish() {
+    var s = state.scenes[0];
+    $('#phone-img').src = afterImg(s);
+    var hc = $('#hook-chips'); hc.innerHTML = '';
+    HOOKS.forEach(function (h) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = h;
+      b.setAttribute('aria-pressed', String($('#hook').value === h));
+      b.addEventListener('click', function () { $('#hook').value = h; $('#phone-hook').textContent = h; renderFinish(); });
+      hc.appendChild(b);
+    });
+    var tr = $('#tracks'); tr.innerHTML = '';
+    TRACKS.forEach(function (t, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'track'; b.setAttribute('aria-pressed', String(i === trackSel));
+      b.innerHTML = '<span class="mono">' + t[1] + '</span><span>' + t[0] + '</span><span class="hot">' + t[2] + '</span>';
+      b.addEventListener('click', function () { trackSel = i; $('#phone-music').textContent = t[0]; renderFinish(); });
+      tr.appendChild(b);
+    });
+  }
+  $('#hook').addEventListener('input', function () { $('#phone-hook').textContent = $('#hook').value; });
+  $('#captions').addEventListener('change', function () { $('#phone-cap').hidden = !$('#captions').checked; });
+  $$('.chips[aria-label="Format"] .chip').forEach(function (b, i, all) {
+    b.addEventListener('click', function () {
+      all.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      $('#phone').style.aspectRatio = ['9 / 16', '1 / 1', '16 / 9'][i];
+    });
+  });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-dl]'); if (!b) return;
+    var what = b.dataset.dl;
+    var msg = what === 'tiktok' ? 'In the real app this posts to your connected TikTok account' :
+      what === 'plan' ? 'Plans are examples in this prototype' :
+      'In the real app this downloads ' + what + (what === 'final_video.mp4' && +$('#variants').value > 1 ? ' plus ' + ($('#variants').value - 1) + ' hook variants' : '');
+    toast(msg);
+  });
+
+  renderSource();
+})();
+</script>
+</body>
+</html>
