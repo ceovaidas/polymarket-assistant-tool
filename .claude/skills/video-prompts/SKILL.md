@@ -52,6 +52,12 @@ Rules:
 - Keep the same person, outfit and place identical in wording across all scenes for consistency.
 - Do not write prompts that rely on bypassing a model's content filter; describe novelty products plainly.
 
+## Offer wording in hooks, captions and CTAs
+
+Follow the "Offer wording" table in `CLAUDE.md`: "$10 to spend" not "$10 off", "mystery discount" not
+"10% off", "$29 worth gift" not "free gift", "$0 shipping, on us" not "free shipping", "99% off the
+second one" not "buy one get one free". Applies to on-screen text, captions and the final CTA.
+
 ## 4. After the prompts
 
 - Consistency tip: generate scene 1 first and attach that person as a reference to every other scene,
