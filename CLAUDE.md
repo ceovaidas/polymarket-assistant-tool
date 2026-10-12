@@ -26,7 +26,7 @@ Frame every offer as something the customer gets, never as a cut or a freebie:
 | free shipping | $0 shipping, on us |
 | buy one get one free | 99% off the second one |
 
-Apply this to everything written for Jolly Haul. When editing existing copy that breaks it, point it out.
+Apply this to everything written for Jolly Haul and any future store. When editing existing copy that breaks it, point it out.
 
 ## Sales psychology (use hard, but only with true claims)
 
@@ -50,3 +50,22 @@ chargebacks): fake countdowns that reset, invented "only 2 left" or "23 people v
 reviews, fake "was" prices, hidden fees or pre-ticked add-ons, subscriptions that are hard to cancel,
 confirmshaming ("No thanks, I hate saving money"), fake celebrity endorsements, false health or safety
 claims. If asked for one of these, offer the honest version that gets the same effect.
+
+## Building any new store (Jolly Haul or the next one)
+
+These rules are part of the build, not an afterthought. Before designing, run the buyer-psychology
+analysis for the niche and its main products, then build every part around it:
+
+- **Home page:** hero = the end result / moment (rule 6), one clear "who it's for" line, real social
+  proof above the fold, real delivery deadline bar, gift finder or quiz (commitment ladder).
+- **Product page:** pain → end result headline, short vivid description in the buyer's own words, real
+  UGC video, transparency block (real photos, sizing, delivery dates, returns), the 3 biggest objections
+  answered next to the buy button, bundle / 2-pack decoy, gain-framed offer wording.
+- **Cart:** progress bar to "$0 shipping, on us", one-click add-ons under $10, delivery date and returns
+  reassurance by the checkout button.
+- **Pop-ups and wheel:** gain framing ("$10 to spend", "mystery discount"), neutral "Maybe later",
+  no confirmshaming.
+- **Emails / SMS:** abandoned cart = cost of inaction + real deadline; post-delivery = ask for a review
+  and UGC.
+- **Voice:** confident, short, funny, like a friend (rules 5 and 7).
+- Everything true: no fake timers, stock, reviews or "was" prices (see the Never list above).

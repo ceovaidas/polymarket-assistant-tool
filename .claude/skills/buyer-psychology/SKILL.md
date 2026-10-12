@@ -1,6 +1,6 @@
 ---
 name: buyer-psychology
-description: Analyse who buys a product and why before writing any sales copy, video hook, product page or offer for Jolly Haul. Use when the user asks whether a product will sell, what customers think or want, what price they will pay, what their pain points or objections are, how to pitch a product, or before writing hooks, product descriptions, ads and offers.
+description: Analyse who buys a product and why before writing any sales copy, video hook, product page or offer for Jolly Haul or any new store the user builds. Use when the user asks whether a product will sell, what customers think or want, what price they will pay, what their pain points or objections are, how to pitch a product, or before writing hooks, product descriptions, ads and offers.
 ---
 
 # Buyer psychology analysis
