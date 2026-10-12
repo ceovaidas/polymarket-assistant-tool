@@ -8,6 +8,8 @@
 
 ## Standing requests
 
+- **Buyer psychology:** before writing hooks, product copy, ads or offers, and whenever the user asks
+  whether a product will sell, follow `.claude/skills/buyer-psychology/SKILL.md`.
 - **Video → prompts:** when the user uploads a video and asks for prompts, follow
   `.claude/skills/video-prompts/SKILL.md` exactly: scene breakdown, then a full self-contained image
   prompt and a motion prompt for every scene, then the cost table.
