@@ -49,16 +49,15 @@
     </div>
 
     <div class="kb-buy" id="kb-buy">
-      {%- if section.settings.eyebrow != blank -%}<p class="kb-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      <h1 class="kb-h1">{{ section.settings.headline | default: p.title }}</h1>
-
+      {%- if section.settings.eyebrow != blank -%}<p class="kb-pill">{{ section.settings.eyebrow }}</p>{%- endif -%}
       {%- if rating != blank and rating_count > 0 -%}
         <a class="kb-rating" href="#kb-reviews">
           <span class="kb-stars" style="--r: {{ rating | times: 20 }}%" aria-hidden="true"></span>
           <b>{{ rating | round: 1 }}</b>
-          <span>({{ rating_count }} review{% if rating_count != 1 %}s{% endif %}{% if section.settings.review_source != blank %} · {{ section.settings.review_source }}{% endif %})</span>
+          <span>{{ rating_count }} review{% if rating_count != 1 %}s{% endif %}{% if section.settings.review_source != blank %} · {{ section.settings.review_source }}{% endif %}</span>
         </a>
       {%- endif -%}
+      <h1 class="kb-h1">{{ section.settings.headline | default: p.title }}</h1>
 
       {%- if section.settings.subhead != blank -%}<p class="kb-sub">{{ section.settings.subhead }}</p>{%- endif -%}
 
@@ -100,6 +99,9 @@
               <label class="kb-tier{% if i == section.settings.default_tier %} is-on{% endif %}">
                 <input type="radio" name="kb-tier" value="{{ q }}" data-off="{{ off_cents }}"{% if i == section.settings.default_tier %} checked{% endif %}>
                 <span class="kb-tier__dot" aria-hidden="true"></span>
+                {%- if p.featured_media != blank -%}
+                  <span class="kb-tier__img">{{ p.featured_media.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '' }}{%- if q > 1 -%}<i>×{{ q }}</i>{%- endif -%}</span>
+                {%- endif -%}
                 <span class="kb-tier__main">
                   <b>{{ section.settings[lk] }}</b>
                   {%- if section.settings[nk] != blank -%}<small>{{ section.settings[nk] }}</small>{%- endif -%}
@@ -130,6 +132,22 @@
           {%- if section.settings[ak] != blank -%}<li>{%- render 'kb-icon', name: 'check' -%}{{ section.settings[ak] }}</li>{%- endif -%}
         {%- endfor -%}
       </ul>
+
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="kb-pay kb-pay--buy" aria-label="Payment methods">{%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}</ul>
+      {%- endif -%}
+
+      <div class="kb-tabs">
+        {%- for i in (1..3) -%}
+          {%- assign tt = 'tab' | append: i | append: '_title' -%}{%- assign tx = 'tab' | append: i | append: '_text' -%}
+          {%- if section.settings[tt] != blank -%}
+            <details class="kb-tab"{% if i == 1 %} open{% endif %}>
+              <summary>{{ section.settings[tt] }}{%- render 'kb-icon', name: 'plus' -%}</summary>
+              <div class="kb-rte">{{ section.settings[tx] }}</div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
     </div>
   </section>
 
@@ -137,6 +155,28 @@
   {%- assign faq_done = false -%}
   {%- for block in section.blocks -%}
     {%- case block.type -%}
+
+      {%- when 'marquee' -%}
+        {%- assign items = block.settings.items | split: '|' -%}
+        <section class="kb-marquee" aria-label="{{ block.settings.items | escape }}" {{ block.shopify_attributes }}>
+          <div class="kb-marquee__track" aria-hidden="true">
+            {%- for n in (1..4) -%}{%- for it in items -%}<span>{{ it | strip }}</span><i>✦</i>{%- endfor -%}{%- endfor -%}
+          </div>
+        </section>
+
+      {%- when 'icons' -%}
+        <section class="kb-icons kb-wrap" {{ block.shopify_attributes }}>
+          {%- assign rows = block.settings.items | newline_to_br | split: '<br />' -%}
+          {%- for r in rows -%}{%- assign t = r | strip -%}{%- if t != blank -%}
+            {%- assign c = t | split: '|' -%}
+            <div class="kb-icons__item">
+              {%- assign icn = c[0] | strip -%}
+              <span class="kb-icons__ic">{%- render 'kb-icon', name: icn -%}</span>
+              <b>{{ c[1] | strip }}</b>
+              {%- if c[2] -%}<span>{{ c[2] | strip }}</span>{%- endif -%}
+            </div>
+          {%- endif -%}{%- endfor -%}
+        </section>
 
       {%- when 'steps' -%}
         <section class="kb-band kb-steps" id="kb-how" {{ block.shopify_attributes }}>
@@ -282,6 +322,7 @@
 
   {%- comment -%} Sticky bar on phones: always one tap away from ordering {%- endcomment -%}
   <div class="kb-sticky" data-kb-sticky aria-hidden="true">
+    {%- if p.featured_media != blank -%}<span class="kb-sticky__img">{{ p.featured_media.preview_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}</span>{%- endif -%}
     <div class="kb-sticky__txt"><b>{{ section.settings.sticky_title | default: p.title }}</b><span data-kb-sticky-price>{{ unit | money }}</span></div>
     <a class="kb-btn" href="#kb-buy" data-kb-jump tabindex="-1">{{ section.settings.cta }}</a>
   </div>
@@ -303,6 +344,13 @@
     { "type": "textarea", "id": "bullets", "label": "Benefit ticks (one per line)", "default": "No monthly fee, no contract\nWrist button + neck pendant, both waterproof\nBattery lasts over a year, backup power in a power cut" },
     { "type": "text", "id": "photo_badge", "label": "Badge on the photo", "default": "$0 monthly fees" },
     { "type": "text", "id": "review_source", "label": "Where the reviews come from", "default": "verified AliExpress buyers", "info": "Shown next to the rating. Keep it true: if reviews are imported from AliExpress, say so." },
+    { "type": "header", "content": "Tabs under the button" },
+    { "type": "text", "id": "tab1_title", "label": "Tab 1", "default": "Why families choose it" },
+    { "type": "richtext", "id": "tab1_text", "label": "Tab 1 text", "default": "<p>Most falls happen when nobody is around and the phone is out of reach. This button stays on the wrist or around the neck, so help is one press away in any room, even the bathroom.</p>" },
+    { "type": "text", "id": "tab2_title", "label": "Tab 2", "default": "Specifications" },
+    { "type": "richtext", "id": "tab2_text", "label": "Tab 2 text", "default": "<ul><li><strong>In the box:</strong> SOS wristwatch button, SOS pendant button, Wi-Fi receiver with plug</li><li><strong>Button range:</strong> about 100 ft indoors, 300 ft in open space</li><li><strong>Button battery:</strong> CR2032, included, lasts 12+ months</li><li><strong>Receiver:</strong> wall plug, alarm sound + LED, 5 volume levels, 5-hour backup battery</li><li><strong>App:</strong> Smart Life / Tuya, free, up to 20 family members</li><li><strong>Works with:</strong> Alexa, Google Home (2.4 GHz Wi-Fi only)</li><li><strong>Buttons:</strong> waterproof</li></ul>" },
+    { "type": "text", "id": "tab3_title", "label": "Tab 3", "default": "Shipping & returns" },
+    { "type": "richtext", "id": "tab3_text", "label": "Tab 3 text", "default": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. Not right for your family? Send it back within 30 days of delivery for a full refund.</p>" },
     { "type": "header", "content": "Bundles" },
     { "type": "paragraph", "content": "Prices = product price × quantity − the amount below. Create matching automatic discounts in Shopify (Discounts → Amount off products, fixed amount, minimum quantity) so checkout charges exactly what is shown here." },
     { "type": "text", "id": "tiers_title", "label": "Bundle title", "default": "Choose your set" },
@@ -335,6 +383,12 @@
   ],
   "blocks": [
     { "type": "@app" },
+    { "type": "marquee", "name": "Scrolling banner", "settings": [
+      { "type": "text", "id": "items", "label": "Items (separate with |)", "default": "No monthly fees | Waterproof buttons | Alerts up to 20 phones | 12-month battery | 30-day returns" }
+    ]},
+    { "type": "icons", "name": "Icon strip", "limit": 2, "settings": [
+      { "type": "textarea", "id": "items", "label": "Items (icon | title | text, one per line)", "info": "Icons: bell, phone, drop, battery, shield, truck, check", "default": "bell | Loud alarm at home | 5 volume levels + flashing light\nphone | Alerts on 20 phones | Free app, no distance limit\ndrop | Waterproof | Wear it in the shower\nbattery | 12+ month battery | Plus 5-hour backup in a power cut" }
+    ]},
     { "type": "steps", "name": "How it works", "limit": 1, "settings": [
       { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it works" },
       { "type": "text", "id": "title", "label": "Title", "default": "Help is one press away" },

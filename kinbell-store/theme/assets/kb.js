@@ -77,14 +77,19 @@
     });
   });
 
-  /* Sticky bar once the buy button is off screen */
+  /* Sticky bar once the buy button has scrolled up past the top of the screen */
   var sticky = $('[data-kb-sticky]'), btn = $('[data-kb-submit]');
-  if (sticky && btn && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) {
-      var off = !es[0].isIntersecting && es[0].boundingClientRect.top < 0;
-      sticky.classList.toggle('is-on', off);
-      sticky.setAttribute('aria-hidden', String(!off));
-      var link = $('a', sticky); if (link) link.tabIndex = off ? 0 : -1;
-    }).observe(btn);
+  if (sticky && btn) {
+    var link = $('a', sticky), ticking = false;
+    var check = function () {
+      ticking = false;
+      var on = btn.getBoundingClientRect().bottom < 0;
+      if (on === sticky.classList.contains('is-on')) return;
+      sticky.classList.toggle('is-on', on);
+      sticky.setAttribute('aria-hidden', String(!on));
+      if (link) link.tabIndex = on ? 0 : -1;
+    };
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(check); } }, { passive: true });
+    check();
   }
 })();

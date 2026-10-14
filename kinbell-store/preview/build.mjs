@@ -56,7 +56,7 @@ const variants = [
   { id: 3, title: 'UK Plug', price: 5999, available: true },
 ];
 const product = {
-  title: 'SOS Call Button for Seniors', media, variants, has_only_default_variant: false,
+  title: 'SOS Call Button for Seniors', media, featured_media: media[0], variants, has_only_default_variant: false,
   options: ['Plug'], selected_or_first_available_variant: variants[0],
   // AliExpress listing at the time of writing: 4.6 stars from 41 reviews.
   metafields: { reviews: { rating: { value: 4.6 }, rating_count: { value: 41 } } },

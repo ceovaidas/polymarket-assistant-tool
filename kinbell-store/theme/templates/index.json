@@ -128,10 +128,20 @@
             "q": "Can they wear it in the shower?",
             "a": "<p>Yes, the manufacturer makes the buttons waterproof, so they can stay on in the bathroom, where many falls happen.</p>"
           }
+        },
+        "marq": {
+          "type": "marquee",
+          "settings": {}
+        },
+        "ico": {
+          "type": "icons",
+          "settings": {}
         }
       },
       "block_order": [
+        "marq",
         "how",
+        "ico",
         "f1",
         "f2",
         "f3",
