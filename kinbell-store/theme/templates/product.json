@@ -13,7 +13,7 @@
             "media_index": 2,
             "eyebrow": "Always within reach",
             "title": "On the wrist, or around the neck",
-            "text": "<p>The phone is in the kitchen, the fall happens in the bathroom. That's the gap this closes. A light SOS button on a soft wrist strap, plus a pendant on a lanyard, so Mom or Dad can call for help from wherever they are in the house.</p>"
+            "text": "<p>The phone is in the kitchen, the fall happens in the bathroom. That's the gap this closes. A light, waterproof SOS button on a wrist strap, plus a pendant for around the neck, so Mom or Dad can call for help from wherever they are in the house, even in the shower.</p>"
           }
         },
         "f2": {
@@ -23,7 +23,7 @@
             "flip": true,
             "eyebrow": "Heard in the house",
             "title": "The receiver beeps where you are",
-            "text": "<p>Plug the receiver in where the family spends the most time. When a button is pressed it sounds and flashes, so whoever is home hears it right away, even in another room.</p>"
+            "text": "<p>Plug the receiver in where the family spends the most time. When a button is pressed it plays an alarm and flashes, at one of 5 volume levels. Silence it with one tap in the app or on the receiver. If the power goes out, a backup battery keeps it running for about 5 hours and the app tells you.</p>"
           }
         },
         "f3": {
@@ -32,7 +32,7 @@
             "media_index": 4,
             "eyebrow": "Wherever you are",
             "title": "An alert on every family phone",
-            "text": "<p>Through the free app, everyone you add gets a notification the moment the button is pressed, so you know at work, at the shops or across town. It also works with Alexa and Google Assistant.</p>"
+            "text": "<p>Through the free Smart Life / Tuya app, up to 20 family members get a notification the moment the button is pressed, at work, at the shops or across the country. No distance limit, no monthly fee. It also works with Alexa and Google Home.</p>"
           }
         },
         "box": {
@@ -55,7 +55,7 @@
           "type": "faq",
           "settings": {
             "q": "Is there a monthly fee?",
-            "a": "<p>No. You pay once. The app is free and there is no subscription or contract.</p>"
+            "a": "<p>No. You pay once and the app alerts are free. If you'd also like a phone call or SMS when the button is pressed, the app sells optional packs of calls or texts. Nothing is required.</p>"
           }
         },
         "q2": {
@@ -76,28 +76,28 @@
           "type": "faq",
           "settings": {
             "q": "Do we need Wi-Fi?",
-            "a": "<p>Yes, for phone alerts. The receiver connects to home Wi-Fi (2.4 GHz). The button-to-receiver beep works inside the house.</p>"
+            "a": "<p>Yes, for phone alerts. The receiver connects to home Wi-Fi (2.4 GHz only). The alarm sound in the house works from the buttons directly.</p>"
           }
         },
         "q5": {
           "type": "faq",
           "settings": {
             "q": "How far does it reach?",
-            "a": "<p>The buttons talk to the receiver by radio. Walls and floors shorten the range, so on day one press it in every room your parent uses and check that it rings.</p>"
+            "a": "<p>The buttons reach the receiver up to about 100 ft (30 m) indoors and 300 ft (90 m) in open space, according to the manufacturer. Walls and floors shorten that, so on day one press it in every room your parent uses and check that it rings. Phone alerts have no distance limit.</p>"
           }
         },
         "q6": {
           "type": "faq",
           "settings": {
             "q": "Can several family members get the alert?",
-            "a": "<p>Yes. Share the device with family members in the app and each of them gets the notification on their own phone.</p>"
+            "a": "<p>Yes. Share the device in the app with up to 20 people and each of them gets the alert on their own phone.</p>"
           }
         },
         "q7": {
           "type": "faq",
           "settings": {
             "q": "Is it hard to set up?",
-            "a": "<p>Plug in the receiver, download the free app, add the device and pair the buttons. Most families are done in about 10 minutes, and we're one email away if you get stuck.</p>"
+            "a": "<p>Plug in the receiver, download the free Smart Life or Tuya app, add the receiver to your Wi-Fi and pair the buttons. The battery is already in the buttons. If you get stuck, email us and we'll walk you through it.</p>"
           }
         },
         "q8": {
@@ -114,6 +114,20 @@
         "final": {
           "type": "final_cta",
           "settings": {}
+        },
+        "q9": {
+          "type": "faq",
+          "settings": {
+            "q": "How long does the battery last?",
+            "a": "<p>Each button runs on a CR2032 coin battery (included) that lasts over 12 months. The receiver plugs into the wall and has a backup battery for about 5 hours if the power goes out.</p>"
+          }
+        },
+        "q10": {
+          "type": "faq",
+          "settings": {
+            "q": "Can they wear it in the shower?",
+            "a": "<p>Yes, the manufacturer makes the buttons waterproof, so they can stay on in the bathroom, where many falls happen.</p>"
+          }
         }
       },
       "block_order": [
@@ -132,6 +146,8 @@
         "q5",
         "q6",
         "q7",
+        "q9",
+        "q10",
         "q8",
         "promise",
         "final"
