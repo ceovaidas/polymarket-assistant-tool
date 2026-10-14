@@ -1,0 +1,35 @@
+{{ 'kb.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.bar != blank -%}
+  <p class="kb-bar">{{ section.settings.bar }}</p>
+{%- endif -%}
+<header class="kb-head">
+  <div class="kb-wrap kb-head__in">
+    <a class="kb-logo" href="{{ routes.root_url }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 360 | image_tag: alt: shop.name, width: section.settings.logo_width, height: null }}
+      {%- else -%}
+        <span class="kb-logo__dot" aria-hidden="true"></span>{{ shop.name }}
+      {%- endif -%}
+    </a>
+    <nav class="kb-nav" aria-label="Page">
+      <a href="{{ routes.root_url }}#kb-how">How it works</a>
+      <a href="{{ routes.root_url }}#kb-reviews">Reviews</a>
+      <a href="{{ routes.root_url }}#kb-faq">FAQ</a>
+    </nav>
+    <a class="kb-btn kb-btn--sm kb-head__cta" href="{{ routes.root_url }}#kb-buy">{{ section.settings.cta }}</a>
+    <a class="kb-cart" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
+      {%- render 'kb-icon', name: 'cart' -%}{%- if cart.item_count > 0 -%}<span class="kb-cart__n">{{ cart.item_count }}</span>{%- endif -%}
+    </a>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "Landing header",
+  "settings": [
+    { "type": "text", "id": "bar", "label": "Top bar", "default": "$0 shipping, on us · No monthly fees · 30-day returns" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 10, "unit": "px", "default": 140 },
+    { "type": "text", "id": "cta", "label": "Button", "default": "Order now" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+<footer class="kb-foot">
+  <div class="kb-wrap kb-foot__in">
+    <div>
+      <p class="kb-logo kb-logo--foot"><span class="kb-logo__dot" aria-hidden="true"></span>{{ shop.name }}</p>
+      {%- if section.settings.text != blank -%}<p class="kb-foot__txt">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if shop.email != blank -%}<p class="kb-foot__txt">Questions? <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>{%- endif -%}
+    </div>
+    <nav class="kb-foot__links" aria-label="Policies">
+      {%- for policy in shop.policies -%}<a href="{{ policy.url }}">{{ policy.title }}</a>{%- endfor -%}
+      <a href="{{ routes.root_url }}#kb-faq">FAQ</a>
+    </nav>
+  </div>
+  <div class="kb-wrap kb-foot__base">
+    <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+    {%- if shop.enabled_payment_types.size > 0 -%}
+      <ul class="kb-pay" aria-label="Payment methods">{%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}</ul>
+    {%- endif -%}
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Landing footer",
+  "settings": [
+    { "type": "textarea", "id": "text", "label": "Text", "default": "A simple SOS button that lets your parent reach the family with one press. One-time price, no subscription." }
+  ]
+}
+{% endschema %}

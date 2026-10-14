@@ -1,0 +1,145 @@
+{
+  "sections": {
+    "main": {
+      "type": "kb-landing",
+      "blocks": {
+        "how": {
+          "type": "steps",
+          "settings": {}
+        },
+        "f1": {
+          "type": "feature",
+          "settings": {
+            "media_index": 2,
+            "eyebrow": "Always within reach",
+            "title": "On the wrist, or around the neck",
+            "text": "<p>The phone is in the kitchen, the fall happens in the bathroom. That's the gap this closes. A light SOS button on a soft wrist strap, plus a pendant on a lanyard, so Mom or Dad can call for help from wherever they are in the house.</p>"
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "media_index": 3,
+            "flip": true,
+            "eyebrow": "Heard in the house",
+            "title": "The receiver beeps where you are",
+            "text": "<p>Plug the receiver in where the family spends the most time. When a button is pressed it sounds and flashes, so whoever is home hears it right away, even in another room.</p>"
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "media_index": 4,
+            "eyebrow": "Wherever you are",
+            "title": "An alert on every family phone",
+            "text": "<p>Through the free app, everyone you add gets a notification the moment the button is pressed, so you know at work, at the shops or across town. It also works with Alexa and Google Assistant.</p>"
+          }
+        },
+        "box": {
+          "type": "box",
+          "settings": {}
+        },
+        "cmp": {
+          "type": "compare",
+          "settings": {}
+        },
+        "lim": {
+          "type": "limits",
+          "settings": {}
+        },
+        "rev": {
+          "type": "reviews",
+          "settings": {}
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "Is there a monthly fee?",
+            "a": "<p>No. You pay once. The app is free and there is no subscription or contract.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "Does it call 911?",
+            "a": "<p>No. It alerts your family: the receiver in the house and the phones you add in the app. In an emergency, call 911.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "Does it detect falls automatically?",
+            "a": "<p>No. It sends an alert when the button is pressed. That's why it comes as a wrist button and a pendant: so it's always within reach.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Do we need Wi-Fi?",
+            "a": "<p>Yes, for phone alerts. The receiver connects to home Wi-Fi (2.4 GHz). The button-to-receiver beep works inside the house.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "How far does it reach?",
+            "a": "<p>The buttons talk to the receiver by radio. Walls and floors shorten the range, so on day one press it in every room your parent uses and check that it rings.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "q": "Can several family members get the alert?",
+            "a": "<p>Yes. Share the device with family members in the app and each of them gets the notification on their own phone.</p>"
+          }
+        },
+        "q7": {
+          "type": "faq",
+          "settings": {
+            "q": "Is it hard to set up?",
+            "a": "<p>Plug in the receiver, download the free app, add the device and pair the buttons. Most families are done in about 10 minutes, and we're one email away if you get stuck.</p>"
+          }
+        },
+        "q8": {
+          "type": "faq",
+          "settings": {
+            "q": "What if it isn't right for us?",
+            "a": "<p>Send it back within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "promise": {
+          "type": "promise",
+          "settings": {}
+        },
+        "final": {
+          "type": "final_cta",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "how",
+        "f1",
+        "f2",
+        "f3",
+        "box",
+        "cmp",
+        "lim",
+        "rev",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "promise",
+        "final"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
