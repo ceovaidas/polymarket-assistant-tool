@@ -19,6 +19,7 @@
   assign brand = shop.name
 -%}
 {{ 'kb.css' | asset_url | stylesheet_tag }}
+{{ 'kb-brand.css' | asset_url | stylesheet_tag }}
 
 <div class="kb" id="kb-top" data-kb data-unit="{{ unit }}" data-ship-min="{{ section.settings.ship_min }}" data-ship-max="{{ section.settings.ship_max }}">
 

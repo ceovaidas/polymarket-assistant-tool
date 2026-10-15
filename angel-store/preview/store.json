@@ -1,0 +1,21 @@
+{
+  "shop": {
+    "name": "Halo Lane",
+    "email": "hello@halolane.com"
+  },
+  "product": {
+    "title": "Angel Blessing Starfall Wall Light",
+    "option": "Style",
+    "price": 3999,
+    "variants": [
+      "Angel"
+    ]
+  },
+  "header": {
+    "bar": "Order by Dec 3 for Christmas delivery \u00b7 $0 shipping, on us \u00b7 30-day returns",
+    "cta": "Order now"
+  },
+  "footer": {
+    "text": "Warm, meaningful Christmas decor. One angel, made to glow on your wall every December."
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "sections": {
+    "main": {
+      "type": "kb-landing",
+      "blocks": {
+        "marq": {
+          "type": "marquee",
+          "settings": {
+            "items": "Order by Dec 3 for Christmas | Warm LED glow | Ready to hang | $0 shipping, on us | 30-day returns"
+          }
+        },
+        "how": {
+          "type": "steps",
+          "settings": {
+            "eyebrow": "Up in two minutes",
+            "title": "From box to wall, no electrician",
+            "step1_title": "Pick the wall",
+            "step1_text": "Hallway, living room or above the fireplace: anywhere people stop and look.",
+            "step2_title": "Hang it on a hook",
+            "step2_text": "Let the strands of stars fall straight down under the angel.",
+            "step3_title": "Switch on the glow",
+            "step3_text": "Dim the big light and watch the stars light up the whole wall."
+          }
+        },
+        "ico": {
+          "type": "icons",
+          "settings": {
+            "items": "bell | Instant focal point | The first thing guests notice\nphone | The photo spot | Made for family Christmas pictures\ncheck | Ready to hang | One hook, no tools needed\ntruck | $0 shipping | On us, with tracking"
+          }
+        },
+        "f1": {
+          "type": "feature",
+          "settings": {
+            "media_index": 2,
+            "eyebrow": "The centrepiece",
+            "title": "Christmas, on one wall",
+            "text": "<p>No hours of untangling lights. One angel and a falling trail of stars turns a plain wall into the warmest corner of the house, the place the whole family gathers for photos.</p>"
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "media_index": 3,
+            "flip": true,
+            "eyebrow": "The gift",
+            "title": "The present she won't put away in January",
+            "text": "<p>Mugs and candles get forgotten. A glowing guardian angel becomes part of her home and her Christmas, year after year. Give one to Mom and keep one for yourself, with the 2-angel set.</p>"
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "media_index": 4,
+            "eyebrow": "The details",
+            "title": "Soft light, delicate details",
+            "text": "<p>White feathered wings, a golden halo and a flowing gown, with warm LED stars on fine strands. Gentle enough to leave on through the evening.</p>"
+          }
+        },
+        "cmp": {
+          "type": "compare",
+          "settings": {
+            "eyebrow": "Why an angel",
+            "title": "More than another string of lights",
+            "them": "Regular string lights",
+            "rows": "Instant centrepiece | yes | no\nNo untangling | yes | no\nMeaningful gift | yes | no\nWorks on any wall | yes | yes\nOne-time price | yes | yes"
+          }
+        },
+        "lim": {
+          "type": "limits",
+          "settings": {
+            "title": "Good to know before you buy",
+            "text": "<ul><li>Size is about 20 cm × 85 cm (8 × 33 in). Photos are taken close up, so it can look bigger online.</li><li>For indoor use.</li><li>The glow looks best in a dim room or in the evening.</li></ul>"
+          }
+        },
+        "rev": {
+          "type": "reviews",
+          "settings": {
+            "title": "From homes that have it",
+            "note": "New this season. Reviews from our customers will appear here."
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "Will it arrive before Christmas?",
+            "a": "<p>Yes, if you order by <strong>December 3</strong>. Delivery takes 7–14 business days with tracking. The exact dates for an order placed today are shown next to the order button.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "How big is it?",
+            "a": "<p>About 20 cm wide and 85 cm tall (8 × 33 in) including the star cascade. Close-up photos can make it look larger, so check the size against your wall.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "How do I hang it?",
+            "a": "<p>On a nail or adhesive hook. Let the star strands fall straight down below the angel.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Can I use it outdoors?",
+            "a": "<p>No, it's made for indoor use.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "Is it a good gift?",
+            "a": "<p>It's made for it: a meaningful, glowing present for moms and grandmothers that comes out every Christmas. The 2-angel set lets you give one and keep one.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "q": "What if it's not right?",
+            "a": "<p>Send it back within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "promise": {
+          "type": "promise",
+          "settings": {
+            "title": "30 days to fall in love with it",
+            "text": "Hang it, switch it on, see how it looks in your home. If it's not right, send it back within 30 days of delivery for a full refund."
+          }
+        },
+        "final": {
+          "type": "final_cta",
+          "settings": {
+            "title": "This year, give the gift that glows",
+            "text": "Order by December 3 and it's on her wall for Christmas."
+          }
+        }
+      },
+      "block_order": [
+        "marq",
+        "how",
+        "ico",
+        "f1",
+        "f2",
+        "f3",
+        "cmp",
+        "lim",
+        "rev",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "promise",
+        "final"
+      ],
+      "settings": {
+        "eyebrow": "The Christmas gift Mom will keep forever",
+        "headline": "A little heaven on your wall.",
+        "subhead": "A white angel with glowing wings and a cascade of warm LED stars falling from her gown. Hang it once and every December evening feels like Christmas Eve.",
+        "bullets": "Instant Christmas centrepiece, no tree-sized effort\nWarm, soft glow for dark winter evenings\nArrives ready to hang: just pick a wall",
+        "photo_badge": "Christmas 2026",
+        "review_source": "",
+        "tiers_title": "Choose your angels",
+        "default_tier": 2,
+        "tier1_label": "1 angel",
+        "tier1_note": "For your own home",
+        "tier1_off": "0",
+        "tier1_badge": "",
+        "tier2_label": "2 angels",
+        "tier2_note": "One for you, one for Mom",
+        "tier2_off": "14.99",
+        "tier2_badge": "Best for gifting",
+        "tier3_label": "3 angels",
+        "tier3_note": "Mom, Grandma and you",
+        "tier3_off": "34.98",
+        "tier3_badge": "Best value",
+        "cta": "Bring the angel home",
+        "ship_min": 7,
+        "ship_max": 14,
+        "ship_note": "$0 shipping, on us",
+        "assure_1": "30-day returns",
+        "assure_2": "Secure checkout",
+        "assure_3": "Ready to hang",
+        "tab1_title": "Why it makes Christmas",
+        "tab1_text": "<p>Most decorations get lost on a busy shelf. This one becomes the first thing people see: a glowing angel with stars falling down the wall, the photo spot of the season. For anyone who has lost someone, it's also a quiet way to keep them close at Christmas.</p>",
+        "tab2_title": "Size & details",
+        "tab2_text": "<ul><li><strong>Size:</strong> about 20 cm wide × 85 cm tall (8 × 33 in), including the star cascade</li><li><strong>Material:</strong> resin angel, LED stars on fine strands</li><li><strong>Light:</strong> warm white LED</li><li><strong>Use:</strong> indoors</li></ul><p>Product photos are taken close up. Please check the size against your wall before ordering.</p>",
+        "tab3_title": "Shipping & returns",
+        "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. <strong>For Christmas delivery, order by December 3.</strong> Not what you hoped for? Send it back within 30 days of delivery for a full refund.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

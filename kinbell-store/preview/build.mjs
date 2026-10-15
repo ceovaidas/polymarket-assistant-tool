@@ -47,30 +47,35 @@ function section(file, tplSettings = {}, tplBlocks = {}, order = []) {
 }
 
 // Sample data: photos are placeholders until the real product is imported.
-const imgDir = join(here, 'img');
+// STORE_DIR=../angel-store node build.mjs renders another store that reuses these sections:
+// it brings its own theme/templates, theme/assets/kb-brand.css and preview/store.json (sample data).
+const storeDir = process.env.STORE_DIR ? join(process.cwd(), process.env.STORE_DIR) : join(here, '..');
+const out = join(storeDir, 'preview');
+const storeRead = (p) => { const f = join(storeDir, 'theme', p); return existsSync(f) ? readFileSync(f, 'utf8') : read(p); };
+const cfgFile = join(out, 'store.json');
+const cfg = existsSync(cfgFile) ? JSON.parse(readFileSync(cfgFile, 'utf8')) : {
+  shop: { name: 'Kinbell', email: 'hello@kinbell.com' },
+  product: { title: 'SOS Call Button for Seniors', option: 'Plug', price: 5999, variants: ['US Plug', 'EU Plug', 'UK Plug'], rating: 4.6, rating_count: 41 },
+};
+const imgDir = join(out, 'img');
 const photos = existsSync(imgDir) ? readdirSync(imgDir).filter((f) => /\.(jpe?g|png|webp)$/.test(f)).sort() : [];
 const media = photos.map((f, i) => ({ preview_image: { src: `img/${f}` }, alt: `Product photo ${i + 1}` }));
-const variants = [
-  { id: 1, title: 'US Plug', price: 5999, available: true },
-  { id: 2, title: 'EU Plug', price: 5999, available: true },
-  { id: 3, title: 'UK Plug', price: 5999, available: true },
-];
+const variants = cfg.product.variants.map((t, i) => ({ id: i + 1, title: t, price: cfg.product.price, available: true }));
 const product = {
-  title: 'SOS Call Button for Seniors', media, featured_media: media[0], variants, has_only_default_variant: false,
-  options: ['Plug'], selected_or_first_available_variant: variants[0],
-  // AliExpress listing at the time of writing: 4.6 stars from 41 reviews.
-  metafields: { reviews: { rating: { value: 4.6 }, rating_count: { value: 41 } } },
+  title: cfg.product.title, media, featured_media: media[0], variants, has_only_default_variant: variants.length < 2,
+  options: [cfg.product.option], selected_or_first_available_variant: variants[0],
+  metafields: cfg.product.rating ? { reviews: { rating: { value: cfg.product.rating }, rating_count: { value: cfg.product.rating_count } } } : {},
 };
 const ctx = {
-  shop: { name: 'Kinbell', email: 'hello@kinbell.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }, { title: 'Terms of service', url: '#' }], enabled_payment_types: [] },
+  shop: { ...cfg.shop, policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }, { title: 'Terms of service', url: '#' }], enabled_payment_types: [] },
   routes: { root_url: '', cart_url: '#' }, cart: { item_count: 0 }, product: null,
 };
 
-const tpl = JSON.parse(read('templates/index.json')).sections.main;
+const tpl = JSON.parse(storeRead('templates/index.json')).sections.main;
 const land = section('kb-landing.liquid', tpl.settings, tpl.blocks, tpl.block_order);
 land.data.settings.product = product;
-const head = section('kb-header.liquid');
-const foot = section('kb-footer.liquid');
+const head = section('kb-header.liquid', cfg.header || {});
+const foot = section('kb-footer.liquid', cfg.footer || {});
 
 const html = [
   await engine.parseAndRender(head.src, { ...ctx, section: head.data }),
@@ -78,7 +83,8 @@ const html = [
   await engine.parseAndRender(foot.src, { ...ctx, section: foot.data }),
 ].join('\n').replace(/\n\s*\n+/g, '\n');
 
-mkdirSync(join(here, 'assets'), { recursive: true });
-for (const f of ['kb.css', 'kb.js']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
-writeFileSync(join(here, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Kinbell</title><style>body{margin:0;background:#faf7f2}</style></head><body>${html}</body></html>`);
-console.log('wrote preview/index.html with', media.length, 'photos');
+mkdirSync(join(out, 'assets'), { recursive: true });
+for (const f of ['kb.css', 'kb.js']) copyFileSync(join(theme, 'assets', f), join(out, 'assets', f));
+writeFileSync(join(out, 'assets', 'kb-brand.css'), storeRead('assets/kb-brand.css'));
+writeFileSync(join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${cfg.shop.name}</title><style>body{margin:0;background:#fff}</style></head><body>${html}</body></html>`);
+console.log('wrote', join(out, 'index.html'), 'with', media.length, 'photos');

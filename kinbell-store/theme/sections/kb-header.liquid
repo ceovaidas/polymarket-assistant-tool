@@ -1,4 +1,5 @@
 {{ 'kb.css' | asset_url | stylesheet_tag }}
+{{ 'kb-brand.css' | asset_url | stylesheet_tag }}
 {%- if section.settings.bar != blank -%}
   <p class="kb-bar">{{ section.settings.bar }}</p>
 {%- endif -%}

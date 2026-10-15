@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+/* Halo Lane: warm Christmas palette on the shared one-product layout. */
+:root {
+  --kb-bg: #fffdf9;
+  --kb-soft: #f7f1e7;
+  --kb-soft-2: #efe5d4;
+  --kb-ink: #1d1813;
+  --kb-ink-2: #574e44;
+  --kb-ink-3: #8f857a;
+  --kb-line: #ebe2d3;
+  --kb-red: #a8202a;
+  --kb-green: #1e6247;
+  --kb-green-soft: #e8f2ec;
+  --kb-gold: #d6a23e;
+  --kb-dark: #1d1813;
+}
+.kb-h1 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; letter-spacing: -.01em; }
+.kb-h2 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; letter-spacing: -.005em; }
+.kb-logo { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; letter-spacing: 0; }
+.kb-logo__dot { background: var(--kb-gold); box-shadow: 0 0 0 5px color-mix(in srgb, var(--kb-gold) 22%, transparent); }
+.kb-marquee__track i { color: var(--kb-gold); }
+.kb-gallery__badge { background: var(--kb-dark); color: var(--kb-gold); }
+.kb-icons__ic { color: var(--kb-gold); }
