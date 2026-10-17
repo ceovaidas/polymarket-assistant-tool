@@ -13,9 +13,9 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 COLORS = {
-    "scheme-1": {"background": "#F7F0E5", "text": "#3A2A21", "button": "#D8643C", "button_label": "#FFFFFF", "secondary_button_label": "#3A2A21", "shadow": "#3A2A21"},
-    "scheme-2": {"background": "#FFFAF2", "text": "#3A2A21", "button": "#8AA58C", "button_label": "#FFFFFF", "secondary_button_label": "#3A2A21", "shadow": "#3A2A21"},
-    "scheme-3": {"background": "#3A2A21", "text": "#F7F0E5", "button": "#F4CD6A", "button_label": "#3A2A21", "secondary_button_label": "#F7F0E5", "shadow": "#000000"},
+    "scheme-1": {"background": "#F6EFE3", "text": "#1B1612", "button": "#FF5A36", "button_label": "#FFFFFF", "secondary_button_label": "#1B1612", "shadow": "#1B1612"},
+    "scheme-2": {"background": "#FFFAF1", "text": "#1B1612", "button": "#1B1612", "button_label": "#FFD43B", "secondary_button_label": "#1B1612", "shadow": "#1B1612"},
+    "scheme-3": {"background": "#1B1612", "text": "#F6EFE3", "button": "#FFD43B", "button_label": "#1B1612", "secondary_button_label": "#F6EFE3", "shadow": "#000000"},
 }
 GLOBAL = {"buttons_radius": 40, "inputs_radius": 14, "variant_pills_radius": 14, "card_corner_radius": 18,
           "media_radius": 18, "popup_corner_radius": 24, "badge_corner_radius": 40, "card_color_scheme": "scheme-2",
