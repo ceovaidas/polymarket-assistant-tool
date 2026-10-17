@@ -62,8 +62,8 @@
     {%- comment -%} Middle: the tee {%- endcomment -%}
     <div class="sp-pdp__media">
       <div class="sp-stage" data-sp-stage>
-        {%- for m in p.media limit: 8 -%}
-          <figure class="sp-stage__slide{% if forloop.first %} is-on{% endif %}">
+        {%- for m in p.media limit: 20 -%}
+          <figure class="sp-stage__slide{% if forloop.first %} is-on{% endif %}" data-media-id="{{ m.id }}">
             {%- case m.media_type -%}
               {%- when 'video' -%}{{ m | video_tag: controls: true, muted: true, playsinline: true, loop: true, preload: 'metadata', image_size: '1200x' }}
               {%- when 'external_video' -%}{{ m | external_video_tag }}
@@ -80,7 +80,7 @@
       </div>
       {%- if p.media.size > 1 -%}
         <div class="sp-dots" role="tablist" aria-label="Photos and videos">
-          {%- for m in p.media limit: 8 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="{% if m.media_type contains 'video' %}Video{% else %}Photo{% endif %} {{ forloop.index }}"></button>{%- endfor -%}
+          {%- for m in p.media limit: 20 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="{% if m.media_type contains 'video' %}Video{% else %}Photo{% endif %} {{ forloop.index }}"></button>{%- endfor -%}
         </div>
       {%- endif -%}
     </div>
@@ -90,11 +90,28 @@
       {%- form 'product', p, class: 'sp-form', data-sp-form: '' -%}
         <input type="hidden" name="id" value="{{ v.id }}" data-sp-id>
         {%- for opt in p.options_with_values -%}
-          <fieldset class="sp-opt" data-sp-opt="{{ forloop.index0 }}">
-            <legend>{{ opt.name }}{% if forloop.index0 == size_index and section.settings.size_link != blank %} <a href="#sp-size">{{ section.settings.size_link }}</a>{% endif %}</legend>
+          {%- liquid
+            assign oi = forloop.index0
+            assign on = opt.name | downcase
+            assign is_color = false
+            if on contains 'color' or on contains 'colour' or on contains 'spalva'
+              assign is_color = true
+            endif
+          -%}
+          <fieldset class="sp-opt" data-sp-opt="{{ oi }}">
+            <legend><span>{{ opt.name }}: <b data-sp-optval>{{ v.options[oi] }}</b></span>{% if oi == size_index and section.settings.size_link != blank %} <a href="#sp-size">{{ section.settings.size_link }}</a>{% endif %}</legend>
             <div class="sp-opt__vals">
               {%- for val in opt.values -%}
-                <label class="sp-pill"><input type="radio" name="sp-opt-{{ forloop.parentloop.index0 }}" value="{{ val | escape }}"{% if v.options[forloop.parentloop.index0] == val %} checked{% endif %}><span>{{ val }}</span></label>
+                {%- comment -%} Colours show the tee itself: the first variant photo with this colour {%- endcomment -%}
+                {%- assign sw = nil -%}
+                {%- if is_color -%}
+                  {%- for vv in p.variants -%}
+                    {%- if vv.options[oi] == val and vv.featured_media -%}{%- assign sw = vv.featured_media -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+                <label class="sp-pill{% if sw %} sp-pill--sw{% endif %}" title="{{ val | escape }}"><input type="radio" name="sp-opt-{{ oi }}" value="{{ val | escape }}"{% if v.options[oi] == val %} checked{% endif %}>
+                  {%- if sw -%}<span>{{ sw.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: val }}</span>{%- else -%}<span>{{ val }}</span>{%- endif -%}
+                </label>
               {%- endfor -%}
             </div>
           </fieldset>
@@ -178,27 +195,27 @@
   "name": "Tee product",
   "settings": [
     { "type": "product", "id": "product", "label": "Product on the home page", "info": "Product pages always show their own product. Empty: the first product in the store." },
-    { "type": "text", "id": "badge", "label": "Badge above the title", "default": "Printed to order" },
+    { "type": "text", "id": "badge", "label": "Badge above the title", "default": "New drop" },
     { "type": "text", "id": "size_link", "label": "Size guide link text", "default": "Size guide" },
     { "type": "text", "id": "reviews_anchor", "label": "Reviews section anchor (id)", "default": "reviews", "info": "Stars show only when a reviews app fills the reviews.rating metafield." },
     { "type": "header", "content": "Delivery date by the button" },
     { "type": "range", "id": "days_min", "label": "Fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
     { "type": "range", "id": "days_max", "label": "Slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17, "info": "Shown as real dates, e.g. Arrives Oct 28 – Nov 9. Match your print partner." },
     { "type": "checkbox", "id": "show_fit", "label": "Show fit meter", "default": true },
-    { "type": "range", "id": "fit_pos", "label": "Fit position (0 snug – 100 oversized)", "min": 0, "max": 100, "step": 5, "default": 55 },
-    { "type": "text", "id": "fit_label", "label": "Fit in words (screen readers)", "default": "relaxed, a little roomy" },
+    { "type": "range", "id": "fit_pos", "label": "Fit position (0 snug – 100 oversized)", "min": 0, "max": 100, "step": 5, "default": 35 },
+    { "type": "text", "id": "fit_label", "label": "Fit in words (screen readers)", "default": "runs a little small, size up if between sizes" },
     { "type": "header", "content": "Accordions" },
     { "type": "text", "id": "acc1_title", "label": "1", "default": "Size & fit" },
-    { "type": "richtext", "id": "acc1_text", "label": "1 text", "default": "<p>Relaxed unisex fit. Between sizes or want it baggy? Size up. Model is 180 cm and wears M.</p>" },
+    { "type": "richtext", "id": "acc1_text", "label": "1 text", "default": "<p>Unisex fit. Most styles use Asian sizing and run about one size small: check the size chart in the photos and size up if you are between sizes.</p>" },
     { "type": "text", "id": "acc2_title", "label": "2", "default": "Fabric & care" },
-    { "type": "richtext", "id": "acc2_text", "label": "2 text", "default": "<p>Soft ringspun cotton. Wash cold inside out, tumble dry low, don't iron the print. The joke stays sharp for years.</p>" },
+    { "type": "richtext", "id": "acc2_text", "label": "2 text", "default": "<p>The fabric of each tee is listed in its description. Wash cold, inside out, hang dry and skip the iron on the print: the joke stays sharp longer.</p>" },
     { "type": "text", "id": "acc3_title", "label": "3", "default": "Shipping & returns" },
-    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Printed to order in 2–5 business days, delivered in 5–12 business days with tracking. Not funny enough? 30-day returns.</p>" },
+    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Ships with tracking and usually arrives in 7–17 business days. Not funny enough? 30-day returns.</p>" },
     { "type": "header", "content": "The 3 biggest doubts, answered by the button" },
     { "type": "text", "id": "info1_title", "label": "Doubt 1", "default": "Will it fit?" },
-    { "type": "text", "id": "info1_text", "label": "Answer 1", "default": "Relaxed unisex fit. Check the size guide; wrong size? Swap it within 30 days." },
+    { "type": "text", "id": "info1_text", "label": "Answer 1", "default": "Most styles run about one size small. Check the size chart in the photos; between sizes, go up." },
     { "type": "text", "id": "info2_title", "label": "Doubt 2", "default": "Will the print crack?" },
-    { "type": "text", "id": "info2_text", "label": "Answer 2", "default": "Printed into the cotton, not stuck on top. Wash cold, inside out." },
+    { "type": "text", "id": "info2_text", "label": "Answer 2", "default": "Wash it cold, inside out, and skip the iron on the print. That keeps it sharp." },
     { "type": "text", "id": "info3_title", "label": "Doubt 3", "default": "What if it's not funny IRL?" },
     { "type": "text", "id": "info3_text", "label": "Answer 3", "default": "30-day returns, no drama. Your bag, your call.", "info": "Keep every answer true to your real return policy and print method." },
     { "type": "header", "content": "Buddy deal (two tees)" },
@@ -213,7 +230,7 @@
     { "type": "range", "id": "recs_count", "label": "Tees shown (0 hides)", "min": 0, "max": 12, "step": 4, "default": 8 },
     { "type": "header", "content": "Size guide" },
     { "type": "text", "id": "size_title", "label": "Title", "default": "Size guide" },
-    { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<p><strong>Chest width (cm):</strong> S 50 · M 53 · L 56 · XL 59 · XXL 62</p><p><strong>Length (cm):</strong> S 70 · M 72 · L 74 · XL 76 · XXL 78</p>" }
+    { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<p>Every tee has its own size chart in the photos (measured flat, in cm). Most styles use Asian sizing: if you are between sizes, size up.</p>" }
   ]
 }
 {% endschema %}

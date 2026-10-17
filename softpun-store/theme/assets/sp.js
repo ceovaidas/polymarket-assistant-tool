@@ -64,6 +64,12 @@
       var add = $('[data-sp-add]', pdp), buy = $('[data-sp-buy]', pdp);
       if (!v) { add.disabled = buy.disabled = true; add.textContent = 'Unavailable'; return; }
       idInput.value = v.id;
+      // show the chosen colour's photo and name
+      if (v.featured_media) {
+        var at = slides.findIndex(function (sl) { return sl.dataset.mediaId == v.featured_media.id; });
+        if (at > -1) show(at);
+      }
+      $$('[data-sp-opt]', pdp).forEach(function (f, oi) { var b = $('[data-sp-optval]', f); if (b) b.textContent = v.options[oi]; });
       add.disabled = buy.disabled = !v.available;
       add.textContent = v.available ? 'Add to bag' : 'Sold out';
       $('[data-sp-price]', pdp).textContent = money(v.price);

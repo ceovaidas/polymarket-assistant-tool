@@ -17,7 +17,10 @@ Before going live:
 1. Discounts → create the pop-up code (default `SOFTPUN10`) and an automatic "Amount off products" discount
    of $9.99 with minimum quantity 2 for the buddy deal (or change the amounts in the theme editor).
 2. Header → countdown: only set an end date for a real offer that actually ends then; empty hides it.
-3. Products: Size option (S–XXL) so the size buttons and fit meter work; add a front and a back photo.
+3. Products: a Size option (sorted S → XXXL) and a Color option with real colour names; each colour variant
+   needs its photo, the theme shows it as the swatch and switches the gallery to it. Supplier imports
+   (DSers/AliExpress) arrive with codes like "88" and cost prices: rename, delete filler variants, set retail
+   prices and rewrite the description before publishing.
 4. Cart → set "$0 shipping from" to your real free-shipping rate, pick an add-ons collection (stickers,
    socks under $10) and the delivery window your print partner really hits. The same window is on the
    product page settings.

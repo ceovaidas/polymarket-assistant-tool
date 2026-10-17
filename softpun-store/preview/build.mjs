@@ -53,12 +53,14 @@ const products = tees.map(([title, lines, glow, emoji], i) => {
   writeFileSync(join(here, 'img', `t${i}a.svg`), teeSvg(lines, glow, emoji, bgs[i % 4], false));
   writeFileSync(join(here, 'img', `t${i}b.svg`), teeSvg(lines, glow, emoji, '#000', true));
   const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
-  const variants = sizes.map((s, k) => ({ id: i * 10 + k + 1, title: s, options: [s], option1: s, price: 2999, compare_at_price: null, available: !(i === 0 && s === 'XXL') }));
-  const media = [{ preview_image: { src: `img/t${i}a.svg` }, alt: title }, { preview_image: { src: `img/t${i}b.svg` }, alt: title + ' back' }];
+  const media = [{ id: i * 10 + 1, preview_image: { src: `img/t${i}a.svg` }, alt: title }, { id: i * 10 + 2, preview_image: { src: `img/t${i}b.svg` }, alt: title + ' back' }];
+  // The first tee comes in two colours, like the supplier imports, to exercise the photo swatches
+  const colors = i === 0 ? ['Black', 'Charcoal'] : null;
+  const variants = (colors || [null]).flatMap((c, ci) => sizes.map((s, k) => ({ id: i * 100 + ci * 10 + k + 1, title: c ? `${c} / ${s}` : s, options: c ? [c, s] : [s], price: 2999, compare_at_price: null, available: !(i === 0 && s === 'XXL'), featured_media: c ? media[ci] : null })));
   return {
     id: 100 + i, title, url: `p${i}.html`, available: true, media, featured_media: media[0], variants,
-    selected_or_first_available_variant: variants[1], options_with_values: [{ name: 'Size', values: sizes }],
-    description: `<p><strong>For the friend who ${['sends 47 voice notes a day', 'has 9 hours of screen time and no regrets', 'honks first and thinks never', 'treats naps like a sport', 'skips leg day in real life too', 'speaks fluent meme', 'narrates their own life', 'has not seen sunlight since 2019'][i]}.</strong></p><p>Vintage bootleg-style graphic on a heavyweight black tee. Wear it, get screenshotted.</p><ul><li>Heavyweight cotton, relaxed unisex fit</li><li>Printed to order, front graphic</li><li>Sizes S–XXL</li></ul>`,
+    selected_or_first_available_variant: variants[1], options_with_values: [...(colors ? [{ name: 'Color', values: colors }] : []), { name: 'Size', values: sizes }],
+    description: `<p><strong>For the friend who ${['sends 47 voice notes a day', 'has 9 hours of screen time and no regrets', 'honks first and thinks never', 'treats naps like a sport', 'skips leg day in real life too', 'speaks fluent meme', 'narrates their own life', 'has not seen sunlight since 2019'][i]}.</strong></p><p>Vintage bootleg-style graphic. Wear it, get screenshotted.</p><ul><li>Fabric: 100% cotton</li><li>Fit: unisex, Asian sizing, size up if between sizes</li><li>Sizes: S–XXL</li><li>Tracked delivery, usually 7–17 business days</li></ul>`,
   };
 });
 

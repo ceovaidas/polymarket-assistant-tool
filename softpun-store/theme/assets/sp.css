@@ -304,3 +304,15 @@ body { background: var(--sp-bg); }
 }
 .sp-empty { min-height: 50vh; padding-block: 120px; text-align: center; }
 .sp-empty .sp-lead { margin: 16px auto 0; }
+
+/* Long supplier titles never spill over the photo */
+.sp-pdp__story > .sp-h1 { max-width: 100%; overflow-wrap: anywhere; hyphens: auto; font-size: clamp(26px, 2.4vw, 36px); }
+.sp-opt legend span b { font-weight: 500; color: var(--sp-ink-2); text-transform: none; letter-spacing: 0; }
+/* Colour swatches show the tee itself */
+.sp-pill--sw span { width: 58px; height: 58px; min-width: 0; padding: 0; overflow: hidden; background: #fff; }
+.sp-pill--sw img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sp-pill--sw input:checked + span { background: #fff; outline: 2px solid var(--sp-terra); outline-offset: 2px; border-color: #000; }
+.sp-pill--sw.is-out span { opacity: .35; text-decoration: none; }
+/* Supplier descriptions: keep headings and images in scale */
+.sp-desc h1, .sp-desc h2, .sp-desc h3 { font: 600 16px/1.3 var(--sp-fb); text-transform: none; color: var(--sp-ink); margin: 14px 0 6px; }
+.sp-desc img { max-width: 100%; height: auto; }
