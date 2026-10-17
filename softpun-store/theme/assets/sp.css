@@ -302,3 +302,5 @@ body { background: var(--sp-bg); }
   .sp-pdp__story > .sp-chip, .sp-pdp__story > .sp-h1, .sp-pdp__story > .sp-stars, .sp-pdp__story > .sp-price { order: 1; }
   .sp-pdp__buy { order: 2; }
 }
+.sp-empty { min-height: 50vh; padding-block: 120px; text-align: center; }
+.sp-empty .sp-lead { margin: 16px auto 0; }

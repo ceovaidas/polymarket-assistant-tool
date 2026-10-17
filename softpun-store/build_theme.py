@@ -19,7 +19,7 @@ COLORS = {
 }
 GLOBAL = {"buttons_radius": 0, "inputs_radius": 0, "variant_pills_radius": 0, "card_corner_radius": 0,
           "media_radius": 0, "popup_corner_radius": 0, "badge_corner_radius": 0, "card_color_scheme": "scheme-2",
-          "cart_type": "page", "page_width": 1280}
+          "cart_type": "page", "page_width": 1300}
 
 
 def load_json(p):

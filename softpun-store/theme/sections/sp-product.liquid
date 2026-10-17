@@ -20,6 +20,14 @@
 -%}
 {{ 'sp.css' | asset_url | stylesheet_tag }}
 
+{%- if p == blank -%}
+  <section class="sp sp-pdp sp-empty">
+    <div class="sp-wrap">
+      <h1 class="sp-h1">New memes dropping soon</h1>
+      {%- if request.design_mode -%}<p class="sp-lead">No active product yet. Add a tee in Products (status Active, Online Store channel), then pick it in this section's settings.</p>{%- endif -%}
+    </div>
+  </section>
+{%- else -%}
 <section class="sp sp-pdp" data-sp-product data-unit="{{ v.price }}">
   <script type="application/json" data-sp-variants>{{ p.variants | json }}</script>
   <div class="sp-wrap sp-pdp__grid">
@@ -163,6 +171,7 @@
     </div>
   {%- endif -%}
 </section>
+{%- endif -%}
 
 {% schema %}
 {
