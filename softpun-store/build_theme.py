@@ -13,12 +13,12 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 COLORS = {
-    "scheme-1": {"background": "#F6EFE3", "text": "#1B1612", "button": "#FF5A36", "button_label": "#FFFFFF", "secondary_button_label": "#1B1612", "shadow": "#1B1612"},
-    "scheme-2": {"background": "#FFFAF1", "text": "#1B1612", "button": "#1B1612", "button_label": "#FFD43B", "secondary_button_label": "#1B1612", "shadow": "#1B1612"},
-    "scheme-3": {"background": "#1B1612", "text": "#F6EFE3", "button": "#FFD43B", "button_label": "#1B1612", "secondary_button_label": "#F6EFE3", "shadow": "#000000"},
+    "scheme-1": {"background": "#000000", "text": "#FFFFFF", "button": "#FFFFFF", "button_label": "#000000", "secondary_button_label": "#FFFFFF", "shadow": "#000000"},
+    "scheme-2": {"background": "#0B0B0B", "text": "#FFFFFF", "button": "#E3242B", "button_label": "#FFFFFF", "secondary_button_label": "#FFFFFF", "shadow": "#000000"},
+    "scheme-3": {"background": "#E3242B", "text": "#FFFFFF", "button": "#000000", "button_label": "#FFFFFF", "secondary_button_label": "#FFFFFF", "shadow": "#000000"},
 }
-GLOBAL = {"buttons_radius": 40, "inputs_radius": 14, "variant_pills_radius": 14, "card_corner_radius": 18,
-          "media_radius": 18, "popup_corner_radius": 24, "badge_corner_radius": 40, "card_color_scheme": "scheme-2",
+GLOBAL = {"buttons_radius": 0, "inputs_radius": 0, "variant_pills_radius": 0, "card_corner_radius": 0,
+          "media_radius": 0, "popup_corner_radius": 0, "badge_corner_radius": 0, "card_color_scheme": "scheme-2",
           "cart_type": "page", "page_width": 1280}
 
 

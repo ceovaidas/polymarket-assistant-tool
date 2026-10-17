@@ -1,11 +1,17 @@
 {%- comment -%}
-  Three-column product page: story on the left, the tee in the middle, choices on the right.
+  One-page product: story on the left, the tee in the middle, choices on the right, more tees below.
+  Product pages show their own product; on the home page it shows the product picked in the settings.
   Prices come from Shopify; the crossed-out price shows only when a real compare-at price is set.
 {%- endcomment -%}
 {%- liquid
-  assign v = product.selected_or_first_available_variant
+  if template.name == 'product'
+    assign p = product
+  else
+    assign p = section.settings.product | default: collections.all.products.first
+  endif
+  assign v = p.selected_or_first_available_variant
   assign size_index = 0
-  for opt in product.options_with_values
+  for opt in p.options_with_values
     assign n = opt.name | downcase
     if n contains 'size' or n contains 'dydis'
       assign size_index = forloop.index0
@@ -15,16 +21,16 @@
 {{ 'sp.css' | asset_url | stylesheet_tag }}
 
 <section class="sp sp-pdp" data-sp-product data-unit="{{ v.price }}">
-  <script type="application/json" data-sp-variants>{{ product.variants | json }}</script>
+  <script type="application/json" data-sp-variants>{{ p.variants | json }}</script>
   <div class="sp-wrap sp-pdp__grid">
 
     {%- comment -%} Left: the story {%- endcomment -%}
     <div class="sp-pdp__story">
       {%- if section.settings.badge != blank -%}<span class="sp-chip">{{ section.settings.badge }}</span>{%- endif -%}
-      <h1 class="sp-h1">{{ product.title }}</h1>
+      <h1 class="sp-h1">{{ p.title }}</h1>
       {%- comment -%} Stars only from a real reviews app (standard reviews.* metafields) {%- endcomment -%}
-      {%- assign rating = product.metafields.reviews.rating.value -%}
-      {%- assign rating_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+      {%- assign rating = p.metafields.reviews.rating.value -%}
+      {%- assign rating_count = p.metafields.reviews.rating_count.value | default: 0 -%}
       {%- if rating != blank and rating_count > 0 -%}
         <a class="sp-stars" href="#{{ section.settings.reviews_anchor | default: 'reviews' }}" aria-label="Rated {{ rating.rating | round: 1 }} out of {{ rating.scale_max }}, {{ rating_count }} reviews">
           <span aria-hidden="true">★★★★★</span><b>{{ rating.rating | round: 1 }}</b><span>({{ rating_count }} reviews)</span>
@@ -34,7 +40,7 @@
         <b data-sp-price>{{ v.price | money }}</b>
         {%- if v.compare_at_price > v.price -%}<s data-sp-compare>{{ v.compare_at_price | money }}</s>{%- endif -%}
       </p>
-      <div class="sp-rte sp-desc">{{ product.description }}</div>
+      <div class="sp-rte sp-desc">{{ p.description }}</div>
       <div class="sp-acc">
         {%- for i in (1..3) -%}
           {%- assign tk = 'acc' | append: i | append: '_title' -%}{%- assign xk = 'acc' | append: i | append: '_text' -%}
@@ -48,34 +54,34 @@
     {%- comment -%} Middle: the tee {%- endcomment -%}
     <div class="sp-pdp__media">
       <div class="sp-stage" data-sp-stage>
-        {%- for m in product.media limit: 8 -%}
+        {%- for m in p.media limit: 8 -%}
           <figure class="sp-stage__slide{% if forloop.first %} is-on{% endif %}">
             {%- case m.media_type -%}
               {%- when 'video' -%}{{ m | video_tag: controls: true, muted: true, playsinline: true, loop: true, preload: 'metadata', image_size: '1200x' }}
               {%- when 'external_video' -%}{{ m | external_video_tag }}
-              {%- else -%}{{ m.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: m.alt | default: product.title, sizes: '(min-width: 990px) 40vw, 100vw' }}
+              {%- else -%}{{ m.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: m.alt | default: p.title, sizes: '(min-width: 990px) 40vw, 100vw' }}
             {%- endcase -%}
           </figure>
         {%- else -%}
           <figure class="sp-stage__slide is-on">{{ 'apparel-1' | placeholder_svg_tag }}</figure>
         {%- endfor -%}
-        {%- if product.media.size > 1 -%}
+        {%- if p.media.size > 1 -%}
           <button type="button" class="sp-stage__nav sp-stage__nav--prev" data-sp-prev aria-label="Previous">‹</button>
           <button type="button" class="sp-stage__nav sp-stage__nav--next" data-sp-next aria-label="Next">›</button>
         {%- endif -%}
       </div>
-      {%- if product.media.size > 1 -%}
+      {%- if p.media.size > 1 -%}
         <div class="sp-dots" role="tablist" aria-label="Photos and videos">
-          {%- for m in product.media limit: 8 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="{% if m.media_type contains 'video' %}Video{% else %}Photo{% endif %} {{ forloop.index }}"></button>{%- endfor -%}
+          {%- for m in p.media limit: 8 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="{% if m.media_type contains 'video' %}Video{% else %}Photo{% endif %} {{ forloop.index }}"></button>{%- endfor -%}
         </div>
       {%- endif -%}
     </div>
 
     {%- comment -%} Right: the choices {%- endcomment -%}
     <div class="sp-pdp__buy">
-      {%- form 'product', product, class: 'sp-form', data-sp-form: '' -%}
+      {%- form 'product', p, class: 'sp-form', data-sp-form: '' -%}
         <input type="hidden" name="id" value="{{ v.id }}" data-sp-id>
-        {%- for opt in product.options_with_values -%}
+        {%- for opt in p.options_with_values -%}
           <fieldset class="sp-opt" data-sp-opt="{{ forloop.index0 }}">
             <legend>{{ opt.name }}{% if forloop.index0 == size_index and section.settings.size_link != blank %} <a href="#sp-size">{{ section.settings.size_link }}</a>{% endif %}</legend>
             <div class="sp-opt__vals">
@@ -108,17 +114,17 @@
         {%- endfor -%}
       </div>
 
-      {%- if section.settings.bundle_on and product.variants.size > 0 -%}
+      {%- if section.settings.bundle_on and p.variants.size > 0 -%}
         {%- assign off_cents = section.settings.bundle_off | times: 100 | round -%}
         <div class="sp-bundle" data-sp-bundle data-off="{{ off_cents }}">
           <div class="sp-bundle__head"><b>{{ section.settings.bundle_title }}</b><span class="sp-tag">{{ section.settings.bundle_tag }}</span></div>
           {%- for row in (1..2) -%}
             <div class="sp-bundle__row">
-              {%- if product.featured_media != blank -%}{{ product.featured_media.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+              {%- if p.featured_media != blank -%}{{ p.featured_media.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
               <div>
-                <p>{{ product.title }}</p>
+                <p>{{ p.title }}</p>
                 <select aria-label="Tee {{ row }}" data-sp-bundle-pick>
-                  {%- for vv in product.variants -%}<option value="{{ vv.id }}" data-price="{{ vv.price }}"{% unless vv.available %} disabled{% endunless %}{% if vv.id == v.id %} selected{% endif %}>{{ vv.title }}</option>{%- endfor -%}
+                  {%- for vv in p.variants -%}<option value="{{ vv.id }}" data-price="{{ vv.price }}"{% unless vv.available %} disabled{% endunless %}{% if vv.id == v.id %} selected{% endif %}>{{ vv.title }}</option>{%- endfor -%}
                 </select>
               </div>
             </div>
@@ -139,12 +145,30 @@
       <div class="sp-rte sp-size__t">{{ section.settings.size_table }}</div>
     </div>
   {%- endif -%}
+
+  {%- comment -%} More tees: each card opens the same one-page layout {%- endcomment -%}
+  {%- assign recs_col = section.settings.recs_collection | default: collections.all -%}
+  {%- if section.settings.recs_count > 0 and recs_col.products.size > 1 -%}
+    <div class="sp-wrap sp-recs">
+      <div class="sp-sec-head"><h2 class="sp-h2">{{ section.settings.recs_title }}</h2><a href="{{ routes.all_products_collection_url }}">See all</a></div>
+      <div class="sp-grid">
+        {%- assign shown = 0 -%}
+        {%- for card in recs_col.products -%}
+          {%- if card.id != p.id and shown < section.settings.recs_count -%}
+            {%- assign shown = shown | plus: 1 -%}
+            {%- render 'sp-card', card: card -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
 {
   "name": "Tee product",
   "settings": [
+    { "type": "product", "id": "product", "label": "Product on the home page", "info": "Product pages always show their own product. Empty: the first product in the store." },
     { "type": "text", "id": "badge", "label": "Badge above the title", "default": "Printed to order" },
     { "type": "text", "id": "size_link", "label": "Size guide link text", "default": "Size guide" },
     { "type": "text", "id": "reviews_anchor", "label": "Reviews section anchor (id)", "default": "reviews", "info": "Stars show only when a reviews app fills the reviews.rating metafield." },
@@ -174,6 +198,10 @@
     { "type": "text", "id": "bundle_tag", "label": "Tag", "default": "Gift idea" },
     { "type": "text", "id": "bundle_off", "label": "$ less for two (e.g. 9.99)", "default": "9.99", "info": "Create a matching automatic discount (Amount off products, fixed amount, minimum quantity 2)." },
     { "type": "text", "id": "bundle_note", "label": "Note", "default": "Applied automatically at checkout." },
+    { "type": "header", "content": "More tees below" },
+    { "type": "text", "id": "recs_title", "label": "Title", "default": "More memes" },
+    { "type": "collection", "id": "recs_collection", "label": "From collection (default: all)" },
+    { "type": "range", "id": "recs_count", "label": "Tees shown (0 hides)", "min": 0, "max": 12, "step": 4, "default": 8 },
     { "type": "header", "content": "Size guide" },
     { "type": "text", "id": "size_title", "label": "Title", "default": "Size guide" },
     { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<p><strong>Chest width (cm):</strong> S 50 · M 53 · L 56 · XL 59 · XXL 62</p><p><strong>Length (cm):</strong> S 70 · M 72 · L 74 · XL 76 · XXL 78</p>" }
