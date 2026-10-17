@@ -1,5 +1,5 @@
 {%- comment -%}
-  Cart page: progress to $0 shipping, the bag, one-click add-ons under a price limit, and the real
+  Cart page: progress to $0 shipping, the bag, the next tee deal, and the real
   delivery window + returns right next to the checkout button.
 {%- endcomment -%}
 {%- liquid
@@ -75,28 +75,6 @@
         </form>
 
         <aside class="sp-cart__sum">
-          {%- if section.settings.addon_collection != blank -%}
-            {%- liquid
-              assign max_cents = section.settings.addon_max | times: 100
-              assign shown = 0
-            -%}
-            {%- capture addons -%}
-              {%- for p in section.settings.addon_collection.products -%}
-                {%- if shown < 3 and p.available and p.price <= max_cents -%}
-                  {%- unless in_cart contains p.id -%}
-                    {%- assign shown = shown | plus: 1 -%}
-                    <form method="post" action="{{ routes.cart_add_url }}" class="sp-addon">
-                      <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}"><input type="hidden" name="quantity" value="1"><input type="hidden" name="return_to" value="{{ routes.cart_url }}">
-                      {%- if p.featured_media -%}{{ p.featured_media.preview_image | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}{%- endif -%}
-                      <span><b>{{ p.title }}</b>{{ p.price | money }}</span>
-                      <button type="submit" class="sp-addon__btn" aria-label="Add {{ p.title | escape }}">+ Add</button>
-                    </form>
-                  {%- endunless -%}
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endcapture -%}
-            {%- if shown > 0 -%}<div class="sp-addons"><p class="sp-addons__t">{{ section.settings.addon_title }}</p>{{ addons }}</div>{%- endif -%}
-          {%- endif -%}
 
           {%- for d in cart.cart_level_discount_applications -%}<p class="sp-sum__row"><span>{{ d.title }}</span><span>−{{ d.total_allocated_amount | money }}</span></p>{%- endfor -%}
           {%- if cart.total_discount > 0 -%}<p class="sp-sum__row sp-sum__keep"><span>You're keeping</span><b>{{ cart.total_discount | money }}</b></p>{%- endif -%}
@@ -137,9 +115,6 @@
     { "type": "text", "id": "tier3_price", "label": "3 tees deal price ($)", "default": "69.99" },
     { "type": "text", "id": "more_title", "label": "More tees title", "default": "Your bag needs a friend" },
     { "type": "range", "id": "more_count", "label": "More tees shown (0 hides)", "min": 0, "max": 8, "step": 4, "default": 4 },
-    { "type": "collection", "id": "addon_collection", "label": "Add-ons collection (stickers, socks, …)" },
-    { "type": "number", "id": "addon_max", "label": "Add-on max price ($)", "default": 10 },
-    { "type": "text", "id": "addon_title", "label": "Add-ons title", "default": "Toss one in" },
     { "type": "range", "id": "days_min", "label": "Delivery: fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
     { "type": "range", "id": "days_max", "label": "Delivery: slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17 }
   ]

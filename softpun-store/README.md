@@ -4,8 +4,8 @@ Dawn-based one-page theme in streetwear black (black, white, one red), sections 
 a full product page for the tee you pick in the theme editor; under it "More memes" shows the other tees,
 and each opens the same one-page layout. The product page has real delivery dates by the button, the 3
 biggest doubts answered, stars only from a reviews app, a UGC video slot, fit meter, size guide and a
-two-tee "buddy deal". The cart has a progress bar to "$0 shipping, on us", add-ons under $10 and delivery
-date + returns by checkout; the pick-a-box pop-up reveals a mystery discount. `sp-home` (hero, "who are
+1 / 2 / 3 tee deal picker. The cart has a progress bar to "$0 shipping, on us", the next tee deal, what the
+customer keeps from discounts, and delivery date + returns by checkout; the pick-a-box pop-up reveals a mystery discount. `sp-home` (hero, "who are
 we roasting?" chooser, grid, perks, FAQ) is still there to add from the theme editor if you want a classic
 home page.
 
@@ -23,8 +23,8 @@ Before going live:
    needs its photo, the theme shows it as the swatch and switches the gallery to it. Supplier imports
    (DSers/AliExpress) arrive with codes like "88" and cost prices: rename, delete filler variants, set retail
    prices and rewrite the description before publishing.
-4. Cart → set "$0 shipping from" to your real free-shipping rate, pick an add-ons collection (stickers,
-   socks under $10) and the delivery window your print partner really hits. The same window is on the
+4. Cart → set "$0 shipping from" to your real free-shipping rate and the delivery window your supplier
+   really hits. The same window is on the
    product page settings.
 5. Install a reviews app that writes the standard `reviews.rating` metafields; stars show only then. Add
    the real order/review numbers to the home "proof line" once you have them.

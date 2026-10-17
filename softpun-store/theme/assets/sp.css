@@ -278,14 +278,6 @@ body { background: var(--sp-bg); }
 .sp-qty input { width: 38px; border: 0; background: none; color: var(--sp-ink); text-align: center; font: 700 15px var(--sp-fb); -moz-appearance: textfield; }
 .sp-qty input::-webkit-inner-spin-button, .sp-qty input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .sp-cart__sum { display: grid; gap: 12px; padding: 20px; border: 1px solid var(--sp-line); background: var(--sp-card); }
-.sp-addons { display: grid; gap: 8px; padding-bottom: 12px; border-bottom: 1px dashed var(--sp-line); }
-.sp-addons__t { margin: 0; font: 600 17px var(--sp-fd); text-transform: uppercase; }
-.sp-addon { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; }
-.sp-addon img { width: 48px; height: 48px; object-fit: cover; border-radius: 0; }
-.sp-addon span { display: grid; font-size: 13px; color: var(--sp-ink-2); }
-.sp-addon span b { color: var(--sp-ink); font-size: 14px; }
-.sp-addon__btn { padding: 8px 12px; border: 1px solid var(--sp-ink); background: none; color: var(--sp-ink); font: 700 12px var(--sp-fb); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
-.sp-addon__btn:hover { background: var(--sp-ink); color: #000; }
 .sp-sum__row { display: flex; justify-content: space-between; margin: 0; color: var(--sp-ink-2); }
 .sp-sum__total { color: var(--sp-ink); font-size: 20px; }
 .sp-assure { display: grid; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; color: var(--sp-ink-2); font-size: 14px; }
