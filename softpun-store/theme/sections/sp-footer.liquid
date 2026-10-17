@@ -11,7 +11,7 @@
     </nav>
   </div>
   <div class="sp-wrap sp-foot__base">
-    <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Made with soft cotton and bad jokes.</span>
+    <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Made with soft cotton and questionable humour.</span>
     {%- if shop.enabled_payment_types.size > 0 -%}<ul class="sp-pay">{%- for t in shop.enabled_payment_types -%}<li>{{ t | payment_type_svg_tag }}</li>{%- endfor -%}</ul>{%- endif -%}
   </div>
 </footer>
@@ -19,7 +19,7 @@
 {
   "name": "Tee footer",
   "settings": [
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Soft tees with jokes you'll want to wear on repeat. Printed to order, shipped with love." }
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Meme tees with vintage bootleg energy. Printed to order, shipped with love, worn with zero shame." }
   ]
 }
 {% endschema %}

@@ -6,25 +6,25 @@
         "p1": {
           "type": "perk",
           "settings": {
-            "emoji": "☁️",
-            "title": "Cloud-soft cotton",
-            "text": "The tee you'll steal back from your partner."
+            "emoji": "🔥",
+            "title": "Bootleg-tee energy",
+            "text": "Vintage rap-tee look, chrome lettering, airbrush vibes."
           }
         },
         "p2": {
           "type": "perk",
           "settings": {
-            "emoji": "😂",
-            "title": "Jokes that land",
-            "text": "Written by humans who laugh at their own puns."
+            "emoji": "💀",
+            "title": "Memes that land",
+            "text": "Picked from what the internet is laughing at right now."
           }
         },
         "p3": {
           "type": "perk",
           "settings": {
-            "emoji": "🎁",
-            "title": "Made for gifting",
-            "text": "The present that gets an actual laugh, not a polite one."
+            "emoji": "☁️",
+            "title": "Heavyweight & soft",
+            "text": "Thick cotton that survives the wash and the group chat."
           }
         },
         "p4": {
