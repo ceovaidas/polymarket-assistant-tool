@@ -1,0 +1,80 @@
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<div class="sp sp-home">
+  <section class="sp-hero">
+    <div class="sp-wrap sp-hero__in">
+      <div class="sp-hero__txt">
+        {%- if section.settings.eyebrow != blank -%}<span class="sp-chip">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h1 class="sp-display">{{ section.settings.title }}</h1>
+        <p class="sp-lead">{{ section.settings.text }}</p>
+        <div class="sp-hero__ctas">
+          <a class="sp-btn" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta }}</a>
+          {%- if section.settings.cta2 != blank -%}<a class="sp-btn sp-btn--ghost" href="#sp-grid">{{ section.settings.cta2 }}</a>{%- endif -%}
+        </div>
+      </div>
+      <div class="sp-hero__art">
+        {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', alt: section.settings.title }}{%- else -%}<div class="sp-hero__ph">{{ 'apparel-1' | placeholder_svg_tag }}</div>{%- endif -%}
+        {%- if section.settings.sticker != blank -%}<span class="sp-sticker">{{ section.settings.sticker }}</span>{%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- assign items = section.settings.marquee | split: '|' -%}
+  {%- if items.size > 0 -%}
+    <div class="sp-marquee" aria-label="{{ section.settings.marquee | escape }}"><div class="sp-marquee__track" aria-hidden="true">{%- for n in (1..4) -%}{%- for it in items -%}<span>{{ it | strip }}</span><i>☺</i>{%- endfor -%}{%- endfor -%}</div></div>
+  {%- endif -%}
+
+  <section class="sp-wrap sp-grid-sec" id="sp-grid">
+    <div class="sp-sec-head"><h2 class="sp-h2">{{ section.settings.grid_title }}</h2><a href="{{ routes.all_products_collection_url }}">See all</a></div>
+    {%- assign col = section.settings.collection | default: collections.all -%}
+    <div class="sp-grid">
+      {%- for card in col.products limit: section.settings.grid_count -%}{%- render 'sp-card', card: card -%}{%- endfor -%}
+    </div>
+  </section>
+
+  {%- assign perks = section.blocks | where: 'type', 'perk' -%}
+  {%- if perks.size > 0 -%}
+    <section class="sp-perks"><div class="sp-wrap sp-perks__in">
+      {%- for b in perks -%}<div class="sp-perk" {{ b.shopify_attributes }}><span class="sp-perk__e" aria-hidden="true">{{ b.settings.emoji }}</span><b>{{ b.settings.title }}</b><span>{{ b.settings.text }}</span></div>{%- endfor -%}
+    </div></section>
+  {%- endif -%}
+
+  {%- assign faqs = section.blocks | where: 'type', 'faq' -%}
+  {%- if faqs.size > 0 -%}
+    <section class="sp-wrap sp-faq">
+      <h2 class="sp-h2">{{ section.settings.faq_title }}</h2>
+      {%- for b in faqs -%}<details {{ b.shopify_attributes }}><summary>{{ b.settings.q }}<i aria-hidden="true">+</i></summary><div class="sp-rte">{{ b.settings.a }}</div></details>{%- endfor -%}
+    </section>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "Tee home",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Soft tees, bad puns" },
+    { "type": "text", "id": "title", "label": "Headline", "default": "Wear the joke. Feel the hug." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Super-soft cotton tees with jokes your friends will steal. Printed to order, made for gifting, guaranteed to start a conversation." },
+    { "type": "text", "id": "cta", "label": "Button", "default": "Find your tee" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "text", "id": "cta2", "label": "Second button", "default": "Bestsellers" },
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "sticker", "label": "Round sticker", "default": "100% soft" },
+    { "type": "text", "id": "marquee", "label": "Scrolling banner (separate with |)", "default": "$0 shipping, on us | Printed to order | 30-day returns | The softest joke you'll ever wear" },
+    { "type": "text", "id": "grid_title", "label": "Product grid title", "default": "Fresh puns" },
+    { "type": "collection", "id": "collection", "label": "Collection (default: all)" },
+    { "type": "range", "id": "grid_count", "label": "Products shown", "min": 4, "max": 16, "step": 4, "default": 8 },
+    { "type": "text", "id": "faq_title", "label": "FAQ title", "default": "Good questions" }
+  ],
+  "blocks": [
+    { "type": "perk", "name": "Perk", "settings": [
+      { "type": "text", "id": "emoji", "label": "Emoji", "default": "☁️" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Cloud-soft cotton" },
+      { "type": "text", "id": "text", "label": "Text", "default": "The tee you'll steal back from your partner." }
+    ]},
+    { "type": "faq", "name": "Question", "settings": [
+      { "type": "text", "id": "q", "label": "Question", "default": "Question" },
+      { "type": "richtext", "id": "a", "label": "Answer", "default": "<p>Answer</p>" }
+    ]}
+  ],
+  "presets": [{ "name": "Tee home" }]
+}
+{% endschema %}

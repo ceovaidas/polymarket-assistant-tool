@@ -1,0 +1,91 @@
+{
+  "sections": {
+    "home": {
+      "type": "sp-home",
+      "blocks": {
+        "p1": {
+          "type": "perk",
+          "settings": {
+            "emoji": "☁️",
+            "title": "Cloud-soft cotton",
+            "text": "The tee you'll steal back from your partner."
+          }
+        },
+        "p2": {
+          "type": "perk",
+          "settings": {
+            "emoji": "😂",
+            "title": "Jokes that land",
+            "text": "Written by humans who laugh at their own puns."
+          }
+        },
+        "p3": {
+          "type": "perk",
+          "settings": {
+            "emoji": "🎁",
+            "title": "Made for gifting",
+            "text": "The present that gets an actual laugh, not a polite one."
+          }
+        },
+        "p4": {
+          "type": "perk",
+          "settings": {
+            "emoji": "🚚",
+            "title": "$0 shipping, on us",
+            "text": "Tracked to your door, printed just for you."
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "How do the tees fit?",
+            "a": "<p>Relaxed unisex fit, true to size. Want it oversized? Go one size up. Every product has a size guide.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "When will my order arrive?",
+            "a": "<p>Each tee is printed to order in 2–5 business days, then delivered in 5–12 business days with tracking.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "Will the print crack or fade?",
+            "a": "<p>Wash cold, inside out, and skip the iron on the print. The joke stays sharp for a long time.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Can I send it as a gift?",
+            "a": "<p>Yes. Ship it straight to them and add a note at checkout.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "What if it's not funny enough?",
+            "a": "<p>Send it back within 30 days for a refund. We'll try not to take it personally.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "home"
+  ]
+}

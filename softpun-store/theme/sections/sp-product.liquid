@@ -1,0 +1,163 @@
+{%- comment -%}
+  Three-column product page: story on the left, the tee in the middle, choices on the right.
+  Prices come from Shopify; the crossed-out price shows only when a real compare-at price is set.
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign size_index = 0
+  for opt in product.options_with_values
+    assign n = opt.name | downcase
+    if n contains 'size' or n contains 'dydis'
+      assign size_index = forloop.index0
+    endif
+  endfor
+-%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+
+<section class="sp sp-pdp" data-sp-product data-unit="{{ v.price }}">
+  <script type="application/json" data-sp-variants>{{ product.variants | json }}</script>
+  <div class="sp-wrap sp-pdp__grid">
+
+    {%- comment -%} Left: the story {%- endcomment -%}
+    <div class="sp-pdp__story">
+      {%- if section.settings.badge != blank -%}<span class="sp-chip">{{ section.settings.badge }}</span>{%- endif -%}
+      <h1 class="sp-h1">{{ product.title }}</h1>
+      <p class="sp-price">
+        <b data-sp-price>{{ v.price | money }}</b>
+        {%- if v.compare_at_price > v.price -%}<s data-sp-compare>{{ v.compare_at_price | money }}</s>{%- endif -%}
+      </p>
+      <div class="sp-rte sp-desc">{{ product.description }}</div>
+      <div class="sp-acc">
+        {%- for i in (1..3) -%}
+          {%- assign tk = 'acc' | append: i | append: '_title' -%}{%- assign xk = 'acc' | append: i | append: '_text' -%}
+          {%- if section.settings[tk] != blank -%}
+            <details><summary>{{ section.settings[tk] }}<i aria-hidden="true">+</i></summary><div class="sp-rte">{{ section.settings[xk] }}</div></details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Middle: the tee {%- endcomment -%}
+    <div class="sp-pdp__media">
+      <div class="sp-stage" data-sp-stage>
+        {%- for m in product.media limit: 8 -%}
+          <figure class="sp-stage__slide{% if forloop.first %} is-on{% endif %}">{{ m.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: m.alt | default: product.title, sizes: '(min-width: 990px) 40vw, 100vw' }}</figure>
+        {%- else -%}
+          <figure class="sp-stage__slide is-on">{{ 'apparel-1' | placeholder_svg_tag }}</figure>
+        {%- endfor -%}
+        {%- if product.media.size > 1 -%}
+          <button type="button" class="sp-stage__nav sp-stage__nav--prev" data-sp-prev aria-label="Previous photo">‹</button>
+          <button type="button" class="sp-stage__nav sp-stage__nav--next" data-sp-next aria-label="Next photo">›</button>
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="sp-dots" role="tablist" aria-label="Photos">
+          {%- for m in product.media limit: 8 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="Photo {{ forloop.index }}"></button>{%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Right: the choices {%- endcomment -%}
+    <div class="sp-pdp__buy">
+      {%- form 'product', product, class: 'sp-form', data-sp-form: '' -%}
+        <input type="hidden" name="id" value="{{ v.id }}" data-sp-id>
+        {%- for opt in product.options_with_values -%}
+          <fieldset class="sp-opt" data-sp-opt="{{ forloop.index0 }}">
+            <legend>{{ opt.name }}{% if forloop.index0 == size_index and section.settings.size_link != blank %} <a href="#sp-size">{{ section.settings.size_link }}</a>{% endif %}</legend>
+            <div class="sp-opt__vals">
+              {%- for val in opt.values -%}
+                <label class="sp-pill"><input type="radio" name="sp-opt-{{ forloop.parentloop.index0 }}" value="{{ val | escape }}"{% if v.options[forloop.parentloop.index0] == val %} checked{% endif %}><span>{{ val }}</span></label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+
+        {%- if section.settings.show_fit -%}
+          <div class="sp-fit" role="img" aria-label="Fit: {{ section.settings.fit_label }}">
+            <p class="sp-fit__t">Fit</p>
+            <div class="sp-fit__bar"><span style="left: {{ section.settings.fit_pos }}%"></span></div>
+            <div class="sp-fit__l"><span>Snug</span><span>True to size</span><span>Oversized</span></div>
+          </div>
+        {%- endif -%}
+
+        <button type="submit" class="sp-btn sp-btn--ghost" data-sp-add{% unless v.available %} disabled{% endunless %}>{% if v.available %}Add to bag{% else %}Sold out{% endif %}</button>
+        <button type="submit" name="return_to" value="/checkout" class="sp-btn" data-sp-buy{% unless v.available %} disabled{% endunless %}>Buy it now</button>
+      {%- endform -%}
+
+      <div class="sp-info">
+        {%- for i in (1..3) -%}
+          {%- assign it = 'info' | append: i | append: '_title' -%}{%- assign ix = 'info' | append: i | append: '_text' -%}
+          {%- if section.settings[it] != blank -%}
+            <div class="sp-info__row"><b>{{ section.settings[it] }}</b>{%- if section.settings[ix] != blank -%}<span>{{ section.settings[ix] }}</span>{%- endif -%}</div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.bundle_on and product.variants.size > 0 -%}
+        {%- assign off_cents = section.settings.bundle_off | times: 100 | round -%}
+        <div class="sp-bundle" data-sp-bundle data-off="{{ off_cents }}">
+          <div class="sp-bundle__head"><b>{{ section.settings.bundle_title }}</b><span class="sp-tag">{{ section.settings.bundle_tag }}</span></div>
+          {%- for row in (1..2) -%}
+            <div class="sp-bundle__row">
+              {%- if product.featured_media != blank -%}{{ product.featured_media.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+              <div>
+                <p>{{ product.title }}</p>
+                <select aria-label="Tee {{ row }}" data-sp-bundle-pick>
+                  {%- for vv in product.variants -%}<option value="{{ vv.id }}" data-price="{{ vv.price }}"{% unless vv.available %} disabled{% endunless %}{% if vv.id == v.id %} selected{% endif %}>{{ vv.title }}</option>{%- endfor -%}
+                </select>
+              </div>
+            </div>
+            {%- if row == 1 -%}<p class="sp-bundle__plus" aria-hidden="true">+</p>{%- endif -%}
+          {%- endfor -%}
+          {%- assign both = v.price | times: 2 -%}
+          <div class="sp-bundle__sum"><span>Both for</span><span>{%- if off_cents > 0 -%}<s data-sp-bundle-full>{{ both | money }}</s>{%- endif -%} <b data-sp-bundle-price>{{ both | minus: off_cents | money }}</b></span></div>
+          <button type="button" class="sp-btn sp-btn--ghost" data-sp-bundle-add>Add both to bag</button>
+          {%- if section.settings.bundle_note != blank -%}<p class="sp-note">{{ section.settings.bundle_note }}</p>{%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.size_table != blank -%}
+    <div class="sp-wrap sp-size" id="sp-size">
+      <h2 class="sp-h2">{{ section.settings.size_title }}</h2>
+      <div class="sp-rte sp-size__t">{{ section.settings.size_table }}</div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Tee product",
+  "settings": [
+    { "type": "text", "id": "badge", "label": "Badge above the title", "default": "Printed to order" },
+    { "type": "text", "id": "size_link", "label": "Size guide link text", "default": "Size guide" },
+    { "type": "checkbox", "id": "show_fit", "label": "Show fit meter", "default": true },
+    { "type": "range", "id": "fit_pos", "label": "Fit position (0 snug – 100 oversized)", "min": 0, "max": 100, "step": 5, "default": 55 },
+    { "type": "text", "id": "fit_label", "label": "Fit in words (screen readers)", "default": "relaxed, a little roomy" },
+    { "type": "header", "content": "Accordions" },
+    { "type": "text", "id": "acc1_title", "label": "1", "default": "Size & fit" },
+    { "type": "richtext", "id": "acc1_text", "label": "1 text", "default": "<p>Relaxed unisex fit. Between sizes or want it baggy? Size up. Model is 180 cm and wears M.</p>" },
+    { "type": "text", "id": "acc2_title", "label": "2", "default": "Fabric & care" },
+    { "type": "richtext", "id": "acc2_text", "label": "2 text", "default": "<p>Soft ringspun cotton. Wash cold inside out, tumble dry low, don't iron the print. The joke stays sharp for years.</p>" },
+    { "type": "text", "id": "acc3_title", "label": "3", "default": "Shipping & returns" },
+    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Printed to order in 2–5 business days, delivered in 5–12 business days with tracking. Not funny enough? 30-day returns.</p>" },
+    { "type": "header", "content": "Info box" },
+    { "type": "text", "id": "info1_title", "label": "Line 1", "default": "$0 shipping, on us" },
+    { "type": "text", "id": "info1_text", "label": "Line 1 detail", "default": "Tracked, to your door. You get the tracking link by email." },
+    { "type": "text", "id": "info2_title", "label": "Line 2", "default": "Printed to order" },
+    { "type": "text", "id": "info2_text", "label": "Line 2 detail", "default": "Made just for you, ships in 2–5 business days." },
+    { "type": "text", "id": "info3_title", "label": "Line 3", "default": "30-day returns" },
+    { "type": "text", "id": "info3_text", "label": "Line 3 detail" },
+    { "type": "header", "content": "Buddy deal (two tees)" },
+    { "type": "checkbox", "id": "bundle_on", "label": "Show", "default": true },
+    { "type": "text", "id": "bundle_title", "label": "Title", "default": "Buddy deal: one for you, one for them" },
+    { "type": "text", "id": "bundle_tag", "label": "Tag", "default": "Gift idea" },
+    { "type": "text", "id": "bundle_off", "label": "$ less for two (e.g. 9.99)", "default": "9.99", "info": "Create a matching automatic discount (Amount off products, fixed amount, minimum quantity 2)." },
+    { "type": "text", "id": "bundle_note", "label": "Note", "default": "Applied automatically at checkout." },
+    { "type": "header", "content": "Size guide" },
+    { "type": "text", "id": "size_title", "label": "Title", "default": "Size guide" },
+    { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<p><strong>Chest width (cm):</strong> S 50 · M 53 · L 56 · XL 59 · XXL 62</p><p><strong>Length (cm):</strong> S 70 · M 72 · L 74 · XL 76 · XXL 78</p>" }
+  ]
+}
+{% endschema %}

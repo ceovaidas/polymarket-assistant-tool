@@ -1,0 +1,40 @@
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sp.js' | asset_url }}" defer></script>
+{%- comment -%} The countdown only renders when a real end date is set, and hides itself once it has passed. {%- endcomment -%}
+{%- if section.settings.countdown_end != blank -%}
+  <div class="sp-count" data-sp-count="{{ section.settings.countdown_end | escape }}" hidden>
+    <span class="sp-count__l">{{ section.settings.countdown_label }}</span>
+    <span class="sp-count__t" aria-live="off"><b data-d>00</b><small>days</small><i>:</i><b data-h>00</b><small>hrs</small><i>:</i><b data-m>00</b><small>min</small><i>:</i><b data-s>00</b><small>sec</small></span>
+  </div>
+{%- endif -%}
+{%- if section.settings.bar != blank -%}<p class="sp-bar">{{ section.settings.bar }}</p>{%- endif -%}
+<header class="sp-head">
+  <div class="sp-wrap sp-head__in">
+    <nav class="sp-head__nav" aria-label="Main">
+      <a href="{{ routes.root_url }}">Home</a>
+      <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+      {%- if section.settings.extra_label != blank -%}<a href="{{ section.settings.extra_link | default: '#' }}">{{ section.settings.extra_label }}</a>{%- endif -%}
+    </nav>
+    <a class="sp-logo" href="{{ routes.root_url }}">
+      {%- if section.settings.logo != blank -%}{{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, width: section.settings.logo_width, height: null }}{%- else -%}<span class="sp-logo__mark" aria-hidden="true">☺</span>{{ shop.name }}{%- endif -%}
+    </a>
+    <div class="sp-head__end">
+      <a class="sp-head__acc" href="{{ routes.account_url }}">Account</a>
+      <a class="sp-head__cart" href="{{ routes.cart_url }}">Bag ({{ cart.item_count }})</a>
+    </div>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "Tee header",
+  "settings": [
+    { "type": "text", "id": "countdown_end", "label": "Countdown end (YYYY-MM-DDTHH:MM, e.g. 2026-11-30T23:59)", "info": "Leave empty to hide. Only use a real deadline: the offer must actually end then." },
+    { "type": "text", "id": "countdown_label", "label": "Countdown label", "default": "Launch prices end in" },
+    { "type": "text", "id": "bar", "label": "Announcement bar", "default": "$0 shipping, on us · Printed to order · 30-day returns" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 10, "unit": "px", "default": 150 },
+    { "type": "text", "id": "extra_label", "label": "Extra menu item", "default": "Gift ideas" },
+    { "type": "url", "id": "extra_link", "label": "Extra menu link" }
+  ]
+}
+{% endschema %}
