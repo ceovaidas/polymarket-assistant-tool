@@ -1,0 +1,114 @@
+{%- comment -%}
+  Cart page: progress to $0 shipping, the bag, one-click add-ons under a price limit, and the real
+  delivery window + returns right next to the checkout button.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = section.settings.free_ship_from | times: 100
+  assign left = threshold | minus: cart.total_price
+  if threshold > 0
+    assign pct = cart.total_price | times: 100 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  endif
+-%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-cart">
+  <div class="sp-wrap sp-cart__in">
+    <h1 class="sp-h1">Your bag</h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="sp-cart__empty">
+        <p class="sp-lead">Your bag is emptier than your group chat on a Monday.</p>
+        <a class="sp-btn" href="{{ routes.all_products_collection_url }}">Find a meme</a>
+      </div>
+    {%- else -%}
+      {%- if threshold > 0 -%}
+        <div class="sp-ship" role="status">
+          {%- if left > 0 -%}
+            <p>You're <b>{{ left | money }}</b> away from <b>$0 shipping, on us</b></p>
+          {%- else -%}
+            <p><b>$0 shipping unlocked.</b> It's on us.</p>
+          {%- endif -%}
+          <div class="sp-ship__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Progress to $0 shipping"><span style="width: {{ pct }}%"></span></div>
+        </div>
+      {%- endif -%}
+
+      <div class="sp-cart__grid">
+        <form action="{{ routes.cart_url }}" method="post" class="sp-cart__items" id="sp-cart-form">
+          {%- for item in cart.items -%}
+            <div class="sp-line">
+              <a class="sp-line__img" href="{{ item.url }}">{%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: alt: item.product.title, loading: 'lazy' }}{%- endif -%}</a>
+              <div class="sp-line__txt">
+                <a href="{{ item.url }}"><b>{{ item.product.title }}</b></a>
+                {%- unless item.product.has_only_default_variant -%}<span>{{ item.variant.title }}</span>{%- endunless -%}
+                {%- for d in item.line_level_discount_allocations -%}<span class="sp-line__disc">{{ d.discount_application.title }} (−{{ d.amount | money }})</span>{%- endfor -%}
+                <div class="sp-qty">
+                  <label class="sp-sr" for="sp-q-{{ forloop.index }}">Quantity</label>
+                  <button type="submit" name="updates[]" value="{{ item.quantity | minus: 1 }}" formaction="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" aria-label="One less">−</button>
+                  <input id="sp-q-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                  <button type="submit" formaction="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" aria-label="One more">+</button>
+                </div>
+              </div>
+              <div class="sp-line__p">
+                <b>{{ item.final_line_price | money }}</b>
+                {%- if item.original_line_price > item.final_line_price -%}<s>{{ item.original_line_price | money }}</s>{%- endif -%}
+                <a class="sp-line__rm" href="{{ item.url_to_remove }}">Remove</a>
+              </div>
+            </div>
+          {%- endfor -%}
+          <noscript><button type="submit" class="sp-btn sp-btn--ghost">Update bag</button></noscript>
+        </form>
+
+        <aside class="sp-cart__sum">
+          {%- if section.settings.addon_collection != blank -%}
+            {%- liquid
+              assign in_cart = cart.items | map: 'product_id'
+              assign max_cents = section.settings.addon_max | times: 100
+              assign shown = 0
+            -%}
+            {%- capture addons -%}
+              {%- for p in section.settings.addon_collection.products -%}
+                {%- if shown < 3 and p.available and p.price <= max_cents -%}
+                  {%- unless in_cart contains p.id -%}
+                    {%- assign shown = shown | plus: 1 -%}
+                    <form method="post" action="{{ routes.cart_add_url }}" class="sp-addon">
+                      <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}"><input type="hidden" name="quantity" value="1"><input type="hidden" name="return_to" value="{{ routes.cart_url }}">
+                      {%- if p.featured_media -%}{{ p.featured_media.preview_image | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}{%- endif -%}
+                      <span><b>{{ p.title }}</b>{{ p.price | money }}</span>
+                      <button type="submit" class="sp-addon__btn" aria-label="Add {{ p.title | escape }}">+ Add</button>
+                    </form>
+                  {%- endunless -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if shown > 0 -%}<div class="sp-addons"><p class="sp-addons__t">{{ section.settings.addon_title }}</p>{{ addons }}</div>{%- endif -%}
+          {%- endif -%}
+
+          {%- for d in cart.cart_level_discount_applications -%}<p class="sp-sum__row"><span>{{ d.title }}</span><span>−{{ d.total_allocated_amount | money }}</span></p>{%- endfor -%}
+          <p class="sp-sum__row sp-sum__total"><span>Total</span><b>{{ cart.total_price | money }}</b></p>
+          <p class="sp-note">Taxes and discount codes are applied at checkout.</p>
+          <form action="{{ routes.cart_url }}" method="post"><button type="submit" name="checkout" class="sp-btn sp-btn--wide">Checkout securely</button></form>
+          <ul class="sp-assure">
+            <li data-sp-eta data-min="{{ section.settings.days_min }}" data-max="{{ section.settings.days_max }}">🚚 Arrives in {{ section.settings.days_min }}–{{ section.settings.days_max }} business days</li>
+            <li>↩️ 30-day returns, no drama</li>
+            <li>🔒 Secure checkout</li>
+          </ul>
+        </aside>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Tee cart",
+  "settings": [
+    { "type": "number", "id": "free_ship_from", "label": "$0 shipping from ($, 0 hides the bar)", "default": 50, "info": "Must match your Shopify shipping rate." },
+    { "type": "collection", "id": "addon_collection", "label": "Add-ons collection (stickers, socks, …)" },
+    { "type": "number", "id": "addon_max", "label": "Add-on max price ($)", "default": 10 },
+    { "type": "text", "id": "addon_title", "label": "Add-ons title", "default": "Toss one in" },
+    { "type": "range", "id": "days_min", "label": "Delivery: fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
+    { "type": "range", "id": "days_max", "label": "Delivery: slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17 }
+  ]
+}
+{% endschema %}

@@ -1,4 +1,4 @@
-// Renders the Softpun sections with sample tees into preview/index.html and preview/product.html.
+// Renders the Softpun sections with sample tees into preview/index.html, product.html and cart.html.
 // Usage: cd preview && npm install liquidjs && node build.mjs
 import { Liquid } from 'liquidjs';
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
@@ -71,7 +71,7 @@ function section(file, settings = {}, tplBlocks = {}, order = []) {
 }
 const ctx = {
   shop: { name: 'Softpun', email: 'hello@softpun.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: [] },
-  routes: { root_url: 'index.html', all_products_collection_url: 'index.html#sp-grid', cart_url: '#', account_url: '#' },
+  routes: { root_url: 'index.html', all_products_collection_url: 'index.html#sp-grid', cart_url: 'cart.html', account_url: '#', cart_change_url: '#', cart_add_url: '#' },
   cart: { item_count: 0 }, collections: { all: { products } },
 };
 const end = new Date(Date.now() + 2 * 864e5 + 5 * 36e5).toISOString().slice(0, 16);
@@ -90,6 +90,12 @@ writeFileSync(join(here, 'img', 'hero.svg'), `<svg xmlns="http://www.w3.org/2000
 const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><style>body{margin:0;background:#0f0b16}</style></head><body>${body}</body></html>`;
 mkdirSync(join(here, 'assets'), { recursive: true });
 for (const f of ['sp.css', 'sp.js']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
+// Cart mock: two tees in the bag, stickers as add-ons under $10
+const sticker = (t, e, id) => { writeFileSync(join(here, 'img', `s${id}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="18" fill="#221a2e"/><text x="50" y="66" text-anchor="middle" font-size="48">${e}</text></svg>`); const m = { preview_image: { src: `img/s${id}.svg` } }; return { id: 900 + id, title: t, price: 499, available: true, featured_media: m, selected_or_first_available_variant: { id: 990 + id } }; };
+const lines = [[products[0], 1, 2], [products[3], 1, 1]].map(([p, q, k]) => ({ product: { ...p, has_only_default_variant: false }, product_id: p.variants[0].id, variant: p.variants[k], quantity: q, url: 'product.html', image: p.media[0].preview_image, final_line_price: 2999 * q, original_line_price: 2999 * q, line_level_discount_allocations: [], url_to_remove: '#' }));
+const cart = { item_count: 2, items: lines, total_price: 5998, cart_level_discount_applications: [] };
+const cartSec = section('sp-cart.liquid', { addon_collection: { products: [sticker('Yapper sticker pack', '🗣️', 1), sticker('Silly Goose sticker', '🪿', 2), sticker('Nap O\'Clock sticker', '😴', 3)] } });
+writeFileSync(join(here, 'cart.html'), page('Your bag · Softpun', [await render(head, { cart }), await render(cartSec, { cart }), await render(foot)].join('\n')));
 writeFileSync(join(here, 'index.html'), page('Softpun', [await render(head), await render(home), await render(foot), await render(pop)].join('\n')));
 writeFileSync(join(here, 'product.html'), page('Professional Yapper Tee · Softpun', [await render(head), await render(pdp, { product: products[0] }), await render(foot)].join('\n')));
-console.log('wrote preview/index.html and preview/product.html');
+console.log('wrote preview/index.html, product.html and cart.html');

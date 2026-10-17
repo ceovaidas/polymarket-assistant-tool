@@ -1,4 +1,4 @@
-/* Softpun: countdown, product options + gallery, buddy deal, pick-a-box pop-up. */
+/* Softpun: countdown, delivery dates, product options + gallery, buddy deal, pick-a-box pop-up. */
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -26,6 +26,19 @@
     };
     if (tick()) setInterval(tick, 1000);
   }
+
+  /* Real delivery window as dates: today + N business days (weekends skipped) */
+  var addBiz = function (n) {
+    var d = new Date();
+    while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) n--; }
+    return d;
+  };
+  var fmt = function (d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+  $$('[data-sp-eta]').forEach(function (el) {
+    var lo = +el.dataset.min, hi = +el.dataset.max;
+    if (!(lo > 0) || !(hi >= lo)) return;
+    el.textContent = '🚚 Arrives ' + fmt(addBiz(lo)) + ' – ' + fmt(addBiz(hi)) + ', tracked';
+  });
 
   /* Product page */
   var pdp = $('[data-sp-product]');

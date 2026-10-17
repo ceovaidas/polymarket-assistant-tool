@@ -13,7 +13,7 @@
     <nav class="sp-head__nav" aria-label="Main">
       <a href="{{ routes.root_url }}">Home</a>
       <a href="{{ routes.all_products_collection_url }}">Shop all</a>
-      {%- if section.settings.extra_label != blank -%}<a href="{{ section.settings.extra_link | default: '#' }}">{{ section.settings.extra_label }}</a>{%- endif -%}
+      {%- if section.settings.extra_label != blank -%}<a href="{{ section.settings.extra_link | default: routes.all_products_collection_url }}">{{ section.settings.extra_label }}</a>{%- endif -%}
     </nav>
     <a class="sp-logo" href="{{ routes.root_url }}">
       {%- if section.settings.logo != blank -%}{{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, width: section.settings.logo_width, height: null }}{%- else -%}<span class="sp-logo__mark" aria-hidden="true">☺</span>{{ shop.name }}{%- endif -%}

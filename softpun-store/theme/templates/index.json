@@ -69,9 +69,45 @@
             "q": "What if it's not funny enough?",
             "a": "<p>Send it back within 30 days for a refund. We'll try not to take it personally.</p>"
           }
+        },
+        "w1": {
+          "type": "persona",
+          "settings": {
+            "emoji": "🗣️",
+            "title": "The yapper",
+            "text": "47 voice notes a day, zero regrets."
+          }
+        },
+        "w2": {
+          "type": "persona",
+          "settings": {
+            "emoji": "📱",
+            "title": "The chronically online one",
+            "text": "Speaks fluent meme, sleeps never."
+          }
+        },
+        "w3": {
+          "type": "persona",
+          "settings": {
+            "emoji": "😴",
+            "title": "The professional napper",
+            "text": "Treats naps like a sport."
+          }
+        },
+        "w4": {
+          "type": "persona",
+          "settings": {
+            "emoji": "🏋️",
+            "title": "The gym talker",
+            "text": "Mentally at the gym. Physically on the couch."
+          }
         }
       },
       "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4",
         "p1",
         "p2",
         "p3",
