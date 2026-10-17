@@ -291,7 +291,7 @@ body { background: var(--sp-bg); }
 .sp-assure { display: grid; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; color: var(--sp-ink-2); font-size: 14px; }
 
 /* One-page product: centred title block like a drop page, more tees below */
-.sp-pdp__story > .sp-h1, .sp-pdp__story > .sp-price, .sp-pdp__story > .sp-chip, .sp-pdp__story > .sp-stars { justify-self: center; text-align: center; }
+.sp-pdp__story > .sp-h1, .sp-pdp__story > .sp-pricebox, .sp-pdp__story > .sp-chip, .sp-pdp__story > .sp-stars { justify-self: center; text-align: center; }
 .sp-recs { padding-top: 72px; }
 ::selection { background: var(--sp-terra); color: #fff; }
 /* Phones: photo, then title + price, then sizes and buttons, then the story */
@@ -299,7 +299,7 @@ body { background: var(--sp-bg); }
   .sp-pdp__grid { gap: 18px; }
   .sp-pdp__story { display: contents; }
   .sp-pdp__story > * { order: 3; }
-  .sp-pdp__story > .sp-chip, .sp-pdp__story > .sp-h1, .sp-pdp__story > .sp-stars, .sp-pdp__story > .sp-price { order: 1; }
+  .sp-pdp__story > .sp-chip, .sp-pdp__story > .sp-h1, .sp-pdp__story > .sp-stars, .sp-pdp__story > .sp-pricebox { order: 1; }
   .sp-pdp__buy { order: 2; }
 }
 .sp-empty { min-height: 50vh; padding-block: 120px; text-align: center; }
@@ -316,3 +316,61 @@ body { background: var(--sp-bg); }
 /* Supplier descriptions: keep headings and images in scale */
 .sp-desc h1, .sp-desc h2, .sp-desc h3 { font: 600 16px/1.3 var(--sp-fb); text-transform: none; color: var(--sp-ink); margin: 14px 0 6px; }
 .sp-desc img { max-width: 100%; height: auto; }
+
+/* Price box: the real price, big, with the real deals under it */
+.sp-pricebox { display: grid; gap: 8px; justify-items: center; text-align: center; width: 100%; padding: 14px 0 6px; border-block: 1px solid var(--sp-line); }
+.sp-pdp__story > .sp-pricebox { justify-self: stretch; }
+.sp-pricebox .sp-price b { font: 600 clamp(38px, 3.6vw, 52px)/1 var(--sp-fd); letter-spacing: -.01em; }
+.sp-low { font-size: 14px; color: var(--sp-ink-2); }
+.sp-low b { color: var(--sp-terra); font-weight: 700; }
+.sp-mystery { border: 1px dashed var(--sp-terra); background: rgba(227, 36, 43, .08); color: var(--sp-ink); padding: 8px 14px; font: 600 13px var(--sp-fb); cursor: pointer; }
+.sp-mystery:hover { background: var(--sp-terra); color: #fff; }
+.sp-mystery[hidden] { display: none; }
+
+/* 1 / 2 / 3 tee picker */
+.sp-tiers { border: 0; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.sp-tiers legend { font-weight: 600; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+.sp-tier { position: relative; display: block; cursor: pointer; }
+.sp-tier input { position: absolute; opacity: 0; pointer-events: none; }
+.sp-tier__box { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; padding: 13px 16px; border: 1px solid var(--sp-line); background: var(--sp-card); transition: border-color .15s, background .15s; }
+.sp-tier:hover .sp-tier__box { border-color: var(--sp-ink-3); }
+.sp-tier input:checked + .sp-tier__box { border: 2px solid var(--sp-terra); padding: 12px 15px; background: #140607; }
+.sp-tier input:focus-visible + .sp-tier__box { outline: 3px solid var(--sp-terra); outline-offset: 2px; }
+.sp-tier__q { font: 600 19px/1 var(--sp-fd); text-transform: uppercase; }
+.sp-tier__p { grid-row: span 2; display: grid; justify-items: end; gap: 2px; }
+.sp-tier__p b { font: 600 22px/1 var(--sp-fd); }
+.sp-tier__p s { color: var(--sp-ink-3); font-size: 13px; }
+.sp-tier__n { font-size: 12.5px; color: var(--sp-ink-2); }
+.sp-tier__badge { position: absolute; top: -10px; right: 12px; padding: 3px 9px; background: var(--sp-terra); color: #fff; font: 700 10.5px/1.4 var(--sp-fb); font-style: normal; letter-spacing: .12em; text-transform: uppercase; }
+.sp-tiers__note { font-size: 12.5px; color: var(--sp-ink-3); }
+.sp-terms:empty { display: none; }
+.sp-terms { font-size: 13px; color: var(--sp-ink-2); }
+
+/* Cart: next deal, what you keep, more tees */
+.sp-nudge { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 16px 18px; border: 1px dashed var(--sp-terra); background: rgba(227, 36, 43, .07); }
+.sp-nudge p { margin: 0; }
+.sp-nudge b { color: var(--sp-ink); }
+.sp-nudge .sp-btn { min-height: 44px; font-size: 15px; }
+.sp-sum__keep { color: var(--sp-terra); font-weight: 600; }
+.sp-sum__keep b { color: var(--sp-terra); }
+.sp-sum__total s { color: var(--sp-ink-3); font-size: 15px; margin-right: 6px; }
+.sp-pay--cart { flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.sp-recs--cart { padding-top: 48px; }
+.sp-cart__empty + .sp-grid { margin-top: 8px; }
+.sp-card__p i { display: block; font-style: normal; font-size: 12.5px; font-weight: 500; color: var(--sp-ink-3); }
+
+/* Collection + search */
+.sp-coll { padding-block: 40px 80px; min-height: 60vh; }
+.sp-coll__head { display: grid; gap: 12px; justify-items: center; text-align: center; margin-bottom: 26px; }
+.sp-coll__deal { padding: 8px 14px; border: 1px solid var(--sp-terra); color: var(--sp-ink); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.sp-coll__bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 16px; color: var(--sp-ink-2); font-size: 14px; }
+.sp-sort select { min-height: 40px; padding: 6px 12px; border: 1px solid var(--sp-line); background: #000; color: var(--sp-ink); font: 500 14px var(--sp-fb); }
+.sp-coll__empty { margin: 30px auto; text-align: center; }
+.sp-coll__empty a { color: var(--sp-ink); }
+.sp-pages { display: flex; justify-content: center; gap: 6px; margin-top: 36px; }
+.sp-pages a, .sp-pages span { display: grid; place-items: center; min-width: 42px; height: 42px; padding: 0 10px; border: 1px solid var(--sp-line); color: var(--sp-ink); text-decoration: none; }
+.sp-pages [aria-current] { border-color: var(--sp-terra); background: var(--sp-terra); }
+.sp-search__form { display: flex; gap: 8px; width: min(560px, 100%); }
+.sp-search__form input { flex: 1; min-width: 0; min-height: 54px; padding: 0 16px; border: 1px solid var(--sp-ink-2); background: #000; color: var(--sp-ink); font: 500 16px var(--sp-fb); }
+.sp-empty .sp-chip { margin-bottom: 16px; }
+.sp-empty .sp-btn { margin-top: 24px; }

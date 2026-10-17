@@ -10,12 +10,14 @@ we roasting?" chooser, grid, perks, FAQ) is still there to add from the theme ed
 home page.
 
     python3 build_theme.py /path/to/dawn          # -> dist/softpun-theme.zip
-    cd preview && npm install liquidjs && node build.mjs   # preview/index.html, p0–p7.html, cart.html
+    cd preview && npm install liquidjs && node build.mjs   # preview/index.html, p0–p7.html, collection.html, cart.html
 
 Before going live:
 0. Theme editor → Home page → "Tee product" → pick your bestseller.
-1. Discounts → create the pop-up code (default `SOFTPUN10`) and an automatic "Amount off products" discount
-   of $9.99 with minimum quantity 2 for the buddy deal (or change the amounts in the theme editor).
+1. Discounts (already created in the store): code `SOFTPUN10` (10%, once per customer) for the pop-up, and
+   automatic "Buddy deal" ($4.99 off at 2+ items, so 2 tees = $54.99) and "Squad deal" ($19.98 off at 3+,
+   so 3 tees = $69.99). The 2 and 3 tee prices in the product and cart settings must match them.
+   Shipping is $4.99 under $50 and $0 from $50, so both deals also get $0 shipping.
 2. Header → countdown: only set an end date for a real offer that actually ends then; empty hides it.
 3. Products: a Size option (sorted S → XXXL) and a Color option with real colour names; each colour variant
    needs its photo, the theme shows it as the swatch and switches the gallery to it. Supplier imports

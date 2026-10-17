@@ -1,0 +1,29 @@
+{%- comment -%} Search: one field, product results in the tee grid. {%- endcomment -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-coll sp-search">
+  <div class="sp-wrap">
+    <div class="sp-coll__head">
+      <h1 class="sp-h1">{% if search.performed %}Results for “{{ search.terms | escape }}”{% else %}Find your meme{% endif %}</h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="sp-search__form">
+        <label class="sp-sr" for="sp-q">Search</label>
+        <input id="sp-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="air fryer, wolf, gym…">
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="sp-btn">Search</button>
+      </form>
+    </div>
+    {%- if search.performed -%}
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count > 0 -%}
+          <p class="sp-coll__bar">{{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %}</p>
+          <div class="sp-grid">{%- for item in search.results -%}{%- if item.object_type == 'product' -%}{%- render 'sp-card', card: item -%}{%- endif -%}{%- endfor -%}</div>
+          {%- if paginate.next -%}<nav class="sp-pages" aria-label="Pages"><a href="{{ paginate.next.url }}">More results ›</a></nav>{%- endif -%}
+        {%- else -%}
+          <p class="sp-lead sp-coll__empty">Nothing yet. Even the group chat is quiet. Try another word, or <a href="{{ routes.all_products_collection_url }}">see every tee</a>.</p>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Tee search", "settings": [] }
+{% endschema %}

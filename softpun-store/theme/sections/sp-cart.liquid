@@ -5,6 +5,10 @@
 {%- liquid
   assign threshold = section.settings.free_ship_from | times: 100
   assign left = threshold | minus: cart.total_price
+  assign t2 = section.settings.tier2_price | times: 100 | round
+  assign t3 = section.settings.tier3_price | times: 100 | round
+  assign unit = cart.items.first.original_price
+  assign in_cart = cart.items | map: 'product_id'
   if threshold > 0
     assign pct = cart.total_price | times: 100 | divided_by: threshold
     if pct > 100
@@ -22,6 +26,9 @@
         <p class="sp-lead">Your bag is emptier than your group chat on a Monday.</p>
         <a class="sp-btn" href="{{ routes.all_products_collection_url }}">Find a meme</a>
       </div>
+      {%- if section.settings.more_count > 0 -%}
+        <div class="sp-grid">{%- for card in collections.all.products limit: section.settings.more_count -%}{%- render 'sp-card', card: card -%}{%- endfor -%}</div>
+      {%- endif -%}
     {%- else -%}
       {%- if threshold > 0 -%}
         <div class="sp-ship" role="status">
@@ -32,6 +39,13 @@
           {%- endif -%}
           <div class="sp-ship__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Progress to $0 shipping"><span style="width: {{ pct }}%"></span></div>
         </div>
+      {%- endif -%}
+
+      {%- comment -%} Next step of the real 2 / 3 tee deal (automatic discounts in Shopify) {%- endcomment -%}
+      {%- if cart.item_count == 1 and t2 > unit -%}
+        <div class="sp-nudge"><p>Add one more tee and pay <b>{{ t2 | money }}</b> for both. The 2nd one is only <b>{{ t2 | minus: unit | money }}</b>.</p><a class="sp-btn sp-btn--ghost" href="{{ routes.all_products_collection_url }}">Pick another tee</a></div>
+      {%- elsif cart.item_count == 2 and t3 > t2 -%}
+        <div class="sp-nudge"><p>Make it 3 for <b>{{ t3 | money }}</b>. The 3rd tee is only <b>{{ t3 | minus: t2 | money }}</b>.</p><a class="sp-btn sp-btn--ghost" href="{{ routes.all_products_collection_url }}">Pick a 3rd tee</a></div>
       {%- endif -%}
 
       <div class="sp-cart__grid">
@@ -63,7 +77,6 @@
         <aside class="sp-cart__sum">
           {%- if section.settings.addon_collection != blank -%}
             {%- liquid
-              assign in_cart = cart.items | map: 'product_id'
               assign max_cents = section.settings.addon_max | times: 100
               assign shown = 0
             -%}
@@ -86,7 +99,8 @@
           {%- endif -%}
 
           {%- for d in cart.cart_level_discount_applications -%}<p class="sp-sum__row"><span>{{ d.title }}</span><span>−{{ d.total_allocated_amount | money }}</span></p>{%- endfor -%}
-          <p class="sp-sum__row sp-sum__total"><span>Total</span><b>{{ cart.total_price | money }}</b></p>
+          {%- if cart.total_discount > 0 -%}<p class="sp-sum__row sp-sum__keep"><span>You're keeping</span><b>{{ cart.total_discount | money }}</b></p>{%- endif -%}
+          <p class="sp-sum__row sp-sum__total"><span>Total</span><span>{%- if cart.total_discount > 0 -%}<s>{{ cart.total_price | plus: cart.total_discount | money }}</s> {% endif -%}<b>{{ cart.total_price | money }}</b></span></p>
           <p class="sp-note">Taxes and discount codes are applied at checkout.</p>
           <form action="{{ routes.cart_url }}" method="post"><button type="submit" name="checkout" class="sp-btn sp-btn--wide">Checkout securely</button></form>
           <ul class="sp-assure">
@@ -94,8 +108,23 @@
             <li>↩️ 30-day returns, no drama</li>
             <li>🔒 Secure checkout</li>
           </ul>
+          {%- if shop.enabled_payment_types.size > 0 -%}<ul class="sp-pay sp-pay--cart">{%- for t in shop.enabled_payment_types -%}<li>{{ t | payment_type_svg_tag }}</li>{%- endfor -%}</ul>{%- endif -%}
         </aside>
       </div>
+
+      {%- if section.settings.more_count > 0 -%}
+        <div class="sp-recs sp-recs--cart">
+          <div class="sp-sec-head"><h2 class="sp-h2">{{ section.settings.more_title }}</h2><a href="{{ routes.all_products_collection_url }}">See all</a></div>
+          <div class="sp-grid">
+            {%- assign shown_more = 0 -%}
+            {%- for card in collections.all.products -%}
+              {%- unless in_cart contains card.id or shown_more >= section.settings.more_count -%}
+                {%- assign shown_more = shown_more | plus: 1 -%}{%- render 'sp-card', card: card -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
     {%- endif -%}
   </div>
 </section>
@@ -104,6 +133,10 @@
   "name": "Tee cart",
   "settings": [
     { "type": "number", "id": "free_ship_from", "label": "$0 shipping from ($, 0 hides the bar)", "default": 50, "info": "Must match your Shopify shipping rate." },
+    { "type": "text", "id": "tier2_price", "label": "2 tees deal price ($, empty hides the nudge)", "default": "54.99", "info": "Same as the product page and your automatic discounts." },
+    { "type": "text", "id": "tier3_price", "label": "3 tees deal price ($)", "default": "69.99" },
+    { "type": "text", "id": "more_title", "label": "More tees title", "default": "Your bag needs a friend" },
+    { "type": "range", "id": "more_count", "label": "More tees shown (0 hides)", "min": 0, "max": 8, "step": 4, "default": 4 },
     { "type": "collection", "id": "addon_collection", "label": "Add-ons collection (stickers, socks, …)" },
     { "type": "number", "id": "addon_max", "label": "Add-on max price ($)", "default": 10 },
     { "type": "text", "id": "addon_title", "label": "Add-ons title", "default": "Toss one in" },

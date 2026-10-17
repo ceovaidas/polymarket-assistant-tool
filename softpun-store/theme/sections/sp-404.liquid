@@ -1,0 +1,12 @@
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-empty">
+  <div class="sp-wrap">
+    <p class="sp-chip">404</p>
+    <h1 class="sp-h1">This page left the group chat</h1>
+    <p class="sp-lead">The link is broken or the tee is gone. The memes are still here.</p>
+    <a class="sp-btn" href="{{ routes.all_products_collection_url }}">See every tee</a>
+  </div>
+</section>
+{% schema %}
+{ "name": "Tee 404", "settings": [] }
+{% endschema %}

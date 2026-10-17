@@ -18,6 +18,11 @@ engine.registerFilter('image_tag', (src, ...a) => { const o = Object.fromEntries
 engine.registerFilter('placeholder_svg_tag', () => '<svg viewBox="0 0 10 10"><rect width="10" height="10" fill="#eee"/></svg>');
 engine.registerFilter('payment_type_svg_tag', () => '');
 engine.registerFilter('json', (v) => JSON.stringify(v));
+engine.registerFilter('payment_terms', () => '<span>Pay in 4 interest-free installments of $7.49 with Shop Pay (preview)</span>');
+engine.registerTag('paginate', {
+  parse(token, remain) { this.tpls = []; const s = this.liquid.parser.parseStream(remain).on('tag:endpaginate', () => s.stop()).on('template', (t) => this.tpls.push(t)).on('end', () => { throw new Error('paginate'); }); s.start(); },
+  * render(ctx, em) { ctx.push({ paginate: { pages: 1 } }); yield this.liquid.renderer.renderTemplates(this.tpls, ctx, em); ctx.pop(); },
+});
 engine.registerTag('form', {
   parse(token, remain) { this.tpls = []; const s = this.liquid.parser.parseStream(remain).on('tag:endform', () => s.stop()).on('template', (t) => this.tpls.push(t)).on('end', () => { throw new Error('form'); }); s.start(); },
   * render(ctx, em) { em.write('<form class="sp-form" onsubmit="event.preventDefault(); alert(\'Preview: in Shopify this adds the tee to the bag.\')">'); yield this.liquid.renderer.renderTemplates(this.tpls, ctx, em); em.write('</form>'); },
@@ -73,7 +78,7 @@ function section(file, settings = {}, tplBlocks = {}, order = []) {
 }
 const ctx = {
   shop: { name: 'Softpun', email: 'hello@softpun.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: [] },
-  routes: { root_url: 'index.html', all_products_collection_url: 'index.html', cart_url: 'cart.html', account_url: '#', cart_change_url: '#', cart_add_url: '#' },
+  routes: { root_url: 'index.html', all_products_collection_url: 'collection.html', search_url: '#', cart_url: 'cart.html', account_url: '#', cart_change_url: '#', cart_add_url: '#' },
   cart: { item_count: 0 }, collections: { all: { products } },
 };
 const end = new Date(Date.now() + 2 * 864e5 + 5 * 36e5).toISOString().slice(0, 16);
@@ -90,9 +95,12 @@ for (const f of ['sp.css', 'sp.js']) copyFileSync(join(theme, 'assets', f), join
 // Cart mock: two tees in the bag, stickers as add-ons under $10
 const sticker = (t, e, id) => { writeFileSync(join(here, 'img', `s${id}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="0" fill="#141414"/><text x="50" y="66" text-anchor="middle" font-size="48">${e}</text></svg>`); const m = { preview_image: { src: `img/s${id}.svg` } }; return { id: 900 + id, title: t, price: 499, available: true, featured_media: m, selected_or_first_available_variant: { id: 990 + id } }; };
 const lines = [[products[0], 1, 2], [products[3], 1, 1]].map(([p, q, k]) => ({ product: { ...p, has_only_default_variant: false }, product_id: p.variants[0].id, variant: p.variants[k], quantity: q, url: p.url, image: p.media[0].preview_image, final_line_price: 2999 * q, original_line_price: 2999 * q, line_level_discount_allocations: [], url_to_remove: '#' }));
-const cart = { item_count: 2, items: lines, total_price: 5998, cart_level_discount_applications: [] };
+lines[0].line_level_discount_allocations = [{ discount_application: { title: 'Buddy deal: 2 tees for $54.99' }, amount: 499 }];
+const cart = { item_count: 2, items: lines, total_price: 5499, items_subtotal_price: 5499, total_discount: 499, cart_level_discount_applications: [] };
 const cartSec = section('sp-cart.liquid', { addon_collection: { products: [sticker('Yapper sticker pack', '🗣️', 1), sticker('Silly Goose sticker', '🪿', 2), sticker('Nap O\'Clock sticker', '😴', 3)] } });
+const coll = section('sp-collection.liquid');
+writeFileSync(join(here, 'collection.html'), page('All the memes · Softpun', [await render(head), await render(coll, { collection: { title: 'All the memes', products, products_count: products.length, sort_options: [{ value: 'best-selling', name: 'Best selling' }, { value: 'price-ascending', name: 'Price, low to high' }], default_sort_by: 'best-selling' } }), await render(foot)].join('\n')));
 writeFileSync(join(here, 'cart.html'), page('Your bag · Softpun', [await render(head, { cart }), await render(cartSec, { cart }), await render(foot)].join('\n')));
 writeFileSync(join(here, 'index.html'), page('Softpun · Meme tees', [await render(head), await render(pdp, { template: { name: 'index' } }), await render(foot), await render(pop)].join('\n')));
 for (const [i, p] of products.entries()) writeFileSync(join(here, `p${i}.html`), page(`${p.title} Tee · Softpun`, [await render(head), await render(pdp, { template: { name: 'product' }, product: p }), await render(foot)].join('\n')));
-console.log('wrote preview/index.html, p0–p7.html and cart.html');
+console.log('wrote preview/index.html, p0–p7.html, collection.html and cart.html');

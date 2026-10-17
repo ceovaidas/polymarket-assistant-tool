@@ -1,4 +1,4 @@
-/* Softpun: countdown, delivery dates, product options + gallery, buddy deal, pick-a-box pop-up. */
+/* Softpun: countdown, delivery dates, product options + gallery, 1/2/3 tee deal, pick-a-box pop-up. */
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -40,6 +40,12 @@
     el.textContent = '🚚 Arrives ' + fmt(addBiz(lo)) + ' – ' + fmt(addBiz(hi)) + ', tracked';
   });
 
+  /* Collection sort */
+  var sort = $('[data-sp-sort]');
+  if (sort) sort.addEventListener('change', function () {
+    var u = new URL(location.href); u.searchParams.set('sort_by', sort.value); u.searchParams.delete('page'); location.href = u.toString();
+  });
+
   /* Product page */
   var pdp = $('[data-sp-product]');
   if (pdp) {
@@ -71,7 +77,7 @@
       }
       $$('[data-sp-opt]', pdp).forEach(function (f, oi) { var b = $('[data-sp-optval]', f); if (b) b.textContent = v.options[oi]; });
       add.disabled = buy.disabled = !v.available;
-      add.textContent = v.available ? 'Add to bag' : 'Sold out';
+      add.textContent = v.available ? addLabel() : 'Sold out';
       $('[data-sp-price]', pdp).textContent = money(v.price);
       var cmp = $('[data-sp-compare]', pdp);
       if (cmp) { cmp.hidden = !(v.compare_at_price > v.price); cmp.textContent = money(v.compare_at_price || 0); }
@@ -84,34 +90,29 @@
         });
       });
     };
+    /* 1 / 2 / 3 tee deal: same tee in the chosen quantity, label shows what you pay */
+    var tiers = $('[data-sp-tiers]', pdp), qty = $('[data-sp-qty]', pdp);
+    function addLabel() {
+      var t = tiers && $('input:checked', tiers);
+      if (!t || t.value === '1') return 'Add to bag';
+      return 'Add ' + t.value + ' to bag · ' + money(+t.dataset.price);
+    }
+    if (tiers) $$('input', tiers).forEach(function (r) {
+      r.addEventListener('change', function () {
+        if (qty) qty.value = r.value;
+        var add = $('[data-sp-add]', pdp);
+        if (!add.disabled) add.textContent = addLabel();
+      });
+    });
     $$('[data-sp-opt] input', pdp).forEach(function (i) { i.addEventListener('change', update); });
     if (variants.length) update();
 
-    /* Buddy deal: two tees, add both */
-    var bundle = $('[data-sp-bundle]', pdp);
-    if (bundle) {
-      var picks = $$('[data-sp-bundle-pick]', bundle), off = +bundle.dataset.off || 0;
-      var sum = function () {
-        var total = picks.reduce(function (a, s) { return a + (+s.selectedOptions[0].dataset.price || 0); }, 0);
-        var full = $('[data-sp-bundle-full]', bundle);
-        if (full) full.textContent = money(total);
-        $('[data-sp-bundle-price]', bundle).textContent = money(total - off);
-      };
-      picks.forEach(function (s) { s.addEventListener('change', sum); });
-      sum();
-      $('[data-sp-bundle-add]', bundle).addEventListener('click', function () {
-        var btn = this; btn.disabled = true; btn.textContent = 'Adding…';
-        var items = picks.map(function (s) { return { id: +s.value, quantity: 1 }; });
-        fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
-          .then(function (r) { if (!r.ok) throw new Error(); location.href = '/cart'; })
-          .catch(function () { btn.disabled = false; btn.textContent = 'Try again'; });
-      });
-    }
   }
 
   /* Pick-a-box pop-up */
   var pop = $('[data-sp-pop]');
-  if (pop && !store.get('sp-pop-done')) {
+  $$('[data-sp-pop-open]').forEach(function (b) { b.hidden = !pop; });
+  if (pop) {
     var steps = function (name) { $$('[data-step]', pop).forEach(function (s) { s.hidden = s.dataset.step !== name; }); };
     var lastFocus = null;
     var open = function () {
@@ -120,7 +121,8 @@
       var first = $('[data-sp-box]', pop); if (first) first.focus();
     };
     var close = function () { pop.hidden = true; store.set('sp-pop-done', '1'); if (lastFocus && lastFocus.focus) lastFocus.focus(); };
-    setTimeout(open, (+pop.dataset.delay || 8) * 1000);
+    if (!store.get('sp-pop-done')) setTimeout(open, (+pop.dataset.delay || 8) * 1000);
+    $$('[data-sp-pop-open]').forEach(function (b) { b.addEventListener('click', open); });
     $$('[data-sp-pop-close]', pop).forEach(function (b) { b.addEventListener('click', close); });
     pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(); });

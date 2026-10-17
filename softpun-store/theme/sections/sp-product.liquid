@@ -44,10 +44,22 @@
           <span aria-hidden="true">★★★★★</span><b>{{ rating.rating | round: 1 }}</b><span>({{ rating_count }} reviews)</span>
         </a>
       {%- endif -%}
-      <p class="sp-price">
-        <b data-sp-price>{{ v.price | money }}</b>
-        {%- if v.compare_at_price > v.price -%}<s data-sp-compare>{{ v.compare_at_price | money }}</s>{%- endif -%}
-      </p>
+      {%- liquid
+        assign t2 = section.settings.tier2_price | times: 100 | round
+        assign t3 = section.settings.tier3_price | times: 100 | round
+        assign tiers_on = false
+        if section.settings.tiers_on and t2 > 0 and t3 > 0
+          assign tiers_on = true
+        endif
+      -%}
+      <div class="sp-pricebox">
+        <p class="sp-price">
+          <b data-sp-price>{{ v.price | money }}</b>
+          {%- if v.compare_at_price > v.price -%}<s data-sp-compare>{{ v.compare_at_price | money }}</s>{%- endif -%}
+        </p>
+        {%- if tiers_on -%}<p class="sp-low">or <b>{{ t3 | divided_by: 3 | money }}</b> a tee when you grab 3</p>{%- endif -%}
+        {%- if section.settings.mystery_label != blank -%}<button type="button" class="sp-mystery" data-sp-pop-open hidden>🎁 {{ section.settings.mystery_label }}</button>{%- endif -%}
+      </div>
       <div class="sp-rte sp-desc">{{ p.description }}</div>
       <div class="sp-acc">
         {%- for i in (1..3) -%}
@@ -125,6 +137,44 @@
           </div>
         {%- endif -%}
 
+        <input type="hidden" name="quantity" value="1" data-sp-qty>
+        {%- if tiers_on -%}
+          {%- assign one = v.price -%}
+          <fieldset class="sp-tiers" data-sp-tiers data-unit="{{ one }}">
+            <legend>{{ section.settings.tiers_title }}</legend>
+            {%- for q in (1..3) -%}
+              {%- liquid
+                case q
+                  when 1
+                    assign tp = one
+                  when 2
+                    assign tp = t2
+                  else
+                    assign tp = t3
+                endcase
+                assign full = one | times: q
+                assign each = tp | divided_by: q
+                assign prev_tp = one
+                if q == 3
+                  assign prev_tp = t2
+                endif
+                assign extra = tp | minus: prev_tp
+              -%}
+              <label class="sp-tier{% if q == 3 %} sp-tier--best{% endif %}">
+                <input type="radio" name="sp-tier" value="{{ q }}" data-price="{{ tp }}"{% if q == 1 %} checked{% endif %}>
+                <span class="sp-tier__box">
+                  {%- if q == 3 and section.settings.tier3_badge != blank -%}<em class="sp-tier__badge">{{ section.settings.tier3_badge }}</em>{%- endif -%}
+                  <span class="sp-tier__q">{{ q }} {% if q == 1 %}tee{% else %}tees{% endif %}</span>
+                  <span class="sp-tier__p"><b>{{ tp | money }}</b>{%- if q > 1 -%}<s>{{ full | money }}</s>{%- endif -%}</span>
+                  <span class="sp-tier__n">{%- if q == 1 -%}Just this one{%- elsif q == 2 -%}2nd tee only {{ extra | money }}{%- else -%}3rd tee only {{ extra | money }}{%- endif -%}{%- if q > 1 %} · {{ each | money }} each{%- endif -%}</span>
+                </span>
+              </label>
+            {%- endfor -%}
+            <p class="sp-tiers__note">{{ section.settings.tiers_note }}</p>
+          </fieldset>
+        {%- endif -%}
+        <div class="sp-terms">{{ form | payment_terms }}</div>
+
         <button type="submit" class="sp-btn sp-btn--ghost" data-sp-add{% unless v.available %} disabled{% endunless %}>{% if v.available %}Add to bag{% else %}Sold out{% endif %}</button>
         <button type="submit" name="return_to" value="/checkout" class="sp-btn" data-sp-buy{% unless v.available %} disabled{% endunless %}>Buy it now</button>
         <p class="sp-eta" data-sp-eta data-min="{{ section.settings.days_min }}" data-max="{{ section.settings.days_max }}">🚚 Arrives in {{ section.settings.days_min }}–{{ section.settings.days_max }} business days, tracked</p>
@@ -139,28 +189,6 @@
         {%- endfor -%}
       </div>
 
-      {%- if section.settings.bundle_on and p.variants.size > 0 -%}
-        {%- assign off_cents = section.settings.bundle_off | times: 100 | round -%}
-        <div class="sp-bundle" data-sp-bundle data-off="{{ off_cents }}">
-          <div class="sp-bundle__head"><b>{{ section.settings.bundle_title }}</b><span class="sp-tag">{{ section.settings.bundle_tag }}</span></div>
-          {%- for row in (1..2) -%}
-            <div class="sp-bundle__row">
-              {%- if p.featured_media != blank -%}{{ p.featured_media.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
-              <div>
-                <p>{{ p.title }}</p>
-                <select aria-label="Tee {{ row }}" data-sp-bundle-pick>
-                  {%- for vv in p.variants -%}<option value="{{ vv.id }}" data-price="{{ vv.price }}"{% unless vv.available %} disabled{% endunless %}{% if vv.id == v.id %} selected{% endif %}>{{ vv.title }}</option>{%- endfor -%}
-                </select>
-              </div>
-            </div>
-            {%- if row == 1 -%}<p class="sp-bundle__plus" aria-hidden="true">+</p>{%- endif -%}
-          {%- endfor -%}
-          {%- assign both = v.price | times: 2 -%}
-          <div class="sp-bundle__sum"><span>Both for</span><span>{%- if off_cents > 0 -%}<s data-sp-bundle-full>{{ both | money }}</s>{%- endif -%} <b data-sp-bundle-price>{{ both | minus: off_cents | money }}</b></span></div>
-          <button type="button" class="sp-btn sp-btn--ghost" data-sp-bundle-add>Add both to bag</button>
-          {%- if section.settings.bundle_note != blank -%}<p class="sp-note">{{ section.settings.bundle_note }}</p>{%- endif -%}
-        </div>
-      {%- endif -%}
     </div>
   </div>
 
@@ -218,12 +246,15 @@
     { "type": "text", "id": "info2_text", "label": "Answer 2", "default": "Wash it cold, inside out, and skip the iron on the print. That keeps it sharp." },
     { "type": "text", "id": "info3_title", "label": "Doubt 3", "default": "What if it's not funny IRL?" },
     { "type": "text", "id": "info3_text", "label": "Answer 3", "default": "30-day returns, no drama. Your bag, your call.", "info": "Keep every answer true to your real return policy and print method." },
-    { "type": "header", "content": "Buddy deal (two tees)" },
-    { "type": "checkbox", "id": "bundle_on", "label": "Show", "default": true },
-    { "type": "text", "id": "bundle_title", "label": "Title", "default": "Buddy deal: one for you, one for them" },
-    { "type": "text", "id": "bundle_tag", "label": "Tag", "default": "Gift idea" },
-    { "type": "text", "id": "bundle_off", "label": "$ less for two (e.g. 9.99)", "default": "9.99", "info": "Create a matching automatic discount (Amount off products, fixed amount, minimum quantity 2)." },
-    { "type": "text", "id": "bundle_note", "label": "Note", "default": "Applied automatically at checkout." },
+    { "type": "header", "content": "2 and 3 tee deals" },
+    { "type": "paragraph", "content": "Match these with automatic discounts in Shopify (Amount off products, minimum quantity 2 and 3). Prices are what the customer really pays." },
+    { "type": "checkbox", "id": "tiers_on", "label": "Show the 1 / 2 / 3 tee picker", "default": true },
+    { "type": "text", "id": "tiers_title", "label": "Title", "default": "Bring the whole group chat" },
+    { "type": "text", "id": "tier2_price", "label": "Price for 2 tees ($)", "default": "54.99" },
+    { "type": "text", "id": "tier3_price", "label": "Price for 3 tees ($)", "default": "69.99" },
+    { "type": "text", "id": "tier3_badge", "label": "Badge on 3 tees", "default": "Best value" },
+    { "type": "text", "id": "tiers_note", "label": "Note", "default": "Mix designs, colours and sizes: the deal kicks in automatically in your bag." },
+    { "type": "text", "id": "mystery_label", "label": "Mystery discount link (opens the pop-up)", "default": "New here? Unlock a mystery discount" },
     { "type": "header", "content": "More tees below" },
     { "type": "text", "id": "recs_title", "label": "Title", "default": "More memes" },
     { "type": "collection", "id": "recs_collection", "label": "From collection (default: all)" },

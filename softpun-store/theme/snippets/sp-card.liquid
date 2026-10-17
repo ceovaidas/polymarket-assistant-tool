@@ -1,4 +1,4 @@
-{%- comment -%} Product card: second photo on hover, real compare-at price only. {%- endcomment -%}
+{%- comment -%} Product card: second photo on hover, real compare-at price only, colour count. {%- endcomment -%}
 {%- assign v = card.selected_or_first_available_variant -%}
 <a class="sp-card" href="{{ card.url }}">
   <span class="sp-card__img">
@@ -7,5 +7,7 @@
     {%- unless card.available -%}<em class="sp-card__badge">Sold out</em>{%- endunless -%}
   </span>
   <span class="sp-card__t">{{ card.title }}</span>
-  <span class="sp-card__p">{{ v.price | money }}{% if v.compare_at_price > v.price %} <s>{{ v.compare_at_price | money }}</s>{% endif %}</span>
+  {%- assign colours = 0 -%}
+  {%- for opt in card.options_with_values -%}{%- assign on = opt.name | downcase -%}{%- if on contains 'colo' -%}{%- assign colours = opt.values.size -%}{%- endif -%}{%- endfor -%}
+  <span class="sp-card__p">{{ v.price | money }}{% if v.compare_at_price > v.price %} <s>{{ v.compare_at_price | money }}</s>{% endif %}{% if colours > 1 %}<i>{{ colours }} colours</i>{% endif %}</span>
 </a>
