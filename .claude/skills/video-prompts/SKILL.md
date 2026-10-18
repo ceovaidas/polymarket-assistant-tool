@@ -22,6 +22,10 @@ Reply in Lithuanian; the prompts themselves stay in English.
 - Why the video works (format, e.g. problem → solution; what the 0-2 s hook is; where the payoff is).
 - Whether it is raw UGC or polished - match that. Raw UGC must not come out as a glossy campaign.
 - On-screen text per scene and the caption / "Comment X" CTA.
+- Check every remix against the 3-part viral structure: **hook** opens a question the viewer wants
+  answered (0-2 s), **build-up** tells a short story that keeps them watching, **payoff** answers the
+  question with an emotional beat (reveal, twist, light/beat drop). If the payoff doesn't answer the
+  hook, rewrite the hook. When a video wins, double down: same structure, new setting/people/hook.
 
 ## 3. Prompts - the format the user approved
 
