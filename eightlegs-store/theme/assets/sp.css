@@ -410,18 +410,21 @@ body { background: var(--sp-bg); }
 .sp-pay svg { filter: grayscale(1) contrast(.9); opacity: .55; transition: opacity .2s; }
 .sp-pay li:hover svg { opacity: .9; }
 
-/* Cut-out (transparent) product photos: show the whole photo, floating on the web background */
-.sp-stage__slide img, .sp-detail__img img { object-fit: contain; }
+/* Whole photo on pure black, so cut-outs and black-studio shots blend into the frame */
+.sp-stage { background: #000; }
+.sp-stage__slide img { object-fit: contain; }
+.sp-detail__img { background: #000; }
+.sp-detail__img img { object-fit: cover; }
 .sp-stage__slide img { filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .55)); }
 .sp-card__img img, .sp-line__img img { object-fit: contain; }
 
 /* Photo strip + reviews */
 .sp-gallery { padding-block: 72px 24px; }
-.sp-gallery__grid { display: grid; gap: 18px; }
-@media (min-width: 900px) { .sp-gallery__grid { grid-template-columns: repeat(2, 1fr); } }
+.sp-gallery__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 640px; margin-inline: auto; }
+@media (min-width: 900px) { .sp-gallery__grid { gap: 16px; } }
 .sp-gallery__item { margin: 0; display: grid; gap: 10px; }
-.sp-gallery__item img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 1px dashed var(--sp-stitch); }
-.sp-gallery__item figcaption { color: var(--sp-ink-2); font-size: 14px; }
+.sp-gallery__item img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border: 1px dashed var(--sp-stitch); }
+.sp-gallery__item figcaption { color: var(--sp-ink-2); font-size: 13px; }
 .sp-reviews { padding-block: 56px 24px; }
 .sp-reviews__empty { max-width: 640px; margin: 0 auto; padding: 28px; border: 1px dashed var(--sp-stitch); text-align: center; display: grid; gap: 8px; }
 .sp-reviews__empty .sp-lead { margin: 0 auto; color: var(--sp-ink); }
