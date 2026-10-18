@@ -231,8 +231,8 @@
     { "type": "text", "id": "size_link", "label": "Size guide link text", "default": "Size guide" },
     { "type": "text", "id": "reviews_anchor", "label": "Reviews section anchor (id)", "default": "reviews", "info": "Stars show only when a reviews app fills the reviews.rating metafield." },
     { "type": "header", "content": "Delivery date by the button" },
-    { "type": "range", "id": "days_min", "label": "Fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
-    { "type": "range", "id": "days_max", "label": "Slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17, "info": "Shown as real dates, e.g. Arrives Oct 28 – Nov 9. Match your print partner." },
+    { "type": "range", "id": "days_min", "label": "Fastest (business days, incl. processing)", "min": 1, "max": 30, "step": 1, "default": 7 },
+    { "type": "range", "id": "days_max", "label": "Slowest (business days, incl. processing)", "min": 2, "max": 40, "step": 1, "default": 17, "info": "Shown as real dates, e.g. Arrives Oct 28 – Nov 9. Match your supplier." },
     { "type": "checkbox", "id": "show_fit", "label": "Show fit meter", "default": true },
     { "type": "range", "id": "fit_pos", "label": "Fit position (0 snug – 100 oversized)", "min": 0, "max": 100, "step": 5, "default": 80 },
     { "type": "text", "id": "fit_label", "label": "Fit in words (screen readers)", "default": "boxy and oversized" },
@@ -242,14 +242,14 @@
     { "type": "text", "id": "acc2_title", "label": "2", "default": "Material & care" },
     { "type": "richtext", "id": "acc2_text", "label": "2 text", "default": "<p>100% heavy faux leather (PU) with a polyester lining. Wipe clean with a damp cloth. No machine wash, no iron, no tumble dryer. Hang it on a wide hanger so the shoulders keep their shape.</p>" },
     { "type": "text", "id": "acc3_title", "label": "3", "default": "Shipping & returns" },
-    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Ships with tracking and usually arrives in 7–17 business days. Not funny enough? 30-day returns.</p>" },
+    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Ships with tracking and usually arrives in 7–17 business days. Not the one? 30-day returns.</p>" },
     { "type": "header", "content": "The 3 biggest doubts, answered by the button" },
     { "type": "text", "id": "info1_title", "label": "Doubt 1", "default": "Will it fit?" },
     { "type": "text", "id": "info1_text", "label": "Answer 1", "default": "Boxy oversized cut. True to size, or one size up for extra room. Every measurement is in the size guide." },
     { "type": "text", "id": "info2_title", "label": "Doubt 2", "default": "Is it real leather?" },
     { "type": "text", "id": "info2_text", "label": "Answer 2", "default": "No: heavy faux leather (PU) with a polyester lining. No animal leather, and it wipes clean." },
     { "type": "text", "id": "info3_title", "label": "Doubt 3", "default": "What if it's not for me?" },
-    { "type": "text", "id": "info3_text", "label": "Answer 3", "default": "30-day returns, no drama. Your bag, your call.", "info": "Keep every answer true to your real return policy and print method." },
+    { "type": "text", "id": "info3_text", "label": "Answer 3", "default": "30-day returns, no drama. Your bag, your call.", "info": "Keep every answer true to your real return policy and product." },
     { "type": "header", "content": "Multi-buy deal" },
     { "type": "paragraph", "content": "Match these with an automatic discount in Shopify (Amount off products, minimum quantity 2, and 3 if you use it). Prices are what the customer really pays." },
     { "type": "checkbox", "id": "tiers_on", "label": "Show the quantity deal picker", "default": true },
@@ -268,7 +268,7 @@
     { "type": "range", "id": "recs_count", "label": "Products shown (0 hides)", "min": 0, "max": 12, "step": 4, "default": 0 },
     { "type": "header", "content": "Size guide" },
     { "type": "text", "id": "size_title", "label": "Title", "default": "Size guide" },
-    { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<table><thead><tr><th>Size</th><th>Chest (cm, flat)</th><th>Length (cm)</th><th>Height</th></tr></thead><tbody><tr><td>S</td><td>58</td><td>66</td><td>165–172 cm</td></tr><tr><td>M</td><td>60</td><td>68</td><td>173–182 cm</td></tr><tr><td>L</td><td>62</td><td>70</td><td>183–189 cm</td></tr><tr><td>XL</td><td>64</td><td>72</td><td>190–196 cm</td></tr><tr><td>XXL</td><td>66</td><td>74</td><td>197 cm +</td></tr></tbody></table><p>True to size. One size up for an extra-oversized fit.</p>" }
+    { "type": "html", "id": "size_table", "label": "Sizes (HTML table)", "default": "<table><thead><tr><th>Size</th><th>Chest (cm, flat)</th><th>Length (cm)</th><th>Height</th></tr></thead><tbody><tr><td>S</td><td>58</td><td>66</td><td>165–172 cm</td></tr><tr><td>M</td><td>60</td><td>68</td><td>173–182 cm</td></tr><tr><td>L</td><td>62</td><td>70</td><td>183–189 cm</td></tr><tr><td>XL</td><td>64</td><td>72</td><td>190–196 cm</td></tr><tr><td>XXL</td><td>66</td><td>74</td><td>197 cm +</td></tr></tbody></table><p>True to size. One size up for an extra-oversized fit.</p>" }
   ]
 }
 {% endschema %}
