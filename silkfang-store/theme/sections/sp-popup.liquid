@@ -1,0 +1,69 @@
+{%- comment -%}
+  "Pick a box" email pop-up. Every box holds the same mystery discount (the copy says so), the email is
+  saved to Shopify customers with the newsletter tag, then the code is shown and applied to the bag.
+{%- endcomment -%}
+{%- if section.settings.enabled and section.settings.code != blank -%}
+<div class="sp-pop" data-sp-pop data-delay="{{ section.settings.delay }}" data-code="{{ section.settings.code | escape }}" hidden>
+  <div class="sp-pop__card" role="dialog" aria-modal="true" aria-labelledby="sp-pop-t">
+    <button type="button" class="sp-pop__x" data-sp-pop-close aria-label="Close">×</button>
+
+    <div data-step="pick">
+      <p class="sp-pop__eyebrow">{{ shop.name }} // {{ section.settings.eyebrow }}</p>
+      <h2 class="sp-pop__t" id="sp-pop-t">{{ section.settings.title1 }}<br><em>{{ section.settings.title2 }}</em></h2>
+      <p class="sp-pop__sub" data-sp-pop-sub>{{ section.settings.text }}</p>
+      <div class="sp-boxes" role="group" aria-label="Pick a box">
+        {%- for n in (1..3) -%}
+          <button type="button" class="sp-box sp-box--{{ n }}" data-sp-box="{{ n }}" aria-label="Box {{ n }}">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><rect class="sp-box__body" x="18" y="52" width="84" height="56" rx="8"/><rect class="sp-box__lid" x="12" y="38" width="96" height="20" rx="6"/><rect class="sp-box__rib" x="54" y="38" width="12" height="70"/><path class="sp-box__bow" d="M60 38c-8-14-26-16-26-6 0 8 14 8 26 6zm0 0c8-14 26-16 26-6 0 8-14 8-26 6z"/></svg>
+            <span>{{ n }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+      <p class="sp-pop__fine">Every box hides the same mystery treat. Pick the one that feels lucky.</p>
+    </div>
+
+    <div data-step="email" hidden>
+      <p class="sp-pop__eyebrow">{{ shop.name }} // {{ section.settings.eyebrow }}</p>
+      <h2 class="sp-pop__t">{{ section.settings.title1 }}<br><em>{{ section.settings.title2 }}</em></h2>
+      <p class="sp-pop__sub">Good pick. Box <b data-sp-picked>2</b> is wiggling.</p>
+      <div class="sp-boxes sp-boxes--one" aria-hidden="true"><span class="sp-box sp-box--on"><svg viewBox="0 0 120 120"><rect class="sp-box__body" x="18" y="52" width="84" height="56" rx="8"/><rect class="sp-box__lid" x="12" y="38" width="96" height="20" rx="6"/><rect class="sp-box__rib" x="54" y="38" width="12" height="70"/><path class="sp-box__bow" d="M60 38c-8-14-26-16-26-6 0 8 14 8 26 6zm0 0c8-14 26-16 26-6 0 8-14 8-26 6z"/></svg></span></div>
+      <p class="sp-pop__ask">{{ section.settings.ask }}</p>
+      <form class="sp-pop__form" data-sp-pop-form novalidate>
+        <label class="sp-sr" for="sp-pop-email">Email</label>
+        <input id="sp-pop-email" type="email" name="email" autocomplete="email" required placeholder="your@email.com">
+        <button type="submit" class="sp-btn">{{ section.settings.open_label }}</button>
+      </form>
+      <p class="sp-pop__err" data-sp-pop-err role="alert"></p>
+      <p class="sp-pop__legal">By signing up you agree to get drop alerts and marketing emails from {{ shop.name }}. Unsubscribe anytime.{% if shop.privacy_policy %} <a href="{{ shop.privacy_policy.url }}">Privacy</a>{% endif %}</p>
+    </div>
+
+    <div data-step="win" hidden>
+      <p class="sp-pop__eyebrow">{{ shop.name }} // {{ section.settings.eyebrow }}</p>
+      <h2 class="sp-pop__t">You opened it.<br><em>Here's your treat.</em></h2>
+      <div class="sp-prize"><b>{{ section.settings.prize }}</b><span>{{ section.settings.prize_sub }}</span></div>
+      <div class="sp-code"><code data-sp-code>{{ section.settings.code }}</code><button type="button" data-sp-copy>Copy</button></div>
+      <p class="sp-pop__fine">Already applied to your bag. Copy it for later, too.{% if section.settings.fine != blank %} {{ section.settings.fine }}{% endif %}</p>
+      <button type="button" class="sp-btn sp-btn--wide" data-sp-pop-close>Back to the jacket</button>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Pick-a-box pop-up",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show the pop-up", "default": true },
+    { "type": "range", "id": "delay", "label": "Show after (seconds)", "min": 2, "max": 60, "step": 1, "default": 8 },
+    { "type": "text", "id": "code", "label": "Discount code (create it in Shopify → Discounts)", "default": "SILKFANG10" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The web" },
+    { "type": "text", "id": "title1", "label": "Title line 1", "default": "Something got" },
+    { "type": "text", "id": "title2", "label": "Title line 2", "default": "caught in the web." },
+    { "type": "text", "id": "text", "label": "Text", "default": "Three boxes. One pick. Choose yours and see what's waiting inside." },
+    { "type": "text", "id": "ask", "label": "Email ask", "default": "Drop your email to open it." },
+    { "type": "text", "id": "open_label", "label": "Button", "default": "Open it" },
+    { "type": "text", "id": "prize", "label": "Prize headline", "default": "Mystery discount unlocked" },
+    { "type": "text", "id": "prize_sub", "label": "Prize detail", "default": "10% on your whole order, already waiting in your bag" },
+    { "type": "text", "id": "fine", "label": "Small print", "default": "One per customer. Doesn't stack with the 2-jacket deal." }
+  ]
+}
+{% endschema %}

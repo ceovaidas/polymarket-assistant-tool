@@ -1,0 +1,274 @@
+{%- comment -%}
+  One-page product: story on the left, the product in the middle, choices on the right, more products below.
+  Product pages show their own product; on the home page it shows the product picked in the settings.
+  Prices come from Shopify; the crossed-out price shows only when a real compare-at price is set.
+{%- endcomment -%}
+{%- liquid
+  if template.name == 'product'
+    assign p = product
+  else
+    assign p = section.settings.product | default: collections.all.products.first
+  endif
+  assign v = p.selected_or_first_available_variant
+  assign size_index = 0
+  for opt in p.options_with_values
+    assign n = opt.name | downcase
+    if n contains 'size' or n contains 'dydis'
+      assign size_index = forloop.index0
+    endif
+  endfor
+-%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+
+{%- if p == blank -%}
+  <section class="sp sp-pdp sp-empty">
+    <div class="sp-wrap">
+      <h1 class="sp-h1">New drop coming soon</h1>
+      {%- if request.design_mode -%}<p class="sp-lead">No active product yet. Add the product in Products (status Active, Online Store channel), then pick it in this section's settings.</p>{%- endif -%}
+    </div>
+  </section>
+{%- else -%}
+<section class="sp sp-pdp" data-sp-product data-unit="{{ v.price }}">
+  <script type="application/json" data-sp-variants>{{ p.variants | json }}</script>
+  <div class="sp-wrap sp-pdp__grid">
+
+    {%- comment -%} Left: the story {%- endcomment -%}
+    <div class="sp-pdp__story">
+      {%- if section.settings.badge != blank -%}<span class="sp-chip">{{ section.settings.badge }}</span>{%- endif -%}
+      <h1 class="sp-h1">{{ p.title }}</h1>
+      {%- comment -%} Stars only from a real reviews app (standard reviews.* metafields) {%- endcomment -%}
+      {%- assign rating = p.metafields.reviews.rating.value -%}
+      {%- assign rating_count = p.metafields.reviews.rating_count.value | default: 0 -%}
+      {%- if rating != blank and rating_count > 0 -%}
+        <a class="sp-stars" href="#{{ section.settings.reviews_anchor | default: 'reviews' }}" aria-label="Rated {{ rating.rating | round: 1 }} out of {{ rating.scale_max }}, {{ rating_count }} reviews">
+          <span aria-hidden="true">★★★★★</span><b>{{ rating.rating | round: 1 }}</b><span>({{ rating_count }} reviews)</span>
+        </a>
+      {%- endif -%}
+      {%- liquid
+        assign t2 = section.settings.tier2_price | times: 100 | round
+        assign t3 = section.settings.tier3_price | times: 100 | round
+        assign tiers_on = false
+        if section.settings.tiers_on and t2 > 0
+          assign tiers_on = true
+        endif
+        assign max_q = 2
+        if t3 > t2
+          assign max_q = 3
+        endif
+      -%}
+      <div class="sp-pricebox">
+        <p class="sp-price">
+          <b data-sp-price>{{ v.price | money }}</b>
+          {%- if v.compare_at_price > v.price -%}<s data-sp-compare>{{ v.compare_at_price | money }}</s>{%- endif -%}
+        </p>
+        {%- if tiers_on -%}{%- if max_q == 3 -%}<p class="sp-low">or <b>{{ t3 | divided_by: 3 | money }}</b> {{ section.settings.unit_one }} when you grab 3</p>{%- else -%}<p class="sp-low">or <b>{{ t2 | divided_by: 2 | money }}</b> {{ section.settings.unit_one }} when you {{ section.settings.twin_word }}</p>{%- endif -%}{%- endif -%}
+        {%- if section.settings.mystery_label != blank -%}<button type="button" class="sp-mystery" data-sp-pop-open hidden>🎁 {{ section.settings.mystery_label }}</button>{%- endif -%}
+      </div>
+      <div class="sp-rte sp-desc">{{ p.description }}</div>
+      <div class="sp-acc">
+        {%- for i in (1..3) -%}
+          {%- assign tk = 'acc' | append: i | append: '_title' -%}{%- assign xk = 'acc' | append: i | append: '_text' -%}
+          {%- if section.settings[tk] != blank -%}
+            <details><summary>{{ section.settings[tk] }}<i aria-hidden="true">+</i></summary><div class="sp-rte">{{ section.settings[xk] }}</div></details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Middle: the product {%- endcomment -%}
+    <div class="sp-pdp__media">
+      <div class="sp-stage" data-sp-stage>
+        {%- for m in p.media limit: 20 -%}
+          <figure class="sp-stage__slide{% if forloop.first %} is-on{% endif %}" data-media-id="{{ m.id }}">
+            {%- case m.media_type -%}
+              {%- when 'video' -%}{{ m | video_tag: controls: true, muted: true, playsinline: true, loop: true, preload: 'metadata', image_size: '1200x' }}
+              {%- when 'external_video' -%}{{ m | external_video_tag }}
+              {%- else -%}{{ m.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: m.alt | default: p.title, sizes: '(min-width: 990px) 40vw, 100vw' }}
+            {%- endcase -%}
+          </figure>
+        {%- else -%}
+          <figure class="sp-stage__slide is-on">{{ 'apparel-1' | placeholder_svg_tag }}</figure>
+        {%- endfor -%}
+        {%- if p.media.size > 1 -%}
+          <button type="button" class="sp-stage__nav sp-stage__nav--prev" data-sp-prev aria-label="Previous">‹</button>
+          <button type="button" class="sp-stage__nav sp-stage__nav--next" data-sp-next aria-label="Next">›</button>
+        {%- endif -%}
+      </div>
+      {%- if p.media.size > 1 -%}
+        <div class="sp-dots" role="tablist" aria-label="Photos and videos">
+          {%- for m in p.media limit: 20 -%}<button type="button" class="{% if forloop.first %}is-on{% endif %}" data-sp-dot="{{ forloop.index0 }}" aria-label="{% if m.media_type contains 'video' %}Video{% else %}Photo{% endif %} {{ forloop.index }}"></button>{%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Right: the choices {%- endcomment -%}
+    <div class="sp-pdp__buy">
+      {%- form 'product', p, class: 'sp-form', data-sp-form: '' -%}
+        <input type="hidden" name="id" value="{{ v.id }}" data-sp-id>
+        {%- for opt in p.options_with_values -%}
+          {%- liquid
+            assign oi = forloop.index0
+            assign on = opt.name | downcase
+            assign is_color = false
+            if on contains 'color' or on contains 'colour' or on contains 'spalva'
+              assign is_color = true
+            endif
+          -%}
+          <fieldset class="sp-opt" data-sp-opt="{{ oi }}">
+            <legend><span>{{ opt.name }}: <b data-sp-optval>{{ v.options[oi] }}</b></span>{% if oi == size_index and section.settings.size_link != blank %} <a href="#sp-size">{{ section.settings.size_link }}</a>{% endif %}</legend>
+            <div class="sp-opt__vals">
+              {%- for val in opt.values -%}
+                {%- comment -%} Colours show the product itself: the first variant photo with this colour {%- endcomment -%}
+                {%- assign sw = nil -%}
+                {%- if is_color -%}
+                  {%- for vv in p.variants -%}
+                    {%- if vv.options[oi] == val and vv.featured_media -%}{%- assign sw = vv.featured_media -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+                <label class="sp-pill{% if sw %} sp-pill--sw{% endif %}" title="{{ val | escape }}"><input type="radio" name="sp-opt-{{ oi }}" value="{{ val | escape }}"{% if v.options[oi] == val %} checked{% endif %}>
+                  {%- if sw -%}<span>{{ sw.preview_image | image_url: width: 140 | image_tag: loading: 'lazy', alt: val }}</span>{%- else -%}<span>{{ val }}</span>{%- endif -%}
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+
+        {%- if section.settings.show_fit -%}
+          <div class="sp-fit" role="img" aria-label="Fit: {{ section.settings.fit_label }}">
+            <p class="sp-fit__t">Fit</p>
+            <div class="sp-fit__bar"><span style="left: {{ section.settings.fit_pos }}%"></span></div>
+            <div class="sp-fit__l"><span>Snug</span><span>True to size</span><span>Oversized</span></div>
+          </div>
+        {%- endif -%}
+
+        <input type="hidden" name="quantity" value="1" data-sp-qty>
+        {%- if tiers_on -%}
+          {%- assign one = v.price -%}
+          <fieldset class="sp-tiers" data-sp-tiers data-unit="{{ one }}">
+            <legend>{{ section.settings.tiers_title }}</legend>
+            {%- for q in (1..max_q) -%}
+              {%- liquid
+                case q
+                  when 1
+                    assign tp = one
+                  when 2
+                    assign tp = t2
+                  else
+                    assign tp = t3
+                endcase
+                assign full = one | times: q
+                assign each = tp | divided_by: q
+                assign prev_tp = one
+                if q == 3
+                  assign prev_tp = t2
+                endif
+                assign extra = tp | minus: prev_tp
+              -%}
+              <label class="sp-tier{% if q == max_q %} sp-tier--best{% endif %}">
+                <input type="radio" name="sp-tier" value="{{ q }}" data-price="{{ tp }}"{% if q == 1 %} checked{% endif %}>
+                <span class="sp-tier__box">
+                  {%- if q == max_q and section.settings.tier3_badge != blank -%}<em class="sp-tier__badge">{{ section.settings.tier3_badge }}</em>{%- endif -%}
+                  <span class="sp-tier__q">{{ q }} {% if q == 1 %}{{ section.settings.unit_one }}{% else %}{{ section.settings.unit_many }}{% endif %}</span>
+                  <span class="sp-tier__p"><b>{{ tp | money }}</b>{%- if q > 1 -%}<s>{{ full | money }}</s>{%- endif -%}</span>
+                  <span class="sp-tier__n">{%- if q == 1 -%}Just this one{%- elsif q == 2 -%}2nd one only {{ extra | money }}{%- else -%}3rd one only {{ extra | money }}{%- endif -%}{%- if q > 1 %} · {{ each | money }} each{%- endif -%}</span>
+                </span>
+              </label>
+            {%- endfor -%}
+            <p class="sp-tiers__note">{{ section.settings.tiers_note }}</p>
+          </fieldset>
+        {%- endif -%}
+        <div class="sp-terms">{{ form | payment_terms }}</div>
+
+        <button type="submit" class="sp-btn sp-btn--ghost" data-sp-add{% unless v.available %} disabled{% endunless %}>{% if v.available %}Add to bag{% else %}Sold out{% endif %}</button>
+        <button type="submit" name="return_to" value="/checkout" class="sp-btn" data-sp-buy{% unless v.available %} disabled{% endunless %}>Buy it now</button>
+        <p class="sp-eta" data-sp-eta data-min="{{ section.settings.days_min }}" data-max="{{ section.settings.days_max }}">🚚 Arrives in {{ section.settings.days_min }}–{{ section.settings.days_max }} business days, tracked</p>
+      {%- endform -%}
+
+      <div class="sp-info" aria-label="Before you ask">
+        {%- for i in (1..3) -%}
+          {%- assign it = 'info' | append: i | append: '_title' -%}{%- assign ix = 'info' | append: i | append: '_text' -%}
+          {%- if section.settings[it] != blank -%}
+            <div class="sp-info__row"><b>{{ section.settings[it] }}</b>{%- if section.settings[ix] != blank -%}<span>{{ section.settings[ix] }}</span>{%- endif -%}</div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+
+  {%- if section.settings.size_table != blank -%}
+    <div class="sp-wrap sp-size" id="sp-size">
+      <h2 class="sp-h2">{{ section.settings.size_title }}</h2>
+      <div class="sp-rte sp-size__t">{{ section.settings.size_table }}</div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} More products: each card opens the same one-page layout {%- endcomment -%}
+  {%- assign recs_col = section.settings.recs_collection | default: collections.all -%}
+  {%- if section.settings.recs_count > 0 and recs_col.products.size > 1 -%}
+    <div class="sp-wrap sp-recs">
+      <div class="sp-sec-head"><h2 class="sp-h2">{{ section.settings.recs_title }}</h2><a href="{{ routes.all_products_collection_url }}">See all</a></div>
+      <div class="sp-grid">
+        {%- assign shown = 0 -%}
+        {%- for card in recs_col.products -%}
+          {%- if card.id != p.id and shown < section.settings.recs_count -%}
+            {%- assign shown = shown | plus: 1 -%}
+            {%- render 'sp-card', card: card -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Silkfang product",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product on the home page", "info": "Product pages always show their own product. Empty: the first product in the store." },
+    { "type": "text", "id": "badge", "label": "Badge above the title", "default": "Faux-leather bomber" },
+    { "type": "text", "id": "size_link", "label": "Size guide link text", "default": "Size guide" },
+    { "type": "text", "id": "reviews_anchor", "label": "Reviews section anchor (id)", "default": "reviews", "info": "Stars show only when a reviews app fills the reviews.rating metafield." },
+    { "type": "header", "content": "Delivery date by the button" },
+    { "type": "range", "id": "days_min", "label": "Fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
+    { "type": "range", "id": "days_max", "label": "Slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17, "info": "Shown as real dates, e.g. Arrives Oct 28 – Nov 9. Match your print partner." },
+    { "type": "checkbox", "id": "show_fit", "label": "Show fit meter", "default": true },
+    { "type": "range", "id": "fit_pos", "label": "Fit position (0 snug – 100 oversized)", "min": 0, "max": 100, "step": 5, "default": 80 },
+    { "type": "text", "id": "fit_label", "label": "Fit in words (screen readers)", "default": "boxy and oversized" },
+    { "type": "header", "content": "Accordions" },
+    { "type": "text", "id": "acc1_title", "label": "1", "default": "Size & fit" },
+    { "type": "richtext", "id": "acc1_text", "label": "1 text", "default": "<p>Boxy, oversized, unisex. True to size; go one size up for an extra-loose fit. Chest and length for every size are in the size guide below.</p>" },
+    { "type": "text", "id": "acc2_title", "label": "2", "default": "Material & care" },
+    { "type": "richtext", "id": "acc2_text", "label": "2 text", "default": "<p>100% heavy faux leather (PU) with a polyester lining. Wipe clean with a damp cloth. No machine wash, no iron, no tumble dryer. Hang it on a wide hanger so the shoulders keep their shape.</p>" },
+    { "type": "text", "id": "acc3_title", "label": "3", "default": "Shipping & returns" },
+    { "type": "richtext", "id": "acc3_text", "label": "3 text", "default": "<p>Ships with tracking and usually arrives in 7–17 business days. Not funny enough? 30-day returns.</p>" },
+    { "type": "header", "content": "The 3 biggest doubts, answered by the button" },
+    { "type": "text", "id": "info1_title", "label": "Doubt 1", "default": "Will it fit?" },
+    { "type": "text", "id": "info1_text", "label": "Answer 1", "default": "Boxy oversized cut. True to size, or one size up for extra room. Every measurement is in the size guide." },
+    { "type": "text", "id": "info2_title", "label": "Doubt 2", "default": "Is it real leather?" },
+    { "type": "text", "id": "info2_text", "label": "Answer 2", "default": "No: heavy faux leather (PU) with a polyester lining. No animal leather, and it wipes clean." },
+    { "type": "text", "id": "info3_title", "label": "Doubt 3", "default": "What if it's not for me?" },
+    { "type": "text", "id": "info3_text", "label": "Answer 3", "default": "30-day returns, no drama. Your bag, your call.", "info": "Keep every answer true to your real return policy and print method." },
+    { "type": "header", "content": "Multi-buy deal" },
+    { "type": "paragraph", "content": "Match these with an automatic discount in Shopify (Amount off products, minimum quantity 2, and 3 if you use it). Prices are what the customer really pays." },
+    { "type": "checkbox", "id": "tiers_on", "label": "Show the quantity deal picker", "default": true },
+    { "type": "text", "id": "tiers_title", "label": "Title", "default": "Twin up" },
+    { "type": "text", "id": "unit_one", "label": "One item, in words", "default": "jacket" },
+    { "type": "text", "id": "unit_many", "label": "Several items, in words", "default": "jackets" },
+    { "type": "text", "id": "twin_word", "label": "Phrase for buying 2", "default": "twin up" },
+    { "type": "text", "id": "tier2_price", "label": "Price for 2 ($)", "default": "159.99" },
+    { "type": "text", "id": "tier3_price", "label": "Price for 3 ($, empty shows only 1 and 2)" },
+    { "type": "text", "id": "tier3_badge", "label": "Badge on the biggest option", "default": "Best value" },
+    { "type": "text", "id": "tiers_note", "label": "Note", "default": "One for you, one for your ride-or-die. Pick both sizes in your bag; the deal kicks in automatically." },
+    { "type": "text", "id": "mystery_label", "label": "Mystery discount link (opens the pop-up)", "default": "New here? Unlock a mystery discount" },
+    { "type": "header", "content": "More products below" },
+    { "type": "text", "id": "recs_title", "label": "Title", "default": "You might also like" },
+    { "type": "collection", "id": "recs_collection", "label": "From collection (default: all)" },
+    { "type": "range", "id": "recs_count", "label": "Products shown (0 hides)", "min": 0, "max": 12, "step": 4, "default": 0 },
+    { "type": "header", "content": "Size guide" },
+    { "type": "text", "id": "size_title", "label": "Title", "default": "Size guide" },
+    { "type": "richtext", "id": "size_table", "label": "Sizes", "default": "<table><thead><tr><th>Size</th><th>Chest (cm, flat)</th><th>Length (cm)</th><th>Height</th></tr></thead><tbody><tr><td>S</td><td>58</td><td>66</td><td>165–172 cm</td></tr><tr><td>M</td><td>60</td><td>68</td><td>173–182 cm</td></tr><tr><td>L</td><td>62</td><td>70</td><td>183–189 cm</td></tr><tr><td>XL</td><td>64</td><td>72</td><td>190–196 cm</td></tr><tr><td>XXL</td><td>66</td><td>74</td><td>197 cm +</td></tr></tbody></table><p>True to size. One size up for an extra-oversized fit.</p>" }
+  ]
+}
+{% endschema %}

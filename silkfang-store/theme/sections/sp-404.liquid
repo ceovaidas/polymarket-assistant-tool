@@ -1,0 +1,12 @@
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-empty">
+  <div class="sp-wrap">
+    <p class="sp-chip">404</p>
+    <h1 class="sp-h1">This page slipped through the web</h1>
+    <p class="sp-lead">The link is broken or the page is gone. The jacket is still here.</p>
+    <a class="sp-btn" href="{{ routes.all_products_collection_url }}">See the jacket</a>
+  </div>
+</section>
+{% schema %}
+{ "name": "Silkfang 404", "settings": [] }
+{% endschema %}

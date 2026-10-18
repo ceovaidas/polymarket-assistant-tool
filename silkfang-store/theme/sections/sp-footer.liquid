@@ -1,0 +1,25 @@
+<footer class="sp-foot">
+  <div class="sp-wrap sp-foot__in">
+    <div>
+      <p class="sp-logo sp-logo--foot"><span class="sp-logo__mark">{%- render 'sp-mark' -%}</span>{{ shop.name }}</p>
+      <p class="sp-foot__txt">{{ section.settings.text }}</p>
+      {%- if shop.email != blank -%}<p class="sp-foot__txt">Say hi: <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>{%- endif -%}
+    </div>
+    <nav class="sp-foot__links" aria-label="Footer">
+      <a href="{{ routes.root_url }}#sp-size">Size guide</a>
+      {%- for policy in shop.policies -%}<a href="{{ policy.url }}">{{ policy.title }}</a>{%- endfor -%}
+    </nav>
+  </div>
+  <div class="sp-wrap sp-foot__base">
+    <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Made for after dark.</span>
+    {%- if shop.enabled_payment_types.size > 0 -%}<ul class="sp-pay">{%- for t in shop.enabled_payment_types -%}<li>{{ t | payment_type_svg_tag }}</li>{%- endfor -%}</ul>{%- endif -%}
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Silkfang footer",
+  "settings": [
+    { "type": "textarea", "id": "text", "label": "Text", "default": "One jacket, made to be noticed. Shipped with tracking, worn after dark." }
+  ]
+}
+{% endschema %}

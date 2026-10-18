@@ -1,0 +1,122 @@
+{%- comment -%}
+  Cart page: progress to $0 shipping, the bag, the 2-jacket deal, and the real
+  delivery window + returns right next to the checkout button.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = section.settings.free_ship_from | times: 100
+  assign left = threshold | minus: cart.total_price
+  assign t2 = section.settings.tier2_price | times: 100 | round
+  assign t3 = section.settings.tier3_price | times: 100 | round
+  assign unit = cart.items.first.original_price
+  assign in_cart = cart.items | map: 'product_id'
+  if threshold > 0
+    assign pct = cart.total_price | times: 100 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  endif
+-%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-cart">
+  <div class="sp-wrap sp-cart__in">
+    <h1 class="sp-h1">Your bag</h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="sp-cart__empty">
+        <p class="sp-lead">Your bag is empty. The web is waiting.</p>
+        <a class="sp-btn" href="{{ routes.all_products_collection_url }}">See the jacket</a>
+      </div>
+      {%- if section.settings.more_count > 0 -%}
+        <div class="sp-grid">{%- for card in collections.all.products limit: section.settings.more_count -%}{%- render 'sp-card', card: card -%}{%- endfor -%}</div>
+      {%- endif -%}
+    {%- else -%}
+      {%- if threshold > 0 -%}
+        <div class="sp-ship" role="status">
+          {%- if left > 0 -%}
+            <p>You're <b>{{ left | money }}</b> away from <b>$0 shipping, on us</b></p>
+          {%- else -%}
+            <p><b>$0 shipping unlocked.</b> It's on us.</p>
+          {%- endif -%}
+          <div class="sp-ship__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}" aria-label="Progress to $0 shipping"><span style="width: {{ pct }}%"></span></div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Next step of the real 2-jacket deal (automatic discounts in Shopify) {%- endcomment -%}
+      {%- if cart.item_count == 1 and t2 > unit -%}
+        <div class="sp-nudge"><p>Twin up: add a 2nd jacket and pay <b>{{ t2 | money }}</b> for both. The 2nd one is only <b>{{ t2 | minus: unit | money }}</b>.</p><a class="sp-btn sp-btn--ghost" href="{{ routes.root_url }}">Add a 2nd jacket</a></div>
+      {%- elsif cart.item_count == 2 and t3 > t2 and t2 > 0 -%}
+        <div class="sp-nudge"><p>Make it 3 for <b>{{ t3 | money }}</b>. The 3rd one is only <b>{{ t3 | minus: t2 | money }}</b>.</p><a class="sp-btn sp-btn--ghost" href="{{ routes.all_products_collection_url }}">Add a 3rd</a></div>
+      {%- endif -%}
+
+      <div class="sp-cart__grid">
+        <form action="{{ routes.cart_url }}" method="post" class="sp-cart__items" id="sp-cart-form">
+          {%- for item in cart.items -%}
+            <div class="sp-line">
+              <a class="sp-line__img" href="{{ item.url }}">{%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: alt: item.product.title, loading: 'lazy' }}{%- endif -%}</a>
+              <div class="sp-line__txt">
+                <a href="{{ item.url }}"><b>{{ item.product.title }}</b></a>
+                {%- unless item.product.has_only_default_variant -%}<span>{{ item.variant.title }}</span>{%- endunless -%}
+                {%- for d in item.line_level_discount_allocations -%}<span class="sp-line__disc">{{ d.discount_application.title }} (−{{ d.amount | money }})</span>{%- endfor -%}
+                <div class="sp-qty">
+                  <label class="sp-sr" for="sp-q-{{ forloop.index }}">Quantity</label>
+                  <button type="submit" name="updates[]" value="{{ item.quantity | minus: 1 }}" formaction="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" aria-label="One less">−</button>
+                  <input id="sp-q-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                  <button type="submit" formaction="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" aria-label="One more">+</button>
+                </div>
+              </div>
+              <div class="sp-line__p">
+                <b>{{ item.final_line_price | money }}</b>
+                {%- if item.original_line_price > item.final_line_price -%}<s>{{ item.original_line_price | money }}</s>{%- endif -%}
+                <a class="sp-line__rm" href="{{ item.url_to_remove }}">Remove</a>
+              </div>
+            </div>
+          {%- endfor -%}
+          <noscript><button type="submit" class="sp-btn sp-btn--ghost">Update bag</button></noscript>
+        </form>
+
+        <aside class="sp-cart__sum">
+
+          {%- for d in cart.cart_level_discount_applications -%}<p class="sp-sum__row"><span>{{ d.title }}</span><span>−{{ d.total_allocated_amount | money }}</span></p>{%- endfor -%}
+          {%- if cart.total_discount > 0 -%}<p class="sp-sum__row sp-sum__keep"><span>You're keeping</span><b>{{ cart.total_discount | money }}</b></p>{%- endif -%}
+          <p class="sp-sum__row sp-sum__total"><span>Total</span><span>{%- if cart.total_discount > 0 -%}<s>{{ cart.total_price | plus: cart.total_discount | money }}</s> {% endif -%}<b>{{ cart.total_price | money }}</b></span></p>
+          <p class="sp-note">Taxes and discount codes are applied at checkout.</p>
+          <form action="{{ routes.cart_url }}" method="post"><button type="submit" name="checkout" class="sp-btn sp-btn--wide">Checkout securely</button></form>
+          <ul class="sp-assure">
+            <li data-sp-eta data-min="{{ section.settings.days_min }}" data-max="{{ section.settings.days_max }}">🚚 Arrives in {{ section.settings.days_min }}–{{ section.settings.days_max }} business days</li>
+            <li>↩️ 30-day returns, no drama</li>
+            <li>🔒 Secure checkout</li>
+          </ul>
+          {%- if shop.enabled_payment_types.size > 0 -%}<ul class="sp-pay sp-pay--cart">{%- for t in shop.enabled_payment_types -%}<li>{{ t | payment_type_svg_tag }}</li>{%- endfor -%}</ul>{%- endif -%}
+        </aside>
+      </div>
+
+      {%- if section.settings.more_count > 0 -%}
+        <div class="sp-recs sp-recs--cart">
+          <div class="sp-sec-head"><h2 class="sp-h2">{{ section.settings.more_title }}</h2><a href="{{ routes.all_products_collection_url }}">See all</a></div>
+          <div class="sp-grid">
+            {%- assign shown_more = 0 -%}
+            {%- for card in collections.all.products -%}
+              {%- unless in_cart contains card.id or shown_more >= section.settings.more_count -%}
+                {%- assign shown_more = shown_more | plus: 1 -%}{%- render 'sp-card', card: card -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Silkfang cart",
+  "settings": [
+    { "type": "number", "id": "free_ship_from", "label": "$0 shipping from ($, 0 hides the bar)", "default": 50, "info": "Must match your Shopify shipping rate." },
+    { "type": "text", "id": "tier2_price", "label": "2 jackets deal price ($, empty hides the nudge)", "default": "159.99", "info": "Same as the product page and your automatic discounts." },
+    { "type": "text", "id": "tier3_price", "label": "3 jackets deal price ($, empty hides it)" },
+    { "type": "text", "id": "more_title", "label": "More products title", "default": "You might also like" },
+    { "type": "range", "id": "more_count", "label": "More products shown (0 hides)", "min": 0, "max": 8, "step": 4, "default": 0 },
+    { "type": "range", "id": "days_min", "label": "Delivery: fastest (business days, incl. printing)", "min": 1, "max": 30, "step": 1, "default": 7 },
+    { "type": "range", "id": "days_max", "label": "Delivery: slowest (business days, incl. printing)", "min": 2, "max": 40, "step": 1, "default": 17 }
+  ]
+}
+{% endschema %}

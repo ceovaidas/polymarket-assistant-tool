@@ -1,0 +1,44 @@
+{%- comment -%}
+  Close-ups of the real product: each block points at one of the product's own photos by number, so the
+  section always shows the real thing (no stock images).
+{%- endcomment -%}
+{%- assign p = section.settings.product | default: collections.all.products.first -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-details">
+  <div class="sp-wrap">
+    <div class="sp-details__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="sp-chip">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sp-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<p class="sp-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="sp-details__grid">
+      {%- for b in section.blocks -%}
+        {%- assign i = b.settings.photo | minus: 1 -%}
+        {%- assign m = p.media[i] -%}
+        <figure class="sp-detail" {{ b.shopify_attributes }}>
+          <div class="sp-detail__img">{%- if m -%}{{ m.preview_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: b.settings.title, sizes: '(min-width: 990px) 33vw, 100vw' }}{%- else -%}{{ 'product-apparel-1' | placeholder_svg_tag }}{%- endif -%}</div>
+          <figcaption><b>{{ b.settings.title }}</b><span>{{ b.settings.text }}</span></figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Product details",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product (default: the first one)" },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Up close" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Caught in every detail" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "For the one who walks in and the whole room looks twice." }
+  ],
+  "blocks": [
+    { "type": "detail", "name": "Detail", "settings": [
+      { "type": "range", "id": "photo", "label": "Product photo number", "min": 1, "max": 20, "step": 1, "default": 1 },
+      { "type": "text", "id": "title", "label": "Title", "default": "Detail" },
+      { "type": "text", "id": "text", "label": "Text" }
+    ]}
+  ],
+  "presets": [{ "name": "Product details" }]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+{%- comment -%} Collection / "Shop all": real deal banner, sort, the product grid, pagination. {%- endcomment -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-coll">
+  <div class="sp-wrap">
+    <div class="sp-coll__head">
+      <h1 class="sp-h1">{{ collection.title | default: section.settings.fallback_title }}</h1>
+      {%- if collection.description != blank -%}<div class="sp-rte">{{ collection.description }}</div>{%- endif -%}
+      {%- if section.settings.deal != blank -%}<p class="sp-coll__deal">{{ section.settings.deal }}</p>{%- endif -%}
+    </div>
+
+    {%- paginate collection.products by section.settings.per_page -%}
+      <div class="sp-coll__bar">
+        <p>{{ collection.products_count }} {% if collection.products_count == 1 %}piece{% else %}pieces{% endif %}</p>
+        {%- if collection.sort_options.size > 0 -%}
+          <label class="sp-sort"><span class="sp-sr">Sort by</span>
+            <select data-sp-sort aria-label="Sort by">
+              {%- assign current = collection.sort_by | default: collection.default_sort_by -%}
+              {%- for o in collection.sort_options -%}<option value="{{ o.value | escape }}"{% if o.value == current %} selected{% endif %}>{{ o.name | escape }}</option>{%- endfor -%}
+            </select>
+          </label>
+        {%- endif -%}
+      </div>
+
+      {%- if collection.products.size > 0 -%}
+        <div class="sp-grid">{%- for card in collection.products -%}{%- render 'sp-card', card: card -%}{%- endfor -%}</div>
+      {%- else -%}
+        <p class="sp-lead sp-coll__empty">New pieces dropping soon. Check back in a bit.</p>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="sp-pages" aria-label="Pages">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="Previous page">‹</a>{%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="Next page">›</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Silkfang collection",
+  "settings": [
+    { "type": "text", "id": "fallback_title", "label": "Title when the collection has none", "default": "The collection" },
+    { "type": "text", "id": "deal", "label": "Deal banner", "default": "$0 shipping, on us · 30-day returns", "info": "Only offers that really exist as automatic discounts." },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

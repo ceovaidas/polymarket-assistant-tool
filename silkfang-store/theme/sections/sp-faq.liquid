@@ -1,0 +1,21 @@
+{%- comment -%} The questions people ask before they buy, answered straight. {%- endcomment -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-faq-sec">
+  <div class="sp-wrap sp-faq">
+    <h2 class="sp-h2">{{ section.settings.title }}</h2>
+    {%- for b in section.blocks -%}<details {{ b.shopify_attributes }}><summary>{{ b.settings.q }}<i aria-hidden="true">+</i></summary><div class="sp-rte">{{ b.settings.a }}</div></details>{%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Before you ask" } ],
+  "blocks": [
+    { "type": "faq", "name": "Question", "settings": [
+      { "type": "text", "id": "q", "label": "Question", "default": "Question" },
+      { "type": "richtext", "id": "a", "label": "Answer", "default": "<p>Answer</p>" }
+    ]}
+  ],
+  "presets": [{ "name": "FAQ" }]
+}
+{% endschema %}
