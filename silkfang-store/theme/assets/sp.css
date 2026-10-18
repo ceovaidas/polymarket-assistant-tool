@@ -397,3 +397,13 @@ body { background: var(--sp-bg); }
 .sp-logo .sp-logo__img { display: block; height: 74px; width: auto; margin-block: -4px; }
 .sp-logo .sp-logo__img--foot { height: auto; width: 190px; }
 @media (max-width: 760px) { .sp-logo .sp-logo__img { height: 54px; } }
+
+/* Deal: one size per jacket */
+.sp-picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: -2px 0 4px; padding: 12px 14px; border: 1px dashed var(--sp-stitch); border-top: 0; background: #0b0b0a; }
+.sp-picks[hidden] { display: none; }
+.sp-pick { display: grid; gap: 5px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--sp-ink-2); }
+.sp-pick select { min-height: 42px; padding: 6px 10px; border: 1px solid var(--sp-ink-3); background: #070707; color: var(--sp-ink); font: 600 14px var(--sp-fb); letter-spacing: 0; text-transform: none; }
+.sp-pick select:focus-visible { outline: 2px solid var(--sp-terra); outline-offset: 1px; }
+/* Payment icons in quiet grey to match the black and bone */
+.sp-pay svg { filter: grayscale(1) contrast(.9); opacity: .55; transition: opacity .2s; }
+.sp-pay li:hover svg { opacity: .9; }

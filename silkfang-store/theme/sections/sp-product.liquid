@@ -173,6 +173,22 @@
                   <span class="sp-tier__n">{%- if q == 1 -%}Just this one{%- elsif q == 2 -%}2nd one only {{ extra | money }}{%- else -%}3rd one only {{ extra | money }}{%- endif -%}{%- if q > 1 %} · {{ each | money }} each{%- endif -%}</span>
                 </span>
               </label>
+              {%- if q > 1 -%}
+                {%- comment -%} Each jacket in the deal gets its own size (and colour, if there are several) {%- endcomment -%}
+                <div class="sp-picks" data-sp-picks="{{ q }}" hidden>
+                  {%- for n in (1..q) -%}
+                    <label class="sp-pick"><span>{{ section.settings.unit_one | capitalize }} {{ n }}</span>
+                      <select data-sp-pick aria-label="{{ section.settings.unit_one | capitalize }} {{ n }}">
+                        {%- for vv in p.variants -%}
+                          {%- capture vlabel -%}{%- for o in vv.options -%}{%- if p.options_with_values[forloop.index0].values.size > 1 %} / {{ o }}{% endif -%}{%- endfor -%}{%- endcapture -%}
+                          {%- assign vlabel = vlabel | remove_first: ' / ' | strip | default: vv.title -%}
+                          <option value="{{ vv.id }}"{% unless vv.available %} disabled{% endunless %}{% if vv.id == v.id %} selected{% endif %}>{{ vlabel }}{% unless vv.available %} (sold out){% endunless %}</option>
+                        {%- endfor -%}
+                      </select>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
             {%- endfor -%}
             <p class="sp-tiers__note">{{ section.settings.tiers_note }}</p>
           </fieldset>
@@ -260,7 +276,7 @@
     { "type": "text", "id": "tier2_price", "label": "Price for 2 ($)", "default": "159.99" },
     { "type": "text", "id": "tier3_price", "label": "Price for 3 ($, empty shows only 1 and 2)" },
     { "type": "text", "id": "tier3_badge", "label": "Badge on the biggest option", "default": "Best value" },
-    { "type": "text", "id": "tiers_note", "label": "Note", "default": "One for you, one for your ride-or-die. Pick both sizes in your bag; the deal kicks in automatically." },
+    { "type": "text", "id": "tiers_note", "label": "Note", "default": "One for you, one for your ride-or-die. Pick a size for each jacket; the deal kicks in automatically." },
     { "type": "text", "id": "mystery_label", "label": "Mystery discount link (opens the pop-up)", "default": "New here? Unlock a mystery discount" },
     { "type": "header", "content": "More products below" },
     { "type": "text", "id": "recs_title", "label": "Title", "default": "You might also like" },

@@ -70,6 +70,7 @@
       var add = $('[data-sp-add]', pdp), buy = $('[data-sp-buy]', pdp);
       if (!v) { add.disabled = buy.disabled = true; add.textContent = 'Unavailable'; return; }
       idInput.value = v.id;
+      $$('[data-sp-pick]', pdp).forEach(function (s) { if (!s.dataset.touched) s.value = v.id; });
       // show the chosen colour's photo and name
       if (v.featured_media) {
         var at = slides.findIndex(function (sl) { return sl.dataset.mediaId == v.featured_media.id; });
@@ -97,12 +98,32 @@
       if (!t || t.value === '1') return 'Add to bag';
       return 'Add ' + t.value + ' to bag · ' + money(+t.dataset.price);
     }
+    var showPicks = function (q) { $$('[data-sp-picks]', pdp).forEach(function (b) { b.hidden = b.dataset.spPicks !== q; }); };
     if (tiers) $$('input', tiers).forEach(function (r) {
       r.addEventListener('change', function () {
         if (qty) qty.value = r.value;
+        showPicks(r.value);
         var add = $('[data-sp-add]', pdp);
         if (!add.disabled) add.textContent = addLabel();
       });
+    });
+    // A size picked by hand in the deal stays; the others follow the size buttons above
+    $$('[data-sp-pick]', pdp).forEach(function (s) { s.addEventListener('change', function () { s.dataset.touched = '1'; }); });
+    var form = $('[data-sp-form]', pdp);
+    if (form) form.addEventListener('submit', function (e) {
+      var t = tiers && $('input:checked', tiers);
+      var box = t && $('[data-sp-picks="' + t.value + '"]', pdp);
+      if (!box) return;
+      e.preventDefault();
+      var buy = e.submitter && e.submitter.name === 'return_to';
+      var counts = {};
+      $$('[data-sp-pick]', box).forEach(function (s) { counts[s.value] = (counts[s.value] || 0) + 1; });
+      var items = Object.keys(counts).map(function (id) { return { id: +id, quantity: counts[id] }; });
+      var btn = e.submitter || $('[data-sp-add]', pdp); var was = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Adding…';
+      fetch((window.Shopify && Shopify.routes ? Shopify.routes.root : '/') + 'cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: items }) })
+        .then(function (r) { if (!r.ok) throw new Error(); location.href = buy ? '/checkout' : '/cart'; })
+        .catch(function () { btn.disabled = false; btn.textContent = was; alert('One of those sizes just sold out. Pick another and try again.'); });
     });
     $$('[data-sp-opt] input', pdp).forEach(function (i) { i.addEventListener('change', update); });
     if (variants.length) update();

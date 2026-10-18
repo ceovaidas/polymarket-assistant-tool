@@ -17,7 +17,7 @@ engine.registerFilter('image_url', (img) => (img && img.src) || '');
 engine.registerFilter('image_tag', (src, ...a) => { const o = Object.fromEntries(a.filter(Array.isArray)); return `<img src="${src}" alt="${o.alt ?? ''}" loading="lazy">`; });
 engine.registerFilter('video_tag', () => '');
 engine.registerFilter('placeholder_svg_tag', () => '<svg viewBox="0 0 10 10"><rect width="10" height="10" fill="#eee"/></svg>');
-engine.registerFilter('payment_type_svg_tag', () => '');
+engine.registerFilter('payment_type_svg_tag', (t) => { const c = { visa: ['#1a1f71', '#fff', 'VISA'], master: ['#fff', '#eb001b', '●●'], paypal: ['#fff', '#003087', 'PayPal'], apple_pay: ['#fff', '#000', 'Pay'], klarna: ['#ffb3c7', '#000', 'Klarna'] }[t] || ['#ccc', '#000', t]; return `<svg viewBox="0 0 38 24"><rect width="38" height="24" rx="3" fill="${c[0]}"/><text x="19" y="16" text-anchor="middle" font-size="8" font-family="Arial" font-weight="700" fill="${c[1]}">${c[2]}</text></svg>`; });
 engine.registerFilter('json', (v) => JSON.stringify(v));
 engine.registerFilter('payment_terms', () => '<span>Pay in 4 interest-free installments of $7.49 with Shop Pay (preview)</span>');
 engine.registerTag('paginate', {
@@ -26,7 +26,7 @@ engine.registerTag('paginate', {
 });
 engine.registerTag('form', {
   parse(token, remain) { this.tpls = []; const s = this.liquid.parser.parseStream(remain).on('tag:endform', () => s.stop()).on('template', (t) => this.tpls.push(t)).on('end', () => { throw new Error('form'); }); s.start(); },
-  * render(ctx, em) { em.write('<form class="sp-form" onsubmit="event.preventDefault(); alert(\'Preview: in Shopify this adds the jacket to the bag.\')">'); yield this.liquid.renderer.renderTemplates(this.tpls, ctx, em); em.write('</form>'); },
+  * render(ctx, em) { em.write('<form class="sp-form" data-sp-form action="#" method="post">'); yield this.liquid.renderer.renderTemplates(this.tpls, ctx, em); em.write('</form>'); },
 });
 engine.registerTag('schema', { parse(t, r) { const s = this.liquid.parser.parseStream(r).on('tag:endschema', () => s.stop()).on('end', () => {}); s.start(); }, render() {} });
 
@@ -72,7 +72,7 @@ function section(file, settings = {}, tplBlocks = {}, order = []) {
 }
 const fromTpl = (key, file) => { const t = JSON.parse(read('templates/index.json')).sections[key]; return section(file, {}, t.blocks || {}, t.block_order || []); };
 const ctx = {
-  shop: { name: 'Silkfang', email: 'hello@silkfang.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: [] },
+  shop: { name: 'Silkfang', email: 'hello@silkfang.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: ['visa', 'master', 'paypal', 'apple_pay', 'klarna'] },
   routes: { root_url: 'index.html', all_products_collection_url: 'index.html', search_url: '#', cart_url: 'cart.html', account_url: '#', cart_change_url: '#', cart_add_url: '#' },
   cart: { item_count: 0 }, collections: { all: { products: [jacket] } }, template: { name: 'index' },
 };
