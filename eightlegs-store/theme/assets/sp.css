@@ -396,8 +396,9 @@ body { background: var(--sp-bg); }
 .sp-size__t p { margin-top: 12px; }
 .sp-logo__lock { display: inline-flex; align-items: center; gap: 12px; }
 .sp-logo .sp-logo__icon { display: block; height: 60px; width: auto; margin-block: -6px; }
-.sp-logo .sp-logo__word { display: block; height: 32px; width: auto; }
-.sp-logo .sp-logo__foot { display: block; width: 240px; height: auto; }
+.sp-logo .sp-logo__word { display: block; height: 44px; width: auto; }
+.sp-logo .sp-logo__foot { display: block; width: 220px; height: auto; }
+@media (max-width: 760px) { .sp-logo .sp-logo__word { height: 34px; } }
 @media (max-width: 760px) { .sp-logo__lock { gap: 8px; } .sp-logo .sp-logo__icon { height: 38px; } .sp-logo .sp-logo__word { height: 18px; } }
 
 /* Deal: one size per jacket */
