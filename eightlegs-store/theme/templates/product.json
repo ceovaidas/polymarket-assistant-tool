@@ -10,7 +10,7 @@
         "d1": {
           "type": "detail",
           "settings": {
-            "photo": 5,
+            "photo": 2,
             "title": "Spider, front and sleeves",
             "text": "A faux-leather spider patch, stitched on, spread across the chest and down both arms."
           }
@@ -18,7 +18,7 @@
         "d2": {
           "type": "detail",
           "settings": {
-            "photo": 3,
+            "photo": 4,
             "title": "A web across the back",
             "text": "White topstitching draws one full web from collar to hem."
           }
@@ -26,7 +26,7 @@
         "d3": {
           "type": "detail",
           "settings": {
-            "photo": 7,
+            "photo": 1,
             "title": "Boxy bomber cut",
             "text": "Dropped shoulders, ribbed cuffs and hem, 2 front pockets and 1 inside."
           }

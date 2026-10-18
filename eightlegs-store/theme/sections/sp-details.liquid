@@ -15,6 +15,8 @@
       {%- for b in section.blocks -%}
         {%- assign i = b.settings.photo | minus: 1 -%}
         {%- assign m = p.media[i] -%}
+        {%- comment -%} A block whose photo doesn't exist yet stays hidden (shown as a placeholder only in the editor) {%- endcomment -%}
+        {%- unless m or request.design_mode -%}{%- continue -%}{%- endunless -%}
         <figure class="sp-detail" {{ b.shopify_attributes }}>
           <div class="sp-detail__img">{%- if m -%}{{ m.preview_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: b.settings.title, sizes: '(min-width: 990px) 33vw, 100vw' }}{%- else -%}{{ 'product-apparel-1' | placeholder_svg_tag }}{%- endif -%}</div>
           <figcaption><b>{{ b.settings.title }}</b><span>{{ b.settings.text }}</span></figcaption>

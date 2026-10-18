@@ -409,3 +409,8 @@ body { background: var(--sp-bg); }
 /* Payment icons in quiet grey to match the black and bone */
 .sp-pay svg { filter: grayscale(1) contrast(.9); opacity: .55; transition: opacity .2s; }
 .sp-pay li:hover svg { opacity: .9; }
+
+/* Cut-out (transparent) product photos: show the whole photo, floating on the web background */
+.sp-stage__slide img, .sp-detail__img img { object-fit: contain; }
+.sp-stage__slide img { filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .55)); }
+.sp-card__img img, .sp-line__img img { object-fit: contain; }
