@@ -1,4 +1,4 @@
-/* Silkfang: countdown, delivery dates, product options + gallery, multi-buy deal, pick-a-box pop-up. */
+/* Eightlegs: countdown, delivery dates, product options + gallery, multi-buy deal, pick-a-box pop-up. */
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };

@@ -1,4 +1,4 @@
-// Renders the Silkfang one-jacket store with an illustrated sample jacket: index.html and cart.html.
+// Renders the Eightlegs one-jacket store with an illustrated sample jacket: index.html and cart.html.
 // Usage: cd preview && npm install liquidjs && node build.mjs
 import { Liquid } from 'liquidjs';
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
@@ -72,7 +72,7 @@ function section(file, settings = {}, tplBlocks = {}, order = []) {
 }
 const fromTpl = (key, file) => { const t = JSON.parse(read('templates/index.json')).sections[key]; return section(file, {}, t.blocks || {}, t.block_order || []); };
 const ctx = {
-  shop: { name: 'Silkfang', email: 'hello@silkfang.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: ['visa', 'master', 'paypal', 'apple_pay', 'klarna'] },
+  shop: { name: 'Eightlegs', email: 'hello@eightlegs.com', policies: [{ title: 'Refund policy', url: '#' }, { title: 'Shipping policy', url: '#' }, { title: 'Privacy policy', url: '#' }], enabled_payment_types: ['visa', 'master', 'paypal', 'apple_pay', 'klarna'] },
   routes: { root_url: 'index.html', all_products_collection_url: 'index.html', search_url: '#', cart_url: 'cart.html', account_url: '#', cart_change_url: '#', cart_add_url: '#' },
   cart: { item_count: 0 }, collections: { all: { products: [jacket] } }, template: { name: 'index' },
 };
@@ -84,13 +84,13 @@ const pdp = section('sp-product.liquid');
 const details = fromTpl('details', 'sp-details.liquid');
 const faq = fromTpl('faq', 'sp-faq.liquid');
 
-const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><style>body{margin:0;background:#070707}</style></head><body>${body}</body></html>`;
+const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="icon" href="assets/eightlegs-favicon-32.png"><style>body{margin:0;background:#070707}</style></head><body>${body}</body></html>`;
 mkdirSync(join(here, 'assets'), { recursive: true });
-for (const f of ['sp.css', 'sp.js', 'silkfang-logo.webp', 'silkfang-logo-full.webp']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
-writeFileSync(join(here, 'index.html'), page('Silkfang · Spider Web Faux-Leather Jacket', [await render(head), await render(pdp), await render(details), await render(faq), await render(foot), await render(pop)].join('\n')));
+for (const f of ['sp.css', 'sp.js', 'eightlegs-wordmark.webp', 'eightlegs-icon.webp', 'eightlegs-lockup.webp', 'eightlegs-favicon-32.png']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
+writeFileSync(join(here, 'index.html'), page('Eightlegs · Spider Web Faux-Leather Jacket', [await render(head), await render(pdp), await render(details), await render(faq), await render(foot), await render(pop)].join('\n')));
 
 // Cart mock: one jacket in the bag, so the 2-jacket nudge shows
 const line = { product: { ...jacket, has_only_default_variant: false }, product_id: 1, variant: variants[2], quantity: 1, url: 'index.html', image: media[0].preview_image, final_line_price: 8999, original_line_price: 8999, original_price: 8999, line_level_discount_allocations: [], url_to_remove: '#' };
 const cart = { item_count: 1, items: [line], total_price: 8999, items_subtotal_price: 8999, total_discount: 0, cart_level_discount_applications: [] };
-writeFileSync(join(here, 'cart.html'), page('Your bag · Silkfang', [await render(head, { cart }), await render(section('sp-cart.liquid'), { cart }), await render(foot)].join('\n')));
+writeFileSync(join(here, 'cart.html'), page('Your bag · Eightlegs', [await render(head, { cart }), await render(section('sp-cart.liquid'), { cart }), await render(foot)].join('\n')));
 console.log('wrote preview/index.html and cart.html');

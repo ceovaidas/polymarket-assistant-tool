@@ -1,7 +1,7 @@
 <footer class="sp-foot">
   <div class="sp-wrap sp-foot__in">
     <div>
-      <p class="sp-logo sp-logo--foot"><img class="sp-logo__img sp-logo__img--foot" src="{{ 'silkfang-logo-full.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="520" height="411"></p>
+      <p class="sp-logo sp-logo--foot"><img class="sp-logo__foot" src="{{ 'eightlegs-lockup.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="640" height="280"></p>
       <p class="sp-foot__txt">{{ section.settings.text }}</p>
       {%- if shop.email != blank -%}<p class="sp-foot__txt">Say hi: <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>{%- endif -%}
     </div>
@@ -17,7 +17,7 @@
 </footer>
 {% schema %}
 {
-  "name": "Silkfang footer",
+  "name": "Eightlegs footer",
   "settings": [
     { "type": "textarea", "id": "text", "label": "Text", "default": "One jacket, made to be noticed. Shipped with tracking, worn after dark." }
   ]

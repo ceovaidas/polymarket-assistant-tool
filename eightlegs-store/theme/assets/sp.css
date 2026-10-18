@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-/* Silkfang: after-dark streetwear. Near-black like the faux leather, bone white like the spider patch,
+/* Eightlegs: after-dark streetwear. Near-black like the faux leather, bone white like the spider patch,
    thin dashed lines like the white topstitched web, and a faint web in the corner of every page. */
 :root {
   --sp-bg: #070707;
@@ -370,7 +370,7 @@ body { background: var(--sp-bg); }
 .sp-empty .sp-chip { margin-bottom: 16px; }
 .sp-empty .sp-btn { margin-top: 24px; }
 
-/* Silkfang: the web and the topstitching */
+/* Eightlegs: the web and the topstitching */
 .sp-mark { display: block; width: 22px; height: 22px; }
 .sp-logo__mark { transform: none; }
 .sp-info, .sp-eta, .sp-tier__box, .sp-cart__sum, .sp-line, .sp-ship { border-style: dashed; border-color: var(--sp-stitch); }
@@ -394,9 +394,11 @@ body { background: var(--sp-bg); }
 .sp-size__t th, .sp-size__t td { padding: 10px 12px; border-bottom: 1px dashed var(--sp-stitch); text-align: left; }
 .sp-size__t th { color: var(--sp-ink); font-weight: 600; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; }
 .sp-size__t p { margin-top: 12px; }
-.sp-logo .sp-logo__img { display: block; height: 74px; width: auto; margin-block: -4px; }
-.sp-logo .sp-logo__img--foot { height: auto; width: 190px; }
-@media (max-width: 760px) { .sp-logo .sp-logo__img { height: 54px; } }
+.sp-logo__lock { display: inline-flex; align-items: center; gap: 12px; }
+.sp-logo .sp-logo__icon { display: block; height: 60px; width: auto; margin-block: -6px; }
+.sp-logo .sp-logo__word { display: block; height: 32px; width: auto; }
+.sp-logo .sp-logo__foot { display: block; width: 240px; height: auto; }
+@media (max-width: 760px) { .sp-logo__lock { gap: 8px; } .sp-logo .sp-logo__icon { height: 38px; } .sp-logo .sp-logo__word { height: 18px; } }
 
 /* Deal: one size per jacket */
 .sp-picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: -2px 0 4px; padding: 12px 14px; border: 1px dashed var(--sp-stitch); border-top: 0; background: #0b0b0a; }
