@@ -1,0 +1,44 @@
+{%- comment -%}
+  Photo strip: each block shows a picked image, or a photo bundled with the theme by file name.
+  Captions describe the photo honestly; this is not a customer-photo or review section.
+{%- endcomment -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-gallery">
+  <div class="sp-wrap">
+    <div class="sp-details__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="sp-chip">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sp-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<p class="sp-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="sp-gallery__grid">
+      {%- for b in section.blocks -%}
+        <figure class="sp-gallery__item" {{ b.shopify_attributes }}>
+          {%- if b.settings.image != blank -%}
+            {{ b.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', alt: b.settings.caption, sizes: '(min-width: 900px) 50vw, 100vw' }}
+          {%- elsif b.settings.asset != blank -%}
+            <img src="{{ b.settings.asset | asset_url }}" alt="{{ b.settings.caption | escape }}" loading="lazy" width="1100" height="1366">
+          {%- endif -%}
+          {%- if b.settings.caption != blank -%}<figcaption>{{ b.settings.caption }}</figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Photo strip",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "How it arrives" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Straight out of the bag" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Folded flat in a resealable bag. Unzip, shake it out, wear it tonight." }
+  ],
+  "blocks": [
+    { "type": "photo", "name": "Photo", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "asset", "label": "Or a theme file name", "info": "Used when no image is picked, e.g. eightlegs-bag-pair.webp" },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ]}
+  ],
+  "presets": [{ "name": "Photo strip" }]
+}
+{% endschema %}

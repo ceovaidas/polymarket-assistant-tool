@@ -86,11 +86,41 @@
         "q5"
       ],
       "settings": {}
+    },
+    "gallery": {
+      "type": "sp-gallery",
+      "blocks": {
+        "g1": {
+          "type": "photo",
+          "settings": {
+            "asset": "eightlegs-bag-pair.webp",
+            "caption": "Twin up: two jackets, two bags."
+          }
+        },
+        "g2": {
+          "type": "photo",
+          "settings": {
+            "asset": "eightlegs-bag-bed.webp",
+            "caption": "Folded flat, ready to throw on."
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2"
+      ],
+      "settings": {}
+    },
+    "reviews": {
+      "type": "sp-reviews",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "details",
+    "gallery",
+    "reviews",
     "faq"
   ]
 }

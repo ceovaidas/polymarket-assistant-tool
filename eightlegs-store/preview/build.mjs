@@ -83,11 +83,13 @@ const pop = section('sp-popup.liquid', { delay: 3 });
 const pdp = section('sp-product.liquid');
 const details = fromTpl('details', 'sp-details.liquid');
 const faq = fromTpl('faq', 'sp-faq.liquid');
+const gallery = fromTpl('gallery', 'sp-gallery.liquid');
+const reviews = section('sp-reviews.liquid');
 
 const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="icon" href="assets/eightlegs-favicon-32.png"><style>body{margin:0;background:#070707}</style></head><body>${body}</body></html>`;
 mkdirSync(join(here, 'assets'), { recursive: true });
-for (const f of ['sp.css', 'sp.js', 'eightlegs-wordmark.webp', 'eightlegs-icon.webp', 'eightlegs-lockup.webp', 'eightlegs-favicon-32.png']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
-writeFileSync(join(here, 'index.html'), page('Eightlegs · Spider Web Faux-Leather Jacket', [await render(head), await render(pdp), await render(details), await render(faq), await render(foot), await render(pop)].join('\n')));
+for (const f of ['sp.css', 'sp.js', 'eightlegs-wordmark.webp', 'eightlegs-icon.webp', 'eightlegs-lockup.webp', 'eightlegs-favicon-32.png', 'eightlegs-bag-pair.webp', 'eightlegs-bag-bed.webp']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
+writeFileSync(join(here, 'index.html'), page('Eightlegs · Spider Web Faux-Leather Jacket', [await render(head), await render(pdp), await render(details), await render(gallery), await render(reviews), await render(faq), await render(foot), await render(pop)].join('\n')));
 
 // Cart mock: one jacket in the bag, so the 2-jacket nudge shows
 const line = { product: { ...jacket, has_only_default_variant: false }, product_id: 1, variant: variants[2], quantity: 1, url: 'index.html', image: media[0].preview_image, final_line_price: 8999, original_line_price: 8999, original_price: 8999, line_level_discount_allocations: [], url_to_remove: '#' };

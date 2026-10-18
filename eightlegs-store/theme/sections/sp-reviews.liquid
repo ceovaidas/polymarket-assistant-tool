@@ -1,0 +1,34 @@
+{%- comment -%}
+  Reviews come only from a reviews app (add its block here in the theme editor). Until there are real
+  reviews, the section invites the first buyers to leave one; it never shows made-up numbers or quotes.
+{%- endcomment -%}
+{{ 'sp.css' | asset_url | stylesheet_tag }}
+<section class="sp sp-reviews" id="reviews">
+  <div class="sp-wrap">
+    <div class="sp-details__head">
+      <h2 class="sp-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.proof != blank -%}<p class="sp-chip">{{ section.settings.proof }}</p>{%- endif -%}
+    </div>
+    {%- if section.blocks.size > 0 -%}
+      <div class="sp-reviews__app">{%- for block in section.blocks -%}{% render block %}{%- endfor -%}</div>
+    {%- else -%}
+      <div class="sp-reviews__empty">
+        <p class="sp-lead">{{ section.settings.empty_title }}</p>
+        <p>{{ section.settings.empty_text }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Reviews" },
+    { "type": "text", "id": "proof", "label": "Real numbers only", "info": "e.g. '4.8 from 212 reviews' once your reviews app shows it. Blank hides it." },
+    { "type": "text", "id": "empty_title", "label": "Text before the first review", "default": "Fresh drop. No reviews yet." },
+    { "type": "textarea", "id": "empty_text", "label": "Invite", "default": "Got yours? Post a photo review and get $10 to spend on your next order." }
+  ],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [{ "name": "Reviews" }]
+}
+{% endschema %}
