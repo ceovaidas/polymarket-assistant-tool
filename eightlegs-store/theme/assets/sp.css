@@ -410,11 +410,8 @@ body { background: var(--sp-bg); }
 .sp-pay svg { filter: grayscale(1) contrast(.9); opacity: .55; transition: opacity .2s; }
 .sp-pay li:hover svg { opacity: .9; }
 
-/* Whole photo on pure black, so cut-outs and black-studio shots blend into the frame */
-.sp-stage { background: #000; }
-.sp-stage__slide img { object-fit: contain; }
-.sp-detail__img { background: #000; }
-.sp-detail__img img { object-fit: cover; }
+/* Cut-out (transparent) 4:5 product photos: show the whole photo, floating on the web background */
+.sp-stage__slide img, .sp-detail__img img { object-fit: contain; }
 .sp-stage__slide img { filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .55)); }
 .sp-card__img img, .sp-line__img img { object-fit: contain; }
 
