@@ -8,6 +8,8 @@
 
 ## Standing requests
 
+- **Theme zip:** after every theme change, rebuild the store's `dist/*-theme.zip` and send it to the user
+  as a file (SendUserFile), not just a path.
 - **Buyer psychology:** before writing hooks, product copy, ads or offers, and whenever the user asks
   whether a product will sell, follow `.claude/skills/buyer-psychology/SKILL.md`.
 - **Video → prompts:** when the user uploads a video and asks for prompts, follow
