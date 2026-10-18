@@ -232,7 +232,7 @@ body { background: var(--sp-bg); }
 .sp-foot__links a { color: rgba(247, 240, 229, .78); text-decoration: none; }
 .sp-foot__links a:hover { color: var(--sp-terra); }
 .sp-foot__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 16px 30px; border-top: 1px solid rgba(247, 240, 229, .15); color: rgba(247, 240, 229, .5); font-size: 13px; }
-.sp-pay { list-style: none; display: flex; gap: 6px; margin: 0; padding: 0; }
+.sp-pay { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; max-width: 100%; min-width: 0; }
 .sp-pay svg { width: 38px; height: 24px; }
 
 @media (prefers-reduced-motion: reduce) { .sp *, .sp-pop * { animation: none !important; transition: none !important; } }
@@ -429,3 +429,6 @@ body { background: var(--sp-bg); }
 .sp-reviews__empty { max-width: 640px; margin: 0 auto; padding: 28px; border: 1px dashed var(--sp-stitch); text-align: center; display: grid; gap: 8px; }
 .sp-reviews__empty .sp-lead { margin: 0 auto; color: var(--sp-ink); }
 .sp-reviews__empty p:last-child { color: var(--sp-ink-2); }
+
+/* Never let one wide row zoom the whole page out on phones */
+html, body { overflow-x: clip; }
