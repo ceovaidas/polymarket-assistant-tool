@@ -375,7 +375,7 @@ body { background: var(--sp-bg); }
 .sp-logo__mark { transform: none; }
 .sp-info, .sp-eta, .sp-tier__box, .sp-cart__sum, .sp-line, .sp-ship { border-style: dashed; border-color: var(--sp-stitch); }
 .sp-tier input:checked + .sp-tier__box { border-style: solid; border-color: var(--sp-terra); }
-.sp-stage { background: var(--sp-web) no-repeat center / 135%, radial-gradient(ellipse 60% 55% at 50% 45%, #1b1b19, #070707 75%); }
+.sp-stage { background: transparent; }
 .sp-stage__slide img { object-fit: cover; }
 .sp-details { padding-block: 80px 24px; }
 .sp-details__head { display: grid; gap: 14px; justify-items: center; text-align: center; margin-bottom: 34px; }
@@ -383,7 +383,7 @@ body { background: var(--sp-bg); }
 .sp-details__grid { display: grid; gap: 18px; }
 @media (min-width: 900px) { .sp-details__grid { grid-template-columns: repeat(3, 1fr); } }
 .sp-detail { margin: 0; display: grid; gap: 14px; }
-.sp-detail__img { aspect-ratio: 4 / 5; overflow: hidden; border: 1px dashed var(--sp-stitch); background: var(--sp-card); }
+.sp-detail__img { aspect-ratio: 4 / 5; overflow: hidden; background: transparent; }
 .sp-detail__img img, .sp-detail__img svg { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
 .sp-detail:hover .sp-detail__img img { transform: scale(1.04); }
 .sp-detail figcaption { display: grid; gap: 4px; }
