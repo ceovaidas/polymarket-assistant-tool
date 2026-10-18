@@ -16,7 +16,7 @@
       {%- if section.settings.extra_label != blank -%}<a href="{{ section.settings.extra_link | default: '/pages/contact' }}">{{ section.settings.extra_label }}</a>{%- endif -%}
     </nav>
     <a class="sp-logo" href="{{ routes.root_url }}">
-      {%- if section.settings.logo != blank -%}{{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, width: section.settings.logo_width, height: null }}{%- else -%}<span class="sp-logo__mark">{%- render 'sp-mark' -%}</span>{{ shop.name }}{%- endif -%}
+      {%- if section.settings.logo != blank -%}{{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, width: section.settings.logo_width, height: null }}{%- elsif section.settings.bundled_logo -%}<img class="sp-logo__img" src="{{ 'silkfang-logo.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="640" height="299">{%- else -%}<span class="sp-logo__mark">{%- render 'sp-mark' -%}</span>{{ shop.name }}{%- endif -%}
     </a>
     <div class="sp-head__end">
       <a class="sp-head__acc" href="{{ routes.account_url }}">Account</a>
@@ -32,6 +32,7 @@
     { "type": "text", "id": "countdown_label", "label": "Countdown label", "default": "Launch offer ends in" },
     { "type": "text", "id": "bar", "label": "Announcement bar", "default": "$0 shipping, on us · Tracked delivery · 30-day returns" },
     { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "checkbox", "id": "bundled_logo", "label": "Use the Silkfang logo that comes with the theme", "default": true, "info": "Used when no logo image is picked above." },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 260, "step": 10, "unit": "px", "default": 150 },
     { "type": "text", "id": "extra_label", "label": "Extra menu item", "default": "Contact" },
     { "type": "url", "id": "extra_link", "label": "Extra menu link (default: /pages/contact)" }

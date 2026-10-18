@@ -394,3 +394,6 @@ body { background: var(--sp-bg); }
 .sp-size__t th, .sp-size__t td { padding: 10px 12px; border-bottom: 1px dashed var(--sp-stitch); text-align: left; }
 .sp-size__t th { color: var(--sp-ink); font-weight: 600; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; }
 .sp-size__t p { margin-top: 12px; }
+.sp-logo .sp-logo__img { display: block; height: 74px; width: auto; margin-block: -4px; }
+.sp-logo .sp-logo__img--foot { height: auto; width: 190px; }
+@media (max-width: 760px) { .sp-logo .sp-logo__img { height: 54px; } }

@@ -86,7 +86,7 @@ const faq = fromTpl('faq', 'sp-faq.liquid');
 
 const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><style>body{margin:0;background:#070707}</style></head><body>${body}</body></html>`;
 mkdirSync(join(here, 'assets'), { recursive: true });
-for (const f of ['sp.css', 'sp.js']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
+for (const f of ['sp.css', 'sp.js', 'silkfang-logo.webp', 'silkfang-logo-full.webp']) copyFileSync(join(theme, 'assets', f), join(here, 'assets', f));
 writeFileSync(join(here, 'index.html'), page('Silkfang · Spider Web Faux-Leather Jacket', [await render(head), await render(pdp), await render(details), await render(faq), await render(foot), await render(pop)].join('\n')));
 
 // Cart mock: one jacket in the bag, so the 2-jacket nudge shows
