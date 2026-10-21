@@ -56,6 +56,12 @@ Rules:
 - Keep the same person, outfit and place identical in wording across all scenes for consistency.
 - Do not write prompts that rely on bypassing a model's content filter; describe novelty products plainly.
 
+### Template gallery
+
+Check `templates/README.md` first: proven formats with fill-in slots live in `templates/`. When the user
+confirms a generated video worked, save its prompts there as a new template (slots for product, person,
+venue) and add it to the README table.
+
 ### Lessons from real generations (follow these every time)
 
 - **The start frame decides the physics.** Pose the subject in the image so the motion is short and
