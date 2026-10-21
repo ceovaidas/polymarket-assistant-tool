@@ -16,6 +16,10 @@ pet beds, plush, bags, blankets, jackets, gadgets.
 | 3 | 7.5–10.5 s | Walking through a crowd, carrying the product securely in both arms | Portability |
 | 4 | 10.5–13.5 s | At the event, product on lap / own seat, reacting to the action; closer shot to end | Payoff, product as hero |
 
+Music (original reel): **Mambo No. 5 – Pérez Prado** (1949 instrumental, its "one, two, three... uh!"
+count matches the finger countdown). Add it via the Instagram/TikTok music library for organic posts;
+for paid ads use a similar track from the Meta Sound Collection / TikTok Commercial Music Library.
+
 On-screen text (whole video): `POV: you're a [pet/product] parent with adult money now 😭`
 End CTA: `Comment "[WORD]" ...` (only with a real DM automation; otherwise "Link in bio").
 
