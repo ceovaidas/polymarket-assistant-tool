@@ -38,6 +38,19 @@ and any risks (brand logos, fake claims, animal or person safety, product used i
 ### 2. Kas pakeista
 Table original → our version (setting, people, angle, product, text), so it is not a 1:1 copy.
 
+### 2b. Kiti kampai (remix ideas)
+Same structure and hook mechanic, moved to new worlds that fit the product and its buyer. Give 4-5
+options in a table: **setting** · **one-line concept** (what happens in each beat) · **why it fits the
+buyer** · **hook text**. Mix:
+- **Unexpected place:** a home video moved to a stadium, airport, subway, gym, concert, beach or road trip.
+- **Identity niche:** the scene where the target buyer lives (cat moms: cafés, cozy apartments, vet,
+  road trips; streetwear: motorcycle meets, rooftops, concerts, night city).
+- **Scale-up:** one person becomes a crowd, a couple or a whole team.
+- **Season or moment:** holiday, first snow, Halloween, Black Friday shipping cut-off (real dates only).
+Pick the strongest one as the default for section 5, and say the others can be written on request.
+Realism check: the product must make sense there (a cat bed at a stadium works as a portable comfort
+bed; never show it used in a way it isn't made for, never real team or brand logos).
+
 ### 3. Muzika
 Original track (Shazam). Organic: add from the in-app library. Paid ads: a similar track from the
 Meta Sound Collection / TikTok Commercial Music Library. Where the beat drop should land (second).
