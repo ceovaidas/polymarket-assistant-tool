@@ -12,6 +12,9 @@
   as a file (SendUserFile), not just a path.
 - **Buyer psychology:** before writing hooks, product copy, ads or offers, and whenever the user asks
   whether a product will sell, follow `.claude/skills/buyer-psychology/SKILL.md`.
+- **Reel link → full pack:** when the user sends a reel link or video to remake, follow
+  `.claude/skills/reel-pack/SKILL.md` and reply with the whole pack (breakdown, music, hooks, prompts,
+  caption, hashtags, edit notes, cost) in one message.
 - **Video → prompts:** when the user uploads a video and asks for prompts, follow
   `.claude/skills/video-prompts/SKILL.md` exactly: scene breakdown, then a full self-contained image
   prompt and a motion prompt for every scene, then the cost table.
