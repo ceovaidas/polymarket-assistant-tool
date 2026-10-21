@@ -56,6 +56,34 @@ Rules:
 - Keep the same person, outfit and place identical in wording across all scenes for consistency.
 - Do not write prompts that rely on bypassing a model's content filter; describe novelty products plainly.
 
+### Lessons from real generations (follow these every time)
+
+- **The start frame decides the physics.** Pose the subject in the image so the motion is short and
+  obvious: a cat already half inside the bed, a person already holding the jacket, the subject in front
+  of the opening. If the subject has to walk around an object, the model takes a shortcut (over it,
+  through it). Never fix that in the motion prompt; fix the image.
+- **One simple action per clip.** Don't ask for things the model can't see (turning around inside a
+  pouch, putting on a hoodie under a jacket). Split into two clips and cut on the action.
+- **Start every motion prompt with a lock line:** "Continue exactly from the start image, same
+  full-colour footage, same lighting and white balance, static camera, no cuts." Name what must NOT
+  change: no night-vision / black-and-white switch, no second cat or person, no object rotating,
+  growing or changing shape.
+- **Label which image each motion prompt belongs to.** Pasting a motion prompt from another scene
+  (e.g. an infrared one) silently breaks the clip.
+- **Product lock with negatives.** Describe the product exactly, then list what it is NOT (no hood,
+  not an all-over print, only one appliqué on the chest...) and add "if unsure, copy it from the product
+  reference". Attach only one clear front photo of the product.
+- **Realism cues:** "REAL phone footage, NOT CGI", practical light only with realistic falloff, deep
+  focus (zero blur unless asked), subtle low-light noise, small real-life imperfections (wrinkled
+  sheets, stray hairs, uneven grass, scuffs, slightly blown-out sky). Too-clean, symmetric, perfectly
+  lit scenes read as AI.
+- **No phone in frame:** words like "iPhone UGC" or "phone on a tripod" can put a phone in someone's
+  hand; add "no phone visible anywhere" when a person's hands are in shot.
+- **Animals and people are never hurt:** falls land softly and safely on their feet.
+- **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
+  mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
+  sentence in every scene so the angle matches across cuts.
+
 ## Offer wording in hooks, captions and CTAs
 
 Follow the "Offer wording" table in `CLAUDE.md`: "$10 to spend" not "$10 off", "mystery discount" not
