@@ -86,6 +86,12 @@ venue) and add it to the README table.
 - **No phone in frame:** words like "iPhone UGC" or "phone on a tripod" can put a phone in someone's
   hand; add "no phone visible anywhere" when a person's hands are in shot.
 - **Animals and people are never hurt:** falls land softly and safely on their feet.
+- **Fewer shots (user feedback):** default to 3-4 shots per video, each one image + one simple action.
+  Merge beats instead of adding shots (e.g. the leap happens inside the wide shot, no separate drone
+  shot). More shots = more cost, more drift, harder to keep consistent. Offer extra shots only as options.
+- **Check consistency before motion:** when the user sends generated frames, compare person and pet
+  across them (hair, beard, age, cat breed and colour). If one drifted, give a short edit prompt
+  ("replace the cat with the one from reference image 1, keep everything else") before writing motion.
 - **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
   mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
   sentence in every scene so the angle matches across cuts.
