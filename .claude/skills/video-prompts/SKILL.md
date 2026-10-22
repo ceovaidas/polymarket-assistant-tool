@@ -154,6 +154,10 @@ venue) and add it to the README table.
   pink, no other print") and put "pink, unicorn, different pattern, different colour" in the negative.
   Image-to-video uses only the start (and end) frame: tell the user to remove any other reference/element
   images in the video tool. A video that shows a different product than we sell can't be posted.
+- **Ask which product photo the user attaches and describe THAT one.** The user switched to a pink
+  rocking-horse variant while prompts still said blue bunnies; the models followed the photo and the
+  shots disagreed. If the product photo contains a pet, add "ignore the cat in reference 1, use only
+  the cat from reference 2" (a ragdoll from the product photo leaked into a shot).
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
