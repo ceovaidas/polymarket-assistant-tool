@@ -86,6 +86,13 @@ venue) and add it to the README table.
 - **No phone in frame:** words like "iPhone UGC" or "phone on a tripod" can put a phone in someone's
   hand; add "no phone visible anywhere" when a person's hands are in shot.
 - **Animals and people are never hurt:** falls land softly and safely on their feet.
+- **No fake camera moves (user feedback):** slow push-ins, dollies and orbits read as CGI and make the
+  scene warp (the boat and the man shifted). Default every motion prompt to: "locked-off static
+  camera, like a phone resting on the bench: no zoom, no push-in, no orbit, no pan, no parallax";
+  allow only tiny natural handheld sway when the shot is clearly handheld. Do zooms in the edit.
+- **Consistency lock (user rule):** one video = one cat (same breed and colour), one person (same face,
+  hair, beard, clothes) and one setting (same place, light, time of day) in every shot. Write those
+  sentences once, paste them identically into every image prompt, and attach shot 1 as a reference.
 - **Fewer shots (user feedback):** default to 3-4 shots per video, each one image + one simple action.
   Merge beats instead of adding shots (e.g. the leap happens inside the wide shot, no separate drone
   shot). More shots = more cost, more drift, harder to keep consistent. Offer extra shots only as options.
