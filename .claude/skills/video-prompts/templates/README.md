@@ -21,4 +21,7 @@ Formats tried in conversation but not yet confirmed by a finished video (save th
 - **"The idea 🤢" vs "The Results" (Peekapaws hanging car cat bed, 23.3M views / 2.9M likes, 10.8 s,
   *Highway to Hell – AC/DC*):** a cheap version fails with the cat in 3 s, the product works, then quick
   "results" cuts in new settings. Car-guy garage + cute cat contrast drives shares.
+- **"DO NOT show this to your mom" kick-unroll reveal (heated hooded robe, 12.5M views / 141k shares,
+  13 s, *Let It Snow – Dean Martin*):** POV from the sofa, she counts 3-2-1 and kicks a rolled-up item on
+  the rug, it unrolls, cut to her wearing it, then feature close-ups and a cozy payoff.
 - **Couple shop drop:** the partner says "stop buying…", an item drops and smashes, the product is bought, then a hero shot.
