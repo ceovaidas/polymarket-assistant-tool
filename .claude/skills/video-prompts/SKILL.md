@@ -112,6 +112,10 @@ venue) and add it to the README table.
   walk or jump", and lands on something soft right below, only waking after landing.
 - **Kling adds its own cuts:** write "single continuous take, no cuts, no close-up insert" or it may
   splice in a close-up at the end.
+- **Start + End frame clips can overshoot:** in the Texas unboxing the bed came out, then sank back into
+  the box before the end. Always check the last second and give exact trim points; say "ends holding the
+  bed up, it never goes back into the box". Soft products held in the air: add "soft floppy fabric,
+  sags naturally, not a rigid bucket".
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
