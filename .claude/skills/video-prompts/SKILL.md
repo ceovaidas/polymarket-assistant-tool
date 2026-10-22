@@ -158,6 +158,10 @@ venue) and add it to the README table.
   rocking-horse variant while prompts still said blue bunnies; the models followed the photo and the
   shots disagreed. If the product photo contains a pet, add "ignore the cat in reference 1, use only
   the cat from reference 2" (a ragdoll from the product photo leaked into a shot).
+- **False NSFW flags on harmless shots:** a woman + "bed"/"sleeping-bag bed" + "lounges on a daybed",
+  "linen dress", "like carrying a baby" got two images refused. For scenes with a person, call the
+  product "the cat pod" or "the cat nest", dress the person fully (long sleeves, trousers), seat them
+  upright in a chair, and avoid baby/body/lounging words. Plain wording, not filter tricks.
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
