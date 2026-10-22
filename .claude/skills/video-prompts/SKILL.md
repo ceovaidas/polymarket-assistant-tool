@@ -99,6 +99,13 @@ venue) and add it to the README table.
 - **Check consistency before motion:** when the user sends generated frames, compare person and pet
   across them (hair, beard, age, cat breed and colour). If one drifted, give a short edit prompt
   ("replace the cat with the one from reference image 1, keep everything else") before writing motion.
+- **Spell out product geometry and scale for "pet in product" poses:** "halfway inside" alone made the
+  model drape the cat bed over the cat like a shell, or blow the bed up bigger than the seat. Write: a
+  closed pouch lying flat on <surface>, closed end at <side>, opening facing <side>, about <size> (≈1.5x
+  the cat's body length, fits on the seat with room to spare); which body parts are inside (a cat-shaped
+  bulge under the fabric) and which stick out of the opening; plus negatives "not draped over the cat,
+  not worn like a blanket, the cat is not underneath it, not oversized". If a past frame got the pose
+  right (fishing shot 3), attach it as an extra pose reference.
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
