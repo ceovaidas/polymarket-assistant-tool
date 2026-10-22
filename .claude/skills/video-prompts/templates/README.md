@@ -6,6 +6,7 @@ user says a generated video worked, save it here as a template with slots (`{PRO
 | Template | File | Status | Best for |
 |---|---|---|---|
 | 3-2-1 reveal → it goes everywhere | `countdown-reveal-everywhere.md` | ✅ proven (user-approved) | portable products, pet products |
+| Took my pet ___ → buddy, upgraded | `fail-then-cozy-upgrade.md` | ✅ liked by user (fix consistency) | pet products, identity niches |
 
 Music identified in the reference reels (Shazam): 3-2-1 reveal → *Mambo No. 5 – Pérez Prado*;
 fan-blade swap and "It's just a hoodie" → *Golden Brown – The Stranglers (slowed)*; cat-bed problem vs

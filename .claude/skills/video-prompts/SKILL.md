@@ -99,6 +99,17 @@ venue) and add it to the README table.
 - **Check consistency before motion:** when the user sends generated frames, compare person and pet
   across them (hair, beard, age, cat breed and colour). If one drifted, give a short edit prompt
   ("replace the cat with the one from reference image 1, keep everything else") before writing motion.
+- **Say what to attach, on every shot:** start each image prompt block (outside the prompt) with
+  "Attach: product photo + shot 1 image" from shot 2 onward. In the fishing video the user skipped it
+  and the cat turned from orange to a ragdoll and the man got younger: the #1 reason a video reads as AI.
+- **Timing:** hook action inside the first 1 s; every middle shot 2-3 s; only the payoff may be longer.
+- **Always end on a close-up payoff:** the pet's face in the product, slow blink. A wide final shot
+  makes the product too small to sell.
+- **Review checklist for the user's finished videos** (look at a contact sheet, then score):
+  same pet colour/breed in every shot · same person · same setting/light · static camera, no warping ·
+  hook action by 1 s · no shot over 3 s except the payoff · close-up payoff with the product readable ·
+  animal safe · on-screen text in the top third. Score each, give the 2-3 cheapest fixes, never promise
+  virality (give ranges and say what would raise them).
 - **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
   mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
   sentence in every scene so the angle matches across cuts.
