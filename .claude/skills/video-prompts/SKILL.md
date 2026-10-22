@@ -116,6 +116,12 @@ venue) and add it to the README table.
   the box before the end. Always check the last second and give exact trim points; say "ends holding the
   bed up, it never goes back into the box". Soft products held in the air: add "soft floppy fabric,
   sags naturally, not a rigid bucket".
+- **Avoid shape-changing product actions:** kicking/unrolling/throwing a soft product made Kling fling it at
+  the lens and morph it into a different product (round donut bed). Prefer reveals where the product's
+  shape never changes (pull a blanket off, open a box lid) and lock the result with an End frame that
+  already shows the correct product.
+- **Before any motion, check the start frame shows the product from reference 1** (right colour and
+  print). A pink bed appeared because the product photo was not attached; the video can never fix that.
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
