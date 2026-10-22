@@ -122,6 +122,12 @@ venue) and add it to the README table.
   already shows the correct product.
 - **Before any motion, check the start frame shows the product from reference 1** (right colour and
   print). A pink bed appeared because the product photo was not attached; the video can never fix that.
+- **Video models recolour the product:** Kling turned the blue bunny bed pink (unicorn print) in 3 of 4
+  clips although the start frames were blue, and added a cat to an empty bed. In every motion prompt add a
+  colour lock ("the bed stays exactly as in the start frame: cornflower-blue with white bunny faces, never
+  pink, no other print") and put "pink, unicorn, different pattern, different colour" in the negative.
+  Image-to-video uses only the start (and end) frame: tell the user to remove any other reference/element
+  images in the video tool. A video that shows a different product than we sell can't be posted.
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
