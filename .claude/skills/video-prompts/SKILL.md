@@ -106,6 +106,12 @@ venue) and add it to the README table.
   bulge under the fabric) and which stick out of the opening; plus negatives "not draped over the cat,
   not worn like a blanket, the cat is not underneath it, not oversized". If a past frame got the pose
   right (fishing shot 3), attach it as an extra pose reference.
+- **Accidental slip/fall, not a jump:** an awake cat sitting or lying alert on an edge will walk and jump
+  down on purpose. Pose it in the start frame sound asleep, belly-up or on its back, half its body already
+  over the edge; in motion say it stays asleep and limp, slides off passively like a sack, "does not stand,
+  walk or jump", and lands on something soft right below, only waking after landing.
+- **Kling adds its own cuts:** write "single continuous take, no cuts, no close-up insert" or it may
+  splice in a close-up at the end.
 - **Upload line on every shot (user request):** put a line right above each image prompt and each
   motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
   `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
