@@ -56,6 +56,32 @@ Rules:
 - Keep the same person, outfit and place identical in wording across all scenes for consistency.
 - Do not write prompts that rely on bypassing a model's content filter; describe novelty products plainly.
 
+### Delivery format: numbered steps (user-approved, use every time)
+
+Write the prompts as a numbered build order, one generation per step, so the user can follow it top to
+bottom without guessing. Never mix scene order and build order.
+
+1. **ŽINGSNIS 0 · Pasiruošimas:** clear old references/elements in the video tool; have the product photo
+   and the pet/person reference ready.
+2. **Image steps first**, anchor shot first (the one with person + pet + product), then the rest.
+3. **A "send to Claude" checkpoint** after the images (consistency, product colour, bed size).
+4. **Video steps** in timeline order.
+5. **Last step: montage** (order, trims, text, music, caption).
+
+Each step uses this exact block:
+
+```
+## ŽINGSNIS N · NUOTRAUKA | VIDEO · Kadras X (laikas, paskirtis)
+**Kur:** Seedream / Kling Image | Kling Video (image-to-video)
+**Įkelk:** 1) ... 2) ...            (images) | Start frame: ŽINGSNIO N rezultatas, End frame: ... (video)
+**Promptas:** one code block, complete and self-contained
+**Negative:** one code block (video steps), always with the colour lock words
+**Trukmė / kirpk:** 5 s, use a–b s (video steps)
+**Patikrink:** 2-3 checkboxes the user verifies before the next step
+```
+Every video prompt starts with the lock line and the product colour lock; every negative includes
+"pink bed, different pattern, different colour, new cat appearing, camera movement, cuts, morphing".
+
 ### Template gallery
 
 Check `templates/README.md` first: proven formats with fill-in slots live in `templates/`. When the user
