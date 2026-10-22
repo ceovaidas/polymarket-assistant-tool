@@ -18,4 +18,7 @@ Formats tried in conversation but not yet confirmed by a finished video (save th
 - **Top-down fan-blade outfit swap:** the person lies on a rug, a ceiling-fan blade wipes and the outfit changes.
 - **Truck restock chase:** the crew chases a moving truck, rips bags open, then a hero shot in another place.
 - **Bed tease "Nope", then toss:** POV from the bed, the partner teases with the product and tosses it.
+- **"The idea 🤢" vs "The Results" (Peekapaws hanging car cat bed, 23.3M views / 2.9M likes, 10.8 s,
+  *Highway to Hell – AC/DC*):** a cheap version fails with the cat in 3 s, the product works, then quick
+  "results" cuts in new settings. Car-guy garage + cute cat contrast drives shares.
 - **Couple shop drop:** the partner says "stop buying…", an item drops and smashes, the product is bought, then a hero shot.
