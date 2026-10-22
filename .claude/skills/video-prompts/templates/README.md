@@ -1,6 +1,7 @@
 # Viral template gallery
 
-Proven formats from the user's projects. Before writing prompts from scratch, check this list. When the
+Proven formats from the user's projects. Also read `idea-library.md` (hooks, openers and the
+"clip bank → many variants" method learned from the user's reference reels). Before writing prompts from scratch, check this list. When the
 user says a generated video worked, save it here as a template with slots (`{PRODUCT}`, `{PERSON}`, ...).
 
 | Template | File | Status | Best for |
