@@ -99,6 +99,11 @@ venue) and add it to the README table.
 - **Check consistency before motion:** when the user sends generated frames, compare person and pet
   across them (hair, beard, age, cat breed and colour). If one drifted, give a short edit prompt
   ("replace the cat with the one from reference image 1, keep everything else") before writing motion.
+- **Upload line on every shot (user request):** put a line right above each image prompt and each
+  motion prompt, e.g. `📎 Seedream image: reference 1 = product photo, reference 2 = shot 1 image` and
+  `📎 Seedance video: start frame = the shot N image you generated (no other uploads)`. Always the same
+  order: reference 1 = product photo, reference 2 = the character/pet reference. Shot 1 without a product
+  in it gets only the pet/person reference (or nothing).
 - **Say what to attach, on every shot:** start each image prompt block (outside the prompt) with
   "Attach: product photo + shot 1 image" from shot 2 onward. In the fishing video the user skipped it
   and the cat turned from orange to a ragdoll and the man got younger: the #1 reason a video reads as AI.
