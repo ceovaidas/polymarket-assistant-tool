@@ -1,0 +1,624 @@
+<title>Video studija</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a production board, top to bottom: product -> idea and plan -> shots (image, then clip) -> render. Sticky credit bar on top. */
+:root {
+  --bg: #050505; --panel: #0e0e0f; --panel-2: #18181a; --line: #232326;
+  --fg: #f5f5f4; --fg-2: #a8a8a6; --fg-3: #6e6e6b;
+  --accent: #e9c46a; --good: #4ade80; --bad: #f87171;
+  --f-display: 'Bricolage Grotesque', 'Arial Narrow', system-ui, sans-serif;
+  --f-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 64px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 14px; }
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.brand { font: 800 20px/1 var(--f-display); }
+.credits { font: 600 13px/1.3 var(--f-mono); color: var(--fg-2); font-variant-numeric: tabular-nums; }
+.credits b { color: var(--accent); }
+h1 { font: 800 clamp(30px, 8vw, 42px)/1 var(--f-display); margin: 18px 0 0; text-wrap: balance; }
+h2 { font: 800 20px/1.15 var(--f-display); margin: 0; text-wrap: balance; }
+h3 { font: 700 16px/1.2 var(--f-display); margin: 0; }
+p { margin: 0; }
+.lead { color: var(--fg-2); max-width: 64ch; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.stage { display: inline-flex; align-items: center; gap: 8px; }
+.stage b { width: 24px; height: 24px; border-radius: 50%; background: var(--fg); color: var(--bg); font: 700 12px/24px var(--f-body); text-align: center; flex: none; }
+.stage.done b { background: var(--good); }
+.eyebrow { font: 600 11px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+.muted { color: var(--fg-2); } .small { font-size: 13px; }
+label.field { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
+input[type=text], input[type=url], select, textarea { font: inherit; color: inherit; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+textarea { min-height: 80px; resize: vertical; font: 13px/1.5 var(--f-mono); }
+.btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel-2); color: inherit; font: 700 14px/1 var(--f-body); cursor: pointer; text-decoration: none; }
+.btn--go { background: var(--fg); border-color: transparent; color: var(--bg); }
+.btn--go:hover:not([disabled]) { background: var(--accent); }
+.btn--ok { border-color: var(--good); color: var(--good); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn--sm { padding: 7px 10px; font-size: 12px; border-radius: 8px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.spread { justify-content: space-between; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.msg { padding: 10px 12px; border-radius: 10px; background: var(--panel-2); font-size: 14px; }
+.msg--err { color: var(--bad); } .msg--ok { color: var(--good); }
+.grid-lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+.grid-lib button { padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: var(--panel-2); cursor: pointer; aspect-ratio: 3 / 4; }
+.grid-lib button[aria-pressed="true"] { border-color: var(--accent); }
+.grid-lib img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; }
+.product img { width: 96px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; background: var(--panel-2); }
+.presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.preset { text-align: left; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); color: inherit; font: inherit; cursor: pointer; display: grid; gap: 4px; }
+.preset[aria-pressed="true"] { border-color: var(--accent); }
+.preset b { font-size: 14px; } .preset span { font-size: 12px; color: var(--fg-2); }
+.shot { display: grid; gap: 12px; }
+.shot-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.pill { padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); font: 600 11px/1.4 var(--f-mono); color: var(--fg-2); }
+.pill--ok { border-color: var(--good); color: var(--good); } .pill--run { border-color: var(--accent); color: var(--accent); } .pill--bad { border-color: var(--bad); color: var(--bad); }
+.media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.slot { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.slot .ph { aspect-ratio: 9 / 16; border-radius: 12px; background: var(--panel-2); border: 1px dashed var(--line); display: grid; place-items: center; color: var(--fg-3); font-size: 13px; overflow: hidden; }
+.slot .ph img { width: 100%; height: 100%; object-fit: cover; }
+.slot .sheet { width: 100%; border-radius: 10px; background: #000; }
+details summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--fg-2); }
+details[open] summary { margin-bottom: 8px; }
+.ledger { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font: 13px/1.4 var(--f-mono); color: var(--fg-2); }
+.ledger li { display: flex; justify-content: space-between; gap: 10px; }
+.texts { display: grid; gap: 8px; }
+.textrow { display: grid; grid-template-columns: 70px 70px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.textrow input { padding: 8px 10px; }
+.final video { width: min(320px, 100%); border-radius: 12px; background: #000; }
+@media (max-width: 520px) { .media { grid-template-columns: 1fr 1fr; gap: 8px; } .textrow { grid-template-columns: 1fr 1fr; } .textrow .t { grid-column: 1 / -1; } .product { grid-template-columns: 72px 1fr; } .product img { width: 72px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <span class="brand">Video studija</span>
+    <span class="credits" id="credits">💳 Kreditai: tikrinama…</span>
+  </div>
+  <h1>Video studija</h1>
+  <p class="lead">Produktas, idėja, nuotraukos su Nano Banana 2.1, klipai su Kling 4.0 ir galutinis video su tekstais, viskas viename puslapyje. Nieko nesugeneruojama be tavo paspaudimo, o prieš kiekvieną žingsnį matai kainą.</p>
+  <p class="msg msg--err" id="gate" hidden></p>
+
+  <!-- 1 product -->
+  <section class="card" id="sProduct">
+    <p class="stage" id="st1"><b>1</b><span class="eyebrow">Produktas</span></p>
+    <div class="product" id="productBox" hidden><img id="productImg" alt="Pasirinktas produktas"><div style="display:grid;gap:6px"><b id="productName">Produktas pasirinktas</b><label class="field" for="productNote">Kas tai, dydis, ko nesimato nuotraukoje<input type="text" id="productNote" placeholder="Katės miegmaišis-lovelė, ~60 cm, viduje sherpa"></label></div></div>
+    <div class="row"><input type="url" id="productUrl" placeholder="Įklijuok produkto nuotraukos nuorodą (pvz. iš Shopify)" style="flex:1;min-width:220px"><button class="btn" type="button" id="importBtn">Naudoti nuorodą</button></div>
+    <div class="row spread"><span class="muted small">…arba pasirink iš savo Higgsfield bibliotekos</span><button class="btn btn--sm" type="button" id="libBtn">Rodyti mano nuotraukas</button></div>
+    <div class="grid-lib" id="lib"></div>
+    <p class="msg msg--err" id="pErr" hidden></p>
+  </section>
+
+  <!-- 2 idea + plan -->
+  <section class="card" id="sIdea">
+    <p class="stage" id="st2"><b>2</b><span class="eyebrow">Idėja ir planas</span></p>
+    <div class="presets" id="presets"></div>
+    <label class="field" for="ideaText">Idėja savo žodžiais (ką darom, kur, kas)
+      <textarea id="ideaText" placeholder="Pvz.: 3-2-1 reveal kalėdinėje svetainėje, mergina su raudonu pledu, pabaigoje oranžinis katinas su Kalėdų senelio kepure"></textarea>
+    </label>
+    <div class="row"><button class="btn btn--go" type="button" id="planBtn">Sukurti planą</button><span class="muted small" id="planState"></span></div>
+    <p class="msg msg--err" id="iErr" hidden></p>
+    <div id="planBox" style="display:grid;gap:10px" hidden>
+      <div class="row spread"><h2 id="planTitle">Planas</h2><span class="pill" id="estimate">Sąmata: –</span></div>
+      <details><summary>Produkto ir veikėjų sakiniai (vienodi visuose promptuose)</summary><div style="display:grid;gap:8px"><textarea id="productSentence"></textarea><textarea id="characters"></textarea></div></details>
+    </div>
+  </section>
+
+  <!-- 3 shots -->
+  <section class="card" id="sShots" hidden>
+    <div class="row spread"><p class="stage" id="st3"><b>3</b><span class="eyebrow">Kadrai</span></p>
+      <div class="row"><button class="btn btn--sm" type="button" id="genAnchor">Generuoti pagrindinį kadrą</button><button class="btn btn--sm" type="button" id="genRest">Generuoti likusias nuotraukas</button><button class="btn btn--sm" type="button" id="genVideos">Generuoti video</button></div></div>
+    <p class="muted small">Pirma pagrindinis kadras (žmogus, augintinis, produktas kartu). Jį patvirtinus, kiti kadrai naudoja jį kaip referenciją. Video generuojami tik patvirtinus visas nuotraukas.</p>
+    <div id="shots" style="display:grid;gap:14px"></div>
+  </section>
+
+  <!-- 4 render -->
+  <section class="card" id="sRender" hidden>
+    <p class="stage" id="st4"><b>4</b><span class="eyebrow">Galutinis video</span></p>
+    <p class="muted small">Tekstai: baltas TikTok Sans su juodu kontūru, viršutiniame trečdalyje. Emoji spalvoti (Google stiliaus; Apple iOS emoji licencija leidžia juos naudoti tik Apple įrenginiuose).</p>
+    <div class="texts" id="texts"></div>
+    <div class="row"><button class="btn btn--sm" type="button" id="addText">+ Tekstas</button><label class="row small"><input type="checkbox" id="keepSound" checked> Palikti klipų garsą (muziką pridėk programėlėje)</label></div>
+    <div class="row"><button class="btn btn--go" type="button" id="renderBtn">Sumontuoti video</button><span class="muted small" id="renderState"></span></div>
+    <p class="msg msg--err" id="rErr" hidden></p>
+    <div class="final" id="final"></div>
+    <details><summary>Caption, prisegtas komentaras, hashtag'ai</summary><textarea id="caption"></textarea></details>
+    <div class="row"><button class="btn" type="button" id="saveTpl">Išsaugoti kaip šabloną</button><span class="muted small" id="tplState"></span></div>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">Kreditai šiam video</p>
+    <ul class="ledger" id="ledger"><li><span>Dar nieko nesugeneruota</span><span>0</span></li></ul>
+    <div class="row"><button class="btn btn--sm" type="button" id="newProject">Naujas video</button></div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const el = (t, c, x) => { const n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; };
+const S = (v) => (v == null ? '' : String(v));
+const RENDER_B64 = '__RENDER_B64__';
+const HF = 'higgsfield';
+const IMG_MODEL = 'nano_banana_2_1', VID_MODEL = 'kling4_0';
+
+const PRESETS = [
+  { id: '321', name: '3-2-1 reveal', hint: 'Patikrintas šablonas: uždengta, 3-2-1, atidengta, tada „visur kartu“', text: '3-2-1 reveal: the person counts down on their fingers and pulls a blanket off; the pet is already inside the product. Then the product comes along to 2 more places (carried in both arms). Close-up payoff with a tiny themed accessory. On-screen: "POV: you\'re a cat mom with adult money now 😭". Music: Mambo No. 5.' },
+  { id: 'dont', name: 'DON\'T show this to…', hint: '80 viral pavyzdžių formatas: hook, 3–4 situacijos, „Tag“', text: '"DON\'T show this to someone who needs it daily 😭🤣🤣" format: POV unboxing opener, then the product in 3 everyday situations (2-2.5 s each), close-up payoff, "Tag someone who needs THIS", "More info in bio".' },
+  { id: 'texas', name: 'Texas cat dad', hint: 'Teksasas: pikapas, BBQ, ranča, katinas su kaubojiška skrybėlyte', text: '"DON\'T show this to a Texas cat dad 😂" — box opened in a pickup, BBQ smoker, ranch road with longhorns, porch at sunset, close-up of the orange cat in the product with a tiny straw cowboy hat.' },
+  { id: 'fish', name: 'Took my cat ___', hint: 'Nesėkmė, tada lovelė: žvejyba, vilkikas, kempingas', text: '"Took my cat fishing…" — the cat in a pet life jacket jumps into the lake by 1 s, gets lifted out soaked, crawls into the product on the boat bench, close-up payoff, "Fishing buddy, upgraded 🎣🐾".' },
+];
+
+// ---------- state (kept in this browser so a refresh does not lose job ids) ----------
+const blank = () => ({ product: null, idea: '', preset: '', plan: null, ledger: [], balanceStart: null, final: null });
+let st = blank();
+try { st = Object.assign(blank(), JSON.parse(localStorage.getItem('studija') || '{}')); } catch {}
+function save() { try { localStorage.setItem('studija', JSON.stringify(st, (k, v) => (k === 'thumb' || k === 'sheet' ? undefined : v))); } catch {} }
+const thumbs = new Map(); // job/media id -> data URL (session only)
+
+let mcp = null, sample = null, db = null, user = null, balanceNow = null;
+
+// ---------- helpers ----------
+const show = (id, text, kind = 'err') => { const n = $(id); n.textContent = text || ''; n.className = `msg msg--${kind}`; n.hidden = !text; };
+function deepFind(obj, pred, out = []) {
+  if (obj && typeof obj === 'object') { if (pred(obj)) out.push(obj); for (const v of Object.values(obj)) deepFind(v, pred, out); }
+  return out;
+}
+function urlsIn(obj) { const out = []; const walk = (v) => { if (typeof v === 'string' && /^https:\/\//.test(v)) out.push(v); else if (v && typeof v === 'object') Object.values(v).forEach(walk); }; walk(obj); return out; }
+async function call(tool, input) {
+  const res = await mcp.callTool(HF, tool, input, { cache: false });
+  let data = res.payload;
+  if (data == null || typeof data !== 'object') {
+    for (const b of res.content || []) if (b.type === 'text') { const i = b.text.indexOf('{'); if (i >= 0) { try { data = JSON.parse(b.text.slice(i)); break; } catch {} } }
+  }
+  return { data, res };
+}
+function hfError(e) {
+  const c = e?.code;
+  if (c === 'server_not_connected' || c === 'not_granted') return 'Higgsfield neprijungtas šiam puslapiui. Leisk prieigą (Permissions) arba prijunk Higgsfield claude.ai Connectors.';
+  return e?.message ? `Higgsfield klaida: ${e.message}` : 'Higgsfield nepavyko. Pabandyk dar kartą.';
+}
+function sampleError(e) {
+  return ({ not_granted: 'Leisk Claude naudoti šį puslapį (atnaujink ir spausk Allow).', rate_limited: 'Pasiektas Claude limitas, pabandyk po kelių minučių.', invalid_json: 'Atsakymas netvarkingas, spausk dar kartą.', refused: 'Claude atsisakė, pakeisk idėją.' })[e?.code] || 'Claude nepavyko, pabandyk dar kartą.';
+}
+
+// thumbnails of remote images/videos, made in the Higgsfield sandbox and returned as images
+async function thumbsFor(items) { // items: [{key, url, video?}]
+  const out = {};
+  for (let i = 0; i < items.length; i += 4) {
+    const group = items.slice(i, i + 4);
+    const cmd = ['mkdir -p /home/user/st && cd /home/user/st'];
+    group.forEach((it, j) => {
+      const q = `'${it.url.replace(/'/g, "'\\''")}'`;
+      if (it.video) cmd.push(`curl -sfL ${q} -o v${j}.mp4 && D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 v${j}.mp4) && ffmpeg -hide_banner -loglevel error -y -i v${j}.mp4 -vf "fps=4/$D,scale=150:-2,tile=4x1" -frames:v 1 -q:v 6 t${j}.jpg`);
+      else cmd.push(`curl -sfL ${q} -o s${j} && convert s${j} -resize 360x640 -quality 72 t${j}.jpg`);
+    });
+    const { res } = await call('sandbox_exec', { command: cmd.join('; '), image_paths: group.map((_, j) => `/home/user/st/t${j}.jpg`), timeout_seconds: 90 });
+    const imgs = (res.content || []).filter((b) => b.type === 'image');
+    group.forEach((it, j) => { if (imgs[j]) out[it.key] = `data:${imgs[j].mimeType};base64,${imgs[j].data}`; });
+  }
+  Object.entries(out).forEach(([k, v]) => thumbs.set(k, v));
+  return out;
+}
+const dataUrlToBlob = async (u) => (await fetch(u)).blob();
+
+// ---------- credits ----------
+const spent = () => st.ledger.reduce((a, x) => a + (+x.credits || 0), 0);
+function renderCredits() {
+  const s = spent();
+  $('credits').innerHTML = '';
+  $('credits').append('💳 Šiam video: ', el('b', null, s.toFixed(1)), balanceNow != null ? ` · likutis ${(+balanceNow).toFixed(1)}` : '');
+  const ul = $('ledger'); ul.replaceChildren();
+  if (!st.ledger.length) ul.append(Object.assign(el('li'), { innerHTML: '<span>Dar nieko nesugeneruota</span><span>0</span>' }));
+  st.ledger.forEach((x) => { const li = el('li'); li.append(el('span', null, x.what), el('span', null, (+x.credits).toFixed(1))); ul.append(li); });
+  if (st.ledger.length) { const li = el('li'); li.style.color = 'var(--fg)'; li.append(el('b', null, 'Iš viso'), el('b', null, s.toFixed(1))); ul.append(li); }
+}
+async function refreshBalance() {
+  try { const { data } = await call('balance', {}); balanceNow = data?.credits ?? balanceNow; if (st.balanceStart == null && balanceNow != null) { st.balanceStart = balanceNow; save(); } } catch {}
+  renderCredits();
+}
+async function costOf(kind, shot) {
+  const params = kind === 'image'
+    ? { model: IMG_MODEL, prompt: 'cost', aspect_ratio: '9:16', resolution: '2k', get_cost: true }
+    : { model: VID_MODEL, prompt: 'cost', mode: 'image-to-video', aspect_ratio: '9:16', resolution: '1080p', duration: shot.duration, get_cost: true };
+  const { data } = await call(kind === 'image' ? 'generate_image' : 'generate_video', { params });
+  return +(data?.cost?.credits_exact ?? data?.cost?.credits ?? 0);
+}
+
+// ---------- 1 product ----------
+function renderProduct() {
+  const p = st.product; $('productBox').hidden = !p;
+  if (!p) return;
+  $('productImg').src = thumbs.get(p.mediaId) || '';
+  $('productNote').value = p.note || '';
+  $('st1').className = 'stage done';
+}
+$('productNote').oninput = (e) => { if (st.product) { st.product.note = e.target.value; save(); } };
+async function setProduct(mediaId, url) {
+  st.product = { mediaId, url, note: st.product?.note || '' }; save();
+  if (!thumbs.get(mediaId)) await thumbsFor([{ key: mediaId, url }]).catch(() => {});
+  renderProduct();
+}
+$('importBtn').onclick = async () => {
+  show('pErr', '');
+  const url = $('productUrl').value.trim();
+  if (!/^https:\/\//.test(url)) return show('pErr', 'Įklijuok nuorodą, prasidedančią https://');
+  $('importBtn').disabled = true;
+  try {
+    const { data } = await call('media_import_url', { url, type: 'image' });
+    const id = data?.media_id || data?.id || deepFind(data, (o) => o.media_id)[0]?.media_id;
+    if (!id) throw new Error('nėra media_id');
+    await setProduct(id, data?.url || url);
+  } catch (e) { show('pErr', hfError(e)); }
+  $('importBtn').disabled = false;
+};
+$('libBtn').onclick = async () => {
+  show('pErr', ''); $('libBtn').disabled = true; $('lib').replaceChildren(el('span', 'muted small', 'Kraunama…'));
+  try {
+    const { data } = await call('show_medias', { type: 'image', size: 12 });
+    const items = (data?.items || []).filter((m) => m.url);
+    const t = await thumbsFor(items.map((m) => ({ key: m.id, url: m.url })));
+    $('lib').replaceChildren();
+    items.forEach((m) => {
+      const b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', String(st.product?.mediaId === m.id));
+      const img = el('img'); img.alt = 'Nuotrauka iš bibliotekos'; img.src = t[m.id] || ''; b.append(img);
+      b.onclick = async () => { [...$('lib').children].forEach((x) => x.setAttribute('aria-pressed', 'false')); b.setAttribute('aria-pressed', 'true'); await setProduct(m.id, m.url); };
+      $('lib').append(b);
+    });
+    if (!items.length) $('lib').replaceChildren(el('span', 'muted small', 'Bibliotekoje nuotraukų nėra. Įklijuok nuorodą.'));
+  } catch (e) { $('lib').replaceChildren(); show('pErr', hfError(e)); }
+  $('libBtn').disabled = false;
+};
+
+// ---------- 2 idea + plan ----------
+function renderPresets() {
+  $('presets').replaceChildren();
+  PRESETS.forEach((p) => {
+    const b = el('button', 'preset'); b.type = 'button'; b.setAttribute('aria-pressed', String(st.preset === p.id));
+    b.append(el('b', null, p.name), el('span', null, p.hint));
+    b.onclick = () => { st.preset = p.id; $('ideaText').value = p.text; st.idea = p.text; save(); renderPresets(); };
+    $('presets').append(b);
+  });
+  loadTemplates();
+}
+$('ideaText').oninput = (e) => { st.idea = e.target.value; save(); };
+
+const RULES = `Write a short-video production plan for the user's product. Audience: English-speaking buyers on Instagram/TikTok.
+All titles, checks and notes in Lithuanian; every prompt, on-screen text, caption and hashtag in English.
+Every shot is generated from scratch (Nano Banana 2.1 images, then Kling 4.0 image-to-video). Rules learned from real
+generations, follow all of them:
+1. One video = one pet (same breed and colour), one person (same face, hair, clothes), one setting and light. Write the
+   product sentence and character sentences once; paste them identically into every image prompt.
+2. Describe the product exactly as in the product photo (colour, print, material, shape, size in cm vs the pet). If the
+   photo shows a pet, write "Ignore the pet in reference 1."
+3. Pet-in-product: soft closed pouch lying flat, opening facing the camera, about 60 cm; the pet already inside with its
+   face peeking out; "not draped over the pet, not oversized".
+4. The start image decides the physics: pose the subject so the clip is one short obvious action. A falling pet is posed
+   asleep and limp at the edge and slides off passively. Never kick, throw, roll or unroll a soft product; reveal by
+   pulling a blanket off (use an end frame = the revealed shot).
+5. 3-5 shots, hook action by 1 s, middle shots 2-3 s, close-up payoff last (pet's face in the product, tiny themed accessory).
+6. Image prompts start "REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16", deep focus, natural full colour, small
+   real-life imperfections, and end "no phone visible, no brand logos, no text, no watermark". 150-230 words.
+7. Video prompts start "Continue exactly from the start image, same full-colour footage, same lighting, no cuts. The
+   product stays exactly as in the start frame: <colours and print>. No colour or pattern change. Single continuous
+   take. Static camera, no zoom, no pan." then the one action, then "Sound: ...". 70-130 words.
+8. Negative for every clip: different colour, different pattern, new pet appearing, second pet, product changing shape,
+   oversized product, camera movement, zoom, cuts, close-up insert, morphing, warping, extra hands, text, logos, watermark, phone.
+9. With a person in shot call the product "the cat pod" (not "bed"), dress people fully, seat them upright, no
+   baby/body/lounging words. Animals and people are never hurt. A cat bed is carried in both arms, never by a loop.
+10. American settings when it fits: flags, diners, pickups, porches; never real brand names.
+11. Honest texts: "Comment WORD" only with an auto-DM, else "More info in bio"; gain framing ("$0 shipping, on us").
+STYLE REFERENCE image prompt (match this length and detail, never copy its content):
+"REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16, a Texas backyard at golden hour, eye-level, camera held still. Deep focus, natural full colour, small imperfections (smoke haze, worn wood, dry grass). A tall Texan man of about 45 with a thick brown horseshoe mustache, a tan straw cowboy hat, a faded blue plaid pearl-snap western shirt with rolled sleeves, jeans, a plain silver belt buckle and brown leather cowboy boots stands at a big black offset barbecue smoker with tongs, smoke drifting. Next to him on a weathered wooden picnic table lies the cat sleeping-bag bed from reference 1, flat on the table: a soft closed pouch about 60 cm long, cornflower-blue cotton outer printed with small white bunny faces, little clouds and tiny orange dots, thick long-pile white sherpa cuff around the round opening facing the camera, a small loop tab on top. A big fluffy orange tabby cat with amber eyes lies inside it, only its face peeking out of the sherpa, watching the smoker. A Texas flag hangs on the wooden fence behind, warm golden light. Photorealistic face, fur, smoke, wood and sherpa, one cat only, no phone visible, no brand logos, no text, no watermark."
+Reply with ONLY one JSON object:
+{"title": "LT short name", "product_sentence": "EN", "characters": ["EN person sentence", "EN pet sentence"],
+ "anchor": <shot n with person + pet + product together>,
+ "shots": [{"n": 1, "title": "LT", "start": 0, "end": 3, "image_prompt": "EN", "uses_anchor": true|false,
+            "video_prompt": "EN", "negative": "EN", "duration": <whole seconds 3-10, shot length + 1>,
+            "end_frame_of": <n of another shot whose image is this clip's end frame, or null>, "trim": [in, out]}],
+ "texts": [{"start": 0, "end": 3, "text": "EN with emoji"}],
+ "caption": "EN", "pinned_comment": "EN", "hashtags": ["#..."]}`;
+
+$('planBtn').onclick = async () => {
+  show('iErr', '');
+  if (!st.product) return show('iErr', 'Pirma pasirink produkto nuotrauką (1 žingsnis).');
+  if (!st.idea.trim()) return show('iErr', 'Pasirink šabloną arba parašyk idėją.');
+  if (!sample) return show('iErr', 'Claude neprieinamas šiame lange.');
+  $('planBtn').disabled = true; $('planState').textContent = 'Claude rašo planą… (apie minutę)';
+  try {
+    const thumb = thumbs.get(st.product.mediaId);
+    const images = thumb && (await sample.limits().catch(() => null))?.images ? [await dataUrlToBlob(thumb)] : undefined;
+    const raw = await sample.json(`${RULES}\n\nThe image is reference 1, the product photo.\nProduct notes: ${st.product.note || 'none'}\nIdea: ${st.idea}`, { images, modelTier: 'complex', cache: false });
+    st.plan = normPlan(raw); st.final = null; save(); renderPlan(); estimate();
+  } catch (e) { show('iErr', e?.code ? sampleError(e) : 'Planas nepilnas, spausk dar kartą.'); }
+  $('planBtn').disabled = false; $('planState').textContent = '';
+};
+function normPlan(r) {
+  const shots = (Array.isArray(r.shots) ? r.shots : []).slice(0, 6).map((s, i) => ({
+    n: Number.isFinite(+s.n) ? +s.n : i + 1, title: S(s.title), start: +s.start || 0, end: +s.end || 0,
+    image_prompt: S(s.image_prompt), uses_anchor: s.uses_anchor !== false, video_prompt: S(s.video_prompt), negative: S(s.negative),
+    duration: Math.max(3, Math.min(10, Math.round(+s.duration || 5))), end_frame_of: Number.isFinite(+s.end_frame_of) && s.end_frame_of !== null ? +s.end_frame_of : null,
+    trim: Array.isArray(s.trim) ? [+s.trim[0] || 0, +s.trim[1] || 3] : [0, Math.max(1, (+s.end || 3) - (+s.start || 0))],
+    image: null, clip: null,
+  }));
+  if (!shots.length || !shots[0].image_prompt) throw {};
+  return { title: S(r.title), product_sentence: S(r.product_sentence), characters: (r.characters || []).map(S), anchor: +r.anchor || shots[0].n,
+    shots, texts: (r.texts || []).map((t) => ({ start: +t.start || 0, end: +t.end || 1, text: S(t.text) })),
+    caption: [S(r.caption), '', 'Pinned: ' + S(r.pinned_comment), '', (r.hashtags || []).join(' ')].join('\n') };
+}
+async function estimate() {
+  if (!st.plan) return;
+  try {
+    const img = await costOf('image');
+    let vid = 0; for (const s of st.plan.shots) vid += await costOf('video', s);
+    const total = img * st.plan.shots.length + vid;
+    $('estimate').textContent = `Sąmata: ~${total.toFixed(1)} kr. (+30 % perdarymams ~${(total * 1.3).toFixed(1)})`;
+  } catch { $('estimate').textContent = 'Sąmata: nepavyko patikrinti'; }
+}
+
+// ---------- 3 shots ----------
+const shotBy = (n) => st.plan.shots.find((s) => s.n === n);
+const anchorShot = () => shotBy(st.plan.anchor) || st.plan.shots[0];
+function statusPill(x) {
+  if (!x) return el('span', 'pill', 'nesugeneruota');
+  if (x.status === 'running') return el('span', 'pill pill--run', 'generuojama…');
+  if (x.status === 'failed') return el('span', 'pill pill--bad', 'nepavyko');
+  return el('span', `pill${x.approved ? ' pill--ok' : ''}`, x.approved ? 'patvirtinta' : 'laukia tavo sprendimo');
+}
+function renderPlan() {
+  const p = st.plan; $('planBox').hidden = !p; $('sShots').hidden = !p; $('sRender').hidden = !p;
+  if (!p) return;
+  $('st2').className = 'stage done';
+  $('planTitle').textContent = p.title || 'Planas';
+  $('productSentence').value = p.product_sentence; $('characters').value = p.characters.join('\n\n');
+  $('productSentence').oninput = (e) => { p.product_sentence = e.target.value; save(); };
+  $('characters').oninput = (e) => { p.characters = e.target.value.split(/\n\s*\n/); save(); };
+  renderShots(); renderTexts(); $('caption').value = p.caption;
+}
+$('caption').oninput = (e) => { if (st.plan) { st.plan.caption = e.target.value; save(); } };
+
+function renderShots() {
+  const box = $('shots'); box.replaceChildren();
+  const allImgs = st.plan.shots.every((s) => s.image?.approved);
+  $('genRest').disabled = !anchorShot().image?.approved;
+  $('genVideos').disabled = !allImgs;
+  $('st3').className = st.plan.shots.every((s) => s.clip?.approved) ? 'stage done' : 'stage';
+  st.plan.shots.forEach((s) => {
+    const c = el('article', 'card shot');
+    const head = el('div', 'shot-head');
+    head.append(el('h3', null, `Kadras ${s.n} · ${s.title}${s.n === st.plan.anchor ? ' · pagrindinis' : ''}`), el('span', 'muted small', `${s.start}–${s.end} s · klipas ${s.duration} s`));
+    c.append(head);
+    const media = el('div', 'media');
+    // image slot
+    const is = el('div', 'slot'); is.append(el('p', 'eyebrow', 'Nuotrauka'), statusPill(s.image));
+    const ph = el('div', 'ph'); const it = s.image && thumbs.get(s.image.jobId);
+    if (it) { const im = el('img'); im.alt = `Kadras ${s.n}`; im.src = it; ph.append(im); } else ph.textContent = s.image?.status === 'running' ? 'Generuojama…' : 'Dar nėra';
+    is.append(ph);
+    if (s.image?.url) { const a = el('a', 'btn btn--sm', 'Atidaryti pilną'); a.href = s.image.url; a.target = '_blank'; a.rel = 'noopener'; is.append(a); }
+    if (s.image?.url && !s.image.approved) { const ok = el('button', 'btn btn--sm btn--ok', 'Patvirtinti'); ok.type = 'button'; ok.onclick = () => { s.image.approved = true; save(); renderShots(); }; is.append(ok); }
+    if (s.image?.approved) { const un = el('button', 'btn btn--sm', 'Atšaukti patvirtinimą'); un.type = 'button'; un.onclick = () => { s.image.approved = false; save(); renderShots(); }; is.append(un); }
+    // clip slot
+    const vs = el('div', 'slot'); vs.append(el('p', 'eyebrow', 'Video'), statusPill(s.clip));
+    const ct = s.clip && thumbs.get(s.clip.jobId);
+    if (ct) { const im = el('img', 'sheet'); im.alt = `Klipo ${s.n} kadrai`; im.src = ct; vs.append(im); } else { const p2 = el('div', 'ph'); p2.textContent = s.clip?.status === 'running' ? 'Generuojama…' : 'Po nuotraukų'; vs.append(p2); }
+    if (s.clip?.url) { const a = el('a', 'btn btn--sm', 'Žiūrėti klipą'); a.href = s.clip.url; a.target = '_blank'; a.rel = 'noopener'; vs.append(a); }
+    if (s.clip?.url && !s.clip.approved) { const ok = el('button', 'btn btn--sm btn--ok', 'Patvirtinti'); ok.type = 'button'; ok.onclick = () => { s.clip.approved = true; save(); renderShots(); }; vs.append(ok); }
+    media.append(is, vs); c.append(media);
+    // prompts + feedback
+    const det = el('details'); det.append(el('summary', null, 'Promptai'));
+    const ip = el('textarea'); ip.value = s.image_prompt; ip.oninput = () => { s.image_prompt = ip.value; save(); };
+    const vp = el('textarea'); vp.value = s.video_prompt; vp.oninput = () => { s.video_prompt = vp.value; save(); };
+    const ng = el('textarea'); ng.value = s.negative; ng.oninput = () => { s.negative = ng.value; save(); };
+    det.append(el('p', 'small muted', 'Nuotraukos promptas'), ip, el('p', 'small muted', 'Video promptas'), vp, el('p', 'small muted', 'Negative'), ng);
+    c.append(det);
+    const fb = el('textarea'); fb.placeholder = 'Ką pakeisti? Pvz.: katinas turi būti oranžinis, lovelė mažesnė, vyras su kepure'; fb.style.minHeight = '60px';
+    const row = el('div', 'row');
+    const redoImg = el('button', 'btn btn--sm', s.image ? 'Perdaryti nuotrauką' : 'Generuoti šią nuotrauką'); redoImg.type = 'button';
+    redoImg.disabled = s.image?.status === 'running' || (s.n !== st.plan.anchor && !anchorShot().image?.approved && s.uses_anchor);
+    redoImg.onclick = () => regenerate(s, 'image', fb.value.trim(), redoImg);
+    const redoVid = el('button', 'btn btn--sm', s.clip ? 'Perdaryti video' : 'Generuoti šį video'); redoVid.type = 'button';
+    redoVid.disabled = !s.image?.approved || s.clip?.status === 'running' || (s.end_frame_of && !shotBy(s.end_frame_of)?.image?.approved);
+    redoVid.onclick = () => regenerate(s, 'clip', fb.value.trim(), redoVid);
+    row.append(redoImg, redoVid);
+    const err = el('p', 'msg msg--err'); err.hidden = true; err.dataset.shot = s.n;
+    c.append(fb, row, err);
+    box.append(c);
+  });
+}
+function shotErr(n, text) { const e = document.querySelector(`[data-shot="${n}"]`); if (e) { e.textContent = text; e.hidden = !text; } }
+
+async function rewritePrompt(prompt, feedback, kind) {
+  const t = await sample(`You are editing an AI ${kind === 'image' ? 'image' : 'video'} prompt. Apply the user's change request (written in Lithuanian) to the prompt below. Keep every other detail, the product sentence, the character sentences, the realism cues, the colour lock and the closing negatives unchanged. Reply with ONLY the new full prompt in English, no comments.\n\nChange request: ${feedback}\n\nPrompt:\n${prompt}`, { modelTier: 'default', cache: false });
+  return t.text.trim().replace(/^```\w*\n?|```$/g, '').trim();
+}
+
+function imageParams(s) {
+  const medias = [{ value: st.product.mediaId, role: 'image_references' }];
+  const a = anchorShot();
+  if (s.n !== a.n && s.uses_anchor && a.image?.jobId) medias.push({ value: a.image.jobId, role: 'image_references' });
+  return { model: IMG_MODEL, prompt: s.image_prompt, aspect_ratio: '9:16', resolution: '2k', medias };
+}
+function videoParams(s) {
+  const medias = [{ value: s.image.jobId, role: 'start_image' }];
+  const end = s.end_frame_of && shotBy(s.end_frame_of);
+  if (end?.image?.jobId) medias.push({ value: end.image.jobId, role: 'end_image' });
+  return { model: VID_MODEL, mode: 'image-to-video', prompt: `${s.video_prompt}\nAvoid: ${s.negative}`, aspect_ratio: '9:16', resolution: '1080p', duration: s.duration, medias };
+}
+
+async function submit(kind, shots) {
+  const tool = kind === 'image' ? 'generate_image_batch' : 'generate_video_batch';
+  const requests = shots.map((s) => ({ index: s.n, params: kind === 'image' ? imageParams(s) : videoParams(s) }));
+  const unit = {};
+  for (const s of shots) unit[s.n] = await costOf(kind === 'image' ? 'image' : 'video', s);
+  const { data } = await call(tool, { requests, context: 'User-approved generation in their video studio page.' });
+  const jobs = deepFind(data, (o) => o.job_id && o.index != null);
+  if (!jobs.length) throw new Error('Higgsfield negrąžino užduočių.');
+  for (const j of jobs) {
+    const s = shotBy(+j.index); if (!s) continue;
+    s[kind] = { jobId: j.job_id, status: 'running', approved: false };
+    st.ledger.push({ what: `${kind === 'image' ? 'Nuotrauka' : 'Video'} · kadras ${s.n}`, credits: unit[s.n] || 0 });
+  }
+  save(); renderShots(); renderCredits();
+  await waitJobs(kind, jobs);
+}
+async function waitJobs(kind, jobs) {
+  const pending = new Map(jobs.map((j) => [j.job_id, +j.index]));
+  for (let round = 0; round < 80 && pending.size; round++) {
+    const { data } = await call('jobs_wait', { jobs: [...pending].map(([job_id, index]) => ({ job_id, index })), timeout_seconds: 15 });
+    const rows = deepFind(data, (o) => (o.job_id || o.id) && (o.status || o.state));
+    for (const r of rows) {
+      const id = r.job_id || r.id; if (!pending.has(id)) continue;
+      const s = shotBy(pending.get(id)); const status = S(r.status || r.state).toLowerCase();
+      const urls = urlsIn(r).filter((u) => kind === 'image' ? /\.(png|jpe?g|webp)(\?|$)/i.test(u) || /image/i.test(u) : /\.(mp4|mov|webm)(\?|$)/i.test(u) || /video/i.test(u));
+      if (/fail|error|nsfw|cancel|reject/.test(status)) { s[kind].status = 'failed'; pending.delete(id); shotErr(s.n, status.includes('nsfw') ? 'Filtras atmetė (NSFW). Pakeisk žodžius: „cat pod“ vietoj „bed“, pilna apranga, sėdi.' : 'Generavimas nepavyko. Pabandyk perdaryti.'); }
+      else if (urls.length && /complet|success|done|finish|ready/.test(status || 'completed')) { s[kind].status = 'done'; s[kind].url = urls[0]; pending.delete(id); }
+    }
+    save(); renderShots();
+    if (pending.size) await new Promise((r) => setTimeout(r, 4000));
+  }
+  const ready = st.plan.shots.filter((s) => s[kind]?.status === 'done' && !thumbs.get(s[kind].jobId));
+  if (ready.length) await thumbsFor(ready.map((s) => ({ key: s[kind].jobId, url: s[kind].url, video: kind === 'clip' }))).catch(() => {});
+  renderShots(); refreshBalance();
+}
+async function regenerate(s, kind, feedback, btn) {
+  shotErr(s.n, ''); btn.disabled = true;
+  try {
+    if (feedback) {
+      btn.textContent = 'Claude taiso promptą…';
+      if (kind === 'image') s.image_prompt = await rewritePrompt(s.image_prompt, feedback, 'image');
+      else s.video_prompt = await rewritePrompt(s.video_prompt, feedback, 'video');
+      save();
+    }
+    btn.textContent = 'Generuojama…';
+    await submit(kind, [s]);
+  } catch (e) { shotErr(s.n, e?.code ? (e.code.startsWith?.('not_') || e.code === 'server_not_connected' ? hfError(e) : sampleError(e)) : hfError(e)); }
+  renderShots();
+}
+$('genAnchor').onclick = async () => { const a = anchorShot(); $('genAnchor').disabled = true; try { await submit('image', [a]); } catch (e) { shotErr(a.n, hfError(e)); } $('genAnchor').disabled = false; };
+$('genRest').onclick = async () => { const rest = st.plan.shots.filter((s) => s.n !== st.plan.anchor && !s.image?.approved); if (!rest.length) return; $('genRest').disabled = true; try { await submit('image', rest); } catch (e) { shotErr(rest[0].n, hfError(e)); } renderShots(); };
+$('genVideos').onclick = async () => { const todo = st.plan.shots.filter((s) => !s.clip?.approved && s.clip?.status !== 'running'); if (!todo.length) return; $('genVideos').disabled = true; try { await submit('clip', todo); } catch (e) { shotErr(todo[0].n, hfError(e)); } renderShots(); };
+
+// ---------- 4 render ----------
+function renderTexts() {
+  const box = $('texts'); box.replaceChildren();
+  st.plan.texts.forEach((t, i) => {
+    const r = el('div', 'textrow');
+    const a = el('input'); a.type = 'text'; a.value = t.start; a.setAttribute('aria-label', 'Nuo s'); a.oninput = () => { t.start = +a.value || 0; save(); };
+    const b = el('input'); b.type = 'text'; b.value = t.end; b.setAttribute('aria-label', 'Iki s'); b.oninput = () => { t.end = +b.value || 0; save(); };
+    const x = el('input', 't'); x.type = 'text'; x.value = t.text; x.setAttribute('aria-label', 'Tekstas'); x.oninput = () => { t.text = x.value; save(); };
+    const d = el('button', 'btn btn--sm', '✕'); d.type = 'button'; d.setAttribute('aria-label', 'Ištrinti'); d.onclick = () => { st.plan.texts.splice(i, 1); save(); renderTexts(); };
+    r.append(a, b, x, d); box.append(r);
+  });
+}
+$('addText').onclick = () => { const last = st.plan.texts.at(-1); st.plan.texts.push({ start: last ? last.end : 0, end: (last ? last.end : 0) + 3, text: '' }); save(); renderTexts(); };
+
+$('renderBtn').onclick = async () => {
+  show('rErr', '');
+  const shots = st.plan.shots;
+  if (!shots.every((s) => s.clip?.approved && s.clip.url)) return show('rErr', 'Pirma patvirtink visus video klipus.');
+  $('renderBtn').disabled = true; $('renderState').textContent = 'Montuoju… (1–3 min)';
+  try {
+    const { data: up } = await call('media_upload', { filename: `studija-${Date.now()}.mp4`, content_type: 'video/mp4' });
+    const u = up?.uploads?.[0] || up;
+    if (!u?.upload_url || !u?.media_id) throw new Error('nepavyko paruošti įkėlimo');
+    const spec = { out: 'final.mp4', font: 'fonts/TikTokSans.ttf', emoji_font: 'fonts/NotoColorEmoji.ttf',
+      clips: shots.map((s, i) => ({ src: `c${i}.mp4`, in: s.trim[0], out: s.trim[1] })),
+      texts: st.plan.texts.filter((t) => t.text.trim()).map((t) => ({ ...t, y: 0.18, size: 64 })) };
+    const q = (x) => `'${String(x).replace(/'/g, "'\\''")}'`;
+    const cmd = [
+      'set -e', 'D=/home/user/render/job && rm -rf $D && mkdir -p $D/fonts && cd $D',
+      `echo ${RENDER_B64} | base64 -d > render.py`,
+      `cat > spec.json <<'JSON'\n${JSON.stringify(spec)}\nJSON`,
+      `curl -sfL -o fonts/TikTokSans.ttf 'https://github.com/google/fonts/raw/main/ofl/tiktoksans/TikTokSans%5Bopsz,slnt,wdth,wght%5D.ttf'`,
+      `(curl -sfL -o fonts/NotoColorEmoji.ttf 'https://github.com/google/fonts/raw/main/ofl/notocoloremoji/NotoColorEmoji-Regular.ttf' || cp /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf fonts/ 2>/dev/null || true)`,
+      ...shots.map((s, i) => `curl -sfL -o c${i}.mp4 ${q(s.clip.url)}`),
+      'python3 render.py spec.json',
+      `curl -sf -X PUT -H 'Content-Type: video/mp4' --upload-file final.mp4 ${q(u.upload_url)}`,
+      'D2=$(ffprobe -v error -show_entries format=duration -of csv=p=0 final.mp4); ffmpeg -hide_banner -loglevel error -y -i final.mp4 -vf "fps=6/$D2,scale=150:-2,tile=6x1" -frames:v 1 -q:v 5 sheet.jpg',
+      'echo RENDER_OK',
+    ].join('\n');
+    const { data: bg } = await call('sandbox_exec', { command: cmd, background: true });
+    const status = bg?.status_path, log = bg?.log_path;
+    if (!status) throw new Error('nepavyko paleisti');
+    let done = false;
+    for (let i = 0; i < 60 && !done; i++) {
+      await new Promise((r) => setTimeout(r, 8000));
+      const { data: poll, res } = await call('sandbox_exec', { command: `cat ${status} 2>/dev/null; echo; tail -c 600 ${log}` });
+      const text = S(poll?.stdout ?? (res.content || []).map((b) => b.text || '').join(''));
+      if (/RENDER_OK/.test(text)) done = true;
+      else if (/^\s*[1-9]/.test(text.split('\n')[0] || '') || /Traceback|failed/.test(text)) throw new Error(text.slice(-300));
+    }
+    if (!done) throw new Error('per ilgai, pabandyk dar kartą');
+    await call('media_confirm', { type: 'video', media_id: u.media_id });
+    const { res: shot } = await call('sandbox_exec', { command: 'ls /home/user/render/job/sheet.jpg', image_paths: ['/home/user/render/job/sheet.jpg'] });
+    const img = (shot.content || []).find((b) => b.type === 'image');
+    st.final = { url: u.url, mediaId: u.media_id }; save();
+    renderFinal(img ? `data:${img.mimeType};base64,${img.data}` : '');
+    $('st4').className = 'stage done';
+  } catch (e) { show('rErr', `Montavimas nepavyko: ${e?.message || hfError(e)}`); }
+  $('renderBtn').disabled = false; $('renderState').textContent = '';
+};
+function renderFinal(sheet) {
+  const f = $('final'); f.replaceChildren();
+  if (!st.final) return;
+  if (sheet) { const im = el('img', 'sheet'); im.alt = 'Galutinio video kadrai'; im.src = sheet; im.style.width = '100%'; im.style.borderRadius = '10px'; f.append(im); }
+  const a = el('a', 'btn btn--go', 'Atsisiųsti galutinį video'); a.href = st.final.url; a.target = '_blank'; a.rel = 'noopener';
+  f.append(el('p', 'msg msg--ok', 'Video paruoštas ir įkeltas į tavo Higgsfield biblioteką. Įkeliant į Instagram ar TikTok uždėk AI žymą.'), a);
+}
+
+// ---------- templates (saved to the artifact database, private to you) ----------
+async function loadTemplates() {
+  if (!db || !user) return;
+  try {
+    const id = await user.id();
+    const snap = await db.collection(`data/users/${id}/templates`).orderBy('at', 'desc').limit(20).get();
+    const docs = snap.docs || snap;
+    (docs || []).forEach((d) => {
+      const t = d.data ? d.data() : d;
+      const b = el('button', 'preset'); b.type = 'button';
+      b.append(el('b', null, `★ ${t.title}`), el('span', null, `Tavo šablonas · ${t.credits ? t.credits.toFixed(1) + ' kr.' : ''}`));
+      b.onclick = () => { st.preset = 'tpl'; st.idea = `Reuse this proven template with the new product and keep the hook, timing and texts. Template plan JSON: ${JSON.stringify(t.plan)}`; $('ideaText').value = st.idea; save(); };
+      $('presets').append(b);
+    });
+  } catch {}
+}
+$('saveTpl').onclick = async () => {
+  if (!st.plan) return;
+  if (!db || !user) return ($('tplState').textContent = 'Šablonų saugykla šiame lange neprieinama.');
+  try {
+    const id = await user.id();
+    const plan = JSON.parse(JSON.stringify(st.plan)); plan.shots.forEach((s) => { delete s.image; delete s.clip; });
+    await db.collection(`data/users/${id}/templates`).doc(`t${Date.now()}`).set({ title: st.plan.title || 'Šablonas', plan, credits: spent(), at: Date.now() });
+    $('tplState').textContent = 'Išsaugota. Rasi jį 2 žingsnyje tarp šablonų.';
+  } catch { $('tplState').textContent = 'Nepavyko išsaugoti.'; }
+};
+$('newProject').onclick = () => { st = blank(); save(); location.reload(); };
+
+// ---------- start ----------
+renderPresets(); renderProduct(); if (st.plan) renderPlan(); renderCredits(); if (st.final) renderFinal('');
+$('ideaText').value = st.idea || '';
+(async () => {
+  try { mcp = await window.claude?.use?.('mcp'); } catch { mcp = null; }
+  try { sample = await window.claude?.use?.('sample'); } catch { sample = null; }
+  try { db = await window.claude?.use?.('db'); user = await window.claude?.use?.('user'); } catch {}
+  if (!mcp) { show('gate', 'Higgsfield šiam puslapiui neprieinamas. Atidaryk jį claude.ai, kai Higgsfield prijungtas tavo Connectors.'); return; }
+  loadTemplates();
+  await refreshBalance();
+  if (st.product && !thumbs.get(st.product.mediaId)) { await thumbsFor([{ key: st.product.mediaId, url: st.product.url }]).catch(() => {}); renderProduct(); }
+  if (st.plan) {
+    const todo = [];
+    st.plan.shots.forEach((s) => ['image', 'clip'].forEach((k) => { if (s[k]?.url && !thumbs.get(s[k].jobId)) todo.push({ key: s[k].jobId, url: s[k].url, video: k === 'clip' }); }));
+    if (todo.length) { await thumbsFor(todo).catch(() => {}); renderShots(); }
+    const running = { image: [], clip: [] };
+    st.plan.shots.forEach((s) => ['image', 'clip'].forEach((k) => { if (s[k]?.status === 'running') running[k].push({ job_id: s[k].jobId, index: s.n }); }));
+    if (running.image.length) waitJobs('image', running.image);
+    if (running.clip.length) waitJobs('clip', running.clip);
+  }
+})();
+</script>

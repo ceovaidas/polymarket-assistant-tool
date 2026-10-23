@@ -1,0 +1,467 @@
+<title>Viral laboratorija</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one column, three stages top to bottom: viral video -> format and mirror -> your product plan. */
+:root {
+  --bg: #050505; --panel: #0e0e0f; --panel-2: #18181a; --line: #232326;
+  --fg: #f5f5f4; --fg-2: #a8a8a6; --fg-3: #6e6e6b;
+  --accent: #e9c46a; --good: #4ade80; --bad: #f87171;
+  --f-display: 'Bricolage Grotesque', 'Arial Narrow', system-ui, sans-serif;
+  --f-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 56px; }
+.wrap { max-width: 640px; margin: 0 auto; display: grid; gap: 14px; }
+h1 { font: 800 clamp(30px, 8vw, 42px)/1 var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font: 800 22px/1.1 var(--f-display); margin: 0; text-wrap: balance; }
+h3 { font: 700 16px/1.2 var(--f-display); margin: 4px 0 0; }
+.lead { margin: 0; color: var(--fg-2); max-width: 62ch; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; min-width: 0; box-shadow: 0 1px 0 rgba(255,255,255,.03) inset; }
+.eyebrow { margin: 0; font: 600 11px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+.stage { display: inline-flex; align-items: center; gap: 8px; }
+.stage b { width: 22px; height: 22px; border-radius: 50%; background: var(--fg); color: var(--bg); font: 700 12px/22px var(--f-body); text-align: center; }
+.muted { color: var(--fg-2); } .small { font-size: 13px; }
+p { margin: 0; }
+.drop { display: grid; gap: 6px; place-items: center; text-align: center; min-height: 130px; padding: 18px; border: 2px dashed var(--line); border-radius: 14px; background: var(--panel-2); color: inherit; font: inherit; cursor: pointer; }
+.drop strong { font: 700 17px/1.2 var(--f-display); }
+.drop--on { border-color: var(--accent); }
+label.field { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
+input[type=text], select, textarea { font: inherit; color: inherit; width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+textarea { min-height: 70px; resize: vertical; }
+.btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 13px 18px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel-2); color: inherit; font: 700 15px/1 var(--f-body); cursor: pointer; }
+.btn--go { background: var(--fg); border-color: transparent; color: var(--bg); }
+.btn--go:hover:not([disabled]) { background: var(--accent); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn--sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.msg { padding: 10px 12px; border-radius: 10px; background: var(--panel-2); font-size: 14px; }
+.msg--err { color: var(--bad); }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.example { justify-self: start; padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--fg-3); font: 600 11px/1.3 var(--f-mono); color: var(--fg-2); }
+/* progress */
+.prog { display: grid; gap: 10px; }
+.thumbs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.thumbs img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 6px; background: #000; }
+.bar { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .8s linear; }
+/* template */
+.hook { display: grid; gap: 6px; padding: 14px; border: 1px solid var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+.hook b { font: 700 13px/1 var(--f-mono); color: var(--accent); }
+ol.beats { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.beats strong { font-variant-numeric: tabular-nums; }
+.beats span { display: block; color: var(--fg-3); font-size: 13px; }
+dl.kv { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px 14px; margin: 0; }
+.kv dt { color: var(--fg-3); font-weight: 600; }
+.kv dd { margin: 0; }
+.kv dd.hl { padding: 6px 8px; border: 1px solid var(--accent); border-radius: 8px; }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.copy { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
+.copy__bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; background: var(--panel-2); font: 600 11px/1 var(--f-mono); color: var(--fg-3); }
+.copy pre { margin: 0; padding: 10px 12px; white-space: pre-wrap; word-break: break-word; font: 13px/1.5 var(--f-mono); max-height: 300px; overflow: auto; }
+.step { display: grid; gap: 10px; }
+.step h3 { display: flex; gap: 10px; align-items: baseline; }
+.kind { padding: 2px 8px; border-radius: 6px; border: 1px solid var(--line); font: 600 11px/1.5 var(--f-mono); color: var(--fg-2); text-transform: uppercase; }
+.kind--video { border-color: var(--accent); color: var(--accent); }
+ul.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; color: var(--fg-2); font-size: 14px; }
+ul.checks li::before { content: '☐ '; }
+.hist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.hist button { width: 100%; text-align: left; background: none; border: 0; color: inherit; font: inherit; padding: 6px 0; cursor: pointer; }
+@media (max-width: 440px) { dl.kv { grid-template-columns: 1fr; } .kv dt { margin-top: 6px; } .thumbs { grid-template-columns: repeat(4, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <p class="eyebrow">Clipwright · laboratorija</p>
+    <h1>Viral laboratorija</h1>
+    <p class="lead">Įmesk viral video. Claude išskaido jo hook'ą ir struktūrą 1:1, parašo sustiprintą versiją, o tada su tavo produktu sudaro žingsnių planą su angliškais promptais. Kiekvienas kadras generuojamas iš naujo, todėl video bus tavo.</p>
+  </header>
+
+  <form class="card" id="vForm" novalidate>
+    <p class="stage"><b>1</b><span class="eyebrow">Viral video</span></p>
+    <button type="button" class="drop" id="vDrop"><strong id="vTitle">Įmesk viral video</strong><span class="muted small" id="vSub">arba spustelk ir pasirink · MP4 ar WebM, iki 90 s</span></button>
+    <input type="file" id="vFile" accept="video/mp4,video/webm,video/quicktime" hidden>
+    <label class="field" for="vCtx">Ką žinai apie jį (nebūtina): tekstas ekrane, muzika, peržiūros
+      <input type="text" id="vCtx" placeholder="2.9M like'ų, muzika Highway to Hell, tekstas „The idea 🤢 … Vs… The Results“">
+    </label>
+    <p class="msg msg--err" id="vErr" role="alert" hidden></p>
+    <button class="btn btn--go" type="submit" id="vGo">Sudaryti šabloną</button>
+    <p class="muted small" id="unavail" hidden>Laboratorija veikia, kai šis puslapis atidarytas claude.ai. Pirmą kartą Claude paklaus leidimo.</p>
+  </form>
+
+  <section class="card prog" id="vProg" hidden aria-live="polite">
+    <p class="eyebrow" id="vProgText">Žiūriu video kadras po kadro…</p>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="bar"><i id="vBar"></i></div>
+    <div class="row"><span class="muted small" id="vTimer">0:00 · apie minutę</span><button type="button" class="btn btn--sm" id="vStop">Stabdyti</button></div>
+  </section>
+
+  <div id="tpl" style="display:grid;gap:14px"></div>
+
+  <form class="card" id="pForm" novalidate hidden>
+    <p class="stage"><b>3</b><span class="eyebrow">Tavo produktas</span></p>
+    <label class="field" for="pFile">Produkto nuotrauka (viena aiški, tos spalvos, kurią parduodi)
+      <input type="file" id="pFile" accept="image/jpeg,image/png,image/webp">
+    </label>
+    <label class="field" for="pNote">Kas tai, dydis, ko nesimato nuotraukoje
+      <input type="text" id="pNote" placeholder="Katės miegmaišis-lovelė, ~60 cm, viduje sherpa">
+    </label>
+    <label class="field" for="pAngle">Naujas pasaulis tam pačiam video
+      <select id="pAngle"></select>
+    </label>
+    <label class="field" for="pCustom">…arba savo idėja
+      <input type="text" id="pCustom" placeholder="Texas cat dad, pikapas, BBQ">
+    </label>
+    <label class="field" for="pExtras">Papildomi norai (veikėjai, katinas, kadrai)
+      <textarea id="pExtras" placeholder="Tas pats didelis oranžinis katinas visur; pabaigoje stambus planas su maža skrybėlyte"></textarea>
+    </label>
+    <p class="msg msg--err" id="pErr" role="alert" hidden></p>
+    <button class="btn btn--go" type="submit" id="pGo">Parašyti žingsnių planą</button>
+  </form>
+
+  <section class="card prog" id="pProg" hidden aria-live="polite">
+    <p class="eyebrow">Rašau tavo žingsnių planą…</p>
+    <div class="bar"><i id="pBar"></i></div>
+    <div class="row"><span class="muted small" id="pTimer">0:00 · apie 1–2 minutes</span><button type="button" class="btn btn--sm" id="pStop">Stabdyti</button></div>
+  </section>
+
+  <div id="plan" style="display:grid;gap:14px"></div>
+
+  <section class="card" id="histCard" hidden>
+    <p class="eyebrow">Tavo šablonai šiame įrenginyje</p>
+    <ul class="hist" id="hist"></ul>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+const S = (v) => (v == null ? '' : String(v));
+const N = (v) => (Number.isFinite(+v) ? Math.round(+v * 10) / 10 : 0);
+const MAX_SECONDS = 90;
+
+const RULES = `You are the Clipwright Lab. You turn a viral short video into a reusable format and then into a step-by-step
+AI production plan for the user's own product. The audience is English-speaking (Instagram, TikTok).
+LANGUAGE: every explanation, title, check and label in Lithuanian. Prompts, negatives, on-screen texts, hooks,
+captions and hashtags in English.
+COPYING: copy the hook, structure, timing and on-screen text pattern 1:1. Never reuse or edit the original
+footage: every shot is generated from scratch with the user's product, new people, a new setting, no
+third-party logos or brands.
+HONESTY: gain framing ("$0 shipping, on us", "mystery discount", "$29 worth gift"); no fake countdowns, stock,
+reviews, "was" prices or health claims; "Comment WORD" only with an auto-DM, else "More info in bio".
+Show the product only as it is really used (a cat bed is not a carrier: carry it in both arms). Animals and
+people are never hurt; falls land softly; pets in water wear a life jacket.
+PROMPT RULES:
+1. One video = one pet (same breed and colour), one person, one setting and light; write those sentences once
+   and paste them identically into every prompt.
+2. Describe the product exactly as in the product photo (colour, print, material, shape, size in cm vs the pet).
+   If the product photo shows a pet, write "Ignore the pet in reference 1."
+3. Pet-in-product: spell out geometry (soft closed pouch lying flat, opening facing the camera, about 60 cm) and
+   which body parts are inside; "not draped over the pet, not oversized". Prefer the pet already inside, face out.
+4. The start frame decides the physics: pose the subject so the motion is one short obvious action. A falling
+   pet is posed asleep and limp at the edge and slides off passively.
+5. One action per clip. Never kick, throw, roll or unroll a soft product; reveal by pulling a blanket off or
+   opening a box.
+6. 3-5 shots. Hook action by 1 s, middle shots 2-3 s, close-up payoff last (pet's face in the product, often a
+   tiny themed accessory).
+7. Image prompts start "REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16", deep focus, natural full colour,
+   small real-life imperfections, end "no phone visible, no brand logos, no text, no watermark".
+8. Video prompts start "Continue exactly from the start image, same full-colour footage, same lighting, no cuts."
+   then "The product stays exactly as in the start frame: <colours and print>. No colour or pattern change."
+   then "Single continuous take. Static camera, no zoom, no pan."
+9. Negatives always include: different colour, different pattern, new pet appearing, second pet, product
+   changing shape, oversized product, camera movement, zoom, cuts, close-up insert, morphing, warping, extra
+   hands, text, logos, watermark, phone.
+10. Video steps upload only the start frame (and an end frame for reveals); clear old references first.
+11. With a person in shot call the product "the cat pod" (not "bed"), dress people fully, seat them upright,
+    avoid baby/body/lounging words (false safety-filter flags).
+12. American angles: instantly recognisable American details (flags, diners, pickups, porches) without brands.
+
+STYLE REFERENCE. These two prompts produced near-perfect results. Write every image and video prompt at this
+length, in this order (camera and place, realism cues, person with exact clothes, product with exact geometry
+and print, pet and its pose, light, closing negatives) and with this level of concrete physical detail:
+IMAGE: "REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16, a Texas backyard at golden hour, eye-level, camera
+held still. Deep focus, natural full colour, small imperfections (smoke haze, worn wood, dry grass). A tall Texan
+man of about 45 with a thick brown horseshoe mustache, a tan straw cowboy hat, a faded blue plaid pearl-snap
+western shirt with rolled sleeves, jeans, a plain silver belt buckle and brown leather cowboy boots stands at a
+big black offset barbecue smoker with tongs, smoke drifting. Next to him on a weathered wooden picnic table lies
+the cat sleeping-bag bed from reference 1, flat on the table: a soft closed pouch about 60 cm long,
+cornflower-blue cotton outer printed with small white bunny faces, little clouds and tiny orange dots, thick
+long-pile white sherpa cuff around the round opening facing the camera, a small loop tab on top. A big fluffy
+orange tabby cat with amber eyes lies inside it, only its face peeking out of the sherpa, watching the smoker.
+A Texas flag hangs on the wooden fence behind, warm golden light. Photorealistic face, fur, smoke, wood and
+sherpa, one cat only, no phone visible, no brand logos, no text, no watermark."
+VIDEO: "Continue exactly from the start image, same full-colour footage, same lighting, no cuts. The bed stays
+exactly as in the start frame: cornflower-blue with small white bunny faces, white sherpa cuff. No colour or
+pattern change. Single continuous take. Static locked-off camera, no zoom, no pan. Smoke drifts from the
+smoker; the man flips a brisket with the tongs, glances at the cat and tips his hat at it; the cat slowly
+blinks and stays inside the bed, sniffing the air. Same man, same orange cat, natural full colour, warm golden
+light, realistic phone footage. Sound: sizzling, crackling wood, birds, a chuckle."
+Use the user's own product, people and world, never these example details.`;
+
+const EXAMPLE_TPL = {
+  example: true,
+  title: 'Idėja vs rezultatas', summary: 'Pigi alternatyva nepavyksta su katinu per 3 s, tada produktas veikia, o pabaigoje greiti rezultatų kadrai naujose vietose.',
+  why_it_works: 'Nesėkmė per pirmas sekundes sukelia juoką ir klausimą „o kaip turi būti?“. Atsakymas ateina iškart, video trunka 10 s, todėl žiūrima ratu.',
+  reference: { niche: 'Augintiniai / katės', audience: 'Katinų mylėtojai ir „car guys“, kurie siunčia video vieni kitiems' },
+  hook: { seconds: 3, said: '', on_screen_text: 'The idea 🤢', seen: 'Vyras pakabina pigų krepšį, katinas įšoka, krepšys apsiverčia', mechanic: 'Nesėkmė per 2 s, kontrastas tarp kieto vyro ir katino', reusable_text: 'The idea 🤢 … Vs… The Results 🐾' },
+  beats: [
+    { n: 1, start: 0, end: 3.2, action: 'Pigi versija nepavyksta, katinas saugiai nušoka', shot: 'Vidutinis · statiška', emotion: 'Juokas', on_screen_text: 'The idea 🤢', sound: 'Highway to Hell', purpose: 'hook' },
+    { n: 2, start: 3.2, end: 6.2, action: 'Produktas, katinas įsitaiso', shot: 'Vidutinis · statiška', emotion: 'Nuostaba', on_screen_text: 'Vs…', sound: 'Gitaros įstojimas', purpose: 'build-up' },
+    { n: 3, start: 6.2, end: 10.8, action: 'Rezultatai naujose vietose', shot: 'Stambus · statiška', emotion: 'Pasitenkinimas', on_screen_text: 'The Results 🐾', sound: 'Muzika', purpose: 'payoff' },
+  ],
+  mirror: { kept: 'Nesėkmė, „Vs…“ ir rezultatų kadrai', stronger: 'Stambus planas pabaigoje su mažu aksesuaru; tekstas nuo 0 s', visuals: 'Šiltas garažas, auksinė šviesa', set: 'Darbastalis, pikapas, įrankių spinta aplink {PRODUCT}' },
+  angles: [{ setting: 'Mechaniko garažas', concept: 'Dėžė nuslysta nuo darbastalio, tada lovelė', hook: 'Garage cat got an upgrade 🏁' }],
+};
+
+let sample = null, limits = null, vFile = null, tpl = null, vCtl = null, pCtl = null, vTimer = null, pTimer = null;
+
+function copyBlock(label, text) {
+  const box = el('div', 'copy'), bar = el('div', 'copy__bar'), pre = el('pre', null, text), btn = el('button', 'btn btn--sm', 'Kopijuoti');
+  btn.type = 'button';
+  btn.onclick = async () => {
+    try { await navigator.clipboard.writeText(text); btn.textContent = 'Nukopijuota'; }
+    catch { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Pažymėta, spausk Ctrl+C'; }
+    setTimeout(() => (btn.textContent = 'Kopijuoti'), 1800);
+  };
+  bar.append(el('span', null, label), btn); box.append(bar, pre); return box;
+}
+const err = (id, t) => { $(id).textContent = t || ''; $(id).hidden = !t; };
+
+function startTimer(id, barId, base) {
+  const t0 = Date.now();
+  return setInterval(() => {
+    const s = Math.floor((Date.now() - t0) / 1000);
+    $(id).textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')} · ${base}`;
+    $(barId).style.width = `${Math.min(95, 20 + s * 0.8)}%`;
+  }, 1000);
+}
+
+const ERRORS = {
+  not_granted: 'Neleidai Claude naudoti šio puslapio. Atnaujink puslapį ir leisk.',
+  sampling_disabled: 'Claude šiai paskyrai neprieinamas.',
+  rate_limited: 'Per daug užklausų arba pasiektas Claude limitas. Pabandyk po kelių minučių.',
+  session_expired: 'Prisijunk prie claude.ai iš naujo.',
+  image_rejected: 'Nuotraukos ar kadrų nepavyko išsiųsti. Pabandyk kitą failą.',
+  images_unavailable: 'Šiame lange negalima siųsti vaizdų. Atidaryk puslapį claude.ai naršyklėje.',
+  refused: 'Claude atsisakė šio turinio. Pabandyk kitą video ar nuotrauką.',
+  invalid_json: 'Atsakymas atėjo netvarkingas arba per ilgas. Spausk mygtuką dar kartą.',
+  decode: 'Naršyklė neatidaro šio failo. Išsaugok jį kaip MP4 (H.264).',
+  too_long: `Video ilgesnis nei ${MAX_SECONDS} s.`,
+  bad_shape: 'Atsakymas nepilnas. Spausk mygtuką dar kartą.',
+};
+const errText = (e) => ERRORS[e?.code] || 'Nepavyko. Pabandyk dar kartą.';
+
+// ---------- video frames ----------
+function loadVideo(f) {
+  return new Promise((res, rej) => {
+    const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.onloadedmetadata = () => res(v); v.onerror = () => rej({ code: 'decode' }); v.src = URL.createObjectURL(f);
+  });
+}
+const seek = (v, t) => new Promise((r) => { v.onseeked = () => r(); v.currentTime = t; });
+async function grabFrames(v, count) {
+  const w = 512, h = Math.round(w * v.videoHeight / v.videoWidth) || 910;
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const g = cv.getContext('2d');
+  const out = []; $('thumbs').replaceChildren();
+  for (let i = 0; i < count; i++) {
+    const t = v.duration * (i + 0.5) / count; await seek(v, t); g.drawImage(v, 0, 0, w, h);
+    const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.82));
+    out.push({ t: Math.round(t * 10) / 10, blob });
+    const img = el('img'); img.alt = `${out.at(-1).t} s`; img.src = URL.createObjectURL(blob); $('thumbs').append(img);
+    $('vBar').style.width = `${Math.round(((i + 1) / count) * 20)}%`;
+  }
+  return out;
+}
+
+// ---------- stage 1: template ----------
+function pickVideo(f) {
+  err('vErr'); if (!f) return;
+  if (!/^video\//.test(f.type)) return err('vErr', 'Tai ne video failas.');
+  vFile = f; $('vTitle').textContent = f.name; $('vSub').textContent = `${(f.size / 1048576).toFixed(1)} MB · spustelk, kad pakeistum`;
+}
+$('vDrop').onclick = () => $('vFile').click();
+$('vFile').onchange = (e) => pickVideo(e.target.files[0]);
+$('vDrop').ondragover = (e) => { e.preventDefault(); $('vDrop').classList.add('drop--on'); };
+$('vDrop').ondragleave = () => $('vDrop').classList.remove('drop--on');
+$('vDrop').ondrop = (e) => { e.preventDefault(); $('vDrop').classList.remove('drop--on'); pickVideo(e.dataTransfer.files[0]); };
+
+const TPL_SHAPE = `{"title": "short Lithuanian name of the format", "summary": "LT 1-2 sentences",
+ "why_it_works": "LT: hook, build-up, payoff",
+ "reference": {"niche": "LT", "audience": "LT: who watches and buys"},
+ "hook": {"seconds": number, "said": "spoken words 1:1 or empty", "on_screen_text": "opening on-screen text 1:1 or empty",
+          "seen": "LT: what the viewer sees", "mechanic": "LT: why it stops the scroll",
+          "reusable_text": "ENGLISH hook for our version with {PRODUCT}/{AUDIENCE} slots"},
+ "beats": [{"n": 1, "start": 0, "end": 2, "action": "LT", "shot": "LT: distance · camera", "emotion": "LT",
+            "on_screen_text": "1:1", "sound": "LT", "purpose": "hook|build-up|payoff|cta"}],
+ "mirror": {"kept": "LT", "stronger": "LT: 1-2 concrete upgrades", "visuals": "LT", "set": "LT"},
+ "angles": [{"setting": "LT", "concept": "LT", "hook": "ENGLISH"}]}`;
+
+function normTpl(r) {
+  const t = {
+    title: S(r.title), summary: S(r.summary), why_it_works: S(r.why_it_works),
+    reference: { niche: S(r.reference?.niche), audience: S(r.reference?.audience) },
+    hook: { seconds: N(r.hook?.seconds), said: S(r.hook?.said), on_screen_text: S(r.hook?.on_screen_text), seen: S(r.hook?.seen), mechanic: S(r.hook?.mechanic), reusable_text: S(r.hook?.reusable_text) },
+    beats: (Array.isArray(r.beats) ? r.beats : []).slice(0, 12).map((b, i) => ({ n: i + 1, start: N(b.start), end: N(b.end), action: S(b.action), shot: S(b.shot), emotion: S(b.emotion), on_screen_text: S(b.on_screen_text), sound: S(b.sound), purpose: S(b.purpose) })),
+    mirror: { kept: S(r.mirror?.kept), stronger: S(r.mirror?.stronger), visuals: S(r.mirror?.visuals), set: S(r.mirror?.set) },
+    angles: (Array.isArray(r.angles) ? r.angles : []).slice(0, 6).map((a) => ({ setting: S(a.setting), concept: S(a.concept), hook: S(a.hook) })),
+  };
+  if (!t.title || !t.beats.length || !t.hook.seen) throw { code: 'bad_shape' };
+  return t;
+}
+
+function renderTpl(t) {
+  const root = $('tpl'); root.replaceChildren();
+  if (t.example) root.append(el('span', 'example', 'Pavyzdinis šablonas · įmesk viral video, kad gautum savo'));
+  const head = el('section', 'card');
+  head.append(el('p', 'stage'), el('h2', null, t.title), el('p', 'muted', t.summary));
+  head.firstChild.innerHTML = '<b>2</b><span class="eyebrow">Šablonas</span>';
+  root.append(head);
+
+  const h = el('section', 'card'); h.append(el('p', 'eyebrow', 'The hook'));
+  const box = el('div', 'hook'); box.append(el('b', null, `Hook (${t.hook.seconds} s)`));
+  const parts = []; if (t.hook.said) parts.push(`Sako: „${t.hook.said}“`); if (t.hook.on_screen_text) parts.push(`Ekrane: ${t.hook.on_screen_text}`); parts.push(`Matosi: ${t.hook.seen}`);
+  box.append(el('span', null, parts.join(' · '))); h.append(box, el('p', 'muted small', t.hook.mechanic));
+  if (t.hook.reusable_text) h.append(copyBlock('Hook tavo versijai (EN)', t.hook.reusable_text));
+  const ol = el('ol', 'beats');
+  t.beats.forEach((b) => { const li = el('li'); li.append(el('strong', null, `${b.start}–${b.end} s `), document.createTextNode(b.action), el('span', null, [b.shot, b.emotion, b.on_screen_text && `„${b.on_screen_text}“`, b.sound].filter(Boolean).join(' · '))); ol.append(li); });
+  h.append(ol, el('h3', null, 'Kodėl veikia'), el('p', null, t.why_it_works)); root.append(h);
+
+  const m = el('section', 'card'); m.append(el('p', 'eyebrow', 'Šiek tiek aštriau'), el('h3', null, 'The mirror'));
+  const kv = el('dl', 'kv');
+  [['Paliekam', t.mirror.kept], ['Stipriau', t.mirror.stronger, true], ['Vaizdas', t.mirror.visuals], ['Aplinka', t.mirror.set]].forEach(([k, v, hl]) => { kv.append(el('dt', null, k)); kv.append(el('dd', hl ? 'hl' : null, v)); });
+  m.append(kv, el('h3', null, 'Originalas, 1:1'));
+  const kv2 = el('dl', 'kv'); kv2.append(el('dt', null, 'Niša'), el('dd', null, t.reference.niche), el('dt', null, 'Auditorija'), el('dd', null, t.reference.audience));
+  m.append(kv2);
+  if (t.angles.length) { const ul = el('ul', 'plain'); t.angles.forEach((a) => { const li = el('li'); li.append(el('b', null, a.setting), document.createTextNode(` · ${a.concept} `), el('span', 'muted', `„${a.hook}“`)); ul.append(li); }); m.append(el('h3', null, 'Kiti pasauliai'), ul); }
+  root.append(m);
+
+  const sel = $('pAngle'); sel.replaceChildren();
+  t.angles.forEach((a) => { const o = el('option', null, `${a.setting}: ${a.concept}`); o.value = `${a.setting}: ${a.concept}`; sel.append(o); });
+  $('pForm').hidden = !!t.example;
+}
+
+$('vForm').onsubmit = async (e) => {
+  e.preventDefault(); err('vErr');
+  if (!sample) return err('vErr', 'Veikia tik atidarius šį puslapį claude.ai.');
+  if (!vFile) return err('vErr', 'Pirma įmesk viral video.');
+  $('vForm').hidden = true; $('vProg').hidden = false; $('tpl').replaceChildren(); $('plan').replaceChildren(); $('pForm').hidden = true;
+  vCtl = new AbortController();
+  try {
+    const v = await loadVideo(vFile);
+    if (!isFinite(v.duration) || v.duration > MAX_SECONDS) throw { code: 'too_long' };
+    const count = Math.min(Math.max(4, Math.min(12, limits?.images?.maxCount || 8)), Math.max(4, Math.round(v.duration)));
+    const frames = await grabFrames(v, count); URL.revokeObjectURL(v.src);
+    $('vProgText').textContent = 'Skaidau hook\'ą, kadrus ir rašau „mirror“…';
+    vTimer = startTimer('vTimer', 'vBar', 'apie minutę');
+    const prompt = `${RULES}\n\nTASK: study this viral short video and turn it into a reusable format.\nThe images are ${frames.length} frames in order, at these seconds: ${frames.map((f) => f.t).join(', ')}. Duration ${v.duration.toFixed(1)} s. You cannot hear the audio; use what the user says about it.\nWhat the user knows: ${$('vCtx').value.trim() || 'nothing'}\nGive 4-5 angles (new worlds for the same structure that fit pet, fashion or gift products).\nReply with ONLY one JSON object of this shape:\n${TPL_SHAPE}`;
+    const raw = await sample.json(prompt, { images: frames.map((f) => f.blob), modelTier: 'complex', signal: vCtl.signal });
+    tpl = normTpl(raw); tpl.at = Date.now(); tpl.file = vFile.name;
+    saveHist(tpl); renderHist(); renderTpl(tpl);
+  } catch (e2) {
+    if (e2?.code !== 'cancelled') err('vErr', errText(e2));
+  } finally {
+    clearInterval(vTimer); $('vProg').hidden = true; $('vForm').hidden = false;
+  }
+};
+$('vStop').onclick = () => vCtl?.abort();
+
+// ---------- stage 3: plan ----------
+const PLAN_SHAPE = `{"product_sentence": "ENGLISH exact product sentence used in every prompt",
+ "characters": ["ENGLISH exact person sentence", "ENGLISH exact pet sentence"],
+ "steps": [{"n": 0, "kind": "prep|image|check|video|edit", "title": "LT", "where": "e.g. Seedream / Kling Image, or Kling Video (Start + End frame)",
+            "uploads": ["LT: what to attach, in order"], "prompt": "ENGLISH full self-contained prompt or empty",
+            "negative": "ENGLISH for video steps else empty", "length": "LT e.g. 5 s, naudok 0.5–3 s, or empty",
+            "checks": ["LT: 2-3 things to verify"]}],
+ "on_screen_texts": [{"time": "0–3 s", "text": "ENGLISH"}], "music": ["track suggestions, first is the pick"],
+ "caption": "ENGLISH", "pinned_comment": "ENGLISH", "hashtags": ["#..."], "cost_note": "LT rough credits"}`;
+
+function normPlan(r) {
+  const p = {
+    product_sentence: S(r.product_sentence), characters: (Array.isArray(r.characters) ? r.characters : []).map(S).filter(Boolean),
+    steps: (Array.isArray(r.steps) ? r.steps : []).slice(0, 16).map((s, i) => ({ n: Number.isFinite(+s.n) ? +s.n : i, kind: S(s.kind), title: S(s.title), where: S(s.where), uploads: (Array.isArray(s.uploads) ? s.uploads : []).map(S), prompt: S(s.prompt), negative: S(s.negative), length: S(s.length), checks: (Array.isArray(s.checks) ? s.checks : []).map(S) })),
+    on_screen_texts: (Array.isArray(r.on_screen_texts) ? r.on_screen_texts : []).map((o) => ({ time: S(o.time), text: S(o.text) })),
+    music: (Array.isArray(r.music) ? r.music : []).map(S), caption: S(r.caption), pinned_comment: S(r.pinned_comment),
+    hashtags: (Array.isArray(r.hashtags) ? r.hashtags : []).map(S), cost_note: S(r.cost_note),
+  };
+  if (!p.steps.length || !p.product_sentence) throw { code: 'bad_shape' };
+  return p;
+}
+
+function renderPlan(p) {
+  const root = $('plan'); root.replaceChildren();
+  const head = el('section', 'card'); head.append(el('p', 'eyebrow', 'Tavo žingsnių planas'), el('h2', null, 'Daryk iš eilės, nuo viršaus'));
+  head.append(copyBlock('Produkto sakinys (tas pats kiekviename prompte)', p.product_sentence));
+  p.characters.forEach((c, i) => head.append(copyBlock(`Veikėjas ${i + 1}`, c)));
+  root.append(head);
+  p.steps.forEach((s) => {
+    const c = el('article', 'card step');
+    const h = el('h3'); h.append(el('span', `kind${s.kind === 'video' ? ' kind--video' : ''}`, s.kind || 'žingsnis'), document.createTextNode(`Žingsnis ${s.n} · ${s.title}`));
+    c.append(h);
+    if (s.where) c.append(el('p', 'small', `Kur: ${s.where}`));
+    if (s.uploads.length) c.append(el('p', 'small', `Įkelk: ${s.uploads.map((u, i) => `${i + 1}) ${u}`).join('  ')}`));
+    if (s.prompt) c.append(copyBlock('Prompt', s.prompt));
+    if (s.negative) c.append(copyBlock('Negative', s.negative));
+    if (s.length) c.append(el('p', 'small', `Trukmė / kirpk: ${s.length}`));
+    if (s.checks.length) { const ul = el('ul', 'checks'); s.checks.forEach((x) => ul.append(el('li', null, x))); c.append(ul); }
+    root.append(c);
+  });
+  const end = el('section', 'card'); end.append(el('p', 'eyebrow', 'Montažas ir įkėlimas'));
+  if (p.on_screen_texts.length) { const ul = el('ul', 'plain'); p.on_screen_texts.forEach((o) => { const li = el('li'); li.append(el('b', null, o.time), document.createTextNode(` · ${o.text}`)); ul.append(li); }); end.append(ul); }
+  if (p.music.length) end.append(el('p', null, `Muzika: ${p.music.join(' · ')}`));
+  if (p.caption) end.append(copyBlock('Caption', p.caption));
+  if (p.pinned_comment) end.append(copyBlock('Prisegtas komentaras', p.pinned_comment));
+  if (p.hashtags.length) end.append(copyBlock('Hashtag\'ai', p.hashtags.join(' ')));
+  if (p.cost_note) end.append(el('p', 'muted small', p.cost_note));
+  end.append(el('p', 'muted small', 'Įkeliant uždėk AI žymą.'));
+  root.append(end);
+}
+
+$('pForm').onsubmit = async (e) => {
+  e.preventDefault(); err('pErr');
+  const photo = $('pFile').files[0];
+  if (!photo) return err('pErr', 'Įkelk vieną aiškią produkto nuotrauką.');
+  if (!tpl) return err('pErr', 'Pirma sudaryk šabloną.');
+  $('pForm').hidden = true; $('pProg').hidden = false; $('plan').replaceChildren();
+  pCtl = new AbortController(); pTimer = startTimer('pTimer', 'pBar', 'apie 1–2 minutes');
+  try {
+    const { at, file, example, ...t } = tpl;
+    const angle = $('pCustom').value.trim() || $('pAngle').value;
+    const prompt = `${RULES}\n\nTASK: write the numbered build order for the user's product, remaking this viral format.\nThe image is reference 1, the product photo. Describe this exact product.\nFormat to remake (JSON): ${JSON.stringify(t)}\nProduct notes: ${$('pNote').value.trim() || 'none'}\nNew world / angle: ${angle || 'the strongest angle'}\nExtra wishes: ${$('pExtras').value.trim() || 'none'}\nKeep the hook text and beat timing 1:1 and apply mirror.stronger. Steps: 0 prep; image steps with the anchor shot first (person + pet + product); one check step ("send the images to Claude before making videos"); video steps in timeline order; a final edit step. At most 12 steps. Image prompts 150-230 words, video prompts 80-140 words, exactly in the STYLE REFERENCE manner.\nReply with ONLY one JSON object of this shape:\n${PLAN_SHAPE}`;
+    const raw = await sample.json(prompt, { images: [photo], modelTier: 'complex', signal: pCtl.signal });
+    renderPlan(normPlan(raw));
+    $('plan').scrollIntoView({ behavior: 'smooth' });
+  } catch (e2) {
+    if (e2?.code !== 'cancelled') err('pErr', errText(e2));
+  } finally {
+    clearInterval(pTimer); $('pProg').hidden = true; $('pForm').hidden = false;
+  }
+};
+$('pStop').onclick = () => pCtl?.abort();
+
+// ---------- saved templates (this browser only) ----------
+function loadHist() { try { return JSON.parse(localStorage.getItem('vl-tpl') || '[]'); } catch { return []; } }
+function saveHist(t) { try { localStorage.setItem('vl-tpl', JSON.stringify([t, ...loadHist()].slice(0, 15))); } catch {} }
+function renderHist() {
+  const list = loadHist(); $('histCard').hidden = !list.length; const ul = $('hist'); ul.replaceChildren();
+  list.forEach((t) => {
+    const b = el('button'); b.type = 'button'; b.append(el('b', null, t.title), el('span', 'muted', ` · ${t.reference?.niche || ''} · ${new Date(t.at).toLocaleDateString('lt-LT')}`));
+    b.onclick = () => { tpl = t; renderTpl(t); $('plan').replaceChildren(); $('tpl').scrollIntoView({ behavior: 'smooth' }); };
+    const li = el('li'); li.append(b); ul.append(li);
+  });
+}
+
+// ---------- start ----------
+renderTpl(EXAMPLE_TPL); renderHist();
+(async () => {
+  try { sample = await window.claude?.use?.('sample'); } catch { sample = null; }
+  if (!sample) { $('unavail').hidden = false; return; }
+  limits = await sample.limits().catch(() => null);
+  if (!limits?.images) { $('unavail').textContent = 'Šiame lange negalima siųsti vaizdų Claude. Atidaryk puslapį claude.ai naršyklėje.'; $('unavail').hidden = false; }
+})();
+</script>
