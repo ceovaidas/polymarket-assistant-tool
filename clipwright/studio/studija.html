@@ -74,6 +74,19 @@ details[open] summary { margin-bottom: 8px; }
 .textrow { display: grid; grid-template-columns: 70px 70px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .textrow input { padding: 8px 10px; }
 .final video { width: min(320px, 100%); border-radius: 12px; background: #000; }
+.mx-title { font-size: 18px; margin-top: 4px; }
+.mx { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.mx-hook { display: grid; gap: 8px; padding: 12px 14px; border: 1px solid var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+.mx-hook b { font: 700 13px/1 var(--f-mono); color: var(--accent); }
+dl.mx-kv { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 6px 12px; margin: 0; }
+.mx-kv dt { color: var(--fg-3); font-weight: 600; font-size: 13px; }
+.mx-kv dd { margin: 0; }
+.mx-kv dd.mx-hl { padding: 6px 8px; border: 1px solid var(--accent); border-radius: 8px; }
+.mx-kv dd.mx-en { font-family: var(--f-mono); font-size: 13px; }
+ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.mx-beats li { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; align-items: start; }
+.mx-time { font: 600 12px/1.6 var(--f-mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+@media (max-width: 440px) { dl.mx-kv { grid-template-columns: 1fr; } .mx-kv dt { margin-top: 4px; } }
 @media (max-width: 520px) { .media { grid-template-columns: 1fr 1fr; gap: 8px; } .textrow { grid-template-columns: 1fr 1fr; } .textrow .t { grid-column: 1 / -1; } .product { grid-template-columns: 72px 1fr; } .product img { width: 72px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -295,7 +308,7 @@ function renderPresets() {
   PRESETS.forEach((p) => {
     const b = el('button', 'preset'); b.type = 'button'; b.setAttribute('aria-pressed', String(st.preset === p.id));
     b.append(el('b', null, p.name), el('span', null, p.hint));
-    b.onclick = () => { st.preset = p.id; st.keepProduct = false; $('ideaText').value = p.text; st.idea = p.text; save(); renderPresets(); };
+    b.onclick = () => { st.preset = p.id; st.keepProduct = false; st.mirror = null; $('ideaText').value = p.text; st.idea = p.text; save(); renderPresets(); renderMirror(); };
     $('presets').append(b);
   });
   loadTemplates();
@@ -341,7 +354,7 @@ Reply with ONLY one JSON object:
 $('planBtn').onclick = async () => {
   show('iErr', '');
   if (!st.product && !st.keepProduct) return show('iErr', 'Pirma pasirink produkto nuotrauką (1 žingsnis) arba pasirink „Palikti tą patį produktą“.');
-  if (!st.idea.trim()) return show('iErr', 'Pasirink šabloną arba parašyk idėją.');
+  if (!ideaForPlan().trim()) return show('iErr', 'Pasirink šabloną, įmesk viral video arba parašyk idėją.');
   if (!sample) return show('iErr', 'Claude neprieinamas šiame lange.');
   $('planBtn').disabled = true; $('planState').textContent = 'Claude rašo planą… (apie minutę)';
   try {
@@ -349,7 +362,7 @@ $('planBtn').onclick = async () => {
     const thumb = useProduct && thumbs.get(st.product.mediaId);
     const images = thumb && (await sample.limits().catch(() => null))?.images ? [await dataUrlToBlob(thumb)] : undefined;
     const intro = useProduct ? `The image is reference 1, the product photo.\nProduct notes: ${st.product.note || 'none'}` : 'No product photo: describe the product from the idea below in every prompt and never write "from reference 1" for the product.';
-    const raw = await sample.json(`${RULES}\n\n${intro}\nIdea: ${st.idea}`, { images, modelTier: 'complex', cache: false });
+    const raw = await sample.json(`${RULES}\n\n${intro}\nIdea: ${ideaForPlan()}`, { images, modelTier: 'complex', cache: false });
     st.plan = normPlan(raw); st.final = null; save(); renderPlan(); estimate();
   } catch (e) { show('iErr', e?.code ? sampleError(e) : 'Planas nepilnas, spausk dar kartą.'); }
   $('planBtn').disabled = false; $('planState').textContent = '';
@@ -409,25 +422,58 @@ $('mirrorBtn').onclick = async () => {
     $('mirrorState').textContent = 'Claude skaido hook\'ą ir rašo „mirror“… (apie minutę)';
     const t = await sample.json(`Study this viral short video and turn it into a reusable format. Explanations in Lithuanian; hooks and on-screen texts copied 1:1 in their original language. The images are ${frames.length} frames in order at seconds ${frames.map((x) => x.t).join(', ')}; duration ${v.duration.toFixed(1)} s; you cannot hear audio. What the user knows: ${$('vCtx').value.trim() || 'nothing'}. In "mirror" describe our sharper version, generated from scratch with the user's product (never reuse the footage). Reply with ONLY one JSON object: ${MIRROR_SHAPE}`, { images: frames.map((x) => x.blob), modelTier: 'complex', cache: false });
     if (!t?.hook || !Array.isArray(t.beats)) throw new Error('Atsakymas nepilnas, spausk dar kartą.');
-    const box = $('mirrorBox'); box.replaceChildren();
-    box.append(el('b', null, S(t.title)));
-    box.append(el('p', 'small', `Hook (${S(t.hook.seconds)} s): ${[t.hook.said && `Sako: „${t.hook.said}“`, t.hook.on_screen_text && `Ekrane: ${t.hook.on_screen_text}`, `Matosi: ${S(t.hook.seen)}`].filter(Boolean).join(' · ')}`));
-    const ol = el('ol', 'small'); ol.style.margin = '0'; ol.style.paddingLeft = '20px'; t.beats.forEach((b) => ol.append(el('li', null, `${S(b.start)}–${S(b.end)} s · ${S(b.action)}${b.on_screen_text ? ` · „${b.on_screen_text}“` : ''}`))); box.append(ol);
-    box.append(el('p', 'small', `Kodėl veikia: ${S(t.why_it_works)}`));
-    box.append(el('p', 'small', `Mirror · paliekam: ${S(t.mirror?.kept)} · stipriau: ${S(t.mirror?.stronger)} · vaizdas: ${S(t.mirror?.visuals)} · aplinka: ${S(t.mirror?.set)}`));
     st.preset = 'mirror';
     st.keepProduct = $('modeKeep').checked;
-    if (st.keepProduct) box.append(el('p', 'small', `Produktas lieka toks pat: ${S(t.original_product)}`));
-    const productLine = st.keepProduct
-      ? `KEEP THE SAME PRODUCT as in the original video: ${S(t.original_product)}. Describe exactly this product in every prompt (no brand names or logos); ignore any product photo.`
-      : 'Use MY product from the product photo (reference 1) instead of the original product.';
-    st.idea = `Remake this viral format. ${productLine} Copy the hook text and the beat timing 1:1 and apply mirror.stronger; generate every shot from scratch with new people and a new setting.\nFormat JSON: ${JSON.stringify(t)}`;
-    $('ideaText').value = st.idea; save(); renderPresets();
+    st.mirror = t; st.idea = ''; $('ideaText').value = '';
+    save(); renderPresets(); renderMirror();
     $('mirrorState').className = 'msg msg--ok';
     $('mirrorState').textContent = 'Šablonas paruoštas ↓. Toliau: spausk „Sukurti planą“ žemiau.';
   } catch (e) { $('mirrorState').className = 'msg msg--err'; $('mirrorState').textContent = e?.code ? sampleError(e) : (e?.message || 'Nepavyko.'); }
   $('mirrorBtn').disabled = false; window.__mirrorBusy = false;
 };
+
+function renderMirror() {
+  const t = st.mirror, box = $('mirrorBox'); box.replaceChildren();
+  if (!t) { $('ideaText').placeholder = 'Pvz.: 3-2-1 reveal kalėdinėje svetainėje, mergina su raudonu pledu, pabaigoje oranžinis katinas su Kalėdų senelio kepure'; return; }
+  $('ideaText').placeholder = 'Papildomi norai (nebūtina): kita vieta, veikėjai, katino spalva, pabaigos aksesuaras…';
+  const sec = (title, ...kids) => { const s = el('section', 'mx'); s.append(el('p', 'eyebrow', title), ...kids); return s; };
+  box.append(el('h3', 'mx-title', S(t.title)));
+  // hook
+  const hook = el('div', 'mx-hook');
+  hook.append(el('b', null, `Hook · pirmos ${S(t.hook?.seconds) || 2} s`));
+  const kv = el('dl', 'mx-kv');
+  if (t.hook?.said) kv.append(el('dt', null, 'Sako'), el('dd', null, `„${S(t.hook.said)}“`));
+  if (t.hook?.on_screen_text) kv.append(el('dt', null, 'Ekrane'), el('dd', null, `„${S(t.hook.on_screen_text)}“`));
+  kv.append(el('dt', null, 'Matosi'), el('dd', null, S(t.hook?.seen)));
+  if (t.hook?.reusable_text) kv.append(el('dt', null, 'Tavo hook'), el('dd', 'mx-en', S(t.hook.reusable_text)));
+  hook.append(kv);
+  box.append(sec('Hook\'as', hook));
+  // beats
+  const ol = el('ol', 'mx-beats');
+  (t.beats || []).forEach((b) => {
+    const li = el('li');
+    li.append(el('span', 'mx-time', `${S(b.start)}–${S(b.end)} s`));
+    const body = el('div'); body.append(el('p', null, S(b.action)));
+    const meta = [b.shot && S(b.shot), b.on_screen_text && `ekrane „${S(b.on_screen_text)}“`].filter(Boolean).join(' · ');
+    if (meta) body.append(el('p', 'small muted', meta));
+    li.append(body); ol.append(li);
+  });
+  box.append(sec('Kadrai', ol));
+  box.append(sec('Kodėl veikia', el('p', null, S(t.why_it_works))));
+  // mirror
+  const m = el('dl', 'mx-kv');
+  [['Paliekam', t.mirror?.kept], ['Stipriau', t.mirror?.stronger], ['Vaizdas', t.mirror?.visuals], ['Aplinka', t.mirror?.set]].forEach(([k, v]) => { if (v) m.append(el('dt', null, k), el('dd', k === 'Stipriau' ? 'mx-hl' : null, S(v))); });
+  box.append(sec('Mirror · mūsų versija', m));
+  box.append(sec('Produktas', el('p', null, st.keepProduct ? `Paliekam tą patį: ${S(t.original_product)}` : 'Keičiam į tavo produktą iš 1 žingsnio.')));
+}
+function ideaForPlan() {
+  const extra = st.idea.trim();
+  if (!st.mirror) return extra;
+  const productLine = st.keepProduct
+    ? `KEEP THE SAME PRODUCT as in the original video: ${S(st.mirror.original_product)}. Describe exactly this product in every prompt (no brand names or logos); ignore any product photo.`
+    : 'Use MY product from the product photo (reference 1) instead of the original product.';
+  return `Remake this viral format. ${productLine} Copy the hook text and the beat timing 1:1 and apply mirror.stronger; generate every shot from scratch with new people and a new setting.${extra ? `\nUser wishes: ${extra}` : ''}\nFormat JSON: ${JSON.stringify(st.mirror)}`;
+}
 
 // ---------- 3 shots ----------
 const shotBy = (n) => st.plan.shots.find((s) => s.n === n);
@@ -669,7 +715,8 @@ $('newProject').onclick = () => { st = blank(); save(); location.reload(); };
 
 // ---------- start ----------
 renderPresets(); renderProduct(); if (st.plan) renderPlan(); renderCredits(); if (st.final) renderFinal('');
-$('ideaText').value = st.idea || '';
+if (/^Remake this viral format/.test(st.idea || '')) { st.idea = ''; save(); } // older version kept the raw format here
+$('ideaText').value = st.idea || ''; renderMirror();
 (async () => {
   try { mcp = await window.claude?.use?.('mcp'); } catch { mcp = null; }
   try { sample = await window.claude?.use?.('sample'); } catch { sample = null; }
