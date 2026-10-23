@@ -83,6 +83,7 @@ details[open] summary { margin-bottom: 8px; }
     <span class="brand">Video studija</span>
     <span class="credits" id="credits">💳 Kreditai: tikrinama…</span>
   </div>
+  <p class="credits" id="diag">Jungiamasi: Claude … · Higgsfield …</p>
   <h1>Video studija</h1>
   <p class="lead">Produktas, idėja, nuotraukos su Nano Banana 2.1, klipai su Kling 4.0 ir galutinis video su tekstais, viskas viename puslapyje. Nieko nesugeneruojama be tavo paspaudimo, o prieš kiekvieną žingsnį matai kainą.</p>
   <p class="msg msg--err" id="gate" hidden></p>
@@ -108,7 +109,8 @@ details[open] summary { margin-bottom: 8px; }
         <label class="row small"><input type="radio" name="prodMode" id="modeSwap" value="swap" checked> Pakeisti į mano produktą</label>
         <label class="row small"><input type="radio" name="prodMode" id="modeKeep" value="keep"> Palikti tą patį produktą kaip originale</label>
       </fieldset>
-      <div class="row"><button class="btn" type="button" id="mirrorBtn">Sukurti šabloną iš video</button><span class="muted small" id="mirrorState"></span></div>
+      <div class="row"><button class="btn" type="button" id="mirrorBtn">Sukurti šabloną iš video</button></div>
+      <p class="msg" id="mirrorState">Pasirink video, ir analizė prasidės iš karto.</p>
       <div id="mirrorBox" style="display:grid;gap:8px"></div>
     </div>
     <div class="presets" id="presets"></div>
@@ -390,10 +392,12 @@ const MIRROR_SHAPE = `{"title": "LT short name", "hook": {"seconds": n, "said": 
  "beats": [{"start": 0, "end": 2, "action": "LT", "shot": "LT", "on_screen_text": "1:1"}],
  "why_it_works": "LT", "mirror": {"kept": "LT", "stronger": "LT", "visuals": "LT", "set": "LT"},
  "original_product": "EN exact description of the product shown in the video (type, colours, print, materials, shape, size), no brand names"}`;
+$('vFile').onchange = () => { if ($('vFile').files[0]) $('mirrorBtn').click(); };
 $('mirrorBtn').onclick = async () => {
   const f = $('vFile').files[0];
+  $('mirrorState').className = 'msg';
   if (!f) return ($('mirrorState').textContent = 'Pirma pasirink video failą.');
-  if (!sample) return ($('mirrorState').textContent = 'Claude neprieinamas šiame lange.');
+  if (!sample) { $('mirrorState').className = 'msg msg--err'; return ($('mirrorState').textContent = 'Claude šiam puslapiui neprieinamas. Atidaryk nuorodą claude.ai naršyklėje (ne programoėlėje), prisijungęs, ir leisk prieigą, kai paklaus.'); }
   $('mirrorBtn').disabled = true; $('mirrorState').textContent = 'Žiūriu video kadras po kadro…';
   try {
     const v = await loadVideo(f);
@@ -419,7 +423,7 @@ $('mirrorBtn').onclick = async () => {
     st.idea = `Remake this viral format. ${productLine} Copy the hook text and the beat timing 1:1 and apply mirror.stronger; generate every shot from scratch with new people and a new setting.\nFormat JSON: ${JSON.stringify(t)}`;
     $('ideaText').value = st.idea; save(); renderPresets();
     $('mirrorState').textContent = 'Šablonas paruoštas. Gali papildyti idėją ir spausti „Sukurti planą“.';
-  } catch (e) { $('mirrorState').textContent = e?.code ? sampleError(e) : (e?.message || 'Nepavyko.'); }
+  } catch (e) { $('mirrorState').className = 'msg msg--err'; $('mirrorState').textContent = e?.code ? sampleError(e) : (e?.message || 'Nepavyko.'); }
   $('mirrorBtn').disabled = false;
 };
 
@@ -668,7 +672,10 @@ $('ideaText').value = st.idea || '';
   try { mcp = await window.claude?.use?.('mcp'); } catch { mcp = null; }
   try { sample = await window.claude?.use?.('sample'); } catch { sample = null; }
   try { db = await window.claude?.use?.('db'); user = await window.claude?.use?.('user'); } catch {}
-  if (!mcp) { show('gate', 'Higgsfield šiam puslapiui neprieinamas. Atidaryk jį claude.ai, kai Higgsfield prijungtas tavo Connectors.'); return; }
+  const ok = (v) => (v ? '✅' : '❌');
+  $('diag').textContent = `Claude ${ok(sample)} · Higgsfield ${ok(mcp)} · šablonų saugykla ${ok(db)}`;
+  if (!sample) show('gate', 'Claude šiam puslapiui neprieinamas. Atidaryk nuorodą claude.ai naršyklėje (kompiuteryje), prisijungęs, ir leisk prieigą, kai paklaus.');
+  if (!mcp) { show('gate', 'Higgsfield šiam puslapiui neprieinamas. Atidaryk jį claude.ai naršyklėje ir patikrink, ar Higgsfield prijungtas Settings → Connectors. Video analizė ir planas veiks ir be jo.'); return; }
   loadTemplates();
   await refreshBalance();
   if (st.product && !thumbs.get(st.product.mediaId)) { await thumbsFor([{ key: st.product.mediaId, url: st.product.url }]).catch(() => {}); renderProduct(); }
