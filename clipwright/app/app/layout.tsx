@@ -21,6 +21,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <nav aria-label="Main">
             {user ? (<>
               <Link href="/studio">Studio</Link>
+              <Link href="/lab">Lab</Link>
               <Link href="/dashboard">Account</Link>
               <Link className="pill" href="/credits"><b>{credits}</b> credits</Link>
               <form action="/auth/signout" method="post"><button className="btn" type="submit">Sign out</button></form>

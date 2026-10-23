@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PROTECTED = ['/dashboard', '/studio', '/credits'];
+const PROTECTED = ['/dashboard', '/studio', '/credits', '/lab'];
 
 /** Refreshes the auth cookie on every request and sends signed-out visitors to /login. */
 export async function updateSession(request: NextRequest) {

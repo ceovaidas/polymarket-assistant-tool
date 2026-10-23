@@ -13,6 +13,8 @@ Next.js 15 + Supabase (accounts, database) + Stripe (payments) + Kie.ai (video m
 | Buy credits (Stripe Checkout) + webhook that adds them | `app/api/checkout`, `app/api/stripe/webhook` |
 | Start a video (charges credits, refunds on failure) | `app/api/generate` |
 | Video finished callback + status | `app/api/kie/callback`, `app/api/jobs/[id]` |
+| **Lab:** viral video or reel link → template (hook 1:1, beats, mirror) → step-by-step plan for your product | `app/lab`, `app/api/lab/*`, `lib/lab/*`, worker in `../worker` |
+| **Clean:** mirror and blur baked-in text on your own clips | `app/lab/clean`, `app/api/lab/clean` |
 
 Rules the code enforces:
 - Prices are calculated on the server, never taken from the browser.
@@ -31,7 +33,9 @@ Rules the code enforces:
 3. **Kie.ai**: create an API key and add balance.
 4. **Vercel** (free): import this folder, add the variables from `.env.example`, deploy.
    `KIE_CALLBACK_TOKEN` is any long random string.
-5. Test with Stripe test mode (card `4242 4242 4242 4242`) before going live.
+5. **Lab (optional):** run `supabase/migrations/0002_lab.sql`, deploy the worker (`../worker/README.md`), then set
+   `ANTHROPIC_API_KEY`, `LAB_WORKER_URL`, `LAB_WORKER_TOKEN` and `LAB_OWNER_EMAILS` (only these emails can use the Lab).
+6. Test with Stripe test mode (card `4242 4242 4242 4242`) before going live.
 
 Local run: `cp .env.example .env.local`, fill it in, `npm install`, `npm run dev`.
 
