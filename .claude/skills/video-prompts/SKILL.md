@@ -178,6 +178,15 @@ venue) and add it to the README table.
   hook action by 1 s · no shot over 3 s except the payoff · close-up payoff with the product readable ·
   animal safe · on-screen text in the top third. Score each, give the 2-3 cheapest fixes, never promise
   virality (give ranges and say what would raise them).
+- **Accessories are part of the consistency lock** (cat bed "think vs actually" video): the cat wore a
+  bandana only in the close-ups and lost it mid-clip in the last one. A bandana, collar or hat goes in
+  the character sentence and in every shot, or nowhere. Check the end of each clip for morphs and trim
+  the clip before them.
+- **Edit rules from the same video:** a "think vs actually" or reveal cut is a hard cut, never a
+  dissolve (the dissolve showed a ghost box inside the bed). Each text appears on the beat it names
+  ("What we actually sell" exactly when the cat goes in, not 3 s later). Max 2 lines on screen; a
+  third line is a new text. Captions big (about 70 px at 1080 wide) with a thick outline, emoji never
+  alone on a line.
 - **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
   mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
   sentence in every scene so the angle matches across cuts.

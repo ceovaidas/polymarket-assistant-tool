@@ -11,10 +11,11 @@ spec.json:
   "font": "fonts/TikTokSans.ttf",          # bold sans; a variable font is set to weight 800
   "emoji_font": "fonts/NotoColorEmoji.ttf", # any colour-emoji font file you are licensed to use
   "clips": [{"src": "shot1.mp4", "in": 0.0, "out": 3.0}, ...],
-  "texts": [{"start": 0, "end": 5, "text": "DON'T show this to\\na Texas cat dad 😂😂😂", "y": 0.17, "size": 66}],
+  "texts": [{"start": 0, "end": 5, "text": "DON'T show this to\\na Texas cat dad 😂😂😂", "y": 0.17, "size": 66},
+            {"start": 5, "end": 8, "png": "caps/t1.png", "top": 0.16}],   # ready-made caption, top edge at 16%
   "audio": {"src": "music.mp3", "volume": 1.0, "clip_volume": 0.15},  # optional
   "clip_volume": 0,                                                    # optional, without `audio`: 0 mutes clips
-  "transition": 0.35                                                   # optional soft dissolve between shots, s
+  "transition": 0.35                                 # optional default dissolve, s; a clip's own "transition" wins
 }
 `y` is the vertical centre of the text block as a fraction of the height (keep 0.12-0.30: top third, away
 from the app buttons). Clip sound is kept unless `audio` is given, then it is mixed under the music.
@@ -181,15 +182,18 @@ def render(spec: dict, base: Path) -> Path:
         run(cmd)
         segs.append(seg)
     joined = work / "joined.mp4"
-    fade = float(spec.get("transition", 0))
-    if fade > 0 and len(segs) > 1:
-        # Soft dissolve between shots: each cut overlaps the next shot by `fade` seconds.
+    # Transition into the next shot: per clip `transition` or the spec default. 0 is a hard cut, done as a blend a
+    # bit over one frame long (xfade drops the rest of the video when the duration rounds below one frame).
+    cut = 1.2 / fps
+    fades = [max(float(c.get("transition", spec.get("transition", 0))), cut) for c in spec["clips"][:-1]]
+    if len(segs) > 1 and any(f > cut for f in fades):
         durs = [float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
                                       str(s)], capture_output=True, text=True).stdout.strip()) for s in segs]
         inputs, vchain, achain, v, a, t = [], [], [], "0:v", "0:a", 0.0
         for s in segs:
             inputs += ["-i", str(s)]
         for i in range(1, len(segs)):
+            fade = fades[i - 1]
             t += durs[i - 1] - fade
             vchain.append(f"[{v}][{i}:v]xfade=transition=fade:duration={fade:.3f}:offset={t:.3f}[v{i}]")
             achain.append(f"[{a}][{i}:a]acrossfade=d={fade:.3f}[a{i}]")
@@ -206,10 +210,15 @@ def render(spec: dict, base: Path) -> Path:
     emoji = Emoji(str(base / spec.get("emoji_font", "fonts/NotoColorEmoji.ttf")))
     inputs, chain, last = ["-i", str(joined)], [], "0:v"
     for i, t in enumerate(spec.get("texts", [])):
-        png = work / f"text{i}.png"
-        w, h = text_png(t["text"], W, int(t.get("size", 64)), str(base / spec["font"]), emoji, png)
+        if t.get("png"):  # caption drawn elsewhere (the studio draws it in the browser at 1080 px width)
+            png = base / t["png"]
+            w, h = Image.open(png).size
+        else:
+            png = work / f"text{i}.png"
+            w, h = text_png(t["text"], W, int(t.get("size", 64)), str(base / spec["font"]), emoji, png)
         inputs += ["-i", str(png)]
-        x, y = (W - w) // 2, round(H * float(t.get("y", 0.18)) - h / 2)
+        x = (W - w) // 2
+        y = round(H * float(t["top"])) if "top" in t else round(H * float(t.get("y", 0.18)) - h / 2)
         out = f"v{i}"
         chain.append(f"[{last}][{i + 1}:v]overlay={x}:{y}:enable='between(t,{float(t['start']):.3f},{float(t['end']):.3f})'[{out}]")
         last = out
