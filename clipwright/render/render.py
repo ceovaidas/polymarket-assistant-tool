@@ -12,7 +12,9 @@ spec.json:
   "emoji_font": "fonts/NotoColorEmoji.ttf", # any colour-emoji font file you are licensed to use
   "clips": [{"src": "shot1.mp4", "in": 0.0, "out": 3.0}, ...],
   "texts": [{"start": 0, "end": 5, "text": "DON'T show this to\\na Texas cat dad 😂😂😂", "y": 0.17, "size": 66}],
-  "audio": {"src": "music.mp3", "volume": 1.0, "clip_volume": 0.15}   # optional
+  "audio": {"src": "music.mp3", "volume": 1.0, "clip_volume": 0.15},  # optional
+  "clip_volume": 0,                                                    # optional, without `audio`: 0 mutes clips
+  "transition": 0.35                                                   # optional soft dissolve between shots, s
 }
 `y` is the vertical centre of the text block as a fraction of the height (keep 0.12-0.30: top third, away
 from the app buttons). Clip sound is kept unless `audio` is given, then it is mixed under the music.
@@ -61,15 +63,22 @@ def load_font(path: str, size: int) -> ImageFont.FreeTypeFont:
 class Emoji:
     """Colour emoji are bitmap fonts with fixed sizes (Noto: 109 px); render big and scale down."""
 
+    # Bitmap (CBDT) colour fonts render in Pillow; COLRv1 builds come out blank, so prefer the system copy.
+    CANDIDATES = ["/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf", "/usr/share/fonts/noto/NotoColorEmoji.ttf"]
+
     def __init__(self, path: str):
         self.font = None
-        for size in (109, 137, 160, 96, 64):
-            try:
-                self.font = ImageFont.truetype(path, size)
-                self.native = size
-                break
-            except OSError:
-                continue
+        for candidate in [path, *self.CANDIDATES]:
+            for size in (109, 137, 160, 96, 64):
+                try:
+                    font = ImageFont.truetype(candidate, size)
+                    probe = Image.new("RGBA", (size * 2, size * 2))
+                    ImageDraw.Draw(probe).text((10, 10), "\U0001F602", font=font, embedded_color=True)
+                    if probe.getbbox():
+                        self.font, self.native = font, size
+                        return
+                except (OSError, ValueError):
+                    continue
 
     def image(self, char: str, height: int) -> Image.Image | None:
         if not self.font:
@@ -87,42 +96,66 @@ class Emoji:
 
 def text_png(text: str, width: int, size: int, font_path: str, emoji: Emoji, dest: Path) -> tuple[int, int]:
     font = load_font(font_path, size)
-    stroke = max(3, round(size * 0.11))
-    line_h = round(size * 1.18)
-    emoji_h = round(size * 1.0)
-    space = font.getlength(" ")
-    lines = []
-    for raw in text.split("\n"):
-        parts, pos = [], 0
+    max_w = round(width * 0.86)
+
+    def tokens(raw: str) -> list[tuple[str, str]]:
+        """Words and emoji as separate tokens; spaces kept as their own token."""
+        out, pos = [], 0
         for m in EMOJI_RE.finditer(raw):
-            if m.start() > pos:
-                parts.append(("t", raw[pos:m.start()]))
-            parts.append(("e", m.group()))
+            out += [("t", w) for w in re.split(r"( )", raw[pos:m.start()]) if w]
+            out.append(("e", m.group()))
             pos = m.end()
-        if pos < len(raw):
-            parts.append(("t", raw[pos:]))
-        lines.append(parts)
+        out += [("t", w) for w in re.split(r"( )", raw[pos:]) if w]
+        return out
+
+    # Shrink the font until the longest single word fits, then wrap words onto lines.
+    while True:
+        stroke = max(3, round(size * 0.09))
+        emoji_h = round(size * 1.02)
+        tok_w = lambda k, v: font.getlength(v) if k == "t" else emoji_h * 1.06
+        words = [t for raw in text.split("\n") for t in tokens(raw) if t[1] != " "]
+        if size <= 30 or all(tok_w(k, v) + 2 * stroke <= max_w for k, v in words):
+            break
+        size -= 4
+        font = load_font(font_path, size)
+    line_h = round(size * 1.2)
+    space = font.getlength(" ")
+    lines: list[list[tuple[str, str]]] = []
+    for raw in text.split("\n"):
+        line, line_w = [], 0.0
+        for k, v in tokens(raw):
+            if v == " ":
+                continue
+            w = tok_w(k, v)
+            gap = space if line else 0
+            if line and line_w + gap + w + 2 * stroke > max_w:
+                lines.append(line)
+                line, line_w, gap = [], 0.0, 0
+            line.append((k, v))
+            line_w += gap + w
+        lines.append(line)
 
     def measure(parts):
-        return sum(font.getlength(v) if k == "t" else emoji_h * 1.04 for k, v in parts)
+        return sum(tok_w(k, v) for k, v in parts) + space * max(0, len(parts) - 1)
 
-    canvas_w = min(width - 2 * round(width * 0.06), max(int(max(measure(p) for p in lines)) + 2 * stroke + 8, 10))
-    img = Image.new("RGBA", (canvas_w, line_h * len(lines) + 2 * stroke + 8), (0, 0, 0, 0))
+    canvas_w = int(max(measure(p) for p in lines)) + 2 * stroke + 16
+    img = Image.new("RGBA", (canvas_w, line_h * len(lines) + 2 * stroke + 12), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
+    ascent, _ = font.getmetrics()
     for i, parts in enumerate(lines):
         x = (canvas_w - measure(parts)) / 2
-        y = stroke + 4 + i * line_h
-        for kind, value in parts:
+        top = stroke + 6 + i * line_h
+        for j, (kind, value) in enumerate(parts):
+            if j:
+                x += space
             if kind == "t":
-                draw.text((x, y), value, font=font, fill="white", stroke_width=stroke, stroke_fill="black")
-                x += font.getlength(value)
+                draw.text((x, top + line_h * 0.82), value, font=font, anchor="ls", fill="white",
+                          stroke_width=stroke, stroke_fill="black")
             else:
                 em = emoji.image(value, emoji_h)
                 if em:
-                    img.alpha_composite(em, (round(x), round(y + (line_h - emoji_h) / 2 - size * 0.06)))
-                    x += emoji_h * 1.04
-                else:
-                    x += space
+                    img.alpha_composite(em, (round(x), round(top + (line_h - emoji_h) / 2)))
+            x += tok_w(kind, value)
     img.save(dest)
     return img.size
 
@@ -147,11 +180,28 @@ def render(spec: dict, base: Path) -> Path:
                 "-c:a", "aac", "-ar", "48000", "-ac", "2", str(seg)]
         run(cmd)
         segs.append(seg)
-    listing = work / "list.txt"
-    listing.write_text("".join(f"file '{s}'\n" for s in segs))
     joined = work / "joined.mp4"
-    run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing),
-         "-c", "copy", str(joined)])
+    fade = float(spec.get("transition", 0))
+    if fade > 0 and len(segs) > 1:
+        # Soft dissolve between shots: each cut overlaps the next shot by `fade` seconds.
+        durs = [float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                      str(s)], capture_output=True, text=True).stdout.strip()) for s in segs]
+        inputs, vchain, achain, v, a, t = [], [], [], "0:v", "0:a", 0.0
+        for s in segs:
+            inputs += ["-i", str(s)]
+        for i in range(1, len(segs)):
+            t += durs[i - 1] - fade
+            vchain.append(f"[{v}][{i}:v]xfade=transition=fade:duration={fade:.3f}:offset={t:.3f}[v{i}]")
+            achain.append(f"[{a}][{i}:a]acrossfade=d={fade:.3f}[a{i}]")
+            v, a = f"v{i}", f"a{i}"
+        run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *inputs, "-filter_complex", ";".join(vchain + achain),
+             "-map", f"[{v}]", "-map", f"[{a}]", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+             "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000", "-ac", "2", str(joined)])
+    else:
+        listing = work / "list.txt"
+        listing.write_text("".join(f"file '{s}'\n" for s in segs))
+        run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing),
+             "-c", "copy", str(joined)])
 
     emoji = Emoji(str(base / spec.get("emoji_font", "fonts/NotoColorEmoji.ttf")))
     inputs, chain, last = ["-i", str(joined)], [], "0:v"
@@ -169,6 +219,9 @@ def render(spec: dict, base: Path) -> Path:
         a = len(spec.get("texts", [])) + 1
         chain.append(f"[0:a]volume={audio.get('clip_volume', 0.15)}[ca];[{a}:a]volume={audio.get('volume', 1.0)}[ma];"
                      f"[ca][ma]amix=inputs=2:duration=first:dropout_transition=0[aout]")
+    elif "clip_volume" in spec:  # no music file: keep, lower or mute the clip sound (music is added in the app)
+        chain.append(f"[0:a]volume={float(spec['clip_volume'])}[aout]")
+        audio = True
     out_path = base / spec.get("out", "final.mp4")
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *inputs]
     if chain:
