@@ -605,8 +605,26 @@ async function submit(kind, shots) {
   const requests = shots.map((s) => ({ index: s.n, params: kind === 'image' ? imageParams(s) : videoParams(s) }));
   const unit = {};
   for (const s of shots) unit[s.n] = await costOf(kind === 'image' ? 'image' : 'video', s);
-  const { data } = await call(tool, { requests, context: 'User-approved generation in their video studio page.' });
-  const jobs = deepFind(data, (o) => o.job_id && o.index != null);
+  // Higgsfield may answer with a preset recommendation instead of a job; we always decline it and resubmit as asked.
+  const declinedFrom = (text) => {
+    const map = {}; const re = /index (\d+)[^]*?declined_preset_id=([0-9a-fA-F-]{36})/g; let m;
+    while ((m = re.exec(text))) map[+m[1]] = m[2];
+    return map;
+  };
+  const textOf = (e, res) => `${e?.message || ''} ${JSON.stringify(e?.result || '')} ${(res?.content || []).map((b) => b.text || '').join(' ')}`;
+  let jobs = [], pendingReq = requests;
+  for (let attempt = 0; attempt < 3 && pendingReq.length; attempt++) {
+    let data, res, err;
+    try { ({ data, res } = await call(tool, { requests: pendingReq, context: 'User-approved generation in their video studio page.' })); } catch (e) { err = e; }
+    const got = deepFind(data, (o) => o.job_id && o.index != null);
+    jobs = jobs.concat(got);
+    const done = new Set(got.map((j) => +j.index));
+    const declined = declinedFrom(textOf(err, res));
+    const retry = pendingReq.filter((r) => !done.has(r.index) && declined[r.index]);
+    if (!retry.length) { if (!jobs.length && err) throw err; break; }
+    logLine(`Higgsfield pasiūlė preset'ą, atmetu ir kartoju (${retry.map((r) => r.index).join(', ')})`);
+    pendingReq = retry.map((r) => ({ index: r.index, params: { ...r.params, declined_preset_id: declined[r.index] } }));
+  }
   if (!jobs.length) throw new Error('Higgsfield negrąžino užduočių.');
   for (const j of jobs) {
     const s = shotBy(+j.index); if (!s) continue;
