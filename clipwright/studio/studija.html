@@ -75,6 +75,10 @@ details[open] summary { margin-bottom: 8px; }
 .textrow input { padding: 8px 10px; }
 .final video { width: min(320px, 100%); border-radius: 12px; background: #000; }
 .mx-title { font-size: 18px; margin-top: 4px; }
+.spin { display: grid; gap: 10px; place-items: center; color: var(--fg-2); text-align: center; padding: 8px; }
+.spin i { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--accent); animation: rot 0.9s linear infinite; }
+@keyframes rot { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin i { animation: none; } }
 .mx { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
 .mx-hook { display: grid; gap: 8px; padding: 12px 14px; border: 1px solid var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
 .mx-hook b { font: 700 13px/1 var(--f-mono); color: var(--accent); }
@@ -511,7 +515,10 @@ function renderShots() {
     // image slot
     const is = el('div', 'slot'); is.append(el('p', 'eyebrow', 'Nuotrauka'), statusPill(s.image));
     const ph = el('div', 'ph'); const it = s.image && thumbs.get(s.image.jobId);
-    if (it) { const im = el('img'); im.alt = `Kadras ${s.n}`; im.src = it; ph.append(im); } else ph.textContent = s.image?.status === 'running' ? 'Generuojama…' : 'Dar nėra';
+    if (it) { const im = el('img'); im.alt = `Kadras ${s.n}`; im.src = it; ph.append(im); }
+    else if (s.image?.status === 'running') ph.append(spinner(s.image.startedAt));
+    else if (s.image?.status === 'done') ph.append(spinner(null, 'Kraunama peržiūra…'));
+    else ph.textContent = 'Dar nėra';
     is.append(ph);
     if (s.image?.url) { const a = el('a', 'btn btn--sm', 'Atidaryti pilną'); a.href = s.image.url; a.target = '_blank'; a.rel = 'noopener'; is.append(a); }
     if (s.image?.url && !s.image.approved) { const ok = el('button', 'btn btn--sm btn--ok', 'Patvirtinti'); ok.type = 'button'; ok.onclick = () => { s.image.approved = true; save(); renderShots(); }; is.append(ok); }
@@ -519,7 +526,8 @@ function renderShots() {
     // clip slot
     const vs = el('div', 'slot'); vs.append(el('p', 'eyebrow', 'Video'), statusPill(s.clip));
     const ct = s.clip && thumbs.get(s.clip.jobId);
-    if (ct) { const im = el('img', 'sheet'); im.alt = `Klipo ${s.n} kadrai`; im.src = ct; vs.append(im); } else { const p2 = el('div', 'ph'); p2.textContent = s.clip?.status === 'running' ? 'Generuojama…' : 'Po nuotraukų'; vs.append(p2); }
+    if (ct) { const im = el('img', 'sheet'); im.alt = `Klipo ${s.n} kadrai`; im.src = ct; vs.append(im); }
+    else { const p2 = el('div', 'ph'); if (s.clip?.status === 'running') p2.append(spinner(s.clip.startedAt)); else if (s.clip?.status === 'done') p2.append(spinner(null, 'Kraunama peržiūra…')); else p2.textContent = 'Po nuotraukų'; vs.append(p2); }
     if (s.clip?.url) { const a = el('a', 'btn btn--sm', 'Žiūrėti klipą'); a.href = s.clip.url; a.target = '_blank'; a.rel = 'noopener'; vs.append(a); }
     if (s.clip?.url && !s.clip.approved) { const ok = el('button', 'btn btn--sm btn--ok', 'Patvirtinti'); ok.type = 'button'; ok.onclick = () => { s.clip.approved = true; save(); renderShots(); }; vs.append(ok); }
     media.append(is, vs); c.append(media);
@@ -544,6 +552,11 @@ function renderShots() {
     box.append(c);
   });
 }
+function spinner(since, label) {
+  const w = el('div', 'spin'); w.append(el('i'));
+  const t = el('span', 'small', label || 'Generuojama…'); if (since) t.dataset.since = since; w.append(t); return w;
+}
+setInterval(() => document.querySelectorAll('[data-since]').forEach((n) => { const s = Math.floor((Date.now() - +n.dataset.since) / 1000); n.textContent = `Generuojama… ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; }), 1000);
 function shotErr(n, text) { const e = document.querySelector(`[data-shot="${n}"]`); if (e) { e.textContent = text; e.hidden = !text; } }
 
 async function rewritePrompt(prompt, feedback, kind) {
@@ -574,7 +587,7 @@ async function submit(kind, shots) {
   if (!jobs.length) throw new Error('Higgsfield negrąžino užduočių.');
   for (const j of jobs) {
     const s = shotBy(+j.index); if (!s) continue;
-    s[kind] = { jobId: j.job_id, status: 'running', approved: false };
+    s[kind] = { jobId: j.job_id, status: 'running', approved: false, startedAt: Date.now() };
     st.ledger.push({ what: `${kind === 'image' ? 'Nuotrauka' : 'Video'} · kadras ${s.n}`, credits: unit[s.n] || 0 });
   }
   save(); renderShots(); renderCredits();
@@ -582,18 +595,24 @@ async function submit(kind, shots) {
 }
 async function waitJobs(kind, jobs) {
   const pending = new Map(jobs.map((j) => [j.job_id, +j.index]));
-  for (let round = 0; round < 80 && pending.size; round++) {
-    const { data } = await call('jobs_wait', { jobs: [...pending].map(([job_id, index]) => ({ job_id, index })), timeout_seconds: 15 });
+  const justDone = [];
+  for (let round = 0; round < 120 && pending.size; round++) {
+    const { data } = await call('jobs_wait', { jobs: [...pending].map(([job_id, index]) => ({ job_id, index })), timeout_seconds: 10 });
     const rows = deepFind(data, (o) => (o.job_id || o.id) && (o.status || o.state));
     for (const r of rows) {
       const id = r.job_id || r.id; if (!pending.has(id)) continue;
       const s = shotBy(pending.get(id)); const status = S(r.status || r.state).toLowerCase();
       const urls = urlsIn(r).filter((u) => kind === 'image' ? /\.(png|jpe?g|webp)(\?|$)/i.test(u) || /image/i.test(u) : /\.(mp4|mov|webm)(\?|$)/i.test(u) || /video/i.test(u));
       if (/fail|error|nsfw|cancel|reject/.test(status)) { s[kind].status = 'failed'; pending.delete(id); shotErr(s.n, status.includes('nsfw') ? 'Filtras atmetė (NSFW). Pakeisk žodžius: „cat pod“ vietoj „bed“, pilna apranga, sėdi.' : 'Generavimas nepavyko. Pabandyk perdaryti.'); }
-      else if (urls.length && /complet|success|done|finish|ready/.test(status || 'completed')) { s[kind].status = 'done'; s[kind].url = urls[0]; pending.delete(id); }
+      else if (urls.length && /complet|success|done|finish|ready/.test(status || 'completed')) { s[kind].status = 'done'; s[kind].url = S(r.result_url) || urls[0]; pending.delete(id); justDone.push(s); }
     }
     save(); renderShots();
-    if (pending.size) await new Promise((r) => setTimeout(r, 4000));
+    if (justDone.length) {
+      const batch = justDone.splice(0);
+      await thumbsFor(batch.map((s) => ({ key: s[kind].jobId, url: s[kind].url, video: kind === 'clip' }))).catch(() => {});
+      renderShots();
+    }
+    if (pending.size) await new Promise((r) => setTimeout(r, 1500));
   }
   const ready = st.plan.shots.filter((s) => s[kind]?.status === 'done' && !thumbs.get(s[kind].jobId));
   if (ready.length) await thumbsFor(ready.map((s) => ({ key: s[kind].jobId, url: s[kind].url, video: kind === 'clip' }))).catch(() => {});
