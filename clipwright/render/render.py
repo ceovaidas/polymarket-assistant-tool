@@ -8,11 +8,11 @@ spec.json:
 {
   "out": "final.mp4",
   "width": 1080, "height": 1920, "fps": 30,
-  "font": "fonts/TikTokSans.ttf",          # bold sans; a variable font is set to weight 800
+  "font": "fonts/TikTokSans.ttf",          # bold sans; a variable font is set to weight 900
   "emoji_font": "fonts/NotoColorEmoji.ttf", # any colour-emoji font file you are licensed to use
   "clips": [{"src": "shot1.mp4", "in": 0.0, "out": 3.0}, ...],
-  "texts": [{"start": 0, "end": 5, "text": "DON'T show this to\\na Texas cat dad 😂😂😂", "y": 0.17, "size": 66},
-            {"start": 5, "end": 8, "png": "caps/t1.png", "top": 0.16}],   # ready-made caption, top edge at 16%
+  "texts": [{"start": 0, "end": 5, "text": "DON'T show this to a Texas cat dad 😂", "top": 0.16, "size": 72}],
+            # `top`: top edge of the caption as a fraction of the height (or `y`: its centre); or a ready-made "png"
   "audio": {"src": "music.mp3", "volume": 1.0, "clip_volume": 0.15},  # optional
   "clip_volume": 0,                                                    # optional, without `audio`: 0 mutes clips
   "transition": 0.35                                 # optional default dissolve, s; a clip's own "transition" wins
@@ -30,11 +30,11 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 EMOJI_RE = re.compile(
-    "(?:[\U0001F1E6-\U0001F1FF]{2})"                     # flags
-    "|(?:[#*0-9]️?⃣)"                            # keycaps
-    "|(?:[☀-➿\U0001F000-\U0001FAFF]"             # pictographs
-    "[️\U0001F3FB-\U0001F3FF]*"                       # variation selector, skin tone
-    "(?:‍[☀-➿\U0001F000-\U0001FAFF][️\U0001F3FB-\U0001F3FF]*)*)"  # ZWJ sequences
+    "(?:[\U0001F1E6-\U0001F1FF]{2})"                                     # flags
+    "|(?:[#*0-9]\uFE0F?\u20E3)"                                           # keycaps
+    "|(?:[\u2600-\u27BF\U0001F000-\U0001FAFF]"                            # pictographs
+    "[\uFE0F\U0001F3FB-\U0001F3FF]*"                                       # variation selector, skin tone
+    "(?:\u200D[\u2600-\u27BF\U0001F000-\U0001FAFF][\uFE0F\U0001F3FB-\U0001F3FF]*)*)"  # ZWJ sequences
 )
 
 
@@ -54,7 +54,7 @@ def load_font(path: str, size: int) -> ImageFont.FreeTypeFont:
     font = ImageFont.truetype(path, size)
     try:  # variable fonts: heavy weight like the in-app caption style
         axes = font.get_variation_axes()
-        values = [800 if a.get("name") in (b"Weight", "Weight") else a.get("default", a["minimum"]) for a in axes]
+        values = [900 if a.get("name") in (b"Weight", "Weight") else a.get("default", a["minimum"]) for a in axes]
         font.set_variation_by_axes(values)
     except Exception:
         pass
@@ -96,67 +96,84 @@ class Emoji:
 
 
 def text_png(text: str, width: int, size: int, font_path: str, emoji: Emoji, dest: Path) -> tuple[int, int]:
-    font = load_font(font_path, size)
-    max_w = round(width * 0.86)
+    """Caption PNG in the studio preview's layout: heavy white letters, thick black outline, balanced lines.
 
-    def tokens(raw: str) -> list[tuple[str, str]]:
-        """Words and emoji as separate tokens; spaces kept as their own token."""
+    Words wrap to at most 84% of the frame width; a run of emoji stays glued to the word before it so it is
+    never alone on a line; lines are balanced to the narrowest width that needs the same number of lines.
+    """
+    max_w = width * 0.84
+
+    def parts(chunk: str) -> list[tuple[str, str]]:
+        """Letters and emoji of one word or line as ("t", text) / ("e", emoji) runs."""
         out, pos = [], 0
-        for m in EMOJI_RE.finditer(raw):
-            out += [("t", w) for w in re.split(r"( )", raw[pos:m.start()]) if w]
+        for m in EMOJI_RE.finditer(chunk):
+            if m.start() > pos:
+                out.append(("t", chunk[pos:m.start()]))
             out.append(("e", m.group()))
             pos = m.end()
-        out += [("t", w) for w in re.split(r"( )", raw[pos:]) if w]
+        if pos < len(chunk):
+            out.append(("t", chunk[pos:]))
         return out
 
-    # Shrink the font until the longest single word fits, then wrap words onto lines.
+    def units(line: str) -> list[str]:
+        out: list[str] = []
+        for w in line.split():
+            if out and all(k == "e" for k, _ in parts(w)):
+                out[-1] += " " + w
+            else:
+                out.append(w)
+        return out
+
+    def wrap(us: list[str], limit: float) -> list[str]:
+        lines: list[str] = []
+        for u in us:
+            if lines and line_w(f"{lines[-1]} {u}") <= limit:
+                lines[-1] += " " + u
+            else:
+                lines.append(u)
+        return lines
+
     while True:
-        stroke = max(3, round(size * 0.09))
-        emoji_h = round(size * 1.02)
-        tok_w = lambda k, v: font.getlength(v) if k == "t" else emoji_h * 1.06
-        words = [t for raw in text.split("\n") for t in tokens(raw) if t[1] != " "]
-        if size <= 30 or all(tok_w(k, v) + 2 * stroke <= max_w for k, v in words):
+        font = load_font(font_path, size)
+        emoji_h = round(size * 0.98)
+        line_w = lambda line: sum(font.getlength(v) if k == "t" else emoji_h * 1.08 for k, v in parts(line))
+        paras = [units(raw) for raw in text.split("\n")]
+        widest = max([line_w(u) for us in paras for u in us] or [0])
+        if widest <= max_w or size <= 34:
             break
         size -= 4
-        font = load_font(font_path, size)
-    line_h = round(size * 1.2)
-    space = font.getlength(" ")
-    lines: list[list[tuple[str, str]]] = []
-    for raw in text.split("\n"):
-        line, line_w = [], 0.0
-        for k, v in tokens(raw):
-            if v == " ":
-                continue
-            w = tok_w(k, v)
-            gap = space if line else 0
-            if line and line_w + gap + w + 2 * stroke > max_w:
-                lines.append(line)
-                line, line_w, gap = [], 0.0, 0
-            line.append((k, v))
-            line_w += gap + w
-        lines.append(line)
+    lines: list[str] = []
+    for us in paras:
+        n = len(wrap(us, max_w))
+        lo, hi = widest, max_w
+        for _ in range(12 if n > 1 else 0):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if len(wrap(us, mid)) > n else (lo, mid)
+        lines += wrap(us, hi if n > 1 else max_w)
 
-    def measure(parts):
-        return sum(tok_w(k, v) for k, v in parts) + space * max(0, len(parts) - 1)
-
-    canvas_w = int(max(measure(p) for p in lines)) + 2 * stroke + 16
-    img = Image.new("RGBA", (canvas_w, line_h * len(lines) + 2 * stroke + 12), (0, 0, 0, 0))
+    stroke = max(3, round(size * 0.085))
+    line_h = round(size * 1.16)
+    pad = stroke + 8
+    widths = [line_w(l) for l in lines]
+    img = Image.new("RGBA", (int(max(widths)) + 2 * pad, line_h * len(lines) + 2 * pad), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    ascent, _ = font.getmetrics()
-    for i, parts in enumerate(lines):
-        x = (canvas_w - measure(parts)) / 2
-        top = stroke + 6 + i * line_h
-        for j, (kind, value) in enumerate(parts):
-            if j:
-                x += space
-            if kind == "t":
-                draw.text((x, top + line_h * 0.82), value, font=font, anchor="ls", fill="white",
-                          stroke_width=stroke, stroke_fill="black")
-            else:
-                em = emoji.image(value, emoji_h)
-                if em:
-                    img.alpha_composite(em, (round(x), round(top + (line_h - emoji_h) / 2)))
-            x += tok_w(kind, value)
+    for outline in (True, False):  # every outline first, so it never covers a neighbouring letter
+        for i, line in enumerate(lines):
+            x = (img.width - widths[i]) / 2
+            base = pad + i * line_h + size * 0.92
+            for kind, value in parts(line):
+                if kind == "t":
+                    if outline:
+                        draw.text((x, base), value, font=font, anchor="ls", fill="black",
+                                  stroke_width=stroke, stroke_fill="black")
+                    else:
+                        draw.text((x, base), value, font=font, anchor="ls", fill="white")
+                    x += font.getlength(value)
+                else:
+                    em = None if outline else emoji.image(value, emoji_h)
+                    if em:
+                        img.alpha_composite(em, (round(x + emoji_h * 0.04), round(base - size * 0.82)))
+                    x += emoji_h * 1.08
     img.save(dest)
     return img.size
 
