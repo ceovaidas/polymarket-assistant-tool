@@ -55,7 +55,29 @@ PLAN FORMAT
 - Then one "check" step: send the images to Claude before making videos.
 - Then video steps in timeline order, each with uploads, prompt, negative, length/trim and 2-3 checks.
 - Last step: edit (order, trims, on-screen text in the top third, music with the beat drop, AI label on upload).
-- Credits guide (Higgsfield): image about 2.75, 5 s clip about 28, 15 s multi-shot about 67.`;
+- Credits guide (Higgsfield): image about 2.75, 5 s clip about 28, 15 s multi-shot about 67.
+
+STYLE REFERENCE. These two prompts produced near-perfect results. Write every image and video prompt at this
+length, in this order (camera and place, realism cues, person with exact clothes, product with exact geometry
+and print, pet and its pose, light, closing negatives) and with this level of concrete physical detail:
+IMAGE: "REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16, a Texas backyard at golden hour, eye-level, camera
+held still. Deep focus, natural full colour, small imperfections (smoke haze, worn wood, dry grass). A tall Texan
+man of about 45 with a thick brown horseshoe mustache, a tan straw cowboy hat, a faded blue plaid pearl-snap
+western shirt with rolled sleeves, jeans, a plain silver belt buckle and brown leather cowboy boots stands at a
+big black offset barbecue smoker with tongs, smoke drifting. Next to him on a weathered wooden picnic table lies
+the cat sleeping-bag bed from reference 1, flat on the table: a soft closed pouch about 60 cm long,
+cornflower-blue cotton outer printed with small white bunny faces, little clouds and tiny orange dots, thick
+long-pile white sherpa cuff around the round opening facing the camera, a small loop tab on top. A big fluffy
+orange tabby cat with amber eyes lies inside it, only its face peeking out of the sherpa, watching the smoker.
+A Texas flag hangs on the wooden fence behind, warm golden light. Photorealistic face, fur, smoke, wood and
+sherpa, one cat only, no phone visible, no brand logos, no text, no watermark."
+VIDEO: "Continue exactly from the start image, same full-colour footage, same lighting, no cuts. The bed stays
+exactly as in the start frame: cornflower-blue with small white bunny faces, white sherpa cuff. No colour or
+pattern change. Single continuous take. Static locked-off camera, no zoom, no pan. Smoke drifts from the
+smoker; the man flips a brisket with the tongs, glances at the cat and tips his hat at it; the cat slowly
+blinks and stays inside the bed, sniffing the air. Same man, same orange cat, natural full colour, warm golden
+light, realistic phone footage. Sound: sizzling, crackling wood, birds, a chuckle."
+Use the user's own product, people and world, never these example details.`;
 
 // Extra instructions for the virality check of the user's own video.
 export const CHECK_RULES = `VIRALITY CHECK
