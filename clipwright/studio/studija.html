@@ -398,7 +398,8 @@ $('mirrorBtn').onclick = async () => {
   $('mirrorState').className = 'msg';
   if (!f) return ($('mirrorState').textContent = 'Pirma pasirink video failą.');
   if (!sample) { $('mirrorState').className = 'msg msg--err'; return ($('mirrorState').textContent = 'Claude šiam puslapiui neprieinamas. Atidaryk nuorodą claude.ai naršyklėje (ne programoėlėje), prisijungęs, ir leisk prieigą, kai paklaus.'); }
-  $('mirrorBtn').disabled = true; $('mirrorState').textContent = 'Žiūriu video kadras po kadro…';
+  if (window.__mirrorBusy) return; window.__mirrorBusy = true;
+  $('mirrorBtn').disabled = true; $('mirrorBox').replaceChildren(); $('mirrorState').textContent = 'Žiūriu video kadras po kadro…';
   try {
     const v = await loadVideo(f);
     if (!isFinite(v.duration) || v.duration > 90) throw new Error('Video ilgesnis nei 90 s.');
@@ -422,9 +423,10 @@ $('mirrorBtn').onclick = async () => {
       : 'Use MY product from the product photo (reference 1) instead of the original product.';
     st.idea = `Remake this viral format. ${productLine} Copy the hook text and the beat timing 1:1 and apply mirror.stronger; generate every shot from scratch with new people and a new setting.\nFormat JSON: ${JSON.stringify(t)}`;
     $('ideaText').value = st.idea; save(); renderPresets();
-    $('mirrorState').textContent = 'Šablonas paruoštas. Gali papildyti idėją ir spausti „Sukurti planą“.';
+    $('mirrorState').className = 'msg msg--ok';
+    $('mirrorState').textContent = 'Šablonas paruoštas ↓. Toliau: spausk „Sukurti planą“ žemiau.';
   } catch (e) { $('mirrorState').className = 'msg msg--err'; $('mirrorState').textContent = e?.code ? sampleError(e) : (e?.message || 'Nepavyko.'); }
-  $('mirrorBtn').disabled = false;
+  $('mirrorBtn').disabled = false; window.__mirrorBusy = false;
 };
 
 // ---------- 3 shots ----------
