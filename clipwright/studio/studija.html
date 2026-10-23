@@ -177,7 +177,7 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
         <div class="texts" id="texts"></div>
         <div class="row small">
           <button class="btn btn--sm" type="button" id="addText">+ Tekstas</button>
-          <label>Dydis <select id="capSize"><option value="60">Mažas</option><option value="72">Vidutinis</option><option value="86">Didelis</option></select></label>
+          <label>Dydis <select id="capSize"><option value="64">Mažas</option><option value="80">Vidutinis</option><option value="94">Didelis</option></select></label>
           <label>Vieta <select id="capTop"><option value="0.11">Aukštai</option><option value="0.16">Viršuje</option><option value="0.40">Centre</option></select></label>
           <button class="btn btn--sm" type="button" id="resetEdit">Atstatyti iš plano</button>
         </div>
@@ -396,6 +396,8 @@ generations, follow all of them:
 9. With a person in shot call the product "the cat pod" (not "bed"), dress people fully, seat them upright, no
    baby/body/lounging words. Animals and people are never hurt. A cat bed is carried in both arms, never by a loop.
 10. American settings when it fits: flags, diners, pickups, porches; never real brand names.
+12. On-screen texts: one idea each, at most 6 words plus emoji, no filler ("Vs...", "Wait for it"); each text starts and
+   ends exactly on a shot's start/end time; the whole video 7-10 s (first shot about 2 s, middle 2-3 s, payoff 2-3 s).
 11. Honest texts: "Comment WORD" only with an auto-DM, else "More info in bio"; gain framing ("$0 shipping, on us").
 STYLE REFERENCE image prompt (match this length and detail, never copy its content):
 "REAL iPhone 17 Pro Max photo, NOT CGI, vertical 9:16, a Texas backyard at golden hour, eye-level, camera held still. Deep focus, natural full colour, small imperfections (smoke haze, worn wood, dry grass). A tall Texan man of about 45 with a thick brown horseshoe mustache, a tan straw cowboy hat, a faded blue plaid pearl-snap western shirt with rolled sleeves, jeans, a plain silver belt buckle and brown leather cowboy boots stands at a big black offset barbecue smoker with tongs, smoke drifting. Next to him on a weathered wooden picnic table lies the cat sleeping-bag bed from reference 1, flat on the table: a soft closed pouch about 60 cm long, cornflower-blue cotton outer printed with small white bunny faces, little clouds and tiny orange dots, thick long-pile white sherpa cuff around the round opening facing the camera, a small loop tab on top. A big fluffy orange tabby cat with amber eyes lies inside it, only its face peeking out of the sherpa, watching the smoker. A Texas flag hangs on the wooden fence behind, warm golden light. Photorealistic face, fur, smoke, wood and sherpa, one cat only, no phone visible, no brand logos, no text, no watermark."
@@ -405,7 +407,7 @@ Reply with ONLY one JSON object:
  "shots": [{"n": 1, "title": "LT", "start": 0, "end": 3, "image_prompt": "EN", "uses_anchor": true|false,
             "video_prompt": "EN", "negative": "EN", "duration": <whole seconds 3-10, shot length + 1>,
             "end_frame_of": <n of another shot whose image is this clip's end frame, or null>, "trim": [in, out],
-            "cut_to_next": "cut" for a reveal, comparison ("think vs actually") or beat drop, else "soft"}],
+            "cut_to_next": "cut", or "soft" only for a jump in time or place}],
  "texts": [{"start": 0, "end": 3, "text": "EN with emoji"}],
  "music": "LT: one song from Can-Can (Offenbach), Free Bird (cover), Boombastic (Shaggy), Mambo No. 5, Cotton Eye Joe, Let It Snow, Jingle Bell Rock, and why it fits this video",
  "caption": "EN", "pinned_comment": "EN", "hashtags": ["#..."]}`;
@@ -743,16 +745,20 @@ $('genVideos').onclick = async () => {
 // so it shows what will be burned in.
 const TR = { cut: 0, soft: 0.15, long: 0.4 }; // transition to the next shot, s
 const TR_LABEL = { cut: 'Kirpimas', soft: 'Minkštas 0,15 s', long: 'Ilgas 0,4 s' };
-const MIN_SHOT = 2.8, CAP_W = 1080;
+const CAP_W = 1080;
+// Shot length bounds in the first cut (s): the hook pays off fast, middle shots never drag, the payoff may linger.
+const SHOT_LEN = { first: [1.6, 2.4], mid: [2.0, 3.0], last: [2.0, 3.4] };
 const r2 = (x) => Math.round(x * 100) / 100;
 
 // Initial cut of each shot: at least MIN_SHOT s and inside the generated clip.
 function cutPlan(shots) {
-  const cuts = shots.map((s) => {
+  const cuts = shots.map((s, i) => {
+    const [lo, hi] = i === 0 ? SHOT_LEN.first : i === shots.length - 1 ? SHOT_LEN.last : SHOT_LEN.mid;
     const max = Math.max(1.5, (+s.duration || 5) - 0.05);
-    const a = Math.min(Math.max(0, +s.trim[0] || 0), max - 1.5);
-    const b = Math.min(max, Math.max(+s.trim[1] || 0, a + MIN_SHOT));
-    return { in: r2(a), out: r2(b), start: +s.start || 0, end: +s.end || 0, tr: s.cut_to_next === 'cut' ? 'cut' : 'soft' };
+    const a = Math.min(Math.max(0, +s.trim[0] || 0), max - lo);
+    const want = Math.min(hi, Math.max(lo, (+s.trim[1] || 0) - a));
+    // Hard cuts by default; a dissolve only where the plan marks a jump in time or place.
+    return { in: r2(a), out: r2(Math.min(max, a + want)), start: +s.start || 0, end: +s.end || 0, tr: s.cut_to_next === 'soft' ? 'soft' : 'cut' };
   });
   const { at, total } = timeline({ cuts });
   cuts.forEach((c, i) => { c.at = at[i]; });
@@ -769,17 +775,25 @@ function mapTime(x, cuts) {
   const frac = Math.min(1, Math.max(0, (x - c.start) / Math.max(0.1, c.end - c.start)));
   return c.at + frac * (c.out - c.in);
 }
+// Texts change on the cuts: snap each start and end to a nearby cut, keep them in order without overlaps.
+function snapTexts(texts, cutsAt, total) {
+  const marks = [...cutsAt, total];
+  const snap = (x) => { const m = marks.reduce((b, v) => (Math.abs(v - x) < Math.abs(b - x) ? v : b), marks[0]); return Math.abs(m - x) <= 0.9 ? m : x; };
+  const out = texts.map((t) => ({ ...t, start: snap(Math.max(0, t.start)), end: snap(Math.min(total, t.end)) }))
+    .sort((a, b) => a.start - b.start);
+  out.forEach((t, i) => { if (out[i + 1]) t.end = Math.min(t.end, out[i + 1].start); if (i === out.length - 1 && total - t.end < 1) t.end = total; });
+  return out.filter((t) => t.end - t.start >= 0.6).map((t) => ({ ...t, start: r2(t.start), end: r2(t.end) }));
+}
 function initEdit(force) {
   const p = st.plan;
   if (p.edit && !force && p.edit.cuts?.length === p.shots.length) return p.edit;
   const { cuts, total } = cutPlan(p.shots);
   p.edit = {
     cuts: cuts.map((c) => ({ in: c.in, out: c.out, tr: c.tr })),
-    texts: p.texts.filter((t) => t.text.trim()).map((t) => {
-      const a = Math.max(0, Math.min(mapTime(+t.start || 0, cuts), total - 1.2));
-      return { start: r2(a), end: r2(Math.min(total, Math.max(a + 1.2, mapTime(+t.end || 0, cuts)))), text: t.text };
-    }),
-    size: 72, top: 0.16,
+    texts: snapTexts(p.texts.filter((t) => t.text.trim()).map((t) => ({
+      start: mapTime(+t.start || 0, cuts), end: mapTime(+t.end || 0, cuts), text: t.text.replace(/\\n/g, '\n'),
+    })), cuts.map((c) => c.at), total),
+    size: 80, top: 0.16,
   };
   save();
   return p.edit;
@@ -877,7 +891,7 @@ async function drawPreview() {
   ctx.fillStyle = '#111'; ctx.fillRect(0, 0, cv.width, cv.height);
   if (bg) { const s = Math.max(cv.width / bg.width, cv.height / bg.height); ctx.drawImage(bg, (cv.width - bg.width * s) / 2, (cv.height - bg.height * s) / 2, bg.width * s, bg.height * s); }
   if (cap) ctx.drawImage(cap, (cv.width - cap.width * k) / 2, cv.height * ed.top, cap.width * k, cap.height * k);
-  $('prevInfo').textContent = `${t.toFixed(1)} s iš ${total.toFixed(1)} s · kadras ${shot?.n ?? '-'}${bg ? '' : ' (nuotrauka dar neįkelta)'}`;
+  $('prevInfo').textContent = `${t.toFixed(1)} s iš ${total.toFixed(1)} s · kadras ${shot?.n ?? '-'}${bg ? '' : ' (nuotrauka dar neįkelta)'}${total > 11 ? ' · ⚠️ per ilgas: siek 7–10 s, trumpink kadrus' : ''}`;
 }
 $('prevT').oninput = drawPreview;
 

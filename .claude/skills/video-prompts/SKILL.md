@@ -187,6 +187,10 @@ venue) and add it to the README table.
   ("What we actually sell" exactly when the cat goes in, not 3 s later). Max 2 lines on screen; a
   third line is a new text. Captions big (about 70 px at 1080 wide) with a thick outline, emoji never
   alone on a line.
+- **Dead time kills it** (second render of the same video, 14.6 s): shot 2 ran 8 s, of which 5 s was
+  the woman petting a cat that was already inside. Cut each shot right after its action ends: hook
+  shot about 2 s, middle shots 2-3 s, payoff 2-3 s, whole video 7-10 s. Texts change on the cuts, one
+  idea each, no filler like "Vs...", and never three captions merged into one block.
 - **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
   mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
   sentence in every scene so the angle matches across cuts.
