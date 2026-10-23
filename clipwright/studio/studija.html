@@ -100,6 +100,17 @@ details[open] summary { margin-bottom: 8px; }
   <!-- 2 idea + plan -->
   <section class="card" id="sIdea">
     <p class="stage" id="st2"><b>2</b><span class="eyebrow">Idėja ir planas</span></p>
+    <div class="card" style="background:var(--panel-2)">
+      <p class="eyebrow">Iš viral video (mirror)</p>
+      <p class="muted small">Įmesk parsisiųstą viral video. Claude nukopijuos hook'ą ir struktūrą 1:1, parašys sustiprintą versiją, o visi kadrai bus sugeneruoti iš naujo su tavo produktu.</p>
+      <div class="row"><input type="file" id="vFile" accept="video/mp4,video/webm,video/quicktime" style="flex:1;min-width:200px"><input type="text" id="vCtx" placeholder="Ką žinai: tekstas ekrane, muzika, like'ai" style="flex:2;min-width:200px"></div>
+      <fieldset class="row" style="border:1px solid var(--line);border-radius:10px;padding:8px 12px"><legend class="small muted">Produktas naujame video</legend>
+        <label class="row small"><input type="radio" name="prodMode" id="modeSwap" value="swap" checked> Pakeisti į mano produktą</label>
+        <label class="row small"><input type="radio" name="prodMode" id="modeKeep" value="keep"> Palikti tą patį produktą kaip originale</label>
+      </fieldset>
+      <div class="row"><button class="btn" type="button" id="mirrorBtn">Sukurti šabloną iš video</button><span class="muted small" id="mirrorState"></span></div>
+      <div id="mirrorBox" style="display:grid;gap:8px"></div>
+    </div>
     <div class="presets" id="presets"></div>
     <label class="field" for="ideaText">Idėja savo žodžiais (ką darom, kur, kas)
       <textarea id="ideaText" placeholder="Pvz.: 3-2-1 reveal kalėdinėje svetainėje, mergina su raudonu pledu, pabaigoje oranžinis katinas su Kalėdų senelio kepure"></textarea>
@@ -144,7 +155,7 @@ details[open] summary { margin-bottom: 8px; }
 const $ = (id) => document.getElementById(id);
 const el = (t, c, x) => { const n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; };
 const S = (v) => (v == null ? '' : String(v));
-const RENDER_B64 = '__RENDER_B64__';
+const RENDER_B64 = 'IiIiQ2xpcHdyaWdodCByZW5kZXI6IHRyaW1zIGdlbmVyYXRlZCBjbGlwcywgam9pbnMgdGhlbSBpbnRvIG9uZSA5OjE2IHZpZGVvIGFuZCBidXJucyBpbiB0aW1lZCBvbi1zY3JlZW4gdGV4dC4KClRleHQgc3R5bGUgbWF0Y2hlcyBUaWtUb2svUmVlbHMgY2FwdGlvbnM6IGJvbGQgd2hpdGUgbGV0dGVycyB3aXRoIGEgYmxhY2sgb3V0bGluZSwgZW1vamkgaW4gY29sb3VyLgoKICAgIHB5dGhvbjMgcmVuZGVyLnB5IHNwZWMuanNvbgoKc3BlYy5qc29uOgp7CiAgIm91dCI6ICJmaW5hbC5tcDQiLAogICJ3aWR0aCI6IDEwODAsICJoZWlnaHQiOiAxOTIwLCAiZnBzIjogMzAsCiAgImZvbnQiOiAiZm9udHMvVGlrVG9rU2Fucy50dGYiLCAgICAgICAgICAjIGJvbGQgc2FuczsgYSB2YXJpYWJsZSBmb250IGlzIHNldCB0byB3ZWlnaHQgODAwCiAgImVtb2ppX2ZvbnQiOiAiZm9udHMvTm90b0NvbG9yRW1vamkudHRmIiwgIyBhbnkgY29sb3VyLWVtb2ppIGZvbnQgZmlsZSB5b3UgYXJlIGxpY2Vuc2VkIHRvIHVzZQogICJjbGlwcyI6IFt7InNyYyI6ICJzaG90MS5tcDQiLCAiaW4iOiAwLjAsICJvdXQiOiAzLjB9LCAuLi5dLAogICJ0ZXh0cyI6IFt7InN0YXJ0IjogMCwgImVuZCI6IDUsICJ0ZXh0IjogIkRPTidUIHNob3cgdGhpcyB0b1xcbmEgVGV4YXMgY2F0IGRhZCDwn5iC8J+YgvCfmIIiLCAieSI6IDAuMTcsICJzaXplIjogNjZ9XSwKICAiYXVkaW8iOiB7InNyYyI6ICJtdXNpYy5tcDMiLCAidm9sdW1lIjogMS4wLCAiY2xpcF92b2x1bWUiOiAwLjE1fSAgICMgb3B0aW9uYWwKfQpgeWAgaXMgdGhlIHZlcnRpY2FsIGNlbnRyZSBvZiB0aGUgdGV4dCBibG9jayBhcyBhIGZyYWN0aW9uIG9mIHRoZSBoZWlnaHQgKGtlZXAgMC4xMi0wLjMwOiB0b3AgdGhpcmQsIGF3YXkKZnJvbSB0aGUgYXBwIGJ1dHRvbnMpLiBDbGlwIHNvdW5kIGlzIGtlcHQgdW5sZXNzIGBhdWRpb2AgaXMgZ2l2ZW4sIHRoZW4gaXQgaXMgbWl4ZWQgdW5kZXIgdGhlIG11c2ljLgoiIiIKaW1wb3J0IGpzb24KaW1wb3J0IHJlCmltcG9ydCBzdWJwcm9jZXNzCmltcG9ydCBzeXMKaW1wb3J0IHRlbXBmaWxlCmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAoKZnJvbSBQSUwgaW1wb3J0IEltYWdlLCBJbWFnZURyYXcsIEltYWdlRm9udAoKRU1PSklfUkUgPSByZS5jb21waWxlKAogICAgIig/OltcVTAwMDFGMUU2LVxVMDAwMUYxRkZdezJ9KSIgICAgICAgICAgICAgICAgICAgICAjIGZsYWdzCiAgICAifCg/OlsjKjAtOV3vuI8/4oOjKSIgICAgICAgICAgICAgICAgICAgICAgICAgICAgIyBrZXljYXBzCiAgICAifCg/OlvimIAt4p6/XFUwMDAxRjAwMC1cVTAwMDFGQUZGXSIgICAgICAgICAgICAgIyBwaWN0b2dyYXBocwogICAgIlvvuI9cVTAwMDFGM0ZCLVxVMDAwMUYzRkZdKiIgICAgICAgICAgICAgICAgICAgICAgICMgdmFyaWF0aW9uIHNlbGVjdG9yLCBza2luIHRvbmUKICAgICIoPzrigI1b4piALeKev1xVMDAwMUYwMDAtXFUwMDAxRkFGRl1b77iPXFUwMDAxRjNGQi1cVTAwMDFGM0ZGXSopKikiICAjIFpXSiBzZXF1ZW5jZXMKKQoKCmRlZiBydW4oY21kOiBsaXN0W3N0cl0pIC0+IE5vbmU6CiAgICByZXMgPSBzdWJwcm9jZXNzLnJ1bihjbWQsIGNhcHR1cmVfb3V0cHV0PVRydWUsIHRleHQ9VHJ1ZSkKICAgIGlmIHJlcy5yZXR1cm5jb2RlICE9IDA6CiAgICAgICAgcmFpc2UgUnVudGltZUVycm9yKGYie2NtZFswXX0gZmFpbGVkOiB7cmVzLnN0ZGVyclstODAwOl19IikKCgpkZWYgaGFzX2F1ZGlvKHNyYzogc3RyKSAtPiBib29sOgogICAgcmVzID0gc3VicHJvY2Vzcy5ydW4oWyJmZnByb2JlIiwgIi12IiwgImVycm9yIiwgIi1zZWxlY3Rfc3RyZWFtcyIsICJhIiwgIi1zaG93X2VudHJpZXMiLCAic3RyZWFtPWluZGV4IiwKICAgICAgICAgICAgICAgICAgICAgICAgICAiLW9mIiwgImNzdj1wPTAiLCBzcmNdLCBjYXB0dXJlX291dHB1dD1UcnVlLCB0ZXh0PVRydWUpCiAgICByZXR1cm4gYm9vbChyZXMuc3Rkb3V0LnN0cmlwKCkpCgoKZGVmIGxvYWRfZm9udChwYXRoOiBzdHIsIHNpemU6IGludCkgLT4gSW1hZ2VGb250LkZyZWVUeXBlRm9udDoKICAgIGZvbnQgPSBJbWFnZUZvbnQudHJ1ZXR5cGUocGF0aCwgc2l6ZSkKICAgIHRyeTogICMgdmFyaWFibGUgZm9udHM6IGhlYXZ5IHdlaWdodCBsaWtlIHRoZSBpbi1hcHAgY2FwdGlvbiBzdHlsZQogICAgICAgIGF4ZXMgPSBmb250LmdldF92YXJpYXRpb25fYXhlcygpCiAgICAgICAgdmFsdWVzID0gWzgwMCBpZiBhLmdldCgibmFtZSIpIGluIChiIldlaWdodCIsICJXZWlnaHQiKSBlbHNlIGEuZ2V0KCJkZWZhdWx0IiwgYVsibWluaW11bSJdKSBmb3IgYSBpbiBheGVzXQogICAgICAgIGZvbnQuc2V0X3ZhcmlhdGlvbl9ieV9heGVzKHZhbHVlcykKICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgcGFzcwogICAgcmV0dXJuIGZvbnQKCgpjbGFzcyBFbW9qaToKICAgICIiIkNvbG91ciBlbW9qaSBhcmUgYml0bWFwIGZvbnRzIHdpdGggZml4ZWQgc2l6ZXMgKE5vdG86IDEwOSBweCk7IHJlbmRlciBiaWcgYW5kIHNjYWxlIGRvd24uIiIiCgogICAgZGVmIF9faW5pdF9fKHNlbGYsIHBhdGg6IHN0cik6CiAgICAgICAgc2VsZi5mb250ID0gTm9uZQogICAgICAgIGZvciBzaXplIGluICgxMDksIDEzNywgMTYwLCA5NiwgNjQpOgogICAgICAgICAgICB0cnk6CiAgICAgICAgICAgICAgICBzZWxmLmZvbnQgPSBJbWFnZUZvbnQudHJ1ZXR5cGUocGF0aCwgc2l6ZSkKICAgICAgICAgICAgICAgIHNlbGYubmF0aXZlID0gc2l6ZQogICAgICAgICAgICAgICAgYnJlYWsKICAgICAgICAgICAgZXhjZXB0IE9TRXJyb3I6CiAgICAgICAgICAgICAgICBjb250aW51ZQoKICAgIGRlZiBpbWFnZShzZWxmLCBjaGFyOiBzdHIsIGhlaWdodDogaW50KSAtPiBJbWFnZS5JbWFnZSB8IE5vbmU6CiAgICAgICAgaWYgbm90IHNlbGYuZm9udDoKICAgICAgICAgICAgcmV0dXJuIE5vbmUKICAgICAgICBzaWRlID0gc2VsZi5uYXRpdmUgKiAyCiAgICAgICAgaW1nID0gSW1hZ2UubmV3KCJSR0JBIiwgKHNpZGUsIHNpZGUpLCAoMCwgMCwgMCwgMCkpCiAgICAgICAgSW1hZ2VEcmF3LkRyYXcoaW1nKS50ZXh0KChzaWRlIC8vIDQsIHNpZGUgLy8gNCksIGNoYXIsIGZvbnQ9c2VsZi5mb250LCBlbWJlZGRlZF9jb2xvcj1UcnVlKQogICAgICAgIGJveCA9IGltZy5nZXRiYm94KCkKICAgICAgICBpZiBub3QgYm94OgogICAgICAgICAgICByZXR1cm4gTm9uZQogICAgICAgIGltZyA9IGltZy5jcm9wKGJveCkKICAgICAgICBzY2FsZSA9IGhlaWdodCAvIGltZy5oZWlnaHQKICAgICAgICByZXR1cm4gaW1nLnJlc2l6ZSgobWF4KDEsIHJvdW5kKGltZy53aWR0aCAqIHNjYWxlKSksIGhlaWdodCksIEltYWdlLkxBTkNaT1MpCgoKZGVmIHRleHRfcG5nKHRleHQ6IHN0ciwgd2lkdGg6IGludCwgc2l6ZTogaW50LCBmb250X3BhdGg6IHN0ciwgZW1vamk6IEVtb2ppLCBkZXN0OiBQYXRoKSAtPiB0dXBsZVtpbnQsIGludF06CiAgICBmb250ID0gbG9hZF9mb250KGZvbnRfcGF0aCwgc2l6ZSkKICAgIHN0cm9rZSA9IG1heCgzLCByb3VuZChzaXplICogMC4xMSkpCiAgICBsaW5lX2ggPSByb3VuZChzaXplICogMS4xOCkKICAgIGVtb2ppX2ggPSByb3VuZChzaXplICogMS4wKQogICAgc3BhY2UgPSBmb250LmdldGxlbmd0aCgiICIpCiAgICBsaW5lcyA9IFtdCiAgICBmb3IgcmF3IGluIHRleHQuc3BsaXQoIlxuIik6CiAgICAgICAgcGFydHMsIHBvcyA9IFtdLCAwCiAgICAgICAgZm9yIG0gaW4gRU1PSklfUkUuZmluZGl0ZXIocmF3KToKICAgICAgICAgICAgaWYgbS5zdGFydCgpID4gcG9zOgogICAgICAgICAgICAgICAgcGFydHMuYXBwZW5kKCgidCIsIHJhd1twb3M6bS5zdGFydCgpXSkpCiAgICAgICAgICAgIHBhcnRzLmFwcGVuZCgoImUiLCBtLmdyb3VwKCkpKQogICAgICAgICAgICBwb3MgPSBtLmVuZCgpCiAgICAgICAgaWYgcG9zIDwgbGVuKHJhdyk6CiAgICAgICAgICAgIHBhcnRzLmFwcGVuZCgoInQiLCByYXdbcG9zOl0pKQogICAgICAgIGxpbmVzLmFwcGVuZChwYXJ0cykKCiAgICBkZWYgbWVhc3VyZShwYXJ0cyk6CiAgICAgICAgcmV0dXJuIHN1bShmb250LmdldGxlbmd0aCh2KSBpZiBrID09ICJ0IiBlbHNlIGVtb2ppX2ggKiAxLjA0IGZvciBrLCB2IGluIHBhcnRzKQoKICAgIGNhbnZhc193ID0gbWluKHdpZHRoIC0gMiAqIHJvdW5kKHdpZHRoICogMC4wNiksIG1heChpbnQobWF4KG1lYXN1cmUocCkgZm9yIHAgaW4gbGluZXMpKSArIDIgKiBzdHJva2UgKyA4LCAxMCkpCiAgICBpbWcgPSBJbWFnZS5uZXcoIlJHQkEiLCAoY2FudmFzX3csIGxpbmVfaCAqIGxlbihsaW5lcykgKyAyICogc3Ryb2tlICsgOCksICgwLCAwLCAwLCAwKSkKICAgIGRyYXcgPSBJbWFnZURyYXcuRHJhdyhpbWcpCiAgICBmb3IgaSwgcGFydHMgaW4gZW51bWVyYXRlKGxpbmVzKToKICAgICAgICB4ID0gKGNhbnZhc193IC0gbWVhc3VyZShwYXJ0cykpIC8gMgogICAgICAgIHkgPSBzdHJva2UgKyA0ICsgaSAqIGxpbmVfaAogICAgICAgIGZvciBraW5kLCB2YWx1ZSBpbiBwYXJ0czoKICAgICAgICAgICAgaWYga2luZCA9PSAidCI6CiAgICAgICAgICAgICAgICBkcmF3LnRleHQoKHgsIHkpLCB2YWx1ZSwgZm9udD1mb250LCBmaWxsPSJ3aGl0ZSIsIHN0cm9rZV93aWR0aD1zdHJva2UsIHN0cm9rZV9maWxsPSJibGFjayIpCiAgICAgICAgICAgICAgICB4ICs9IGZvbnQuZ2V0bGVuZ3RoKHZhbHVlKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgZW0gPSBlbW9qaS5pbWFnZSh2YWx1ZSwgZW1vamlfaCkKICAgICAgICAgICAgICAgIGlmIGVtOgogICAgICAgICAgICAgICAgICAgIGltZy5hbHBoYV9jb21wb3NpdGUoZW0sIChyb3VuZCh4KSwgcm91bmQoeSArIChsaW5lX2ggLSBlbW9qaV9oKSAvIDIgLSBzaXplICogMC4wNikpKQogICAgICAgICAgICAgICAgICAgIHggKz0gZW1vamlfaCAqIDEuMDQKICAgICAgICAgICAgICAgIGVsc2U6CiAgICAgICAgICAgICAgICAgICAgeCArPSBzcGFjZQogICAgaW1nLnNhdmUoZGVzdCkKICAgIHJldHVybiBpbWcuc2l6ZQoKCmRlZiByZW5kZXIoc3BlYzogZGljdCwgYmFzZTogUGF0aCkgLT4gUGF0aDoKICAgIFcsIEgsIGZwcyA9IHNwZWMuZ2V0KCJ3aWR0aCIsIDEwODApLCBzcGVjLmdldCgiaGVpZ2h0IiwgMTkyMCksIHNwZWMuZ2V0KCJmcHMiLCAzMCkKICAgIHdvcmsgPSBQYXRoKHRlbXBmaWxlLm1rZHRlbXAocHJlZml4PSJyZW5kZXItIikpCiAgICBzZWdzID0gW10KICAgIGZvciBpLCBjIGluIGVudW1lcmF0ZShzcGVjWyJjbGlwcyJdKToKICAgICAgICBzcmMgPSBzdHIoYmFzZSAvIGNbInNyYyJdKQogICAgICAgIHNlZyA9IHdvcmsgLyBmInNlZ3tpfS5tcDQiCiAgICAgICAgc3RhcnQsIGVuZCA9IGZsb2F0KGMuZ2V0KCJpbiIsIDApKSwgYy5nZXQoIm91dCIpCiAgICAgICAgY21kID0gWyJmZm1wZWciLCAiLWhpZGVfYmFubmVyIiwgIi1sb2dsZXZlbCIsICJlcnJvciIsICIteSIsICItc3MiLCBmIntzdGFydDouM2Z9Il0KICAgICAgICBpZiBlbmQgaXMgbm90IE5vbmU6CiAgICAgICAgICAgIGNtZCArPSBbIi10IiwgZiJ7ZmxvYXQoZW5kKSAtIHN0YXJ0Oi4zZn0iXQogICAgICAgIGNtZCArPSBbIi1pIiwgc3JjXQogICAgICAgIGlmIG5vdCBoYXNfYXVkaW8oc3JjKToKICAgICAgICAgICAgY21kICs9IFsiLWYiLCAibGF2ZmkiLCAiLWkiLCAiYW51bGxzcmM9cj00ODAwMDpjbD1zdGVyZW8iXQogICAgICAgIGNtZCArPSBbIi12ZiIsIGYic2NhbGU9e1d9OntIfTpmb3JjZV9vcmlnaW5hbF9hc3BlY3RfcmF0aW89aW5jcmVhc2UsY3JvcD17V306e0h9LGZwcz17ZnBzfSxzZXRzYXI9MSIsCiAgICAgICAgICAgICAgICAiLW1hcCIsICIwOnY6MCIsICItbWFwIiwgIjA6YTowIiBpZiBoYXNfYXVkaW8oc3JjKSBlbHNlICIxOmE6MCIsICItc2hvcnRlc3QiLAogICAgICAgICAgICAgICAgIi1jOnYiLCAibGlieDI2NCIsICItcHJlc2V0IiwgIm1lZGl1bSIsICItY3JmIiwgIjE4IiwgIi1waXhfZm10IiwgInl1djQyMHAiLAogICAgICAgICAgICAgICAgIi1jOmEiLCAiYWFjIiwgIi1hciIsICI0ODAwMCIsICItYWMiLCAiMiIsIHN0cihzZWcpXQogICAgICAgIHJ1bihjbWQpCiAgICAgICAgc2Vncy5hcHBlbmQoc2VnKQogICAgbGlzdGluZyA9IHdvcmsgLyAibGlzdC50eHQiCiAgICBsaXN0aW5nLndyaXRlX3RleHQoIiIuam9pbihmImZpbGUgJ3tzfSdcbiIgZm9yIHMgaW4gc2VncykpCiAgICBqb2luZWQgPSB3b3JrIC8gImpvaW5lZC5tcDQiCiAgICBydW4oWyJmZm1wZWciLCAiLWhpZGVfYmFubmVyIiwgIi1sb2dsZXZlbCIsICJlcnJvciIsICIteSIsICItZiIsICJjb25jYXQiLCAiLXNhZmUiLCAiMCIsICItaSIsIHN0cihsaXN0aW5nKSwKICAgICAgICAgIi1jIiwgImNvcHkiLCBzdHIoam9pbmVkKV0pCgogICAgZW1vamkgPSBFbW9qaShzdHIoYmFzZSAvIHNwZWMuZ2V0KCJlbW9qaV9mb250IiwgImZvbnRzL05vdG9Db2xvckVtb2ppLnR0ZiIpKSkKICAgIGlucHV0cywgY2hhaW4sIGxhc3QgPSBbIi1pIiwgc3RyKGpvaW5lZCldLCBbXSwgIjA6diIKICAgIGZvciBpLCB0IGluIGVudW1lcmF0ZShzcGVjLmdldCgidGV4dHMiLCBbXSkpOgogICAgICAgIHBuZyA9IHdvcmsgLyBmInRleHR7aX0ucG5nIgogICAgICAgIHcsIGggPSB0ZXh0X3BuZyh0WyJ0ZXh0Il0sIFcsIGludCh0LmdldCgic2l6ZSIsIDY0KSksIHN0cihiYXNlIC8gc3BlY1siZm9udCJdKSwgZW1vamksIHBuZykKICAgICAgICBpbnB1dHMgKz0gWyItaSIsIHN0cihwbmcpXQogICAgICAgIHgsIHkgPSAoVyAtIHcpIC8vIDIsIHJvdW5kKEggKiBmbG9hdCh0LmdldCgieSIsIDAuMTgpKSAtIGggLyAyKQogICAgICAgIG91dCA9IGYidntpfSIKICAgICAgICBjaGFpbi5hcHBlbmQoZiJbe2xhc3R9XVt7aSArIDF9OnZdb3ZlcmxheT17eH06e3l9OmVuYWJsZT0nYmV0d2Vlbih0LHtmbG9hdCh0WydzdGFydCddKTouM2Z9LHtmbG9hdCh0WydlbmQnXSk6LjNmfSknW3tvdXR9XSIpCiAgICAgICAgbGFzdCA9IG91dAogICAgYXVkaW8gPSBzcGVjLmdldCgiYXVkaW8iKQogICAgaWYgYXVkaW86CiAgICAgICAgaW5wdXRzICs9IFsiLWkiLCBzdHIoYmFzZSAvIGF1ZGlvWyJzcmMiXSldCiAgICAgICAgYSA9IGxlbihzcGVjLmdldCgidGV4dHMiLCBbXSkpICsgMQogICAgICAgIGNoYWluLmFwcGVuZChmIlswOmFddm9sdW1lPXthdWRpby5nZXQoJ2NsaXBfdm9sdW1lJywgMC4xNSl9W2NhXTtbe2F9OmFddm9sdW1lPXthdWRpby5nZXQoJ3ZvbHVtZScsIDEuMCl9W21hXTsiCiAgICAgICAgICAgICAgICAgICAgIGYiW2NhXVttYV1hbWl4PWlucHV0cz0yOmR1cmF0aW9uPWZpcnN0OmRyb3BvdXRfdHJhbnNpdGlvbj0wW2FvdXRdIikKICAgIG91dF9wYXRoID0gYmFzZSAvIHNwZWMuZ2V0KCJvdXQiLCAiZmluYWwubXA0IikKICAgIGNtZCA9IFsiZmZtcGVnIiwgIi1oaWRlX2Jhbm5lciIsICItbG9nbGV2ZWwiLCAiZXJyb3IiLCAiLXkiLCAqaW5wdXRzXQogICAgaWYgY2hhaW46CiAgICAgICAgY21kICs9IFsiLWZpbHRlcl9jb21wbGV4IiwgIjsiLmpvaW4oY2hhaW4pXQogICAgY21kICs9IFsiLW1hcCIsIGYiW3tsYXN0fV0iIGlmIGNoYWluIGFuZCBsYXN0ICE9ICIwOnYiIGVsc2UgIjA6diIsCiAgICAgICAgICAgICItbWFwIiwgIlthb3V0XSIgaWYgYXVkaW8gZWxzZSAiMDphIiwKICAgICAgICAgICAgIi1jOnYiLCAibGlieDI2NCIsICItcHJlc2V0IiwgIm1lZGl1bSIsICItY3JmIiwgIjE4IiwgIi1waXhfZm10IiwgInl1djQyMHAiLAogICAgICAgICAgICAiLWM6YSIsICJhYWMiLCAiLWI6YSIsICIxOTJrIiwgIi1tb3ZmbGFncyIsICIrZmFzdHN0YXJ0Iiwgc3RyKG91dF9wYXRoKV0KICAgIHJ1bihjbWQpCiAgICByZXR1cm4gb3V0X3BhdGgKCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgc3BlY19wYXRoID0gUGF0aChzeXMuYXJndlsxXSkucmVzb2x2ZSgpCiAgICBwcmludChyZW5kZXIoanNvbi5sb2FkcyhzcGVjX3BhdGgucmVhZF90ZXh0KCkpLCBzcGVjX3BhdGgucGFyZW50KSkK';
 const HF = 'higgsfield';
 const IMG_MODEL = 'nano_banana_2_1', VID_MODEL = 'kling4_0';
 
@@ -156,7 +167,7 @@ const PRESETS = [
 ];
 
 // ---------- state (kept in this browser so a refresh does not lose job ids) ----------
-const blank = () => ({ product: null, idea: '', preset: '', plan: null, ledger: [], balanceStart: null, final: null });
+const blank = () => ({ product: null, keepProduct: false, idea: '', preset: '', plan: null, ledger: [], balanceStart: null, final: null });
 let st = blank();
 try { st = Object.assign(blank(), JSON.parse(localStorage.getItem('studija') || '{}')); } catch {}
 function save() { try { localStorage.setItem('studija', JSON.stringify(st, (k, v) => (k === 'thumb' || k === 'sheet' ? undefined : v))); } catch {} }
@@ -282,7 +293,7 @@ function renderPresets() {
   PRESETS.forEach((p) => {
     const b = el('button', 'preset'); b.type = 'button'; b.setAttribute('aria-pressed', String(st.preset === p.id));
     b.append(el('b', null, p.name), el('span', null, p.hint));
-    b.onclick = () => { st.preset = p.id; $('ideaText').value = p.text; st.idea = p.text; save(); renderPresets(); };
+    b.onclick = () => { st.preset = p.id; st.keepProduct = false; $('ideaText').value = p.text; st.idea = p.text; save(); renderPresets(); };
     $('presets').append(b);
   });
   loadTemplates();
@@ -327,14 +338,16 @@ Reply with ONLY one JSON object:
 
 $('planBtn').onclick = async () => {
   show('iErr', '');
-  if (!st.product) return show('iErr', 'Pirma pasirink produkto nuotrauką (1 žingsnis).');
+  if (!st.product && !st.keepProduct) return show('iErr', 'Pirma pasirink produkto nuotrauką (1 žingsnis) arba pasirink „Palikti tą patį produktą“.');
   if (!st.idea.trim()) return show('iErr', 'Pasirink šabloną arba parašyk idėją.');
   if (!sample) return show('iErr', 'Claude neprieinamas šiame lange.');
   $('planBtn').disabled = true; $('planState').textContent = 'Claude rašo planą… (apie minutę)';
   try {
-    const thumb = thumbs.get(st.product.mediaId);
+    const useProduct = st.product && !st.keepProduct;
+    const thumb = useProduct && thumbs.get(st.product.mediaId);
     const images = thumb && (await sample.limits().catch(() => null))?.images ? [await dataUrlToBlob(thumb)] : undefined;
-    const raw = await sample.json(`${RULES}\n\nThe image is reference 1, the product photo.\nProduct notes: ${st.product.note || 'none'}\nIdea: ${st.idea}`, { images, modelTier: 'complex', cache: false });
+    const intro = useProduct ? `The image is reference 1, the product photo.\nProduct notes: ${st.product.note || 'none'}` : 'No product photo: describe the product from the idea below in every prompt and never write "from reference 1" for the product.';
+    const raw = await sample.json(`${RULES}\n\n${intro}\nIdea: ${st.idea}`, { images, modelTier: 'complex', cache: false });
     st.plan = normPlan(raw); st.final = null; save(); renderPlan(); estimate();
   } catch (e) { show('iErr', e?.code ? sampleError(e) : 'Planas nepilnas, spausk dar kartą.'); }
   $('planBtn').disabled = false; $('planState').textContent = '';
@@ -361,6 +374,54 @@ async function estimate() {
     $('estimate').textContent = `Sąmata: ~${total.toFixed(1)} kr. (+30 % perdarymams ~${(total * 1.3).toFixed(1)})`;
   } catch { $('estimate').textContent = 'Sąmata: nepavyko patikrinti'; }
 }
+
+// ---------- viral video -> template + mirror ----------
+function loadVideo(f) {
+  return new Promise((res, rej) => { const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto'; v.onloadedmetadata = () => res(v); v.onerror = () => rej(new Error('Naršyklė neatidaro šio failo, išsaugok kaip MP4 (H.264).')); v.src = URL.createObjectURL(f); });
+}
+const seekTo = (v, t) => new Promise((r) => { v.onseeked = () => r(); v.currentTime = t; });
+async function grabFrames(v, count) {
+  const w = 512, h = Math.round(w * v.videoHeight / v.videoWidth) || 910;
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const g = cv.getContext('2d'); const out = [];
+  for (let i = 0; i < count; i++) { const t = v.duration * (i + 0.5) / count; await seekTo(v, t); g.drawImage(v, 0, 0, w, h); out.push({ t: Math.round(t * 10) / 10, blob: await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.82)) }); }
+  return out;
+}
+const MIRROR_SHAPE = `{"title": "LT short name", "hook": {"seconds": n, "said": "1:1 or empty", "on_screen_text": "1:1 or empty", "seen": "LT", "reusable_text": "EN hook for our version"},
+ "beats": [{"start": 0, "end": 2, "action": "LT", "shot": "LT", "on_screen_text": "1:1"}],
+ "why_it_works": "LT", "mirror": {"kept": "LT", "stronger": "LT", "visuals": "LT", "set": "LT"},
+ "original_product": "EN exact description of the product shown in the video (type, colours, print, materials, shape, size), no brand names"}`;
+$('mirrorBtn').onclick = async () => {
+  const f = $('vFile').files[0];
+  if (!f) return ($('mirrorState').textContent = 'Pirma pasirink video failą.');
+  if (!sample) return ($('mirrorState').textContent = 'Claude neprieinamas šiame lange.');
+  $('mirrorBtn').disabled = true; $('mirrorState').textContent = 'Žiūriu video kadras po kadro…';
+  try {
+    const v = await loadVideo(f);
+    if (!isFinite(v.duration) || v.duration > 90) throw new Error('Video ilgesnis nei 90 s.');
+    const lim = await sample.limits().catch(() => null);
+    const count = Math.min(Math.max(4, Math.min(12, lim?.images?.maxCount || 8)), Math.max(4, Math.round(v.duration)));
+    const frames = await grabFrames(v, count); URL.revokeObjectURL(v.src);
+    $('mirrorState').textContent = 'Claude skaido hook\'ą ir rašo „mirror“… (apie minutę)';
+    const t = await sample.json(`Study this viral short video and turn it into a reusable format. Explanations in Lithuanian; hooks and on-screen texts copied 1:1 in their original language. The images are ${frames.length} frames in order at seconds ${frames.map((x) => x.t).join(', ')}; duration ${v.duration.toFixed(1)} s; you cannot hear audio. What the user knows: ${$('vCtx').value.trim() || 'nothing'}. In "mirror" describe our sharper version, generated from scratch with the user's product (never reuse the footage). Reply with ONLY one JSON object: ${MIRROR_SHAPE}`, { images: frames.map((x) => x.blob), modelTier: 'complex', cache: false });
+    if (!t?.hook || !Array.isArray(t.beats)) throw new Error('Atsakymas nepilnas, spausk dar kartą.');
+    const box = $('mirrorBox'); box.replaceChildren();
+    box.append(el('b', null, S(t.title)));
+    box.append(el('p', 'small', `Hook (${S(t.hook.seconds)} s): ${[t.hook.said && `Sako: „${t.hook.said}“`, t.hook.on_screen_text && `Ekrane: ${t.hook.on_screen_text}`, `Matosi: ${S(t.hook.seen)}`].filter(Boolean).join(' · ')}`));
+    const ol = el('ol', 'small'); ol.style.margin = '0'; ol.style.paddingLeft = '20px'; t.beats.forEach((b) => ol.append(el('li', null, `${S(b.start)}–${S(b.end)} s · ${S(b.action)}${b.on_screen_text ? ` · „${b.on_screen_text}“` : ''}`))); box.append(ol);
+    box.append(el('p', 'small', `Kodėl veikia: ${S(t.why_it_works)}`));
+    box.append(el('p', 'small', `Mirror · paliekam: ${S(t.mirror?.kept)} · stipriau: ${S(t.mirror?.stronger)} · vaizdas: ${S(t.mirror?.visuals)} · aplinka: ${S(t.mirror?.set)}`));
+    st.preset = 'mirror';
+    st.keepProduct = $('modeKeep').checked;
+    if (st.keepProduct) box.append(el('p', 'small', `Produktas lieka toks pat: ${S(t.original_product)}`));
+    const productLine = st.keepProduct
+      ? `KEEP THE SAME PRODUCT as in the original video: ${S(t.original_product)}. Describe exactly this product in every prompt (no brand names or logos); ignore any product photo.`
+      : 'Use MY product from the product photo (reference 1) instead of the original product.';
+    st.idea = `Remake this viral format. ${productLine} Copy the hook text and the beat timing 1:1 and apply mirror.stronger; generate every shot from scratch with new people and a new setting.\nFormat JSON: ${JSON.stringify(t)}`;
+    $('ideaText').value = st.idea; save(); renderPresets();
+    $('mirrorState').textContent = 'Šablonas paruoštas. Gali papildyti idėją ir spausti „Sukurti planą“.';
+  } catch (e) { $('mirrorState').textContent = e?.code ? sampleError(e) : (e?.message || 'Nepavyko.'); }
+  $('mirrorBtn').disabled = false;
+};
 
 // ---------- 3 shots ----------
 const shotBy = (n) => st.plan.shots.find((s) => s.n === n);
@@ -439,10 +500,10 @@ async function rewritePrompt(prompt, feedback, kind) {
 }
 
 function imageParams(s) {
-  const medias = [{ value: st.product.mediaId, role: 'image_references' }];
+  const medias = st.product && !st.keepProduct ? [{ value: st.product.mediaId, role: 'image_references' }] : [];
   const a = anchorShot();
   if (s.n !== a.n && s.uses_anchor && a.image?.jobId) medias.push({ value: a.image.jobId, role: 'image_references' });
-  return { model: IMG_MODEL, prompt: s.image_prompt, aspect_ratio: '9:16', resolution: '2k', medias };
+  return medias.length ? { model: IMG_MODEL, prompt: s.image_prompt, aspect_ratio: '9:16', resolution: '2k', medias } : { model: IMG_MODEL, prompt: s.image_prompt, aspect_ratio: '9:16', resolution: '2k' };
 }
 function videoParams(s) {
   const medias = [{ value: s.image.jobId, role: 'start_image' }];
@@ -576,7 +637,7 @@ function renderFinal(sheet) {
 async function loadTemplates() {
   if (!db || !user) return;
   try {
-    const id = await user.id();
+    const id = await user.id(); if (!id) return;
     const snap = await db.collection(`data/users/${id}/templates`).orderBy('at', 'desc').limit(20).get();
     const docs = snap.docs || snap;
     (docs || []).forEach((d) => {
@@ -592,7 +653,7 @@ $('saveTpl').onclick = async () => {
   if (!st.plan) return;
   if (!db || !user) return ($('tplState').textContent = 'Šablonų saugykla šiame lange neprieinama.');
   try {
-    const id = await user.id();
+    const id = await user.id(); if (!id) throw 0;
     const plan = JSON.parse(JSON.stringify(st.plan)); plan.shots.forEach((s) => { delete s.image; delete s.clip; });
     await db.collection(`data/users/${id}/templates`).doc(`t${Date.now()}`).set({ title: st.plan.title || 'Šablonas', plan, credits: spent(), at: Date.now() });
     $('tplState').textContent = 'Išsaugota. Rasi jį 2 žingsnyje tarp šablonų.';
