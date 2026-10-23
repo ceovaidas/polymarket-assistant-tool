@@ -75,6 +75,8 @@ details[open] summary { margin-bottom: 8px; }
 .textrow input { padding: 8px 10px; }
 .final video { width: min(320px, 100%); border-radius: 12px; background: #000; }
 .mx-title { font-size: 18px; margin-top: 4px; }
+.btn--dim { opacity: .55; }
+#log li.bad { color: var(--bad); }
 .spin { display: grid; gap: 10px; place-items: center; color: var(--fg-2); text-align: center; padding: 8px; }
 .spin i { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--accent); animation: rot 0.9s linear infinite; }
 @keyframes rot { to { transform: rotate(360deg); } }
@@ -146,7 +148,8 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
   <section class="card" id="sShots" hidden>
     <div class="row spread"><p class="stage" id="st3"><b>3</b><span class="eyebrow">Kadrai</span></p>
       <div class="row"><button class="btn btn--sm" type="button" id="genAnchor">Generuoti pagrindinį kadrą</button><button class="btn btn--sm" type="button" id="genRest">Generuoti likusias nuotraukas</button><button class="btn btn--sm" type="button" id="genVideos">Generuoti video</button></div></div>
-    <p class="muted small">Pirma pagrindinis kadras (žmogus, augintinis, produktas kartu). Jį patvirtinus, kiti kadrai naudoja jį kaip referenciją. Video generuojami tik patvirtinus visas nuotraukas.</p>
+    <p class="muted small">Eiga: 1) „Generuoti pagrindinį kadrą“ → 2) po nuotrauka „Patvirtinti“ → 3) „Generuoti likusias nuotraukas“ → patvirtink kiekvieną → 4) „Generuoti video“.</p>
+    <p class="msg" id="shotsMsg" hidden></p>
     <div id="shots" style="display:grid;gap:14px"></div>
   </section>
 
@@ -167,6 +170,7 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
     <p class="eyebrow">Kreditai šiam video</p>
     <ul class="ledger" id="ledger"><li><span>Dar nieko nesugeneruota</span><span>0</span></li></ul>
     <div class="row"><button class="btn btn--sm" type="button" id="newProject">Naujas video</button></div>
+    <details><summary>Veiksmų žurnalas (jei kas neveikia, atsiųsk jo ekrano nuotrauką)</summary><ul class="ledger" id="log"></ul></details>
   </section>
 </div>
 
@@ -201,8 +205,20 @@ function deepFind(obj, pred, out = []) {
   return out;
 }
 function urlsIn(obj) { const out = []; const walk = (v) => { if (typeof v === 'string' && /^https:\/\//.test(v)) out.push(v); else if (v && typeof v === 'object') Object.values(v).forEach(walk); }; walk(obj); return out; }
+function logLine(text, kind = '') {
+  const ul = $('log'); if (!ul) return;
+  const li = el('li', kind, `${new Date().toLocaleTimeString('lt-LT')} · ${text}`); ul.prepend(li);
+  while (ul.children.length > 60) ul.lastChild.remove();
+}
+function topMsg(text, kind = 'err') { const n = $('shotsMsg'); n.textContent = text || ''; n.className = `msg msg--${kind}`; n.hidden = !text; if (text) n.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 async function call(tool, input) {
-  const res = await mcp.callTool(HF, tool, input, { cache: false });
+  if (!mcp) { logLine(`${tool}: Higgsfield neprijungtas`, 'bad'); throw { code: 'server_not_connected', message: 'Higgsfield neprijungtas šiam puslapiui' }; }
+  const quiet = tool === 'jobs_wait' || tool === 'balance';
+  if (!quiet) logLine(`→ ${tool}`);
+  let res;
+  try { res = await mcp.callTool(HF, tool, input, { cache: false }); }
+  catch (e) { logLine(`✕ ${tool}: ${e?.code || ''} ${e?.message || ''}`.trim(), 'bad'); throw e; }
+  if (!quiet) logLine(`✓ ${tool}`);
   let data = res.payload;
   if (data == null || typeof data !== 'object') {
     for (const b of res.content || []) if (b.type === 'text') { const i = b.text.indexOf('{'); if (i >= 0) { try { data = JSON.parse(b.text.slice(i)); break; } catch {} } }
@@ -503,8 +519,8 @@ $('caption').oninput = (e) => { if (st.plan) { st.plan.caption = e.target.value;
 function renderShots() {
   const box = $('shots'); box.replaceChildren();
   const allImgs = st.plan.shots.every((s) => s.image?.approved);
-  $('genRest').disabled = !anchorShot().image?.approved;
-  $('genVideos').disabled = !allImgs;
+  $('genRest').classList.toggle('btn--dim', !anchorShot().image?.approved);
+  $('genVideos').classList.toggle('btn--dim', !allImgs);
   $('st3').className = st.plan.shots.every((s) => s.clip?.approved) ? 'stage done' : 'stage';
   st.plan.shots.forEach((s) => {
     const c = el('article', 'card shot');
@@ -541,11 +557,18 @@ function renderShots() {
     const fb = el('textarea'); fb.placeholder = 'Ką pakeisti? Pvz.: katinas turi būti oranžinis, lovelė mažesnė, vyras su kepure'; fb.style.minHeight = '60px';
     const row = el('div', 'row');
     const redoImg = el('button', 'btn btn--sm', s.image ? 'Perdaryti nuotrauką' : 'Generuoti šią nuotrauką'); redoImg.type = 'button';
-    redoImg.disabled = s.image?.status === 'running' || (s.n !== st.plan.anchor && !anchorShot().image?.approved && s.uses_anchor);
-    redoImg.onclick = () => regenerate(s, 'image', fb.value.trim(), redoImg);
+    redoImg.disabled = s.image?.status === 'running';
+    redoImg.onclick = () => {
+      if (s.n !== st.plan.anchor && s.uses_anchor && !anchorShot().image?.approved) return topMsg(`Pirma sugeneruok ir patvirtink pagrindinį kadrą (${anchorShot().n}), nes šis kadras jį naudoja kaip referenciją.`);
+      regenerate(s, 'image', fb.value.trim(), redoImg);
+    };
     const redoVid = el('button', 'btn btn--sm', s.clip ? 'Perdaryti video' : 'Generuoti šį video'); redoVid.type = 'button';
-    redoVid.disabled = !s.image?.approved || s.clip?.status === 'running' || (s.end_frame_of && !shotBy(s.end_frame_of)?.image?.approved);
-    redoVid.onclick = () => regenerate(s, 'clip', fb.value.trim(), redoVid);
+    redoVid.disabled = s.clip?.status === 'running';
+    redoVid.onclick = () => {
+      if (!s.image?.approved) return topMsg(`Kadras ${s.n}: pirma patvirtink nuotrauką (mygtukas „Patvirtinti“ po ja).`);
+      if (s.end_frame_of && !shotBy(s.end_frame_of)?.image?.approved) return topMsg(`Kadras ${s.n}: šis video baigiasi kadro ${s.end_frame_of} nuotrauka, ją irgi patvirtink.`);
+      regenerate(s, 'clip', fb.value.trim(), redoVid);
+    };
     row.append(redoImg, redoVid);
     const err = el('p', 'msg msg--err'); err.hidden = true; err.dataset.shot = s.n;
     c.append(fb, row, err);
@@ -557,7 +580,7 @@ function spinner(since, label) {
   const t = el('span', 'small', label || 'Generuojama…'); if (since) t.dataset.since = since; w.append(t); return w;
 }
 setInterval(() => document.querySelectorAll('[data-since]').forEach((n) => { const s = Math.floor((Date.now() - +n.dataset.since) / 1000); n.textContent = `Generuojama… ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; }), 1000);
-function shotErr(n, text) { const e = document.querySelector(`[data-shot="${n}"]`); if (e) { e.textContent = text; e.hidden = !text; } }
+function shotErr(n, text) { const e = document.querySelector(`[data-shot="${n}"]`); if (e) { e.textContent = text; e.hidden = !text; } if (text) { topMsg(`Kadras ${n}: ${text}`); logLine(`Kadras ${n}: ${text}`, 'bad'); } }
 
 async function rewritePrompt(prompt, feedback, kind) {
   const t = await sample(`You are editing an AI ${kind === 'image' ? 'image' : 'video'} prompt. Apply the user's change request (written in Lithuanian) to the prompt below. Keep every other detail, the product sentence, the character sentences, the realism cues, the colour lock and the closing negatives unchanged. Reply with ONLY the new full prompt in English, no comments.\n\nChange request: ${feedback}\n\nPrompt:\n${prompt}`, { modelTier: 'default', cache: false });
@@ -632,9 +655,28 @@ async function regenerate(s, kind, feedback, btn) {
   } catch (e) { shotErr(s.n, e?.code ? (e.code.startsWith?.('not_') || e.code === 'server_not_connected' ? hfError(e) : sampleError(e)) : hfError(e)); }
   renderShots();
 }
-$('genAnchor').onclick = async () => { const a = anchorShot(); $('genAnchor').disabled = true; try { await submit('image', [a]); } catch (e) { shotErr(a.n, hfError(e)); } $('genAnchor').disabled = false; };
-$('genRest').onclick = async () => { const rest = st.plan.shots.filter((s) => s.n !== st.plan.anchor && !s.image?.approved); if (!rest.length) return; $('genRest').disabled = true; try { await submit('image', rest); } catch (e) { shotErr(rest[0].n, hfError(e)); } renderShots(); };
-$('genVideos').onclick = async () => { const todo = st.plan.shots.filter((s) => !s.clip?.approved && s.clip?.status !== 'running'); if (!todo.length) return; $('genVideos').disabled = true; try { await submit('clip', todo); } catch (e) { shotErr(todo[0].n, hfError(e)); } renderShots(); };
+$('genAnchor').onclick = async () => {
+  topMsg(''); if (!st.product && !st.keepProduct) return topMsg('Pirma pasirink produkto nuotrauką (1 žingsnis).');
+  const a = anchorShot(); $('genAnchor').disabled = true; topMsg('Siunčiu pagrindinį kadrą į Higgsfield…', 'ok');
+  try { await submit('image', [a]); topMsg(''); } catch (e) { shotErr(a.n, hfError(e)); } $('genAnchor').disabled = false;
+};
+$('genRest').onclick = async () => {
+  topMsg('');
+  if (!anchorShot().image?.approved) return topMsg(`Pirma sugeneruok ir patvirtink pagrindinį kadrą (${anchorShot().n}): spausk „Generuoti pagrindinį kadrą“, tada „Patvirtinti“ po nuotrauka.`);
+  const rest = st.plan.shots.filter((s) => s.n !== st.plan.anchor && !s.image?.approved && s.image?.status !== 'running');
+  if (!rest.length) return topMsg('Visos nuotraukos jau sugeneruotos arba generuojamos.', 'ok');
+  $('genRest').disabled = true; topMsg(`Siunčiu ${rest.length} nuotraukas į Higgsfield…`, 'ok');
+  try { await submit('image', rest); topMsg(''); } catch (e) { shotErr(rest[0].n, hfError(e)); } $('genRest').disabled = false; renderShots();
+};
+$('genVideos').onclick = async () => {
+  topMsg('');
+  const missing = st.plan.shots.filter((s) => !s.image?.approved).map((s) => s.n);
+  if (missing.length) return topMsg(`Video generuojami tik patvirtinus visas nuotraukas. Dar nepatvirtinti kadrai: ${missing.join(', ')}. Po kiekviena nuotrauka spausk „Patvirtinti“.`);
+  const todo = st.plan.shots.filter((s) => !s.clip?.approved && s.clip?.status !== 'running');
+  if (!todo.length) return topMsg('Visi video jau patvirtinti arba generuojami.', 'ok');
+  $('genVideos').disabled = true; topMsg(`Siunčiu ${todo.length} video į Kling 4.0…`, 'ok');
+  try { await submit('clip', todo); topMsg(''); } catch (e) { shotErr(todo[0].n, hfError(e)); } $('genVideos').disabled = false; renderShots();
+};
 
 // ---------- 4 render ----------
 function renderTexts() {
