@@ -136,6 +136,7 @@ async def recognise_music(video: Path, workdir: Path) -> str:
 class AnalyzeBody(BaseModel):
     link: str | None = None          # public reel / TikTok / Short link
     video_url: HttpUrl | None = None  # direct file URL (the app's signed upload URL)
+    timeline: bool = False           # also return evenly spaced frames (pacing check)
 
 
 @app.get("/health")
@@ -165,9 +166,15 @@ async def analyze(body: AnalyzeBody, authorization: str | None = Header(default=
             mid = start + (end - start) / 2
             scenes.append({"n": i + 1, "start": round(start, 2), "end": round(end, 2),
                            "frame": frame_b64(video, mid, workdir / f"f{i}.jpg")})
+        timeline = []
+        if body.timeline:
+            count = min(16, max(4, int(duration)))
+            for i in range(count):
+                t = duration * (i + 0.5) / count
+                timeline.append({"t": round(t, 2), "frame": frame_b64(video, t, workdir / f"t{i}.jpg")})
         transcript = await asyncio.to_thread(transcribe, video, workdir)
         music = await recognise_music(video, workdir)
-        return {"duration": round(duration, 2), "meta": meta, "scenes": scenes,
+        return {"duration": round(duration, 2), "meta": meta, "scenes": scenes, "timeline": timeline,
                 "transcript": transcript, "music": music}
     finally:
         shutil.rmtree(workdir, ignore_errors=True)

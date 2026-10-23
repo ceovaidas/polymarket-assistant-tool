@@ -72,3 +72,26 @@ export const Plan = z.object({
   cost_note: z.string().describe('Rough credit estimate: images + clips, cheaper multi-shot option'),
 });
 export type Plan = z.infer<typeof Plan>;
+
+// Virality check of the user's own finished video. All text in Lithuanian except `prompt`.
+export const Check = z.object({
+  score: z.number().int().describe('0-100, honest, calibrated: 80+ only if ready to post as is'),
+  verdict: z.enum(['Paruošta kelti', 'Beveik: pirma pataisyk', 'Reikia perdaryti']),
+  summary: z.string().describe('Lithuanian, 1-2 sentences: the main strength and the main problem'),
+  hook: z.object({
+    score: z.number().int().describe('0-10 for the first 2 seconds'),
+    note: z.string().describe('Lithuanian: what the viewer sees and understands in the first 2 seconds'),
+  }),
+  works: z.array(z.string()).describe('Lithuanian, 2-4 concrete strengths with timestamps where useful'),
+  fixes: z.array(z.object({
+    tag: z.enum(['ekrano tekstas', 'pirma eilutė', 'tempas', 'garsas', 'produktas', 'CTA', 'nuoseklumas', 'kadras']),
+    text: z.string().describe('Lithuanian: exactly what to change and where (second), cheapest fix first'),
+    prompt: z.string().describe('ENGLISH ready-to-paste on-screen text or image/motion prompt for this fix, or ""'),
+  })).describe('1-4 fixes, most important first'),
+  platforms: z.array(z.object({
+    name: z.enum(['TikTok', 'Reels', 'Shorts']),
+    fit: z.number().int().describe('1 = weak, 2 = OK, 3 = good fit'),
+    note: z.string().describe('Lithuanian, one sentence'),
+  })),
+});
+export type Check = z.infer<typeof Check>;

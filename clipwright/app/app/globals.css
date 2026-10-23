@@ -77,3 +77,50 @@ label.check input { width: auto; margin-top: 3px; }
 .cleanprev { position: relative; width: min(260px, 100%); aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: #000; }
 .cleanprev video { width: 100%; height: 100%; object-fit: cover; }
 .cleanprev i { position: absolute; border: 2px dashed var(--tally); background: rgba(224, 53, 43, .18); }
+
+/* Virality check */
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.score { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: center; }
+.gauge { width: 120px; height: 120px; }
+.gauge circle { fill: none; stroke-width: 9; }
+.gauge__bg { stroke: var(--panel-2); }
+.gauge__fg { stroke: currentColor; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.gauge__num { font: 900 30px/1 var(--f-display); fill: currentColor; }
+.gauge__of { font: 600 9px/1 var(--f-mono); fill: var(--fg-3); }
+.score--good { color: var(--ok); } .score--mid { color: var(--warn); } .score--low { color: var(--tally); }
+.score p { color: var(--fg); margin: 8px 0 0; }
+.tag { display: inline-block; padding: 4px 10px; border-radius: 8px; background: currentColor; font: 700 12px/1.2 var(--f-body); }
+.tag { color: inherit; background: color-mix(in srgb, currentColor 18%, transparent); }
+.big-num { font: 900 34px/1 var(--f-display); }
+.big-num small { font-size: 14px; color: var(--fg-3); }
+.segs { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin: 4px 0 12px; }
+.segs i { height: 8px; border-radius: 3px; background: var(--panel-2); }
+.segs i.on { background: var(--warn); }
+.ticks, .fixes, .fits { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.ticks li { padding-left: 28px; position: relative; }
+.ticks li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--ok); color: #fff; font-size: 12px; display: grid; place-items: center; }
+.fixes { counter-reset: fix; }
+.fixes li { padding-left: 32px; position: relative; counter-increment: fix; }
+.fixes li::before { content: counter(fix); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--run); color: #fff; font: 700 12px/22px var(--f-body); text-align: center; }
+.pill--tag { padding: 3px 8px; font-size: 11px; }
+.fits li { display: grid; grid-template-columns: 70px auto 1fr; gap: 4px 10px; align-items: center; }
+.fits li .muted { grid-column: 1 / -1; }
+.signal { display: inline-flex; gap: 3px; align-items: flex-end; height: 16px; }
+.signal i { width: 5px; border-radius: 2px; background: var(--panel-2); }
+.signal i:nth-child(1) { height: 6px; } .signal i:nth-child(2) { height: 11px; } .signal i:nth-child(3) { height: 16px; }
+.signal i.on { background: var(--ok); }
+.fit { justify-self: end; font: 700 12px/1 var(--f-body); }
+.fit--1 { color: var(--tally); } .fit--2 { color: var(--warn); } .fit--3 { color: var(--ok); }
+.checking { display: grid; gap: 12px; }
+.checking__frame { width: min(220px, 100%); aspect-ratio: 9 / 16; margin-inline: auto; border-radius: 14px; overflow: hidden; background: #000; outline: 2px solid var(--run); outline-offset: 4px; }
+.checking__frame video { width: 100%; height: 100%; object-fit: cover; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.steps li { padding-left: 26px; position: relative; color: var(--fg-3); }
+.steps li::before { content: ''; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); }
+.steps li.now { color: var(--fg); font-weight: 600; } .steps li.now::before { border-color: var(--run); border-top-color: transparent; animation: spin 1s linear infinite; }
+.steps li.done { color: var(--fg-2); } .steps li.done::before { background: var(--ok); border-color: var(--ok); }
+.bar { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--run), var(--tally)); transition: width 1s linear; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .steps li.now::before { animation: none; } }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr; justify-items: center; } }

@@ -5,7 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin';
 import { LAB_BUCKET, labAllowed } from '@/lib/lab/worker';
 
 const Body = z.object({
-  kind: z.enum(['video', 'product', 'clean']),
+  kind: z.enum(['video', 'product', 'clean', 'check']),
   type: z.enum(['video/mp4', 'video/quicktime', 'video/webm', 'image/jpeg', 'image/png', 'image/webp']),
 });
 const EXT: Record<string, string> = {

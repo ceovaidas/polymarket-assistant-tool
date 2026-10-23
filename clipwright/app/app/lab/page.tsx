@@ -34,7 +34,7 @@ export default async function Lab() {
               );
             })}
           </ul>
-          <p><Link className="btn" href="/lab/clean">Clean my own clip</Link></p>
+          <p className="row"><Link className="btn" href="/lab/check">Viralumo patikra</Link><Link className="btn" href="/lab/clean">Clean my own clip</Link></p>
         </div>
       </div>
     </div>

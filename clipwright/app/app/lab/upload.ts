@@ -1,7 +1,7 @@
 'use client';
 
 /** Uploads a file straight to private storage and returns its path. */
-export async function uploadToLab(kind: 'video' | 'product' | 'clean', file: File): Promise<string> {
+export async function uploadToLab(kind: 'video' | 'product' | 'clean' | 'check', file: File): Promise<string> {
   const r = await fetch('/api/lab/upload', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ kind, type: file.type }),

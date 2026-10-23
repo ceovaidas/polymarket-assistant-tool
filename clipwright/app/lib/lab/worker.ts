@@ -5,6 +5,7 @@ export type Analysis = {
   duration: number;
   meta: Record<string, unknown>;
   scenes: { n: number; start: number; end: number; frame: string }[];
+  timeline: { t: number; frame: string }[];
   transcript: string;
   music: string;
 };
@@ -21,7 +22,7 @@ async function call<T>(path: string, body: unknown): Promise<T> {
   return json;
 }
 
-export const analyzeVideo = (input: { link?: string; video_url?: string }) => call<Analysis>('/analyze', input);
+export const analyzeVideo = (input: { link?: string; video_url?: string; timeline?: boolean }) => call<Analysis>('/analyze', input);
 
 export const cleanVideo = (input: {
   video_url: string; upload_url: string; confirm_rights: true; mirror: boolean;
