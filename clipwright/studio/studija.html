@@ -520,7 +520,7 @@ function renderShots() {
   const box = $('shots'); box.replaceChildren();
   const allImgs = st.plan.shots.every((s) => s.image?.approved);
   $('genRest').classList.toggle('btn--dim', !anchorShot().image?.approved);
-  $('genVideos').classList.toggle('btn--dim', !allImgs);
+  $('genVideos').classList.toggle('btn--dim', !st.plan.shots.some((s) => s.image?.approved));
   $('st3').className = st.plan.shots.every((s) => s.clip?.approved) ? 'stage done' : 'stage';
   st.plan.shots.forEach((s) => {
     const c = el('article', 'card shot');
@@ -670,12 +670,13 @@ $('genRest').onclick = async () => {
 };
 $('genVideos').onclick = async () => {
   topMsg('');
-  const missing = st.plan.shots.filter((s) => !s.image?.approved).map((s) => s.n);
-  if (missing.length) return topMsg(`Video generuojami tik patvirtinus visas nuotraukas. Dar nepatvirtinti kadrai: ${missing.join(', ')}. Po kiekviena nuotrauka spausk „Patvirtinti“.`);
-  const todo = st.plan.shots.filter((s) => !s.clip?.approved && s.clip?.status !== 'running');
-  if (!todo.length) return topMsg('Visi video jau patvirtinti arba generuojami.', 'ok');
-  $('genVideos').disabled = true; topMsg(`Siunčiu ${todo.length} video į Kling 4.0…`, 'ok');
-  try { await submit('clip', todo); topMsg(''); } catch (e) { shotErr(todo[0].n, hfError(e)); } $('genVideos').disabled = false; renderShots();
+  const ready = (s) => s.image?.approved && (!s.end_frame_of || shotBy(s.end_frame_of)?.image?.approved);
+  const skipped = st.plan.shots.filter((s) => !ready(s)).map((s) => s.n);
+  const todo = st.plan.shots.filter((s) => ready(s) && !s.clip?.approved && s.clip?.status !== 'running' && s.clip?.status !== 'done');
+  if (!todo.length) return topMsg(skipped.length ? `Nėra ką generuoti: patvirtink kadrų ${skipped.join(', ')} nuotraukas.` : 'Visi video jau sugeneruoti arba generuojami.', skipped.length ? 'err' : 'ok');
+  $('genVideos').disabled = true;
+  topMsg(`Siunčiu ${todo.length} video į Kling 4.0 (kadrai ${todo.map((s) => s.n).join(', ')})…${skipped.length ? ` Praleisti, nes nuotrauka nepatvirtinta: ${skipped.join(', ')}.` : ''}`, 'ok');
+  try { await submit('clip', todo); topMsg(skipped.length ? `Video palėisti. Kadrams ${skipped.join(', ')} pirma patvirtink nuotrauką, tada spausk „Generuoti šį video“.` : '', 'ok'); } catch (e) { shotErr(todo[0].n, hfError(e)); } $('genVideos').disabled = false; renderShots();
 };
 
 // ---------- 4 render ----------
