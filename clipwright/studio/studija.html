@@ -212,10 +212,22 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
         <label>Daina <select id="musicSel"></select></label>
         <label>Pradžia, s <input type="text" id="musicStart" inputmode="decimal" style="width:70px"></label>
       </div>
+      <div id="ownMusic" class="mx" hidden>
+        <p class="muted small">Įkelk dainą į savo Higgsfield biblioteką (higgsfield.ai → įkelti failą) arba įklijuok tiesioginę nuorodą į mp3. Naudok muziką, kurią turi teisę naudoti (savo, pirktą Epidemic Sound / Artlist ir pan.): dainos, iškirptos iš svetimų reels, įdegtos į video būna nutildomos, o paskyra gauna įspėjimą.</p>
+        <div class="row small"><button class="btn btn--sm" type="button" id="ownList">Rodyti mano garso failus</button></div>
+        <div class="row small"><input type="text" id="ownUrl" placeholder="https://…/daina.mp3" style="flex:1;min-width:180px"><button class="btn btn--sm" type="button" id="ownImport">Importuoti</button></div>
+        <div id="ownItems" style="display:grid;gap:6px"></div>
+      </div>
       <p class="muted small" id="musicInfo"></p>
       <p class="muted small" id="musicPick"></p>
-      <details><summary class="small">Free Bird, Boombastic, Mambo No. 5 ir kitos žinomos dainos</summary>
-        <p class="muted small">Jos saugomos autorių teisių: įdegtas į failą įrašas būna nutildomas ar blokuojamas. Montuok su „Be muzikos“ ir pridėk jas TikTok / IG programėlėje (ten jos legalios, o algoritmas rodo video tos dainos klausytojams). Iš tavo 80+ reels: Free Bird (cover) ×5 lėtam reveal, Boombastic ×1 „flex“ momentams.</p>
+      <details open><summary class="small"><b>Tos pačios dainos kaip tavo 80+ reels aplanke (Free Bird, Boombastic, Can-Can versijos)</b></summary>
+        <ol class="muted small">
+          <li>Sumontuok su „Be muzikos“ ir nuimk varnelę „Palikti klipų garsą“.</li>
+          <li>Instagram atidaryk tą reel iš aplanko, kurio dainos nori, ir spausk dainos pavadinimą apačioje → „Use audio“.</li>
+          <li>Pasirink savo video iš galerijos: daina uždedama ta pati versija, nuo to paties momento, legaliai, ir Instagram rodo video tos dainos klausytojams.</li>
+          <li>TikTok: spausk „Add sound“ ir susirask dainą pagal pavadinimą arba „Use this sound“ ant to paties video.</li>
+        </ol>
+        <p class="muted small">Įdegti šių įrašų į failą negaliu: jie saugomi autorių teisių, todėl toks video būna nutildomas ar blokuojamas.</p>
       </details>
     </div>
     <div class="row"><button class="btn btn--go" type="button" id="renderBtn">Sumontuoti video</button><span class="muted small" id="renderState"></span></div>
@@ -608,13 +620,18 @@ const MUSIC = [
   { id: 'snitch', name: 'Sneaky Snitch', start: 0, use: 'sėlinimas, „katė planuoja“, prieš reveal', ...MACLEOD('Sneaky Snitch') },
   { id: 'jingle', name: 'Jingle Bells', start: 0, use: 'kalėdiniai video (Jolly Haul, žiemos kadrai)', ...MACLEOD('Jingle Bells') },
 ];
-const musicNow = () => MUSIC.find((m) => m.id === (st.plan?.music_id || 'none')) || MUSIC[0];
+MUSIC.push({ id: 'own', name: '🎵 Mano garso failas' });
+const musicNow = () => {
+  if (st.plan?.music_id === 'own') { const o = st.plan.music_own; return { id: 'own', name: o?.name || 'Mano garso failas', url: o?.url || '', start: 0, use: o ? `Tavo failas: ${o.name}` : 'Pasirink failą žemiau', note: 'tavo atsakomybė, kad turi teisę jį naudoti' }; }
+  return MUSIC.find((m) => m.id === (st.plan?.music_id || 'none')) || MUSIC[0];
+};
 function renderMusic() {
   const sel = $('musicSel'); sel.replaceChildren();
   MUSIC.forEach((m) => { const o = el('option', null, m.name); o.value = m.id; sel.append(o); });
   const m = musicNow(); sel.value = m.id; setCredit(m);
   $('musicStart').value = m.id === 'none' ? '' : (st.plan?.music_start ?? m.start);
   $('musicStart').disabled = m.id === 'none';
+  $('ownMusic').hidden = m.id !== 'own';
   $('musicInfo').textContent = m.id === 'none' ? 'Video bus su klipų garsu (arba tylus, jei nuimsi varnelę). Muziką pridėk programėlėje.'
     : `${m.use}. ${m.credit ? 'Licencija CC BY 4.0: kredito eilutė automatiškai pridėta į aprašymą žemiau, jos neištrink.' : m.note}. Pabaigoje muzika nutyla per 1 s.`;
 }
@@ -625,6 +642,29 @@ function setCredit(m) {
   $('caption').value = st.plan.caption;
 }
 $('musicSel').onchange = () => { const m = MUSIC.find((x) => x.id === $('musicSel').value); st.plan.music_id = m.id; st.plan.music_start = m.start; setCredit(m); save(); renderMusic(); };
+// Own music: an audio file from the viewer's Higgsfield library, or a link imported into it.
+function pickOwn(url, name) { st.plan.music_own = { url, name }; st.plan.music_id = 'own'; st.plan.music_start = 0; save(); renderMusic(); $('ownItems').replaceChildren(); }
+const fileName = (u) => decodeURIComponent(String(u).split('?')[0].split('/').pop() || 'garsas');
+$('ownList').onclick = async () => {
+  const box = $('ownItems'); box.replaceChildren(el('span', 'muted small', 'Kraunu…'));
+  try {
+    const { data } = await call('show_medias', { type: 'audio', size: 40 });
+    const items = (data?.items || []).filter((x) => x.url);
+    box.replaceChildren();
+    if (!items.length) return box.append(el('span', 'muted small', 'Bibliotekoje garso failų nėra. Įkelk dainą higgsfield.ai arba įklijuok nuorodą.'));
+    items.forEach((x) => { const b = el('button', 'preset', null); b.type = 'button'; b.append(el('b', null, fileName(x.url)), el('span', null, x.created_at ? new Date(+x.created_at * 1000 || x.created_at).toLocaleDateString('lt-LT') : '')); b.onclick = () => pickOwn(x.url, fileName(x.url)); box.append(b); });
+  } catch (e) { box.replaceChildren(el('span', 'muted small', hfError(e))); }
+};
+$('ownImport').onclick = async () => {
+  const url = $('ownUrl').value.trim(); if (!/^https:\/\//.test(url)) return;
+  $('ownImport').disabled = true;
+  try {
+    const { data } = await call('media_import_url', { url, type: 'audio' });
+    const u = S(data?.url || data?.media?.url || urlsIn(data)[0]); if (!u) throw new Error('negavau failo nuorodos');
+    pickOwn(u, fileName(url));
+  } catch (e) { $('ownItems').replaceChildren(el('span', 'muted small', `Nepavyko importuoti: ${e?.message || hfError(e)}`)); }
+  $('ownImport').disabled = false;
+};
 $('musicStart').onchange = () => { st.plan.music_start = Math.max(0, +String($('musicStart').value).replace(',', '.') || 0); save(); };
 
 
@@ -1066,6 +1106,7 @@ $('renderBtn').onclick = async () => {
       clips: ed.cuts.map((c, i) => ({ src: `c${i}.mp4`, in: c.in, out: c.out, transition: i < ed.cuts.length - 1 ? TR[c.tr] ?? 0 : 0 })), texts,
       ...($('keepSound').checked ? {} : { clip_volume: 0 }) };
     const mus = musicNow();
+    if (mus.id === 'own' && !mus.url) throw new Error('pasirink savo garso failą arba kitą dainą');
     if (mus.url) {
       spec.audio = { src: 'music.audio', start: +(st.plan.music_start ?? mus.start) || 0, volume: 1.0, clip_volume: $('keepSound').checked ? 0.18 : 0 };
       delete spec.clip_volume;
@@ -1109,8 +1150,16 @@ function renderFinal(sheet) {
   const f = $('final'); f.replaceChildren();
   if (!st.final) return;
   if (sheet) { const im = el('img', 'sheet'); im.alt = 'Galutinio video kadrai'; im.src = sheet; im.style.width = '100%'; im.style.borderRadius = '10px'; f.append(im); }
-  const a = el('a', 'btn btn--go', 'Atsisiųsti galutinį video'); a.href = st.final.url; a.target = '_blank'; a.rel = 'noopener';
-  f.append(el('p', 'msg msg--ok', 'Video paruoštas ir įkeltas į tavo Higgsfield biblioteką. Įkeliant į Instagram ar TikTok uždėk AI žymą.'), a);
+  const a = el('a', 'btn btn--go', 'Atidaryti video'); a.href = st.final.url; a.target = '_blank'; a.rel = 'noopener';
+  const link = el('input'); link.type = 'text'; link.readOnly = true; link.value = st.final.url; link.setAttribute('aria-label', 'Video nuoroda');
+  const copy = el('button', 'btn', 'Kopijuoti nuorodą'); copy.type = 'button';
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(st.final.url); copy.textContent = 'Nukopijuota ✓'; }
+    catch { link.focus(); link.select(); copy.textContent = 'Pažymėta: spausk Kopijuoti'; }
+  };
+  const how = el('p', 'muted small', 'Į telefoną: nukopijuok nuorodą, įklijuok į Safari, atsidarius video spausk „Bendrinti“ (kvadratas su rodykle) → „Išsaugoti vaizdo įrašą“. Video taip pat yra tavo Higgsfield bibliotekoje (programėlėje „Assets“), iš ten irgi gali atsisiųsti. Įkeliant į Instagram ar TikTok uždėk AI žymą.');
+  const row = el('div', 'row'); row.append(a, copy);
+  f.append(el('p', 'msg msg--ok', 'Video paruoštas ir įkeltas į tavo Higgsfield biblioteką.'), row, link, how);
 }
 
 // ---------- variants of a video that performed well ----------
