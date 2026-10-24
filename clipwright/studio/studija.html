@@ -703,7 +703,11 @@ async function submit(kind, shots) {
     const done = new Set(got.map((j) => +j.index));
     const declined = declinedFrom(textOf(err, res));
     const retry = pendingReq.filter((r) => !done.has(r.index) && declined[r.index]);
-    if (!retry.length) { if (!jobs.length && err) throw err; break; }
+    if (!retry.length) {
+      // A dropped connection (phone locked, app in background) leaves the outcome unknown: never resubmit blindly.
+      if (!jobs.length && err) throw err.code && err.code !== 'tool_error' ? new Error('ryšys nutrūko siunčiant (gal užsirakino telefonas). Prieš kartodamas patikrink Higgsfield bibliotekoje, ar užduotis neprasidėjo, kad nemokėtum dukart.') : err;
+      break;
+    }
     logLine(`Higgsfield pasiūlė preset'ą, atmetu ir kartoju (${retry.map((r) => r.index).join(', ')})`);
     pendingReq = retry.map((r) => ({ index: r.index, params: { ...r.params, declined_preset_id: declined[r.index] } }));
   }
@@ -716,18 +720,34 @@ async function submit(kind, shots) {
   save(); renderShots(); renderCredits();
   await waitJobs(kind, jobs);
 }
+// Jobs keep running on Higgsfield while the phone is locked; only this page sleeps. A watcher that loses its
+// connection stops quietly (the shot stays "generuojama") and resumeRunning() picks it up when the page is back.
+const watching = new Set();
 async function waitJobs(kind, jobs) {
+  jobs = jobs.filter((j) => !watching.has(j.job_id));
+  if (!jobs.length) return;
+  jobs.forEach((j) => watching.add(j.job_id));
   const pending = new Map(jobs.map((j) => [j.job_id, +j.index]));
+  try { await watchLoop(kind, pending); } finally { jobs.forEach((j) => watching.delete(j.job_id)); keepAwake(false); }
+}
+async function watchLoop(kind, pending) {
   const justDone = [];
-  for (let round = 0; round < 120 && pending.size; round++) {
-    const { data } = await call('jobs_wait', { jobs: [...pending].map(([job_id, index]) => ({ job_id, index })), timeout_seconds: 10 });
+  keepAwake(true);
+  for (let round = 0; round < 150 && pending.size; round++) {
+    let data;
+    try { ({ data } = await call('jobs_wait', { jobs: [...pending].map(([job_id, index]) => ({ job_id, index })), timeout_seconds: 10 })); }
+    catch (e) {
+      if (e?.code === 'tool_error') throw e;
+      topMsg('Ryšys su Higgsfield nutrūko (užsirakino telefonas ar programa buvo fone). Generavimas tęsiasi Higgsfield serveryje: grįžus čia būsena atsinaujins pati.', 'ok');
+      return;
+    }
     const rows = deepFind(data, (o) => (o.job_id || o.id) && (o.status || o.state));
     for (const r of rows) {
       const id = r.job_id || r.id; if (!pending.has(id)) continue;
       const s = shotBy(pending.get(id)); const status = S(r.status || r.state).toLowerCase();
       const urls = urlsIn(r).filter((u) => kind === 'image' ? /\.(png|jpe?g|webp)(\?|$)/i.test(u) || /image/i.test(u) : /\.(mp4|mov|webm)(\?|$)/i.test(u) || /video/i.test(u));
       if (/fail|error|nsfw|cancel|reject/.test(status)) { s[kind].status = 'failed'; pending.delete(id); shotErr(s.n, status.includes('nsfw') ? 'Filtras atmetė (NSFW). Pakeisk žodžius: „cat pod“ vietoj „bed“, pilna apranga, sėdi.' : 'Generavimas nepavyko. Pabandyk perdaryti.'); }
-      else if (urls.length && /complet|success|done|finish|ready/.test(status || 'completed')) { s[kind].status = 'done'; s[kind].url = S(r.result_url) || urls[0]; pending.delete(id); justDone.push(s); }
+      else if (urls.length && /complet|success|done|finish|ready/.test(status || 'completed')) { s[kind].status = 'done'; s[kind].url = S(r.result_url) || urls[0]; pending.delete(id); justDone.push(s); shotErr(s.n, ''); }
     }
     save(); renderShots();
     if (justDone.length) {
@@ -755,6 +775,29 @@ async function regenerate(s, kind, feedback, btn) {
   } catch (e) { shotErr(s.n, e?.code ? (e.code.startsWith?.('not_') || e.code === 'server_not_connected' ? hfError(e) : sampleError(e)) : hfError(e)); }
   renderShots();
 }
+function resumeRunning() {
+  if (!st.plan || !mcp) return;
+  const running = { image: [], clip: [] };
+  st.plan.shots.forEach((s) => ['image', 'clip'].forEach((k) => { if (s[k]?.status === 'running' && !watching.has(s[k].jobId)) running[k].push({ job_id: s[k].jobId, index: s.n }); }));
+  if (!running.image.length && !running.clip.length) return;
+  topMsg('Tikrinu, kas sugeneruota, kol buvai išėjęs…', 'ok');
+  const done = () => { if (!watching.size) topMsg(''); };
+  if (running.image.length) waitJobs('image', running.image).then(done, (e) => shotErr(running.image[0].index, hfError(e)));
+  if (running.clip.length) waitJobs('clip', running.clip).then(done, (e) => shotErr(running.clip[0].index, hfError(e)));
+}
+// Back on the page (unlocked phone, switched back to the app): pick up jobs that finished meanwhile.
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') resumeRunning(); });
+window.addEventListener('pageshow', () => resumeRunning());
+window.addEventListener('focus', () => resumeRunning());
+// Keep the screen on while something is generating, so the phone does not lock by itself (where allowed).
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock && document.visibilityState === 'visible') { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); }
+    else if (!on && wakeLock && !watching.size) { await wakeLock.release(); wakeLock = null; }
+  } catch { wakeLock = null; }
+}
+
 $('genAnchor').onclick = async () => {
   topMsg(''); if (!st.product && !st.keepProduct) return topMsg('Pirma pasirink produkto nuotrauką (1 žingsnis).');
   const a = anchorShot(); $('genAnchor').disabled = true; topMsg('Siunčiu pagrindinį kadrą į Higgsfield…', 'ok');
@@ -1087,10 +1130,7 @@ $('ideaText').value = st.idea || ''; renderMirror();
     const todo = [];
     st.plan.shots.forEach((s) => ['image', 'clip'].forEach((k) => { if (s[k]?.url && !thumbs.get(s[k].jobId)) todo.push({ key: s[k].jobId, url: s[k].url, video: k === 'clip' }); }));
     if (todo.length) { await thumbsFor(todo).catch(() => {}); renderShots(); renderEdit(); }
-    const running = { image: [], clip: [] };
-    st.plan.shots.forEach((s) => ['image', 'clip'].forEach((k) => { if (s[k]?.status === 'running') running[k].push({ job_id: s[k].jobId, index: s.n }); }));
-    if (running.image.length) waitJobs('image', running.image);
-    if (running.clip.length) waitJobs('clip', running.clip);
+    resumeRunning();
   }
 })();
 </script>
