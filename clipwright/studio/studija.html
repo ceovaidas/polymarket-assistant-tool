@@ -1158,25 +1158,14 @@ function renderFinal(sheet) {
     catch { link.focus(); link.select(); copy.textContent = 'Pažymėta: spausk Kopijuoti'; }
   };
   const how = el('p', 'muted small', 'Į telefoną: nukopijuok nuorodą, įklijuok į Safari, atsidarius video spausk „Bendrinti“ (kvadratas su rodykle) → „Išsaugoti vaizdo įrašą“. Video taip pat yra tavo Higgsfield bibliotekoje (programėlėje „Assets“), iš ten irgi gali atsisiųsti. Įkeliant į Instagram ar TikTok uždėk AI žymą.');
-  // One tap to Photos: the file goes to the Claude app's save surface (on iPhone the share sheet with "Save Video").
-  const toGallery = el('button', 'btn btn--go', '💾 Išsaugoti į galeriją'); toGallery.type = 'button';
-  const galMsg = el('p', 'muted small');
-  toGallery.onclick = async () => {
-    toGallery.disabled = true; toGallery.textContent = 'Atsisiunčiu video…'; galMsg.textContent = '';
-    try {
-      const dl = await window.claude?.use?.('downloads');
-      if (!dl) throw { code: 'unavailable' };
-      const r = await fetch(st.final.url);
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const name = (st.plan?.title || 'video').normalize('NFD').replace(/[^A-Za-z0-9 _-]+/g, '').trim().slice(0, 40) || 'video';
-      await dl.save({ filename: `${name}.mp4`, data: await r.blob() });
-      toGallery.textContent = 'Išsaugota ✓';
-      galMsg.textContent = 'iPhone lange pasirink „Išsaugoti vaizdo įrašą“ (Save Video), ir video bus Nuotraukose.';
-    } catch (e) {
-      toGallery.disabled = false; toGallery.textContent = '💾 Išsaugoti į galeriją';
-      galMsg.textContent = e?.code === 'declined' ? 'Atšaukta.' : `Tiesiogiai išsaugoti nepavyko${e?.code ? ` (${e.code})` : ''}: naudok nuorodą žemiau ir Safari.`;
-    }
-  };
+  // The page may not download the file itself, so hand the video to Safari, whose share sheet has "Save Video".
+  // x-safari-https:// opens Safari straight from the Claude app on iOS 17+; elsewhere the plain link is used.
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const toGallery = el('a', 'btn btn--go', '💾 Į galeriją (atidaryti Safari)');
+  toGallery.href = ios ? `x-safari-${st.final.url}` : st.final.url; toGallery.target = '_blank'; toGallery.rel = 'noopener';
+  const galMsg = el('p', 'muted small', ios
+    ? 'Atsidarys Safari su video: spausk „Bendrinti“ (kvadratas su rodykle) → „Išsaugoti vaizdo įrašą“. Jei Safari neatsidarė, naudok „Kopijuoti nuorodą“ ir įklijuok ją Safari.'
+    : 'Atsidarys video: kompiuteryje dešiniu pelės mygtuku → „Išsaugoti vaizdo įrašą kaip…“.');
   const row = el('div', 'row'); row.append(a, copy);
   f.append(el('p', 'msg msg--ok', 'Video paruoštas ir įkeltas į tavo Higgsfield biblioteką.'), toGallery, galMsg, row, link, how);
 }
