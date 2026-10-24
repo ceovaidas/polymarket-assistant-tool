@@ -48,8 +48,11 @@ Read `balance` at the start and at the end; the final line states the true diffe
    deliver a no-text version and they add the text in Instagram/TikTok on iPhone.
 3. Copy `clipwright/render/render.py` into the sandbox (heredoc) and write `spec.json`: clips with in/out
    trims from the plan, texts with start/end, `y` 0.15-0.25 (top third), size 60-70 for 1080 wide,
-   white bold with black outline, emoji included. Music: only a file the user supplies or licensed library
-   music; otherwise keep the clips' own sound and tell the user to add the trending song in the app.
+   white bold with black outline, emoji included. Music burned in: only recordings we may publish. The studio
+   library has Can-Can (public-domain Wikimedia recording, famous theme from ~90.5 s) and Kevin MacLeod tracks
+   from incompetech.com under CC BY 4.0 (Fluffing a Duck, Monkeys Spinning Monkeys, Sneaky Snitch, Jingle
+   Bells; the credit line must stay in the caption). Commercial songs (Free Bird, Boombastic, Mambo No. 5)
+   are never burned in: render without music and add them in the app.
 4. Run it, check a contact sheet of the result, then upload/send the final MP4 to the user.
 
 ## Templates menu ("šablonai")

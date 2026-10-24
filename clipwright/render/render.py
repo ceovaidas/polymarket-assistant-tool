@@ -13,12 +13,13 @@ spec.json:
   "clips": [{"src": "shot1.mp4", "in": 0.0, "out": 3.0}, ...],
   "texts": [{"start": 0, "end": 5, "text": "DON'T show this to a Texas cat dad 😂", "top": 0.16, "size": 72}],
             # `top`: top edge of the caption as a fraction of the height (or `y`: its centre); or a ready-made "png"
-  "audio": {"src": "music.mp3", "volume": 1.0, "clip_volume": 0.15},  # optional
+  "audio": {"src": "music.mp3", "start": 90.5, "volume": 1.0, "clip_volume": 0.15},  # optional, from `start` s
   "clip_volume": 0,                                                    # optional, without `audio`: 0 mutes clips
   "transition": 0.35                                 # optional default dissolve, s; a clip's own "transition" wins
 }
 `y` is the vertical centre of the text block as a fraction of the height (keep 0.12-0.30: top third, away
-from the app buttons). Clip sound is kept unless `audio` is given, then it is mixed under the music.
+from the app buttons). Clip sound is kept unless `audio` is given, then it is mixed under the music, which
+fades out over the last second. Only use music you may publish (public domain or a licence that allows it).
 """
 import json
 import re
@@ -241,10 +242,15 @@ def render(spec: dict, base: Path) -> Path:
         last = out
     audio = spec.get("audio")
     if audio:
-        inputs += ["-i", str(base / audio["src"])]
+        # Music from `start` s, 1 s fade-out at the end of the video, clip sound mixed underneath.
+        total = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                      str(joined)], capture_output=True, text=True).stdout.strip())
+        inputs += ["-ss", f"{float(audio.get('start', 0)):.2f}", "-i", str(base / audio["src"])]
         a = len(spec.get("texts", [])) + 1
-        chain.append(f"[0:a]volume={audio.get('clip_volume', 0.15)}[ca];[{a}:a]volume={audio.get('volume', 1.0)}[ma];"
-                     f"[ca][ma]amix=inputs=2:duration=first:dropout_transition=0[aout]")
+        fade = max(0.0, total - 1.0)
+        chain.append(f"[0:a]volume={audio.get('clip_volume', 0.15)}[ca];"
+                     f"[{a}:a]volume={audio.get('volume', 1.0)},afade=t=in:d=0.05,afade=t=out:st={fade:.2f}:d=1[ma];"
+                     f"[ca][ma]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,apad,atrim=0:{total:.3f}[aout]")
     elif "clip_volume" in spec:  # no music file: keep, lower or mute the clip sound (music is added in the app)
         chain.append(f"[0:a]volume={float(spec['clip_volume'])}[aout]")
         audio = True
