@@ -62,6 +62,14 @@ Read `balance` at the start and at the end; the final line states the true diffe
 - "šablonai" → list the README table (name, best for, cost, last result). Reusing one: ask for the product
   photo and the new world, fill the slots, show the plan, then the same gates.
 
+## Variants of a winner ("variantai")
+
+When a video gets many views, remake it with minimal changes instead of a new video (the clip-bank lesson
+from the 80-reel study). Cheapest first: new hook text and/or music on the same approved clips (0 credits,
+re-render only); then redo ONE shot, usually the hook shot, with one change (identity, season, the product's
+other colour), which costs one image and one clip and still passes the approval gates. Each variant is a
+new project; the original stays. The studio's "Sugalvok variantus" button does exactly this.
+
 ## Swapping product or people in an existing video
 - Allowed on the user's own or licensed videos only (their generated clips, their filmed footage): use
   `hf_mult_replace_object` (swap product/garment/character from reference images) or `kling4_0` with

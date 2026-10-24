@@ -216,6 +216,14 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
     <div class="final" id="final"></div>
     <details><summary>Caption, prisegtas komentaras, hashtag'ai</summary><textarea id="caption"></textarea></details>
     <div class="row"><button class="btn" type="button" id="saveTpl">Išsaugoti kaip šabloną</button><span class="muted small" id="tplState"></span></div>
+    <div class="mx" id="variants" hidden>
+      <p class="eyebrow">Video surinko daug peržiūrų? Daryk variantą</p>
+      <p class="muted small">Tie patys patvirtinti klipai, tik naujas hook'as, kita muzika arba vienas perdarytas kadras (kita tapatybė, sezonas ar spalva). Kiekvienas variantas tampa nauju projektu, originalas lieka „Mano projektuose“.</p>
+      <div class="row"><input type="text" id="varNote" placeholder="Ką pakeisti? Nebūtina. Pvz.: Floridos močiutė, Kalėdos, koralinė lova" style="flex:1;min-width:200px"><button class="btn btn--go" type="button" id="varBtn">Sugalvok variantus</button></div>
+      <span class="muted small" id="varState"></span>
+      <p class="msg msg--err" id="varErr" hidden></p>
+      <div id="varList" style="display:grid;gap:10px"></div>
+    </div>
   </section>
 
   <section class="card">
@@ -575,7 +583,7 @@ function renderPlan() {
   $('characters').oninput = (e) => { p.characters = e.target.value.split(/\n\s*\n/); save(); };
   renderShots(); renderEdit(); $('caption').value = p.caption;
   $('musicPick').textContent = p.music ? `Claude siūlo šiam video: ${p.music}` : '';
-  renderMusic();
+  renderMusic(); renderVariantsBox();
 }
 $('caption').oninput = (e) => { if (st.plan) { st.plan.caption = e.target.value; save(); } };
 // ----- music burned into the render: only recordings we may publish -----
@@ -768,7 +776,7 @@ async function watchLoop(kind, pending) {
     if (justDone.length) {
       const batch = justDone.splice(0);
       await thumbsFor(batch.map((s) => ({ key: s[kind].jobId, url: s[kind].url, video: kind === 'clip' }))).catch(() => {});
-      renderShots(); updateCover();
+      renderShots(); updateCover(); renderVariantsBox();
     }
     if (pending.size) await new Promise((r) => setTimeout(r, 1500));
   }
@@ -1096,6 +1104,83 @@ function renderFinal(sheet) {
   if (sheet) { const im = el('img', 'sheet'); im.alt = 'Galutinio video kadrai'; im.src = sheet; im.style.width = '100%'; im.style.borderRadius = '10px'; f.append(im); }
   const a = el('a', 'btn btn--go', 'Atsisiųsti galutinį video'); a.href = st.final.url; a.target = '_blank'; a.rel = 'noopener';
   f.append(el('p', 'msg msg--ok', 'Video paruoštas ir įkeltas į tavo Higgsfield biblioteką. Įkeliant į Instagram ar TikTok uždėk AI žymą.'), a);
+}
+
+// ---------- variants of a video that performed well ----------
+// The variant machine from the 80-reel study: keep the approved clips, change the hook, the music or ONE shot.
+// A variant is a new project (the original stays in "Mano projektai").
+const VAR_RULES = `You make low-cost variants of a short product video that already got many views. Keep what worked and change as little as possible.
+Reply with ONLY one JSON object:
+{"variants": [{"name": "LT, 2-4 words", "why": "LT, one sentence", "texts": [{"shot": <shot n>, "text": "EN"}],
+  "music_id": "cancan" | "duck" | "monkeys" | "snitch" | "jingle" | "none", "change_shot": <shot n or null>, "change": "EN instruction for that shot's image, or empty"}]}
+Rules:
+- 4 variants, cheapest first. Variants 1-2 change only the on-screen texts (a new hook on the first shot) and maybe the music: 0 credits.
+  Variants 3-4 may also redo ONE shot, usually the first (hook) shot, with ONE change: another identity ("Florida grandma", "Texas trucker",
+  "biker dad"), a season (Christmas, Halloween, Thanksgiving) or the product's other colour. The product never changes shape or size.
+- Hooks from proven skeletons: "DON'T show this to [identity] 😂", "This ___ feels illegal", "POV: ...", "What [people] think we sell" / "What we actually sell".
+- One text per shot at most, one idea, max 6 words plus emoji; the first shot always has the hook. Honest claims only, offers gain-framed
+  ("$0 shipping, on us"), never fake scarcity, reviews or prices.
+- If the user wrote a wish, at least two variants follow it.`;
+
+function hasClips() { return !!st.plan?.shots?.some((s) => s.clip?.status === 'done'); }
+function renderVariantsBox() { $('variants').hidden = !hasClips(); }
+function currentTextsByShot() {
+  const ed = initEdit(), { at } = timeline(ed);
+  return st.plan.shots.map((s, i) => ({ shot: s.n, text: ed.texts.find((t) => t.start <= at[i] + 0.05 && t.end > at[i] + 0.05)?.text || '' }));
+}
+$('varBtn').onclick = async () => {
+  if (!sample) return show('varErr', 'Claude šiame lange neprieinamas.');
+  show('varErr', ''); $('varBtn').disabled = true; $('varState').textContent = 'Claude galvoja variantus… (apie 30 s)';
+  try {
+    const p = st.plan;
+    const brief = { title: p.title, product: p.product_sentence, characters: p.characters,
+      shots: p.shots.map((s) => ({ n: s.n, title: s.title, image: s.image_prompt.slice(0, 400) })),
+      texts_now: currentTextsByShot(), music_now: p.music_id || 'none', wish: $('varNote').value.trim() };
+    const r = await sample.json(`${VAR_RULES}\n\nVideo:\n${JSON.stringify(brief)}`, { modelTier: 'complex', cache: false });
+    renderVariants((r.variants || []).slice(0, 6));
+  } catch (e) { show('varErr', e?.code ? sampleError(e) : 'Nepavyko, spausk dar kartą.'); }
+  $('varBtn').disabled = false; $('varState').textContent = '';
+};
+function renderVariants(list) {
+  const box = $('varList'); box.replaceChildren();
+  list.forEach((v) => {
+    const card = el('div', 'mx-hook');
+    const redo = v.change_shot && S(v.change).trim() ? shotBy(+v.change_shot) : null;
+    card.append(el('b', null, S(v.name) || 'Variantas'), el('span', 'muted small', S(v.why)));
+    const ul = el('ul', 'ledger');
+    (v.texts || []).forEach((t) => { const li = el('li'); li.append(el('span', null, `Kadras ${t.shot}: ${S(t.text)}`)); ul.append(li); });
+    const m = MUSIC.find((x) => x.id === v.music_id);
+    if (m) { const li = el('li'); li.append(el('span', null, `Muzika: ${m.name}`)); ul.append(li); }
+    if (redo) { const li = el('li'); li.append(el('span', null, `Perdaromas kadras ${redo.n}: ${S(v.change)}`)); ul.append(li); }
+    card.append(ul, el('span', `pill${redo ? '' : ' pill--ok'}`, redo ? `1 nuotrauka + 1 klipas (kadras ${redo.n})` : '0 kreditų, tik sumontuoti'));
+    const go = el('button', 'btn btn--sm', 'Kurti šį variantą'); go.type = 'button';
+    go.onclick = () => makeVariant(v, redo, go);
+    card.append(go); box.append(card);
+  });
+}
+async function makeVariant(v, redo, btn) {
+  btn.disabled = true; btn.textContent = 'Kuriu variantą…';
+  try {
+    initEdit(); clearTimeout(cloudTimer); await cloudFlush();
+    const copy = JSON.parse(JSON.stringify(st));
+    Object.assign(copy, { pid: `p${Date.now()}`, parent: st.pid, final: null, ledger: [] });
+    const p = copy.plan, ed = p.edit, { at, total } = timeline(ed);
+    p.title = `${p.title} · ${S(v.name) || 'variantas'}`;
+    // New texts sit exactly on their shot, from its cut to the next one.
+    const byShot = new Map((v.texts || []).filter((t) => S(t.text).trim()).map((t) => [+t.shot, S(t.text)]));
+    if (byShot.size) {
+      ed.texts = p.shots.map((s, i) => (byShot.has(s.n) ? { start: r2(at[i]), end: r2(i + 1 < at.length ? at[i + 1] : total), text: byShot.get(s.n) } : null)).filter(Boolean);
+      p.texts = p.shots.filter((s) => byShot.has(s.n)).map((s) => ({ start: s.start, end: s.end, text: byShot.get(s.n) }));
+    }
+    if (MUSIC.some((x) => x.id === v.music_id)) { p.music_id = v.music_id; delete p.music_start; }
+    if (redo) {
+      const s = p.shots.find((x) => x.n === redo.n);
+      s.image_prompt = await rewritePrompt(s.image_prompt, S(v.change), 'image');
+      s.image = null; s.clip = null; copy.cover = '';
+    }
+    st = Object.assign(blank(), copy); save(); clearTimeout(cloudTimer); await cloudFlush();
+    location.reload();
+  } catch (e) { btn.disabled = false; btn.textContent = 'Kurti šį variantą'; show('varErr', e?.code ? sampleError(e) : 'Nepavyko sukurti varianto.'); }
 }
 
 // ---------- templates (saved to the artifact database, private to you) ----------
