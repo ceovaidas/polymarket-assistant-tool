@@ -17,7 +17,7 @@
 body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--f-body);
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 64px; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 14px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .brand { font: 800 20px/1 var(--f-display); }
 .credits { font: 600 13px/1.3 var(--f-mono); color: var(--fg-2); font-variant-numeric: tabular-nums; }
@@ -42,6 +42,10 @@ textarea { min-height: 80px; resize: vertical; font: 13px/1.5 var(--f-mono); }
 .btn--ok { border-color: var(--good); color: var(--good); }
 .btn[disabled] { opacity: .45; cursor: not-allowed; }
 .btn--sm { padding: 7px 10px; font-size: 12px; border-radius: 8px; }
+.jump { display: flex; gap: 6px; overflow-x: auto; flex: 1 1 100%; min-width: 0; max-width: 100%; scrollbar-width: none; }
+.jump a { flex: none; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; color: inherit; text-decoration: none; font-size: 13px; background: var(--panel-2); }
+.jump a:focus-visible, .jump a:hover { border-color: var(--accent); }
+[id] { scroll-margin-top: 120px; }
 .projs { display: grid; gap: 8px; max-height: 420px; overflow: auto; }
 .proj { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 10px; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); }
 .proj--on { border-color: var(--accent); }
@@ -116,13 +120,16 @@ ol.mx-beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px;
   <div class="topbar">
     <span class="brand">Video studija</span>
     <span class="credits" id="credits">💳 Kreditai: tikrinama…</span>
+    <nav class="jump" aria-label="Studijos meniu">
+      <a href="#sProjects">📁 Projektai</a><a href="#sProduct">1 Produktas</a><a href="#sIdea">2 Idėja</a><a href="#sShots">3 Kadrai</a><a href="#sRender">4 Montažas</a><a href="#variants">🔁 Variantai</a>
+    </nav>
   </div>
   <p class="credits" id="diag">Jungiamasi: Claude … · Higgsfield …</p>
   <h1>Video studija</h1>
   <p class="lead">Produktas, idėja, nuotraukos su Nano Banana 2.1, klipai su Kling 4.0 ir galutinis video su tekstais, viskas viename puslapyje. Nieko nesugeneruojama be tavo paspaudimo, o prieš kiekvieną žingsnį matai kainą.</p>
   <p class="msg msg--err" id="gate" hidden></p>
 
-  <section class="card">
+  <section class="card" id="sProjects">
     <div class="row" style="justify-content:space-between"><p class="eyebrow">Mano projektai</p><span class="muted small" id="projState"></span></div>
     <p class="muted small">Kiekvienas video išsaugomas automatiškai tavo paskyroje: juodraščiai, sugeneruotos nuotraukos ir klipai, baigti video. Matysi juos ir telefone, ir kompiuteryje.</p>
     <div id="projects" class="projs"></div>
@@ -1123,7 +1130,11 @@ Rules:
 - If the user wrote a wish, at least two variants follow it.`;
 
 function hasClips() { return !!st.plan?.shots?.some((s) => s.clip?.status === 'done'); }
-function renderVariantsBox() { $('variants').hidden = !hasClips(); }
+function renderVariantsBox() {
+  $('variants').hidden = false;
+  $('varBtn').disabled = !hasClips();
+  $('varState').textContent = hasClips() ? '' : 'Atsiras, kai projekte bus bent vienas sugeneruotas klipas. Atidaryk baigtą video iš „Mano projektų“.';
+}
 function currentTextsByShot() {
   const ed = initEdit(), { at } = timeline(ed);
   return st.plan.shots.map((s, i) => ({ shot: s.n, text: ed.texts.find((t) => t.start <= at[i] + 0.05 && t.end > at[i] + 0.05)?.text || '' }));
@@ -1188,7 +1199,7 @@ async function loadTemplates() {
   if (!db || !user) return;
   try {
     const id = await user.id(); if (!id) return;
-    const snap = await db.collection(`data/users/${id}/templates`).orderBy('at', 'desc').limit(20).get();
+    const snap = await userCol(id, 'templates').orderBy('at', 'desc').limit(20).get();
     const docs = snap.docs || snap;
     (docs || []).forEach((d) => {
       const t = d.data ? d.data() : d;
@@ -1205,13 +1216,15 @@ $('saveTpl').onclick = async () => {
   try {
     const id = await user.id(); if (!id) throw 0;
     const plan = JSON.parse(JSON.stringify(st.plan)); plan.shots.forEach((s) => { delete s.image; delete s.clip; });
-    await db.collection(`data/users/${id}/templates`).doc(`t${Date.now()}`).set({ title: st.plan.title || 'Šablonas', plan, credits: spent(), at: Date.now() });
+    await userCol(id, 'templates').doc(`t${Date.now()}`).set({ title: st.plan.title || 'Šablonas', plan, credits: spent(), at: Date.now() });
     $('tplState').textContent = 'Išsaugota. Rasi jį 2 žingsnyje tarp šablonų.';
   } catch { $('tplState').textContent = 'Nepavyko išsaugoti.'; }
 };
 // ---------- my projects (saved to the artifact database, private to you, on every device) ----------
 // Every change is kept in this browser (localStorage) and, a moment later, in data/users/<id>/projects/<pid>,
 // so closing the app, a cleared browser or another device never loses a project.
+// data/users/<id> is the viewer's private collection; named lists live under its "studio" document.
+const userCol = (id, name) => db.doc(`data/users/${id}/studio`).collection(name);
 var cloudTimer = null, cloudBusy = false, cloudAgain = false, uidCache = null; // var: save() may run before this line
 const uid = async () => uidCache || (uidCache = user ? await user.id().catch(() => null) : null);
 const projectStatus = (x) => (x.final ? 'baigtas' : x.plan?.shots?.some((s) => s.clip?.status === 'done') ? 'video yra' : x.plan ? 'juodraštis' : 'pradėtas');
@@ -1225,12 +1238,12 @@ async function cloudFlush() {
     const id = await uid(); if (!id) return;
     const state = JSON.stringify(st, (k, v) => (k === 'thumb' || k === 'sheet' ? undefined : v));
     if (state.length > 240000) { logLine('Projektas per didelis debesiui, saugomas tik šiame įrenginyje', 'bad'); return; }
-    await db.collection(`data/users/${id}/projects`).doc(st.pid).set({
+    await userCol(id, 'projects').doc(st.pid).set({
       title: st.plan?.title || (st.idea || '').slice(0, 60) || 'Be pavadinimo', status: projectStatus(st), at: Date.now(),
       credits: spent(), cover: st.cover || '', finalUrl: st.final?.url || '', state,
     });
     $('projState').textContent = `Išsaugota ${new Date().toLocaleTimeString('lt-LT', { hour: '2-digit', minute: '2-digit' })}`;
-  } catch (e) { $('projState').textContent = e?.code === 'quota_exceeded' ? 'Saugykla pilna: ištrink senus projektus.' : 'Nepavyko išsaugoti debesyje (liko šiame įrenginyje).'; }
+  } catch (e) { $('projState').textContent = e?.code === 'quota_exceeded' ? 'Saugykla pilna: ištrink senus projektus.' : `Nepavyko išsaugoti debesyje (liko šiame įrenginyje): ${e?.code || e?.message || ''}`; logLine(`Projektų saugykla: ${e?.code || ''} ${e?.message || ''}`, 'bad'); }
   finally { cloudBusy = false; if (cloudAgain) { cloudAgain = false; cloudSave(); } }
 }
 // Small cover from the first finished image, so the list shows which video is which.
@@ -1248,7 +1261,7 @@ async function loadProjects() {
   const box = $('projects'); if (!db) { box.replaceChildren(el('p', 'muted small', 'Projektų saugykla šiame lange neprieinama: projektas saugomas tik šiame įrenginyje.')); return; }
   try {
     const id = await uid(); if (!id) return;
-    const snap = await db.collection(`data/users/${id}/projects`).orderBy('at', 'desc').limit(30).get();
+    const snap = await userCol(id, 'projects').orderBy('at', 'desc').limit(30).get();
     const docs = (snap.docs || snap || []).map((d) => ({ id: d.id, ...(d.data ? d.data() : d) }));
     box.replaceChildren();
     if (!docs.length) { box.append(el('p', 'muted small', 'Dar nėra išsaugotų projektų. Šis bus išsaugotas automatiškai.')); return; }
@@ -1261,11 +1274,13 @@ async function loadProjects() {
       const pill = el('span', `pill${d.status === 'baigtas' ? ' pill--ok' : ''}`, d.id === st.pid ? `${d.status} · atidarytas` : d.status);
       const acts = el('div', 'row');
       if (d.id !== st.pid) { const o = el('button', 'btn btn--sm', 'Atidaryti'); o.type = 'button'; o.onclick = () => openProject(d); acts.append(o); }
+      if (d.status === 'baigtas' || d.status === 'video yra') { const v = el('button', 'btn btn--sm', '🔁 Variantai'); v.type = 'button';
+        v.onclick = () => { try { sessionStorage.setItem('studijaJump', 'variants'); } catch {} if (d.id === st.pid) $('variants').scrollIntoView({ behavior: 'smooth' }); else openProject(d); }; acts.append(v); }
       if (d.finalUrl) { const a = el('a', 'btn btn--sm', 'Atsisiųsti'); a.href = d.finalUrl; a.target = '_blank'; a.rel = 'noopener'; acts.append(a); }
       const del = el('button', 'btn btn--sm btn--dim', 'Ištrinti'); del.type = 'button';
       del.onclick = async () => {
         if (del.dataset.sure !== '1') { del.dataset.sure = '1'; del.textContent = 'Tikrai ištrinti?'; return; }
-        await db.collection(`data/users/${id}/projects`).doc(d.id).delete().catch(() => {});
+        await userCol(id, 'projects').doc(d.id).delete().catch(() => {});
         if (d.id === st.pid) { st = blank(); save(); location.reload(); return; }
         loadProjects();
       };
@@ -1273,7 +1288,7 @@ async function loadProjects() {
       info.append(pill, acts);
       row.append(cov, info); box.append(row);
     }
-  } catch { box.replaceChildren(el('p', 'muted small', 'Nepavyko užkrauti projektų.')); }
+  } catch (e) { box.replaceChildren(el('p', 'muted small', `Nepavyko užkrauti projektų: ${e?.code || e?.message || ''}`)); }
 }
 async function openProject(d) {
   clearTimeout(cloudTimer); await cloudFlush();
@@ -1283,12 +1298,17 @@ async function openProject(d) {
 
 async function newProject() { clearTimeout(cloudTimer); await cloudFlush(); st = blank(); try { localStorage.setItem('studija', JSON.stringify(st)); } catch {} location.reload(); }
 $('newProject').onclick = newProject;
+document.querySelectorAll('.jump a').forEach((a) => { a.onclick = (e) => {
+  const t = document.querySelector(a.getAttribute('href'));
+  if (t && (t.hidden || t.closest('[hidden]'))) { e.preventDefault(); $('sProjects').scrollIntoView({ behavior: 'smooth' }); $('projState').textContent = 'Ši dalis atsiras, kai turėsi planą: atidaryk projektą arba pradėk naują.'; }
+}; });
 $('newProject2').onclick = newProject;
 // Leaving the page (phone locked, app switched): save to the cloud right away.
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { clearTimeout(cloudTimer); cloudFlush(); } });
 
 // ---------- start ----------
 renderPresets(); renderProduct(); if (st.plan) renderPlan(); renderCredits(); if (st.final) renderFinal('');
+try { if (sessionStorage.getItem('studijaJump') === 'variants' && st.plan) { sessionStorage.removeItem('studijaJump'); setTimeout(() => $('variants').scrollIntoView({ behavior: 'smooth' }), 300); } } catch {}
 if (/^Remake this viral format/.test(st.idea || '')) { st.idea = ''; save(); } // older version kept the raw format here
 $('ideaText').value = st.idea || ''; renderMirror();
 (async () => {
