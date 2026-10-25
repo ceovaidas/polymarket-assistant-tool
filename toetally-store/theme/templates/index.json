@@ -1,0 +1,208 @@
+{
+  "sections": {
+    "main": {
+      "type": "kb-landing",
+      "blocks": {
+        "marq": {
+          "type": "marquee",
+          "settings": {
+            "items": "10 extra toes | Snaps into your clogs | Instant double-takes | The gag gift of the year | $0 shipping, on us | Order by Dec 3 for Christmas"
+          }
+        },
+        "ico": {
+          "type": "icons",
+          "settings": {
+            "items": "smile | Instant double-takes | Everyone looks twice at your feet\nsnap | Snaps in, pops out | Into the holes of standard clogs\ngift | The gag gift of the year | For the clown of the friend group\ntruck | $0 shipping | On us, with tracking"
+          }
+        },
+        "how": {
+          "type": "steps",
+          "settings": {
+            "eyebrow": "Ready in 30 seconds",
+            "title": "From pack to punchline",
+            "step1_title": "Grab your clogs",
+            "step1_text": "Any classic clog with round holes on top. Clogs are not included.",
+            "step2_title": "Push the toes in",
+            "step2_text": "Press each toe into a front hole until it snaps in. Five per clog, big toe on the inside.",
+            "step3_title": "Walk into the room",
+            "step3_text": "Count how long it takes before someone screams \"WHAT is on your feet?\""
+          }
+        },
+        "f1": {
+          "type": "feature",
+          "settings": {
+            "media_index": 2,
+            "eyebrow": "The joke",
+            "title": "Your clogs, but they grew toes",
+            "text": "<p>Realistic, chubby little toes with pink nails sit right on top of your clogs, like your feet are trying to escape. From two metres away people think they're real. Up close they can't stop laughing.</p>"
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "media_index": 3,
+            "flip": true,
+            "eyebrow": "The gift",
+            "title": "For the clown of your friend group",
+            "text": "<p>Every group has one: the friend who would wear these to a wedding, a job interview and a fishing trip. Give them ten extra toes for a birthday, Secret Santa or white elephant and watch them put them on before they say thank you.</p><p>Get one set for them and one for you with the 2-set bundle.</p>"
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "media_index": 4,
+            "eyebrow": "Two styles",
+            "title": "Clean toes or hairy toes",
+            "text": "<p>Pick <strong>Non-hairy</strong> for the classic \"wait, are those real?\" look, or <strong>Hairy</strong> for the full uncle-at-the-BBQ experience. Same snap-in fit, same laughs.</p>"
+          }
+        },
+        "box": {
+          "type": "box",
+          "settings": {
+            "title": "What's in the pack",
+            "items": "10 toe charms | Five for each clog, left and right\nStyle of your choice | Non-hairy or hairy\nSnap-in fit | For the round holes on top of standard clogs"
+          }
+        },
+        "cmp": {
+          "type": "compare",
+          "settings": {
+            "eyebrow": "Why toes",
+            "title": "Better than another pair of funny socks",
+            "them": "Funny socks",
+            "rows": "People notice from across the room | yes | no\nWorks on the clogs they already wear | yes | no\nTakes 30 seconds to put on | yes | yes\nGets a reaction at every event | yes | no\nUnder $25 | yes | yes",
+            "note": "Socks are fine. Toes are a story people tell for years."
+          }
+        },
+        "lim": {
+          "type": "limits",
+          "settings": {
+            "title": "Good to know before you buy",
+            "text": "<ul><li><strong>Clogs are not included.</strong> You get the 10 toe charms only.</li><li>Made for the round holes on top of standard clogs. Some off-brand clogs have smaller holes, and the toes may not hold there.</li><li>Small parts: not for children under 3.</li><li>They're a joke, not a shoe part: take them off before running, sports or hiking.</li></ul>"
+          }
+        },
+        "rev": {
+          "type": "reviews",
+          "settings": {
+            "title": "From feet that wear them",
+            "note": "Brand new store. Reviews from our customers will appear here, word for word."
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "Will they fit my clogs?",
+            "a": "<p>They're made for the round holes on top of standard clogs. If your clogs have the classic holes, they'll fit. Some off-brand clogs have smaller holes where the toes may not hold.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "Are the clogs included?",
+            "a": "<p>No, you get 10 toe charms (five per clog). They go on the clogs you already have.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "Will it arrive before Christmas?",
+            "a": "<p>Yes, if you order by <strong>December 3</strong>. Delivery takes 7–14 business days with tracking. The delivery window for an order placed today is shown next to the order button.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Hairy or non-hairy?",
+            "a": "<p>Non-hairy is the classic \"are those real?\" look. Hairy is louder and funnier in person. Can't decide? Take the 2-set bundle and get one of each.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "Do they fall out?",
+            "a": "<p>They snap into the holes and stay put for normal walking. Push them all the way in until you feel the click. Take them off before sports or running.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "q": "What if they're not funny enough?",
+            "a": "<p>Send them back within 30 days of delivery for a full refund. (They will be funny.)</p>"
+          }
+        },
+        "promise": {
+          "type": "promise",
+          "settings": {
+            "title": "30 days to try the joke",
+            "text": "Wear them to dinner, the office or a wedding. If nobody laughs, send them back within 30 days of delivery for a full refund."
+          }
+        },
+        "final": {
+          "type": "final_cta",
+          "settings": {
+            "title": "Don't be the one who gives socks again",
+            "text": "Ten toes, one gift, a whole room laughing. Order by December 3 for Christmas."
+          }
+        }
+      },
+      "block_order": [
+        "marq",
+        "ico",
+        "how",
+        "f1",
+        "f2",
+        "f3",
+        "box",
+        "cmp",
+        "lim",
+        "rev",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "promise",
+        "final"
+      ],
+      "settings": {
+        "eyebrow": "🤡 For the clown of your friend group",
+        "headline": "Give your clogs 10 extra toes.",
+        "subhead": "Realistic toe charms that snap into the holes of your clogs. Walk in anywhere and watch every head turn to your feet.",
+        "bullets": "Snaps into standard clog holes in seconds\nSo realistic people look twice\nThe gag gift nobody sees coming",
+        "photo_badge": "Christmas 2026",
+        "review_source": "",
+        "tiers_title": "Choose your toes",
+        "default_tier": 2,
+        "tier1_label": "1 set",
+        "tier1_note": "10 toes, one pair of clogs",
+        "tier1_off": "0",
+        "tier1_badge": "",
+        "tier2_label": "2 sets",
+        "tier2_note": "One for you, one for your clown",
+        "tier2_off": "5.99",
+        "tier2_badge": "Best for gifting",
+        "tier3_label": "3 sets",
+        "tier3_note": "The whole friend group",
+        "tier3_off": "14.98",
+        "tier3_badge": "Best value",
+        "cta": "Get the toes",
+        "sticky_title": "Toe charms · 10-pack",
+        "ship_min": 7,
+        "ship_max": 14,
+        "ship_note": "$0 shipping, on us",
+        "assure_1": "30-day returns",
+        "assure_2": "Secure checkout",
+        "assure_3": "Tracked delivery",
+        "tab1_title": "Why people love them",
+        "tab1_text": "<p>Because nobody expects toes. They turn plain clogs into the funniest thing in the room, and they make the best photos of the night. Put them on before a wedding, a BBQ or a family dinner and you've got the story everyone tells for years.</p>",
+        "tab2_title": "Details & fit",
+        "tab2_text": "<ul><li><strong>In the pack:</strong> 10 toe charms (5 per clog)</li><li><strong>Styles:</strong> Non-hairy or Hairy</li><li><strong>Fits:</strong> the round holes on top of standard clogs</li><li><strong>Clogs:</strong> not included</li><li><strong>Small parts:</strong> not for children under 3</li></ul>",
+        "tab3_title": "Shipping & returns",
+        "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. <strong>For Christmas, order by December 3.</strong> Not funny enough? Send them back within 30 days of delivery for a full refund.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

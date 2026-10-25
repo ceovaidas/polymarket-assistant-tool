@@ -1,0 +1,6 @@
+{
+  "shop": { "name": "toetally.extra", "email": "hello@toetally.shop" },
+  "product": { "title": "Toe Charms for Clogs (10-Pack)", "option": "Style", "price": 2299, "variants": ["Non-hairy", "Hairy"] },
+  "header": { "bar": "Order by Dec 3 for Christmas · $0 shipping, on us · 30-day returns", "cta": "Get the toes" },
+  "footer": { "text": "Ten extra toes for your clogs. Made for the clown of every friend group." }
+}

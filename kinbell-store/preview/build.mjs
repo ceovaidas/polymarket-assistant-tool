@@ -9,7 +9,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const theme = join(here, '..', 'theme');
 const read = (p) => readFileSync(join(theme, p), 'utf8');
 
-const engine = new Liquid({ root: [join(theme, 'snippets')], extname: '.liquid' });
+// STORE_DIR=../angel-store node build.mjs renders another store that reuses these sections (see below);
+// its own theme/snippets and theme/sections win over the shared ones.
+const storeDir = process.env.STORE_DIR ? join(process.cwd(), process.env.STORE_DIR) : join(here, '..');
+const engine = new Liquid({ root: [join(storeDir, 'theme', 'snippets'), join(theme, 'snippets')], extname: '.liquid' });
 engine.registerFilter('money', (c) => '$' + (Number(c) / 100).toFixed(2));
 engine.registerFilter('asset_url', (n) => 'assets/' + n);
 engine.registerFilter('stylesheet_tag', (u) => `<link rel="stylesheet" href="${u}">`);
@@ -35,7 +38,7 @@ engine.registerTag('form', {
 engine.registerTag('schema', { parse(t, remain) { const s = this.liquid.parser.parseStream(remain).on('tag:endschema', () => s.stop()).on('end', () => {}); s.start(); }, render() {} });
 
 function section(file, tplSettings = {}, tplBlocks = {}, order = []) {
-  const src = read(`sections/${file}`);
+  const src = storeRead(`sections/${file}`);
   const schema = JSON.parse(src.match(/{% schema %}([\s\S]*){% endschema %}/)[1]);
   const defaults = (list) => Object.fromEntries((list || []).filter((s) => s.id).map((s) => [s.id, s.default ?? null]));
   const blocks = order.map((id) => {
@@ -49,7 +52,6 @@ function section(file, tplSettings = {}, tplBlocks = {}, order = []) {
 // Sample data: photos are placeholders until the real product is imported.
 // STORE_DIR=../angel-store node build.mjs renders another store that reuses these sections:
 // it brings its own theme/templates, theme/assets/kb-brand.css and preview/store.json (sample data).
-const storeDir = process.env.STORE_DIR ? join(process.cwd(), process.env.STORE_DIR) : join(here, '..');
 const out = join(storeDir, 'preview');
 const storeRead = (p) => { const f = join(storeDir, 'theme', p); return existsSync(f) ? readFileSync(f, 'utf8') : read(p); };
 const cfgFile = join(out, 'store.json');
@@ -86,5 +88,7 @@ const html = [
 mkdirSync(join(out, 'assets'), { recursive: true });
 for (const f of ['kb.css', 'kb.js']) copyFileSync(join(theme, 'assets', f), join(out, 'assets', f));
 writeFileSync(join(out, 'assets', 'kb-brand.css'), storeRead('assets/kb-brand.css'));
+const storeAssets = join(storeDir, 'theme', 'assets');
+if (existsSync(storeAssets)) for (const f of readdirSync(storeAssets).filter((n) => /\.(png|jpe?g|svg|webp)$/.test(n))) copyFileSync(join(storeAssets, f), join(out, 'assets', f));
 writeFileSync(join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${cfg.shop.name}</title><style>body{margin:0;background:#fff}</style></head><body>${html}</body></html>`);
 console.log('wrote', join(out, 'index.html'), 'with', media.length, 'photos');
