@@ -29,6 +29,7 @@ status.
 
 ## Hook text skeletons (proven formats)
 - "DON'T let the clown of your friend group see this 🤣😭" ✅ (toe clogs, 2026-10)
+- "POV: the clown of your friend group restocked 🤣😭" / "…of your fishing crew restocked 🤣🎣" ✅ (trunk reveal)
 - "DON'T show this to [identity] 😂" (a Texas cat dad, a road rage driver, a Thanksgiving uncle,
   someone who needs it daily) ✅ (cat bed, 80-reel batch)
 - "DON'T let a [identity] see this 😂" (a Florida man, an American dad, a PRO prankster)
@@ -44,6 +45,8 @@ CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never
 | Opener | Why | Notes |
 |---|---|---|
 | ✅ Store laugh → camera turns to the product pallet | curiosity + social proof (it's "in stores") | see `clown-friend-group-reveal.md`, product hidden until the pan |
+| ✅ GoPro POV opens a trunk packed with the product, lifts one box to the lens | viewer is the one opening it, abundance = "in stock" | see `gopro-trunk-reveal.md`, worked first try |
+| ✅ 3-2-1 towel reveal of the boxed product (bride on a porch, dad in a kitchen) | countdown + reveal, any setting | end frame edited from the start frame |
 | ✅ 3-2-1 countdown on fingers → blanket pulled off | countdown forces watching to 3 | see `countdown-reveal-everywhere.md` |
 | ✅ Fail by 1 s (pet jumps into the lake) | instant tension | `fail-then-cozy-upgrade.md`, animal always safe |
 | POV hands unboxing on a lap in a car | native, cheap | from the 80-reel batch |
@@ -57,5 +60,5 @@ CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never
 | 2026-10 | cat bed | "Took my cat fishing…" | ✅ liked | attach shot 1 to keep the cat and man the same |
 | 2026-10 | cat bed | "DON'T show this to a Texas cat dad" | tried | start + end frame overshoot: check the last second |
 | 2026-10-25 | toe charms for clogs | "DON'T let the clown of your friend group see this", store laugh → pan to boxes | ✅ liked after 5 tries | product hidden until 2-3 s; end frame made from the start frame stops Kling's inserted cut |
-| 2026-10-25 | toe charms for clogs | 3-2-1 towel reveal of the box (bride on a farmhouse porch; dad in a white kitchen) | sent, waiting for result | end frame = edit of the start frame; box shape under the towel = real box size |
-| 2026-10-25 | toe charms for clogs | GoPro POV opens an SUV trunk packed with boxes, lifts one ("POV: the clown of your friend group restocked") | sent, waiting for result | start frame with no product; end frame edited from it; split into 2 clips if Kling rushes |
+| 2026-10-25 | toe charms for clogs | 3-2-1 towel reveal of the box (bride on a farmhouse porch; dad in a white kitchen) | ✅ made into 2 finished videos | end frame = edit of the start frame; box shape under the towel = real box size |
+| 2026-10-25 | toe charms for clogs | GoPro POV opens a trunk packed with boxes, lifts one (SUV driveway + fishing pickup at a boat ramp) | ✅ proven, user praised it, worked first try | see `gopro-trunk-reveal.md`; end frame edited from the start frame | start frame with no product; end frame edited from it; split into 2 clips if Kling rushes |

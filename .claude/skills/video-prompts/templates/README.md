@@ -8,6 +8,7 @@ user says a generated video worked, save it here as a template with slots (`{PRO
 |---|---|---|---|
 | 3-2-1 reveal → it goes everywhere | `countdown-reveal-everywhere.md` | ✅ proven (user-approved) | portable products, pet products |
 | Took my pet ___ → buddy, upgraded | `fail-then-cozy-upgrade.md` | ✅ liked by user (fix consistency) | pet products, identity niches |
+| GoPro POV trunk reveal ("POV: the clown of your friend group restocked") | `gopro-trunk-reveal.md` | ✅ proven (user praised, first try) | boxed products, niche by vehicle (fishing, hunting, tailgate) |
 | DON'T let the clown of your friend group see this (store laugh → reveal → situations) | `clown-friend-group-reveal.md` | ✅ liked (hook + graduation + library) | gag gifts, wearable novelty products |
 
 Music identified in the reference reels (Shazam): 3-2-1 reveal → *Mambo No. 5 – Pérez Prado*;
