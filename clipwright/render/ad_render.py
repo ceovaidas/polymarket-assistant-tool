@@ -9,9 +9,11 @@ spec.json:
   "font": "/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf",
   "bg": "#0B1F3A", "accent": "#F5B700", "brand": "FJØRD",
   "product": "product.png",                 # real packshot; a white background is cut out automatically
-  "vo": "vo.mp3", "vo_text": "Apversk savo žuvų taukus. ...",   # display words for the captions
+  "vo": "vo.mp3",
   "shots": [                                # in order; each shot lasts while its words are spoken
-    {"kind": "clip", "src": "s1.mp4", "words": 8, "card": {"type": "headline", "top": "APVERSK SAVO", "accent": "ŽUVŲ TAUKUS"}},
+    # vo: caption text for this shot (digits allowed); tts_words: how many words the voice says for it
+    {"kind": "clip", "src": "s1.mp4", "vo": "Apversk savo žuvų taukus.", "tts_words": 4,
+     "card": {"type": "headline", "top": "APVERSK SAVO", "accent": "ŽUVŲ TAUKUS"}},
     {"kind": "product", "src": "s2.png", "words": 6, "card": {"type": "number", "value": "700", "unit": "mg", "label": "OMEGA-3 · 1 KAPSULĖJE"}},
     {"kind": "still", "src": "s3.png", "words": 7, "card": {"type": "pills", "items": ["IFOS žaliava", "Laukinės žuvys"], "stars": true}},
     {"kind": "clip", "src": "s4.mp4", "words": 7, "card": {"type": "checks", "items": ["350 mg EPR", "250 mg DHR"]}, "footnote": true},
@@ -89,16 +91,27 @@ class Ad:
 
     # ---------- timing ----------
     def timeline(self):
-        ws = word_times(self.p(self.s["vo"]))
-        toks = self.s.get("vo_text", "").split() or ["…"] * len(ws)
-        nw, nt = len(ws), len(toks)
-        at = lambda i: ws[min(nw - 1, int(i * nw / nt))]
-        self.caps = [(toks[i], at(i)[0], at(i)[1]) for i in range(nt)]
-        shots, k, starts = self.s["shots"], 0, []
-        for sh in shots:
-            starts.append(0.0 if not starts else max(starts[-1] + 0.8, self.caps[min(k, nt - 1)][1] - 0.12))
-            k += int(sh.get("words", 0))
-        self.total = self.caps[-1][2] + float(self.s.get("tail", 0.9))
+        """Shot spans and caption word times. The voice reads `vo_tts` (numbers spelled out), so each shot's share of
+        the spoken words is its `tts_words`; its caption words (`vo`, with digits) are spread over that share."""
+        ws = word_times(self.p(self.s["vo"])); nw = len(ws)
+        shots = self.s["shots"]
+        disp = [str(sh.get("vo") or "").split() for sh in shots]
+        if not any(disp):  # older specs: one vo_text plus a word count per shot
+            toks, k, disp = self.s.get("vo_text", "").split(), 0, []
+            for sh in shots:
+                disp.append(toks[k:k + int(sh.get("words", 0))]); k += int(sh.get("words", 0))
+        tts = [int(sh.get("tts_words") or len(d) or 1) for sh, d in zip(shots, disp)]
+        total_tts, cum, starts, self.caps = sum(tts), 0, [], []
+        for d, t in zip(disp, tts):
+            a = min(nw - 1, int(cum * nw / total_tts)); b = max(a + 1, min(nw, round((cum + t) * nw / total_tts)))
+            starts.append(0.0 if not starts else max(starts[-1] + 0.8, ws[a][0] - 0.12))
+            for j, tok in enumerate(d):
+                w = ws[a + min(b - a - 1, int(j * (b - a) / len(d)))]
+                self.caps.append((tok, w[0], w[1]))
+            cum += t
+        for j in range(len(self.caps) - 1):  # a word stays until the next one starts
+            tok, s, e = self.caps[j]; self.caps[j] = (tok, s, max(e, min(self.caps[j + 1][1], s + 1.2)))
+        self.total = ws[-1][1] + float(self.s.get("tail", 0.9))
         self.spans = [(starts[i], starts[i + 1] if i + 1 < len(starts) else self.total) for i in range(len(shots))]
 
     # ---------- backgrounds ----------
