@@ -117,7 +117,10 @@
           {%- endfor -%}
           {%- comment -%} Combo card: a second product (the clogs) added with the toes. Never pre-selected. {%- endcomment -%}
           {%- liquid
-            assign cp = section.settings.combo_product
+            assign cp = nil
+            if section.settings.combo_handle != blank
+              assign cp = all_products[section.settings.combo_handle]
+            endif
             assign cq = section.settings.combo_qty
           -%}
           {%- if cp != blank and cq > 0 -%}
@@ -415,7 +418,7 @@
     { "type": "text", "id": "tier3_badge", "label": "Bundle 3: badge", "default": "Best value" },
     { "type": "header", "content": "Combo with a second product" },
     { "type": "paragraph", "content": "Adds a card that puts the toes and this product in the cart together. It is never pre-selected. The price shown must match a real automatic discount (Buy X get Y)." },
-    { "type": "product", "id": "combo_product", "label": "Combo product (clogs)" },
+    { "type": "text", "id": "combo_handle", "label": "Combo product handle (clogs)", "default": "classic-clogs", "info": "The end of the product URL, e.g. classic-clogs for /products/classic-clogs. Empty hides the combo card. (Shopify allows only one product picker per section.)" },
     { "type": "range", "id": "combo_qty", "label": "Toe packs in the combo", "min": 0, "max": 6, "step": 1, "default": 2, "info": "0 hides the combo card." },
     { "type": "text", "id": "combo_label", "label": "Label", "default": "Clogs + 10 toes" },
     { "type": "text", "id": "combo_note", "label": "Note", "default": "Everything they need, ready to wear" },

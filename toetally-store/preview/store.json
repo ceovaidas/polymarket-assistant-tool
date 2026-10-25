@@ -1,7 +1,34 @@
 {
-  "shop": { "name": "toetally.extra", "email": "hello@toetally.shop" },
-  "product": { "title": "Toe Charms for Clogs (5-Pack)", "option": "Style", "price": 1999, "variants": ["Non-hairy", "Hairy", "Mix (hairy + non-hairy)"] },
-  "combo": { "title": "Classic Clogs", "price": 1999, "image": "img/1.jpg", "variants": ["Black / EU 36-37 · US W 6-7 / M 4-5", "Black / EU 40-41 · US W 9-10 / M 7.5-8.5", "White / EU 40-41 · US W 9-10 / M 7.5-8.5"] },
-  "header": { "bar": "Order by Dec 3 for Christmas · $0 shipping, on us · 30-day returns", "cta": "Get the toes" },
-  "footer": { "text": "Ten extra toes for your clogs. Made for the clown of every friend group." }
+  "shop": {
+    "name": "toetally.extra",
+    "email": "hello@toetally.shop"
+  },
+  "product": {
+    "title": "Toe Charms for Clogs (5-Pack)",
+    "option": "Style",
+    "price": 1999,
+    "variants": [
+      "Non-hairy",
+      "Hairy",
+      "Mix (hairy + non-hairy)"
+    ]
+  },
+  "combo": {
+    "title": "Classic Clogs",
+    "price": 1999,
+    "image": "img/1.jpg",
+    "variants": [
+      "Black / EU 36-37 · US W 6-7 / M 4-5",
+      "Black / EU 40-41 · US W 9-10 / M 7.5-8.5",
+      "White / EU 40-41 · US W 9-10 / M 7.5-8.5"
+    ],
+    "handle": "classic-clogs"
+  },
+  "header": {
+    "bar": "Order by Dec 3 for Christmas · $0 shipping, on us · 30-day returns",
+    "cta": "Get the toes"
+  },
+  "footer": {
+    "text": "Ten extra toes for your clogs. Made for the clown of every friend group."
+  }
 }
