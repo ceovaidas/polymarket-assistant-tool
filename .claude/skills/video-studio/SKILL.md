@@ -62,6 +62,17 @@ Read `balance` at the start and at the end; the final line states the true diffe
 - "šablonai" → list the README table (name, best for, cost, last result). Reusing one: ask for the product
   photo and the new world, fill the slots, show the plan, then the same gates.
 
+## Business ads ("reklama įmonėms")
+
+The studio's "Reklama įmonėms" mode makes 15-30 s voiced product ads in the style of premium short business ads
+(dark brand colour, one accent, real packshot, animated cards, Lithuanian voice-over, word-by-word captions, end
+card with the website). Flow: product page URL (read in the sandbox, Claude extracts facts, claims and the image) or
+manual facts → ad plan (one spoken sentence per shot; shot kinds clip / still / product) → images (never drawing the
+packaging; the real packshot is composited) → clips only for clip shots → ElevenLabs v4 voice (`vo_tts` with numbers
+in words) → `clipwright/render/ad_render.py`, which times every shot by the voice. Only facts and claims from the
+brief; regulated claims word for word with their footnote. A real brand used without its consent is a demo only.
+A 15 s ad costs about 25-35 credits.
+
 ## Variants of a winner ("variantai")
 
 When a video gets many views, remake it with minimal changes instead of a new video (the clip-bank lesson
