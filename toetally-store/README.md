@@ -2,22 +2,39 @@
 
 Black + lemon-yellow "sticker" design on the shared one-product landing sections from
 `kinbell-store/theme`. This folder holds the store's templates (copy, bundles), `kb-brand.css`,
-the logo files and its own header, footer and icon snippet (logo from the theme assets, extra icons).
+the logo files, its own header, footer and icon snippet, and its own copy of `kb-landing.liquid`
+with a "Clogs + toes" combo card (`te-combo.js` adds both products to the cart in one request).
 
     python3 build_theme.py /path/to/dawn        # -> dist/toetally-theme.zip
     cd ../kinbell-store/preview && STORE_DIR=../../toetally-store node build.mjs   # preview
 
+## Products and pricing (set up through the Admin API on 2026-10-25)
+| Product (handle) | Variants | Price | Supplier cost |
+|---|---|---|---|
+| Toe Charms for Clogs (5-Pack) (`toe-charms`) | Style: Non-hairy / Hairy / Mix | $19.99 per pack | ≈ $10.50 per 5 toes |
+| Classic Clogs (`classic-clogs`) | Color Black/White × EU 36-45 (US sizes in the names) | $19.99 | ≈ $4.40–4.95 |
+
+Page bundles and the automatic discounts that make checkout match them (already created):
+- 2 packs (10 toes) $34.99: "Toes: 2 packs" $4.99 off, min 2 packs.
+- 4 packs (20 toes) $64.99: "Toes: 4 packs" $14.97 off, min 4 packs (Shopify applies the better one).
+- Clogs + 10 toes $44.99: the 2-pack discount + "Combo" Buy 2 toe packs, get 1 pair of clogs $9.99 off.
+If you change a price, change the matching discount and the bundle amounts in the theme editor.
+
+## DSers mapping (do this before the first order)
+The supplier sells single toes and pairs, so each Shopify 5-pack is a bundle:
+- Non-hairy pack → 2 × "C3-2pcs" + 1 × "C1-1pcs"
+- Hairy pack → 2 × "C4-2pcs" + 1 × "C2-1pcs"
+- Mix pack → 2 × "C5-2pcs" + 1 × "C1-1pcs"
+In DSers: Products → the toe product → Mapping → Bundle mapping, add those supplier variants and quantities.
+Clogs: standard mapping by colour and size.
+
 ## Set up in Shopify
 1. Upload `dist/toetally-theme.zip` (Online Store → Themes → Add theme → Upload zip) and publish it.
-2. Create the product "Toe Charms for Clogs (10-Pack)" with option **Style**: `Non-hairy`, `Hairy`.
-   Price **$22.99** each. No compare-at price unless it is a real earlier selling price.
-3. Theme editor → Home page → One-product landing → pick the product.
-4. Bundles shown on the page: 2 sets **$39.99**, 3 sets **$53.99**. Create two automatic discounts so the
-   checkout matches: $5.99 off the order at min quantity 2, $14.98 off at min quantity 3 (this product only).
-5. Photos (order matters, the feature blocks use photos 2–4): 1 hero on feet, 2 close-up of the toes
-   on clogs, 3 gift / the box, 4 the two styles side by side, then lifestyle shots.
-6. Reviews: only real ones (Judge.me / Loox app block, or "Review" blocks copied word for word).
-7. Pages: refund (30 days), shipping (7–14 business days) and privacy policies, contact email.
+   The home page already points at `toe-charms` and the combo at `classic-clogs`.
+2. Photos are on the product in this order: 1 clogs on yellow, 2 styles, 3 gift, 4–5 charm close-ups;
+   the feature blocks use photos 4, 3 and 2.
+3. Reviews: only real ones (Judge.me / Loox app block, or "Review" blocks copied word for word).
+4. Pages: refund (30 days), shipping (7–14 business days) and privacy policies, contact email.
 
 ## Keep it true
 - The Christmas cut-off (Dec 3) assumes 7–14 business days delivery. Change it if shipping differs.

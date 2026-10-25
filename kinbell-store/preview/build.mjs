@@ -76,6 +76,11 @@ const ctx = {
 const tpl = JSON.parse(storeRead('templates/index.json')).sections.main;
 const land = section('kb-landing.liquid', tpl.settings, tpl.blocks, tpl.block_order);
 land.data.settings.product = product;
+if (cfg.combo) { // optional second product for a store's combo card (toetally-store)
+  const cvars = cfg.combo.variants.map((t, i) => ({ id: 100 + i, title: t, price: cfg.combo.price, available: true }));
+  const cimg = cfg.combo.image ? { preview_image: { src: cfg.combo.image } } : media[0];
+  land.data.settings.combo_product = { title: cfg.combo.title, variants: cvars, selected_or_first_available_variant: cvars[0], featured_media: cimg };
+}
 const head = section('kb-header.liquid', cfg.header || {});
 const foot = section('kb-footer.liquid', cfg.footer || {});
 
@@ -89,6 +94,6 @@ mkdirSync(join(out, 'assets'), { recursive: true });
 for (const f of ['kb.css', 'kb.js']) copyFileSync(join(theme, 'assets', f), join(out, 'assets', f));
 writeFileSync(join(out, 'assets', 'kb-brand.css'), storeRead('assets/kb-brand.css'));
 const storeAssets = join(storeDir, 'theme', 'assets');
-if (existsSync(storeAssets)) for (const f of readdirSync(storeAssets).filter((n) => /\.(png|jpe?g|svg|webp)$/.test(n))) copyFileSync(join(storeAssets, f), join(out, 'assets', f));
+if (existsSync(storeAssets)) for (const f of readdirSync(storeAssets).filter((n) => /\.(png|jpe?g|svg|webp|js)$/.test(n))) copyFileSync(join(storeAssets, f), join(out, 'assets', f));
 writeFileSync(join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${cfg.shop.name}</title><style>body{margin:0;background:#fff}</style></head><body>${html}</body></html>`);
 console.log('wrote', join(out, 'index.html'), 'with', media.length, 'photos');

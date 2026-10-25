@@ -177,3 +177,11 @@
 @media (prefers-reduced-motion: reduce) {
   .kb-btn, .kb-tier { transition: none; }
 }
+
+/* Combo card (toes + clogs) and its clog picker */
+.te-combo .kb-tier__badge { background: var(--te-pink); }
+.te-combo.is-on .kb-tier__badge { background: var(--te-y); }
+.te-addon { display: grid; gap: 8px; padding: 14px; border: var(--te-border); border-radius: 16px; background: #fff; box-shadow: 4px 4px 0 #111; }
+.te-addon[hidden] { display: none; }
+.te-addon .kb-label { font-family: var(--kb-fd); font-weight: 800; }
+.te-addon__note { margin: 0; font-size: 13px; color: var(--kb-ink-3); }
