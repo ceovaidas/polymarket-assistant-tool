@@ -387,9 +387,9 @@ class Ad:
             chain.append(f"[1:a]apad,atrim=0:{T:.2f},asplit=2[vo][key]")
             chain.append(f"[{n}:a]volume={float(music.get('volume', 0.18))},atrim=0:{T:.2f},afade=t=in:d=0.4,afade=t=out:st={T - 1.2:.2f}:d=1.2[m0]")
             chain.append("[m0][key]sidechaincompress=threshold=0.02:ratio=6:attack=20:release=350[m]")
-            chain.append(f"[vo][m]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,atrim=0:{T:.2f}[a]")
+            chain.append(f"[vo][m]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,atrim=0:{T:.2f},loudnorm=I=-14:TP=-1.5:LRA=11[a]")
         else:
-            chain.append(f"[1:a]apad,atrim=0:{T:.2f},afade=t=out:st={T - 0.3:.2f}:d=0.3[a]")
+            chain.append(f"[1:a]apad,atrim=0:{T:.2f},afade=t=out:st={T - 0.3:.2f}:d=0.3,loudnorm=I=-14:TP=-1.5:LRA=11[a]")  # social loudness
         out = self.p(self.s.get("out", "final.mp4"))
         run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", ";".join(chain), "-map", f"[{last}]", "-map", "[a]",
              "-t", f"{T:.2f}", "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p",
