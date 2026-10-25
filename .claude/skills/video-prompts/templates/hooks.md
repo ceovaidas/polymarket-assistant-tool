@@ -57,3 +57,5 @@ CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never
 | 2026-10 | cat bed | "Took my cat fishing…" | ✅ liked | attach shot 1 to keep the cat and man the same |
 | 2026-10 | cat bed | "DON'T show this to a Texas cat dad" | tried | start + end frame overshoot: check the last second |
 | 2026-10-25 | toe charms for clogs | "DON'T let the clown of your friend group see this", store laugh → pan to boxes | ✅ liked after 5 tries | product hidden until 2-3 s; end frame made from the start frame stops Kling's inserted cut |
+| 2026-10-25 | toe charms for clogs | 3-2-1 towel reveal of the box (bride on a farmhouse porch; dad in a white kitchen) | sent, waiting for result | end frame = edit of the start frame; box shape under the towel = real box size |
+| 2026-10-25 | toe charms for clogs | GoPro POV opens an SUV trunk packed with boxes, lifts one ("POV: the clown of your friend group restocked") | sent, waiting for result | start frame with no product; end frame edited from it; split into 2 clips if Kling rushes |
