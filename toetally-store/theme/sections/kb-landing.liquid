@@ -16,7 +16,23 @@
   endif
   assign rating = p.metafields.reviews.rating.value.rating | default: p.metafields.reviews.rating.value
   assign rating_count = p.metafields.reviews.rating_count.value | default: 0
-  assign brand = shop.name
+  assign brand = section.settings.brand_name | default: shop.name
+  comment
+    Combo (toetally): a second product picked by handle, because Shopify allows one product picker per section.
+  endcomment
+  assign cp = nil
+  if section.settings.combo_handle != blank
+    assign cp = all_products[section.settings.combo_handle]
+  endif
+  assign cq = section.settings.combo_qty
+  assign has_combo = false
+  if cp != blank and cq > 0
+    assign has_combo = true
+    assign cv = cp.selected_or_first_available_variant
+    assign c_off = section.settings.combo_off | times: 100 | round
+    assign c_full = unit | times: cq | plus: cv.price
+    assign c_price = c_full | minus: c_off
+  endif
 -%}
 {{ 'kb.css' | asset_url | stylesheet_tag }}
 {{ 'kb-brand.css' | asset_url | stylesheet_tag }}
@@ -71,10 +87,31 @@
         {%- if section.settings.go_to_checkout -%}<input type="hidden" name="return_to" value="/checkout">{%- endif -%}
         <input type="hidden" name="quantity" value="1" data-kb-qty>
 
+        {%- if has_combo -%}
+          <div class="te-choice" role="group" aria-labelledby="te-choice-{{ section.id }}">
+            <p class="kb-label" id="te-choice-{{ section.id }}"><span class="te-step">1</span>{{ section.settings.choice_title }}</p>
+            <div class="te-choice__opts">
+              <button type="button" class="te-choice__opt is-on" data-te-mode="toes" aria-pressed="true">
+                <span class="te-choice__ic" aria-hidden="true">🦶</span>
+                <b>{{ section.settings.choice_toes }}</b>
+                <small>{{ section.settings.choice_toes_note }}</small>
+                <span class="te-choice__price">from {{ unit | money }}</span>
+              </button>
+              <button type="button" class="te-choice__opt" data-te-mode="combo" aria-pressed="false">
+                {%- if section.settings.combo_badge != blank -%}<span class="te-choice__badge">{{ section.settings.combo_badge }}</span>{%- endif -%}
+                <span class="te-choice__ic" aria-hidden="true">👟</span>
+                <b>{{ section.settings.choice_combo }}</b>
+                <small>{{ section.settings.choice_combo_note }}</small>
+                <span class="te-choice__price">{{ c_price | money }}{% if c_off > 0 %} <s>{{ c_full | money }}</s>{% endif %}</span>
+              </button>
+            </div>
+          </div>
+        {%- endif -%}
+
         {%- if p.has_only_default_variant -%}
           <input type="hidden" name="id" value="{{ v.id }}">
         {%- else -%}
-          <label class="kb-label" for="kb-variant-{{ section.id }}">{{ p.options.first }}</label>
+          <label class="kb-label" for="kb-variant-{{ section.id }}">{%- if has_combo -%}<span class="te-step">2</span>{%- endif -%}{{ section.settings.style_label | default: p.options.first }}</label>
           <select class="kb-select" id="kb-variant-{{ section.id }}" name="id" data-kb-variant>
             {%- for vv in p.variants -%}
               <option value="{{ vv.id }}" data-price="{{ vv.price }}"{% if vv.id == v.id %} selected{% endif %}{% unless vv.available %} disabled{% endunless %}>{{ vv.title }}{% unless vv.available %} (sold out){% endunless %}</option>
@@ -83,7 +120,7 @@
         {%- endif -%}
 
         <fieldset class="kb-tiers">
-          <legend class="kb-label">{{ section.settings.tiers_title }}</legend>
+          <legend class="kb-label">{%- if has_combo -%}<span class="te-step">3</span>{%- endif -%}<span data-te-legend data-toes="{{ section.settings.tiers_title | escape }}" data-combo="{{ section.settings.combo_title | escape }}">{{ section.settings.tiers_title }}</span></legend>
           {%- for i in (1..3) -%}
             {%- liquid
               assign qk = 'tier' | append: i | append: '_qty'
@@ -115,21 +152,7 @@
               </label>
             {%- endif -%}
           {%- endfor -%}
-          {%- comment -%} Combo card: a second product (the clogs) added with the toes. Never pre-selected. {%- endcomment -%}
-          {%- liquid
-            assign cp = nil
-            if section.settings.combo_handle != blank
-              assign cp = all_products[section.settings.combo_handle]
-            endif
-            assign cq = section.settings.combo_qty
-          -%}
-          {%- if cp != blank and cq > 0 -%}
-            {%- liquid
-              assign cv = cp.selected_or_first_available_variant
-              assign c_off = section.settings.combo_off | times: 100 | round
-              assign c_full = unit | times: cq | plus: cv.price
-              assign c_price = c_full | minus: c_off
-            -%}
+          {%- if has_combo -%}
             <label class="kb-tier te-combo">
               <input type="radio" name="kb-tier" value="{{ cq }}" data-off="{{ c_off }}" data-te-combo data-addon-price="{{ cv.price }}">
               <span class="kb-tier__dot" aria-hidden="true"></span>
@@ -144,20 +167,26 @@
                 <b data-kb-tier-price>{{ c_price | money }}</b>
                 {%- if c_off > 0 -%}<s data-kb-tier-full>{{ c_full | money }}</s><small class="kb-tier__save">${{ section.settings.combo_off }} to spend</small>{%- endif -%}
               </span>
-              {%- if section.settings.combo_badge != blank -%}<span class="kb-tier__badge">{{ section.settings.combo_badge }}</span>{%- endif -%}
             </label>
           {%- endif -%}
         </fieldset>
 
-        {%- if cp != blank and cq > 0 -%}
+        {%- if has_combo -%}
           <div class="te-addon" data-te-addon hidden>
-            <label class="kb-label" for="te-addon-{{ section.id }}">{{ section.settings.combo_variant_label }}</label>
-            <select class="kb-select" id="te-addon-{{ section.id }}" data-te-addon-variant>
-              {%- for vv in cp.variants -%}
-                <option value="{{ vv.id }}" data-price="{{ vv.price }}"{% if vv.id == cv.id %} selected{% endif %}{% unless vv.available %} disabled{% endunless %}>{{ vv.title }}{% unless vv.available %} (sold out){% endunless %}</option>
+            <p class="te-addon__title">{{ section.settings.combo_variant_label }}</p>
+            <input type="hidden" data-te-addon-variant value="{{ cv.id }}">
+            <script type="application/json" data-te-addon-json>{{ cp.variants | json }}</script>
+            <div class="te-addon__row">
+              {%- for opt in cp.options_with_values -%}
+                <label class="te-addon__field">
+                  <span>{{ opt.name }}</span>
+                  <select class="kb-select" data-te-addon-opt="{{ forloop.index0 }}">
+                    {%- for val in opt.values -%}<option value="{{ val | escape }}"{% if cv.options[forloop.parentloop.index0] == val %} selected{% endif %}>{{ val }}</option>{%- endfor -%}
+                  </select>
+                </label>
               {%- endfor -%}
-            </select>
-            <p class="te-addon__note">{{ section.settings.combo_variant_note }}</p>
+            </div>
+            <p class="te-addon__note" data-te-addon-note>{{ section.settings.combo_variant_note }}</p>
           </div>
         {%- endif -%}
 
@@ -416,16 +445,24 @@
     { "type": "text", "id": "tier3_note", "label": "Bundle 3: note", "default": "Grandparents' home + a spare" },
     { "type": "text", "id": "tier3_off", "label": "Bundle 3: $ off (e.g. 19.99)", "default": "44.98" },
     { "type": "text", "id": "tier3_badge", "label": "Bundle 3: badge", "default": "Best value" },
-    { "type": "header", "content": "Combo with a second product" },
-    { "type": "paragraph", "content": "Adds a card that puts the toes and this product in the cart together. It is never pre-selected. The price shown must match a real automatic discount (Buy X get Y)." },
-    { "type": "text", "id": "combo_handle", "label": "Combo product handle (clogs)", "default": "classic-clogs", "info": "The end of the product URL, e.g. classic-clogs for /products/classic-clogs. Empty hides the combo card. (Shopify allows only one product picker per section.)" },
-    { "type": "range", "id": "combo_qty", "label": "Toe packs in the combo", "min": 0, "max": 6, "step": 1, "default": 2, "info": "0 hides the combo card." },
-    { "type": "text", "id": "combo_label", "label": "Label", "default": "Clogs + 10 toes" },
-    { "type": "text", "id": "combo_note", "label": "Note", "default": "Everything they need, ready to wear" },
-    { "type": "text", "id": "combo_off", "label": "Amount off the combo (USD)", "default": "14.98", "info": "Total of the toe bundle discount and the clogs discount." },
-    { "type": "text", "id": "combo_badge", "label": "Badge", "default": "Best deal" },
-    { "type": "text", "id": "combo_variant_label", "label": "Variant picker label", "default": "Clog colour and size" },
-    { "type": "text", "id": "combo_variant_note", "label": "Under the picker", "default": "Between sizes? Take the bigger one." },
+    { "type": "header", "content": "Toes or clogs + toes" },
+    { "type": "paragraph", "content": "Step 1 asks what they need. \"Clogs + toes\" adds the combo product (by handle) with the toe packs. Nothing is pre-selected for the combo; its price must match a real automatic discount (Buy X get Y)." },
+    { "type": "text", "id": "combo_handle", "label": "Combo product handle (clogs)", "default": "classic-clogs", "info": "End of the product URL, e.g. classic-clogs. Empty hides the choice." },
+    { "type": "range", "id": "combo_qty", "label": "Toe packs in the combo", "min": 0, "max": 6, "step": 1, "default": 2 },
+    { "type": "text", "id": "combo_off", "label": "Amount off the combo (USD)", "default": "14.98", "info": "Toe bundle discount + clogs discount." },
+    { "type": "text", "id": "choice_title", "label": "Step 1 title", "default": "What do you need?" },
+    { "type": "text", "id": "choice_toes", "label": "Option: toes", "default": "Just the toes" },
+    { "type": "text", "id": "choice_toes_note", "label": "Option: toes note", "default": "I already have clogs" },
+    { "type": "text", "id": "choice_combo", "label": "Option: combo", "default": "Clogs + toes" },
+    { "type": "text", "id": "choice_combo_note", "label": "Option: combo note", "default": "Everything, ready to wear" },
+    { "type": "text", "id": "style_label", "label": "Step 2 title (toe style)", "default": "Toe style" },
+    { "type": "text", "id": "combo_title", "label": "Step 3 title in combo mode", "default": "Your combo" },
+    { "type": "text", "id": "combo_label", "label": "Combo card label", "default": "Clogs + 10 toes" },
+    { "type": "text", "id": "combo_note", "label": "Combo card note", "default": "1 pair of clogs + 2 toe packs" },
+    { "type": "text", "id": "combo_badge", "label": "Combo badge", "default": "Best deal" },
+    { "type": "text", "id": "combo_variant_label", "label": "Clog picker title", "default": "Pick your clogs" },
+    { "type": "text", "id": "combo_variant_note", "label": "Under the clog picker", "default": "Between sizes? Take the bigger one." },
+    { "type": "text", "id": "brand_name", "label": "Brand name (comparison table)", "default": "toetally.extra" },
     { "type": "header", "content": "Button and delivery" },
     { "type": "text", "id": "cta", "label": "Button text", "default": "Get peace of mind" },
     { "type": "checkbox", "id": "go_to_checkout", "label": "Button goes straight to checkout", "default": true },

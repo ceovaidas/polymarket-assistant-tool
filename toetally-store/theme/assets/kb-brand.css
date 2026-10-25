@@ -178,10 +178,61 @@
   .kb-btn, .kb-tier { transition: none; }
 }
 
-/* Combo card (toes + clogs) and its clog picker */
-.te-combo .kb-tier__badge { background: var(--te-pink); }
-.te-combo.is-on .kb-tier__badge { background: var(--te-y); }
-.te-addon { display: grid; gap: 8px; padding: 14px; border: var(--te-border); border-radius: 16px; background: #fff; box-shadow: 4px 4px 0 #111; }
+/* Step labels */
+.te-step { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%; background: #111; color: var(--te-y); font: 800 13px/1 var(--kb-fb); vertical-align: 2px; }
+.kb-tiers legend .te-step { margin-right: 0; }
+
+/* Step 1: just the toes / clogs + toes */
+.te-choice { display: grid; gap: 10px; }
+.te-choice .kb-label { font-family: var(--kb-fd); font-weight: 800; font-size: 18px; color: #111; }
+.te-choice__opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.te-choice__opt { position: relative; display: grid; justify-items: center; align-content: start; gap: 4px; padding: 18px 10px 14px; border: var(--te-border); border-radius: 18px; background: #fff; color: #111; font: inherit; text-align: center; cursor: pointer; box-shadow: 4px 4px 0 #111; transition: transform .12s, box-shadow .12s, background .15s; }
+.te-choice__opt:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 #111; }
+.te-choice__opt:focus-visible { outline: 3px solid #111; outline-offset: 3px; }
+.te-choice__opt.is-on { background: #111; color: #fff; box-shadow: 4px 4px 0 #111, 4px 4px 0 2px var(--te-y); }
+.te-choice__ic { font-size: 30px; line-height: 1; }
+.te-choice__opt b { font: 800 18px/1.1 var(--kb-fd); }
+.te-choice__opt small { font-size: 13px; color: var(--kb-ink-3); line-height: 1.3; }
+.te-choice__opt.is-on small { color: rgba(255, 255, 255, .72); }
+.te-choice__price { margin-top: 4px; padding: 3px 10px; border-radius: 999px; background: var(--te-y); color: #111; border: 2px solid #111; font: 800 14px/1.3 var(--kb-fd); }
+.te-choice__price s { font-weight: 600; opacity: .6; }
+.te-choice__badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%) rotate(-2deg); padding: 3px 12px; border-radius: 999px; background: var(--te-pink); border: 2px solid #111; color: #111; font: 800 11px/1.4 var(--kb-fb); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+
+/* Mode: toe bundles, or only the combo card + clog picker */
+.kb:not(.te-mode-combo) .te-combo { display: none; }
+.te-mode-combo .kb-tier:not(.te-combo) { display: none; }
+.te-combo .kb-tier__img img { object-fit: contain; background: #fff; }
+
+/* Clog picker */
+.te-addon { display: grid; gap: 10px; padding: 14px; border: var(--te-border); border-radius: 16px; background: #fff; box-shadow: 4px 4px 0 #111; }
 .te-addon[hidden] { display: none; }
-.te-addon .kb-label { font-family: var(--kb-fd); font-weight: 800; }
+.te-addon__title { margin: 0; font: 800 17px/1.2 var(--kb-fd); color: #111; }
+.te-addon__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 10px; }
+.te-addon__field { display: grid; gap: 4px; font-size: 13px; font-weight: 800; color: #111; }
+.te-addon__field .kb-select { width: 100%; min-width: 0; font-size: 15px; box-shadow: 2px 2px 0 #111; }
 .te-addon__note { margin: 0; font-size: 13px; color: var(--kb-ink-3); }
+
+/* Gallery: photos are 3:4, fill the frame */
+.kb-gallery__main { aspect-ratio: 3 / 4; }
+.kb-gallery__slide img { object-fit: cover; }
+@media (max-width: 899px) { .kb-hero .kb-gallery__main { max-height: 72vh; margin-inline: auto; } }
+
+/* Tabs: inner padding inside the sticker cards */
+.kb-tabs { border-top: 0; display: grid; gap: 12px; }
+.kb-tab summary { padding: 14px 16px; }
+.kb-tab .kb-rte { padding: 0 16px 16px; }
+
+/* Phones: bundle cards on two rows, nothing sticks out */
+@media (max-width: 480px) {
+  .kb-tier { grid-template-columns: 20px 48px minmax(0, 1fr); column-gap: 10px; row-gap: 6px; padding: 16px 12px 12px; }
+  .kb-tier__img { width: 48px; height: 48px; }
+  .kb-tier__price { grid-column: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; text-align: left; }
+  .kb-tier__main b { font-size: 17px; }
+  .te-choice__opts { gap: 10px; }
+  .te-choice__opt { padding: 18px 8px 12px; }
+  .te-choice__opt b { font-size: 16px; }
+  .kb-h1 { font-size: 40px; }
+  .te-addon__row { grid-template-columns: 1fr; }
+  .kb-btn--big { font-size: 18px; letter-spacing: .02em; padding-inline: 18px; }
+  .kb-hero { padding-top: 18px; }
+}

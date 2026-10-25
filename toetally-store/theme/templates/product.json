@@ -205,12 +205,15 @@
         "tier3_qty": 4,
         "combo_qty": 2,
         "combo_label": "Clogs + 10 toes",
-        "combo_note": "Black or white clogs with 2 toe packs, ready to wear",
         "combo_off": "14.98",
         "combo_badge": "Best deal",
-        "combo_variant_label": "Clog colour and size",
         "combo_variant_note": "Between sizes? Take the bigger one.",
-        "combo_handle": "classic-clogs"
+        "combo_handle": "classic-clogs",
+        "combo_note": "1 pair of clogs + 2 toe packs",
+        "combo_variant_label": "Pick your clogs",
+        "brand_name": "toetally.extra",
+        "combo_title": "Your combo",
+        "style_label": "Toe style"
       }
     }
   },
