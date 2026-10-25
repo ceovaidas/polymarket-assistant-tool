@@ -28,15 +28,6 @@
             "step3_text": "Count how long it takes before someone screams \"WHAT is on your feet?\""
           }
         },
-        "f1": {
-          "type": "feature",
-          "settings": {
-            "media_index": 4,
-            "eyebrow": "The joke",
-            "title": "Your clogs, but they grew toes",
-            "text": "<p>Each charm is a chunky, realistic rubber toe with a little plug underneath. Push five into the front holes and your clogs look like your feet are trying to escape. From two metres away people think they're real. Up close they can't stop laughing.</p>"
-          }
-        },
         "f2": {
           "type": "feature",
           "settings": {
@@ -142,13 +133,22 @@
             "title": "Don't be the one who gives socks again",
             "text": "Five toes, one gift, a whole room laughing. Order by December 3 for Christmas."
           }
+        },
+        "anat": {
+          "type": "anatomy",
+          "settings": {
+            "media_index": 5,
+            "eyebrow": "Up close",
+            "title": "What you actually get",
+            "notes": "smile | Realistic rubber toe | Skin tone, a real-looking nail and creases\nsnap | Push-in plug | Fits the round holes on top of standard clogs\ncamera | Clean or hairy | Pick non-hairy, hairy or a mix of both\ncheck | Sold in packs of 5 | Take 2 packs for both clogs"
+          }
         }
       },
       "block_order": [
         "marq",
         "ico",
         "how",
-        "f1",
+        "anat",
         "f2",
         "f3",
         "box",
@@ -165,11 +165,11 @@
         "final"
       ],
       "settings": {
-        "eyebrow": "🤡 For the clown of your friend group",
-        "headline": "Give your clogs 10 extra toes.",
+        "eyebrow": "Made for the clown of every friend group",
+        "headline": "Toe Charms for Clogs",
         "subhead": "Realistic rubber toes that push into the holes of your clogs. Walk in anywhere and watch every head turn to your feet.",
-        "bullets": "Push into standard clog holes in seconds\nSo realistic people look twice\nSold in packs of 5: take 2 packs for both clogs",
-        "photo_badge": "Christmas 2026",
+        "bullets": "Push into any clog hole\nRealistic rubber toes\nClean, hairy or mix\nGag gift of the year",
+        "photo_badge": "Gag gift 2026",
         "review_source": "",
         "tiers_title": "Choose your toes",
         "default_tier": 2,
@@ -185,7 +185,7 @@
         "tier3_note": "You + your clown, both clogs",
         "tier3_off": "14.97",
         "tier3_badge": "Best value",
-        "cta": "Get the toes",
+        "cta": "Add to cart",
         "sticky_title": "Toe charms for clogs",
         "ship_min": 7,
         "ship_max": 14,
@@ -213,7 +213,13 @@
         "combo_variant_label": "Pick your clogs",
         "brand_name": "toetally.extra",
         "combo_title": "Your combo",
-        "style_label": "Toe style"
+        "style_label": "Toe style",
+        "tiles": "smile | Instant double-takes\nsnap | Push in, pop out\ngift | Gag gift of the year",
+        "price_note": "5 toes",
+        "pack_size": 5,
+        "value_title": "Clogs + toes combo:",
+        "value_cta": "Take the combo",
+        "value_toe_media": 4
       }
     }
   },

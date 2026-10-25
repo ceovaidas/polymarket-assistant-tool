@@ -42,6 +42,7 @@
   {%- comment -%} ===== HERO: gallery + buy box ===== {%- endcomment -%}
   <section class="kb-hero kb-wrap">
     <div class="kb-gallery" data-kb-gallery>
+      <div class="te-stage">
       <div class="kb-gallery__main">
         {%- if p.media.size > 0 -%}
           {%- for m in p.media limit: 8 -%}
@@ -53,6 +54,16 @@
           <figure class="kb-gallery__slide is-on kb-ph">{{ 'product-1' | placeholder_svg_tag }}</figure>
         {%- endif -%}
         {%- if section.settings.photo_badge != blank -%}<span class="kb-gallery__badge">{{ section.settings.photo_badge }}</span>{%- endif -%}
+      </div>
+      {%- assign tiles = section.settings.tiles | newline_to_br | split: '<br />' -%}
+      {%- if section.settings.tiles != blank -%}
+        <ul class="te-tiles">
+          {%- for t in tiles -%}{%- assign row = t | strip -%}{%- if row != blank -%}
+            {%- assign c = row | split: '|' -%}{%- assign icn = c[0] | strip -%}
+            <li class="te-tile">{%- render 'kb-icon', name: icn -%}<span>{{ c[1] | strip }}</span></li>
+          {%- endif -%}{%- endfor -%}
+        </ul>
+      {%- endif -%}
       </div>
       {%- if p.media.size > 1 -%}
         <div class="kb-gallery__thumbs" role="tablist" aria-label="Product photos">
@@ -66,7 +77,9 @@
     </div>
 
     <div class="kb-buy" id="kb-buy">
-      {%- if section.settings.eyebrow != blank -%}<p class="kb-pill">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.eyebrow != blank and rating_count == 0 -%}
+        <p class="te-proof"><span class="te-proof__faces" aria-hidden="true"><i>🤡</i><i>🦶</i><i>👟</i></span><span>{{ section.settings.eyebrow }}</span></p>
+      {%- endif -%}
       {%- if rating != blank and rating_count > 0 -%}
         <a class="kb-rating" href="#kb-reviews">
           <span class="kb-stars" style="--r: {{ rating | times: 20 }}%" aria-hidden="true"></span>
@@ -75,6 +88,12 @@
         </a>
       {%- endif -%}
       <h1 class="kb-h1">{{ section.settings.headline | default: p.title }}</h1>
+      <p class="te-price">
+        <b data-kb-cta-price>{{ unit | money }}</b>
+        <s data-te-full hidden></s>
+        <span class="te-price__save" data-te-save hidden></span>
+        {%- if section.settings.price_note != blank -%}<small class="te-price__note" data-te-note data-pack="{{ section.settings.pack_size }}">{{ section.settings.price_note }}</small>{%- endif -%}
+      </p>
 
       {%- if section.settings.subhead != blank -%}<p class="kb-sub">{{ section.settings.subhead }}</p>{%- endif -%}
 
@@ -195,6 +214,34 @@
         </button>
       {%- endform -%}
 
+      {%- if has_combo and section.settings.value_title != blank -%}
+        {%- liquid
+          assign toe_img = p.featured_media
+          if section.settings.value_toe_media > 0 and p.media.size >= section.settings.value_toe_media
+            assign vi = section.settings.value_toe_media | minus: 1
+            assign toe_img = p.media[vi]
+          endif
+        -%}
+        <div class="te-value">
+          <p class="te-value__title">{%- render 'kb-icon', name: 'gift' -%}<b>{{ section.settings.value_title }}</b> <span>worth {{ c_full | money }}, yours for {{ c_price | money }}</span></p>
+          <ul class="te-value__items">
+            <li>
+              <span class="te-value__tag">{{ cv.price | money }}</span>
+              <span class="te-value__img">{%- if cp.featured_media != blank -%}{{ cp.featured_media.preview_image | image_url: width: 220 | image_tag: loading: 'lazy', alt: cp.title }}{%- endif -%}</span>
+              <span class="te-value__name">1 pair of clogs</span>
+            </li>
+            {%- for k in (1..cq) -%}
+              <li>
+                <span class="te-value__tag">{{ unit | money }}</span>
+                <span class="te-value__img">{%- if toe_img != blank -%}{{ toe_img.preview_image | image_url: width: 220 | image_tag: loading: 'lazy', alt: p.title }}{%- endif -%}</span>
+                <span class="te-value__name">Toe pack {{ k }} · 5 toes</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+          <button type="button" class="te-value__go" data-te-mode="combo">{{ section.settings.value_cta }} →</button>
+        </div>
+      {%- endif -%}
+
       <p class="kb-eta" data-kb-eta>
         {%- render 'kb-icon', name: 'truck' -%}
         <span>Order today, delivered in <b>{{ section.settings.ship_min }}–{{ section.settings.ship_max }} business days</b>{% if section.settings.ship_note != blank %} · {{ section.settings.ship_note }}{% endif %}</span>
@@ -282,6 +329,33 @@
             {%- if block.settings.eyebrow != blank -%}<p class="kb-eyebrow">{{ block.settings.eyebrow }}</p>{%- endif -%}
             <h2 class="kb-h2">{{ block.settings.title }}</h2>
             <div class="kb-rte">{{ block.settings.text }}</div>
+          </div>
+        </section>
+
+      {%- when 'anatomy' -%}
+        {%- liquid
+          assign aimg = block.settings.image
+          if aimg == blank and p.media.size > 0
+            assign ai = block.settings.media_index | minus: 1
+            assign aimg = p.media[ai].preview_image
+          endif
+          assign notes = block.settings.notes | newline_to_br | split: '<br />'
+        -%}
+        <section class="te-anatomy kb-wrap" {{ block.shopify_attributes }}>
+          <div class="te-anatomy__card">
+            <div class="te-anatomy__head">
+              {%- if block.settings.eyebrow != blank -%}<p class="kb-eyebrow">{{ block.settings.eyebrow }}</p>{%- endif -%}
+              <h2 class="kb-h2">{{ block.settings.title }}</h2>
+            </div>
+            <div class="te-anatomy__body">
+              <div class="te-anatomy__img">{%- if aimg != blank -%}{{ aimg | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.title }}{%- endif -%}</div>
+              <ul class="te-anatomy__notes">
+                {%- for n in notes -%}{%- assign row = n | strip -%}{%- if row != blank -%}
+                  {%- assign c = row | split: '|' -%}{%- assign icn = c[0] | strip -%}
+                  <li class="te-anatomy__note te-anatomy__note--{{ forloop.index }}">{%- render 'kb-icon', name: icn -%}<b>{{ c[1] | strip }}</b>{%- if c[2] -%}<span>{{ c[2] | strip }}</span>{%- endif -%}</li>
+                {%- endif -%}{%- endfor -%}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -462,6 +536,12 @@
     { "type": "text", "id": "combo_badge", "label": "Combo badge", "default": "Best deal" },
     { "type": "text", "id": "combo_variant_label", "label": "Clog picker title", "default": "Pick your clogs" },
     { "type": "text", "id": "combo_variant_note", "label": "Under the clog picker", "default": "Between sizes? Take the bigger one." },
+    { "type": "textarea", "id": "tiles", "label": "Tiles next to the photo (icon | text, 3 lines)", "info": "Icons: smile, snap, gift, camera, check, truck, shield", "default": "smile | Instant double-takes\nsnap | Push in, pop out\ngift | Gag gift of the year" },
+    { "type": "text", "id": "price_note", "label": "Small note next to the price", "default": "per pack of 5 toes" },
+    { "type": "number", "id": "pack_size", "label": "Toes per pack (for the price note)", "default": 5 },
+    { "type": "text", "id": "value_title", "label": "Combo value row title", "default": "Clogs + toes combo:" },
+    { "type": "text", "id": "value_cta", "label": "Combo value row button", "default": "Take the combo" },
+    { "type": "range", "id": "value_toe_media", "label": "Toe photo nr. in the value row", "min": 0, "max": 10, "step": 1, "default": 4, "info": "0 = main photo" },
     { "type": "text", "id": "brand_name", "label": "Brand name (comparison table)", "default": "toetally.extra" },
     { "type": "header", "content": "Button and delivery" },
     { "type": "text", "id": "cta", "label": "Button text", "default": "Get peace of mind" },
@@ -499,6 +579,13 @@
       { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
       { "type": "text", "id": "title", "label": "Title", "default": "Feature title" },
       { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Describe what this part does and why it matters.</p>" }
+    ]},
+    { "type": "anatomy", "name": "Product anatomy", "limit": 1, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Photo (white background works best)" },
+      { "type": "range", "id": "media_index", "label": "Or use product photo nr.", "min": 1, "max": 10, "step": 1, "default": 5 },
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Up close" },
+      { "type": "text", "id": "title", "label": "Title", "default": "What you actually get" },
+      { "type": "textarea", "id": "notes", "label": "Notes (icon | title | text, up to 4 lines)", "default": "smile | Realistic rubber toe | Skin tone, nail and creases\nsnap | Push-in plug | Fits the round holes of standard clogs" }
     ]},
     { "type": "box", "name": "What's in the box", "limit": 1, "settings": [
       { "type": "text", "id": "title", "label": "Title", "default": "What's in the box" },
