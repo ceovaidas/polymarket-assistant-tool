@@ -318,35 +318,54 @@ class Ad:
         path = str(self.work / "grad.png"); img.save(path); return path
 
     def captions(self):
-        """One PNG per spoken word: the sentence in white, the current word on an accent highlight."""
-        f = self.font(56, "body", 800); out = []; sentences, cur = [], []
-        for c in self.caps:
+        """Short caption chunks (up to 3 words) that build up word by word as they are spoken, like premium social ads:
+        clean heavy sans, white with a soft shadow and a thin outline, one key word in the accent colour (a number,
+        or a word marked *like this* in `vo`). Each chunk fades and rises in."""
+        f = self.font(76, "body", 800); space = f.getlength(" "); out = []
+        caps = []
+        for c in self.caps:  # dashes are dropped; symbols like "%" or "€" stay glued to the word before
+            if c[0] in ("–", "-", "—"): continue
+            if caps and not any(ch.isalnum() for ch in c[0].replace("%", "")) or (caps and c[0].strip(".,?!") in ("%", "€", "mg/kg")):
+                t, a_, b_ = caps[-1]; caps[-1] = (f"{t} {c[0]}", a_, c[2]); continue
+            caps.append(c)
+        chunks, cur = [], []
+        for c in caps:
+            text = c[0].replace("*", "")
+            if cur and (len(cur) >= 3 or len(" ".join(x[0].replace("*", "") for x in cur + [c])) > 22):
+                chunks.append(cur); cur = []
             cur.append(c)
-            if c[0][-1] in ".?!": sentences.append(cur); cur = []
-        if cur: sentences.append(cur)
-        space = f.getlength(" ")
-        for ph in sentences:
-            toks = [c[0] for c in ph]; lines, line = [], []
-            for k in range(len(toks)):
-                if line and f.getlength(" ".join(toks[j] for j in line + [k])) > self.W * 0.82: lines.append(line); line = []
-                line.append(k)
+            if text[-1:] in ".,?!:;": chunks.append(cur); cur = []
+        if cur: chunks.append(cur)
+        for ch in chunks:
+            toks = [c[0].replace("*", "").rstrip(".,;:") or c[0] for c in ch]  # no full stops on screen
+            marked = [j for j, c in enumerate(ch) if c[0].startswith("*")]
+            digits = [j for j, t in enumerate(toks) if any(x.isdigit() for x in t)]
+            key = (marked or digits or [None])[0]
+            lines, line = [], []
+            for j in range(len(toks)):
+                if line and f.getlength(" ".join(toks[x] for x in line + [j])) > self.W * 0.82: lines.append(line); line = []
+                line.append(j)
             lines.append(line)
-            for k, c in enumerate(ph):
-                img = self.canvas(); d = ImageDraw.Draw(img); y = self.H * 0.785
-                for ln in lines:
-                    x = (self.W - f.getlength(" ".join(toks[j] for j in ln))) / 2
-                    for j in ln:
-                        w = f.getlength(toks[j])
-                        if j == k:
-                            d.rounded_rectangle((x - 12, y - 6, x + w + 12, y + 70), radius=14, fill=self.ACC + (255,))
-                            d.text((x, y), toks[j], font=f, fill=self.BG)
-                        else:
-                            d.text((x, y), toks[j], font=f, fill=self.WHITE, stroke_width=5, stroke_fill=(0, 0, 0, 220))
-                        x += w + space
-                    y += 80
+            lh = 92; top = self.H * 0.745 - lh * len(lines) / 2
+            pos = {}
+            for li, ln in enumerate(lines):
+                x = (self.W - f.getlength(" ".join(toks[j] for j in ln))) / 2
+                for j in ln:
+                    pos[j] = (x, top + li * lh); x += f.getlength(toks[j]) + space
+            for k, c in enumerate(ch):
+                img, sh = self.canvas(), self.canvas(); d, ds = ImageDraw.Draw(img), ImageDraw.Draw(sh)
+                for j in range(k + 1):
+                    x, y = pos[j]
+                    ds.text((x + 2, y + 6), toks[j], font=f, fill=(0, 0, 0, 200))
+                    d.text((x, y), toks[j], font=f, fill=self.ACC if j == key else self.WHITE, stroke_width=3, stroke_fill=(0, 0, 0, 150))
+                img = Image.alpha_composite(sh.filter(ImageFilter.GaussianBlur(9)), img)
                 path = str(self.work / f"cap{len(out)}.png"); img.save(path)
-                end = ph[k + 1][1] if k + 1 < len(ph) else c[2] + 0.3
-                out.append((path, c[1], min(end, self.total)))
+                end = ch[k + 1][1] if k + 1 < len(ch) else c[2] + 0.25
+                out.append((path, c[1], min(end, self.total), k == 0))
+        # a chunk stays until the next one starts (no flicker in short pauses)
+        for i in range(len(out) - 1):
+            p_, a_, b_, an = out[i]
+            if out[i + 1][3]: out[i] = (p_, a_, max(b_, min(out[i + 1][1], b_ + 0.6)), an)
         return out
 
     # ---------- compose ----------
@@ -366,7 +385,7 @@ class Ad:
             ov += self.overlays(i, card, s, e)
             if sh.get("footnote") and self.s.get("footnote"): ov.append((self.small_line(self.s["footnote"], i), s, e, False))
             elif card.get("type") == "end" and self.s.get("small"): ov.append((self.small_line(self.s["small"], i), s, e, False))
-        ov += [(p, a, b, False) for p, a, b in self.captions()]
+        ov += self.captions()
         inputs, chain, last = ["-i", str(base), "-i", str(self.p(self.s["vo"]))], [], "0:v"
         n = 2
         for path, a, b, anim in ov:
