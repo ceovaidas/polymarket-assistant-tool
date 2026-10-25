@@ -271,6 +271,8 @@ class Ad:
                 add(img, f"p{k}", a0 + k * 0.3); y = y2 + 20
         elif t == "end":
             y = int(self.H * 0.06)
+            panel = self.canvas(); ImageDraw.Draw(panel).rounded_rectangle((70, y - 24, self.W - 70, int(self.H * 0.395)), radius=40, fill=self.BG + (150,))
+            add(panel.filter(ImageFilter.GaussianBlur(2)), "panel", a0, None, False)
             logo = self.logo_img(int(self.W * 0.30))
             if logo:
                 img = self.canvas(); img.alpha_composite(logo, ((self.W - logo.width) // 2, y)); add(img, "logo", a0); y += logo.height + 18
@@ -346,7 +348,11 @@ class Ad:
                 if line and f.getlength(" ".join(toks[x] for x in line + [j])) > self.W * 0.82: lines.append(line); line = []
                 line.append(j)
             lines.append(line)
-            lh = 92; top = self.H * 0.745 - lh * len(lines) / 2
+            lh = 92
+            # over a packshot the captions sit below the bottle, elsewhere in the lower third
+            mid = ch[0][1] + 0.01
+            on_product = any(s0 <= mid < s1 and sh.get("kind") == "product" for sh, (s0, s1) in zip(self.s["shots"], self.spans))
+            top = self.H * (0.885 if on_product else 0.745) - lh * len(lines) / 2
             pos = {}
             for li, ln in enumerate(lines):
                 x = (self.W - f.getlength(" ".join(toks[j] for j in ln))) / 2
@@ -362,10 +368,11 @@ class Ad:
                 path = str(self.work / f"cap{len(out)}.png"); img.save(path)
                 end = ch[k + 1][1] if k + 1 < len(ch) else c[2] + 0.25
                 out.append((path, c[1], min(end, self.total), k == 0))
-        # a chunk stays until the next one starts (no flicker in short pauses)
+        # a chunk stays until the next one starts (no flicker in short pauses), and never overlaps it
         for i in range(len(out) - 1):
             p_, a_, b_, an = out[i]
-            if out[i + 1][3]: out[i] = (p_, a_, max(b_, min(out[i + 1][1], b_ + 0.6)), an)
+            if out[i + 1][3]: out[i] = (p_, a_, out[i + 1][1] if out[i + 1][1] - b_ < 0.6 else b_, an)
+            else: out[i] = (p_, a_, min(b_, out[i + 1][1]), an)
         return out
 
     # ---------- compose ----------
