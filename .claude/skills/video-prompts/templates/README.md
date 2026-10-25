@@ -1,6 +1,6 @@
 # Viral template gallery
 
-Proven formats from the user's projects. Also read `idea-library.md` (hooks, openers and the
+Proven formats from the user's projects. Read `hooks.md` before writing any hook. Also read `idea-library.md` (hooks, openers and the
 "clip bank → many variants" method learned from the user's reference reels). Before writing prompts from scratch, check this list. When the
 user says a generated video worked, save it here as a template with slots (`{PRODUCT}`, `{PERSON}`, ...).
 
@@ -8,6 +8,7 @@ user says a generated video worked, save it here as a template with slots (`{PRO
 |---|---|---|---|
 | 3-2-1 reveal → it goes everywhere | `countdown-reveal-everywhere.md` | ✅ proven (user-approved) | portable products, pet products |
 | Took my pet ___ → buddy, upgraded | `fail-then-cozy-upgrade.md` | ✅ liked by user (fix consistency) | pet products, identity niches |
+| DON'T let the clown of your friend group see this (store laugh → reveal → situations) | `clown-friend-group-reveal.md` | ✅ liked (hook + graduation + library) | gag gifts, wearable novelty products |
 
 Music identified in the reference reels (Shazam): 3-2-1 reveal → *Mambo No. 5 – Pérez Prado*;
 fan-blade swap and "It's just a hoodie" → *Golden Brown – The Stranglers (slowed)*; cat-bed problem vs

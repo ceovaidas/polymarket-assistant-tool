@@ -17,6 +17,9 @@
   caption, hashtags, edit notes, cost) in one message.
 - **Generate in Higgsfield:** when the user asks to generate, render or reuse a template, follow
   `.claude/skills/video-studio/SKILL.md` (product photo first, approval gates, credit counter, render).
+- **Hooks:** before writing any hook or opening shot, read `.claude/skills/video-prompts/templates/hooks.md`,
+  work the hook shot first until it passes its checklist, and log every hook tried (and its result) there.
+  Save every format the user likes as a template in that folder.
 - **Video → prompts:** when the user uploads a video and asks for prompts, follow
   `.claude/skills/video-prompts/SKILL.md` exactly: scene breakdown, then a full self-contained image
   prompt and a motion prompt for every scene, then the cost table.

@@ -87,6 +87,8 @@ Every video prompt starts with the lock line and the product colour lock; every 
 Check `templates/README.md` first: proven formats with fill-in slots live in `templates/`. When the user
 confirms a generated video worked, save its prompts there as a new template (slots for product, person,
 venue) and add it to the README table.
+Before writing any hook or first shot, read `templates/hooks.md` (hook checklist, skeletons, the
+iteration loop and the log of every hook tried); add each new hook and its result to its log.
 
 ### Lessons from real generations (follow these every time)
 
@@ -194,6 +196,35 @@ venue) and add it to the README table.
 - **Fixed camera angles** (top-down, security cam, POV): describe where the camera is physically
   mounted ("mounted on the pergola beam directly above, looking straight down") and repeat the same
   sentence in every scene so the angle matches across cuts.
+
+- **Product scale (toe clogs gym shot):** "low angle from the floor" plus "fills the lower 35% of the
+  frame" made the clogs giant clown shoes. Shoot from knee height about 2.5 m away with a "natural 1x
+  phone lens, no wide-angle distortion", say "normal realistic adult size, exactly proportional to the
+  body, no bigger than regular sneakers", keep the person at 80-85% of the frame height, and add
+  "oversized shoes, giant, clown shoes, huge feet, fisheye" to the negative.
+- **Wearable gag products turn into real body parts:** fake silicone toes came out as real bare toes in
+  open sandals. Say "fully closed clogs, the wearer's real feet hidden inside, NOT sandals, NOT
+  open-toe", describe the fake part's size ("small, normal human toe size"), and fix a drifted frame with
+  an edit prompt ("Edit reference 2, keep everything else identical, replace only the footwear with the
+  exact product from reference 1"). Fake parts are rigid: "the toes never wiggle" (an honest demo).
+- **Check the reference thumbnail colour:** the user attached a pink variant while selling black. Ask or
+  warn before the next shot.
+- **Hidden-product hook:** the start frame must contain no product and no product colour at all, the
+  person mid-action with a neutral face (a hand already on the mouth leaves no laugh to build), and the
+  frame edge the person points at described as plain background. Kling slides products into an empty
+  frame unless the negative says "product appearing, objects sliding in".
+- **Kling inserts a hard cut when Start and End frames look like two places.** For a camera turn,
+  create the end frame by editing the start frame ("the same moment, camera turned about 60 degrees to
+  the right, the display 2 m away now fills 70% of the frame, the person partly visible at the left
+  edge") and say "one single continuous handheld take, no cuts, no scene change". This is the only case
+  where a camera move is allowed, and only when the user asks for it. Backups: two clips cut on the same
+  action, or a wide 16:9 clip with the pan done as a moving 9:16 crop in the edit.
+- **Swap a person in a liked frame with an edit, not a re-roll:** "Edit reference 1, keep the scene
+  identical, replace only the man with the woman from reference 2, keeping her exactly as she is".
+- **Reaction shots:** the wearer does one serious action with a straight face, a witness double-takes
+  and laughs. Put the witness's laugh at the end of the clip and keep the wearer's feet still.
+- **Never name a third-party brand** (Crocs, Costco) in prompts, packaging, on-screen text or captions,
+  and remove their logo badges ("no logo badge anywhere"). Describe the product generically.
 
 ## Offer wording in hooks, captions and CTAs
 

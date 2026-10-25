@@ -56,6 +56,7 @@ Original track (Shazam). Organic: add from the in-app library. Paid ads: a simil
 Meta Sound Collection / TikTok Commercial Music Library. Where the beat drop should land (second).
 
 ### 4. Hook'ai
+Read `../video-prompts/templates/hooks.md` first (checklist, proven skeletons, log) and add the new hooks to its log.
 3-5 on-screen hook options (top one marked), each built on hook → payoff. Plus the end-screen CTA text.
 
 ### 5. Promptai
