@@ -1,31 +1,32 @@
-"""Clipwright ad render: a voiced product ad in the style of short business ads (dark brand background, accent colour,
-animated cards, word-by-word captions, real product packshot, end card).
+"""Clipwright ad render: a voiced product ad in the style of premium short business ads (brand-colour graphics, serif
+headlines, real product packshot and logo, animated cards, word-by-word captions, progress bar, end card).
 
     python3 ad_render.py spec.json
 
 spec.json:
 {
   "out": "final.mp4", "width": 1080, "height": 1920, "fps": 30,
-  "font": "/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf",
-  "bg": "#0B1F3A", "accent": "#F5B700", "brand": "FJØRD",
+  "fonts": {"head": "Playfair.ttf", "head_italic": "PlayfairItalic.ttf", "body": "Manrope.ttf"},   # optional
+  "bg": "#1E2A14", "accent": "#D9A441", "brand": "ADUKO ŪKIS",
+  "logo": "logo.png",                       # optional, transparent PNG; shown top-left and on the end card
   "product": "product.png",                 # real packshot; a white background is cut out automatically
   "vo": "vo.mp3",
   "shots": [                                # in order; each shot lasts while its words are spoken
     # vo: caption text for this shot (digits allowed); tts_words: how many words the voice says for it
-    {"kind": "clip", "src": "s1.mp4", "vo": "Apversk savo žuvų taukus.", "tts_words": 4,
-     "card": {"type": "headline", "top": "APVERSK SAVO", "accent": "ŽUVŲ TAUKUS"}},
-    {"kind": "product", "src": "s2.png", "words": 6, "card": {"type": "number", "value": "700", "unit": "mg", "label": "OMEGA-3 · 1 KAPSULĖJE"}},
-    {"kind": "still", "src": "s3.png", "words": 7, "card": {"type": "pills", "items": ["IFOS žaliava", "Laukinės žuvys"], "stars": true}},
-    {"kind": "clip", "src": "s4.mp4", "words": 7, "card": {"type": "checks", "items": ["350 mg EPR", "250 mg DHR"]}, "footnote": true},
-    {"kind": "product", "src": "s2.png", "words": 2, "card": {"type": "end", "title": "FJØRD STRONG", "accent": "OMEGA-3", "cta": "Eurovaistine.lt"}}
+    {"kind": "clip", "src": "s1.mp4", "vo": "Ar tavo aliejus tikrai tikras?", "tts_words": 5,
+     "card": {"type": "headline", "kicker": "PIRMO ŠALTO SPAUDIMO", "top": "AR TAVO ALIEJUS", "accent": "tikrai tikras?"}},
+    {"kind": "product", "src": "s2.png", "vo": "...", "tts_words": 8, "card": {"type": "checks", "items": ["...", "..."]}},
+    {"kind": "still", "src": "s4.png", "vo": "...", "tts_words": 6, "card": {"type": "number", "value": "0,13", "unit": "%", "label": "RŪGŠTINGUMAS"}},
+    {"kind": "clip", "src": "s3.mp4", "vo": "...", "tts_words": 8, "card": {"type": "pills", "items": ["...", "..."], "stars": false}},
+    {"kind": "product", "src": "s2.png", "vo": "...", "tts_words": 4, "card": {"type": "end", "title": "ADUKO ŪKIS", "accent": "AOVE · 2 L", "cta": "adukoukis.lt", "note": "37,99 €"}}
   ],
-  "footnote": "*Teigiamas poveikis vartojant 250 mg EPR ir DHR per parą.", "small": "Maisto papildas.",
-  "music": {"src": "music.mp3", "start": 0, "volume": 0.12},   # optional bed under the voice
-  "tail": 0.9                                # seconds the end card stays after the last word
+  "footnote": "", "small": "",
+  "music": {"src": "music.mp3", "start": 0, "volume": 0.18},   # optional bed, ducked under the voice
+  "tail": 1.0
 }
-Card types: headline {top, accent}, number {value, unit, label} (counts up), pills {items, stars}, checks {items},
-end {title, accent, cta, note}. Shot kinds: clip (video file), still (image, slow push-in), product (backdrop image with
-the packshot placed on it). Word timings come from faster-whisper; caption words are spread over them in order.
+Card types: headline {kicker, top, accent}, number {value, unit, label} (counts up, decimals kept), pills {items, stars},
+checks {items}, end {title, accent, cta, note}. Shot kinds: clip (video), still (image, slow push-in), product (backdrop
+image with the packshot placed on it). Word timings come from faster-whisper.
 """
 import json
 import math
@@ -35,6 +36,8 @@ import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+
+FALLBACK = "/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf"
 
 
 def run(cmd):
@@ -61,8 +64,11 @@ def word_times(vo):
 
 def cutout(src, dst):
     """White-background packshots get a transparent background; anything else is kept as a rounded card."""
-    im = Image.open(src).convert("RGB")
-    corners = [im.getpixel(p) for p in ((1, 1), (im.width - 2, 1), (1, im.height - 2), (im.width - 2, im.height - 2))]
+    im = Image.open(src).convert("RGBA")
+    if im.getextrema()[3][0] < 250:  # already transparent
+        im.crop(im.getbbox()).save(dst); return
+    rgbim = im.convert("RGB")
+    corners = [rgbim.getpixel(p) for p in ((1, 1), (im.width - 2, 1), (1, im.height - 2), (im.width - 2, im.height - 2))]
     if all(min(c) > 235 for c in corners):
         cmd = ["convert", str(src), "-alpha", "set", "-fuzz", "4%", "-fill", "none"]
         for x, y in ((0, 0), (im.width - 1, 0), (0, im.height - 1), (im.width - 1, im.height - 1)):
@@ -72,7 +78,7 @@ def cutout(src, dst):
         r = max(12, im.width // 18)
         mask = Image.new("L", im.size, 0)
         ImageDraw.Draw(mask).rounded_rectangle((0, 0, im.width - 1, im.height - 1), radius=r, fill=255)
-        out = im.convert("RGBA"); out.putalpha(mask); out.save(dst)
+        im.putalpha(mask); im.save(dst)
 
 
 class Ad:
@@ -80,26 +86,32 @@ class Ad:
         self.s, self.base = spec, base
         self.W, self.H, self.fps = spec.get("width", 1080), spec.get("height", 1920), spec.get("fps", 30)
         self.BG, self.ACC, self.WHITE = rgb(spec.get("bg", "#0B1F3A")), rgb(spec.get("accent", "#F5B700")), (255, 255, 255)
-        self.fontp = spec.get("font", "/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf")
+        f = spec.get("fonts") or {}
+        self.fonts = {k: str(base / f[k]) if f.get(k) else FALLBACK for k in ("head", "head_italic", "body")}
         self.work = base / "ad_work"; self.work.mkdir(exist_ok=True)
+        self._fc = {}
 
-    def font(self, px):
-        return ImageFont.truetype(self.fontp, px)
+    def font(self, px, kind="body", weight=800):
+        key = (px, kind, weight)
+        if key not in self._fc:
+            ft = ImageFont.truetype(self.fonts[kind], px)
+            try:
+                ft.set_variation_by_axes([max(a["minimum"], min(a["maximum"], weight)) if a.get("name") in (b"Weight", "Weight") else a.get("default", a["minimum"]) for a in ft.get_variation_axes()])
+            except Exception:
+                pass
+            self._fc[key] = ft
+        return self._fc[key]
 
     def p(self, name):
         return self.base / name
 
     # ---------- timing ----------
     def timeline(self):
-        """Shot spans and caption word times. The voice reads `vo_tts` (numbers spelled out), so each shot's share of
-        the spoken words is its `tts_words`; its caption words (`vo`, with digits) are spread over that share."""
+        """Shot spans and caption word times. The voice reads numbers spelled out, so each shot's share of the spoken
+        words is its `tts_words`; its caption words (`vo`, with digits) are spread over that share."""
         ws = word_times(self.p(self.s["vo"])); nw = len(ws)
         shots = self.s["shots"]
         disp = [str(sh.get("vo") or "").split() for sh in shots]
-        if not any(disp):  # older specs: one vo_text plus a word count per shot
-            toks, k, disp = self.s.get("vo_text", "").split(), 0, []
-            for sh in shots:
-                disp.append(toks[k:k + int(sh.get("words", 0))]); k += int(sh.get("words", 0))
         tts = [int(sh.get("tts_words") or len(d) or 1) for sh, d in zip(shots, disp)]
         total_tts, cum, starts, self.caps = sum(tts), 0, [], []
         for d, t in zip(disp, tts):
@@ -111,7 +123,7 @@ class Ad:
             cum += t
         for j in range(len(self.caps) - 1):  # a word stays until the next one starts
             tok, s, e = self.caps[j]; self.caps[j] = (tok, s, max(e, min(self.caps[j + 1][1], s + 1.2)))
-        self.total = ws[-1][1] + float(self.s.get("tail", 0.9))
+        self.total = ws[-1][1] + float(self.s.get("tail", 1.0))
         self.spans = [(starts[i], starts[i + 1] if i + 1 < len(starts) else self.total) for i in range(len(shots))]
 
     # ---------- backgrounds ----------
@@ -119,162 +131,221 @@ class Ad:
         bg = Image.open(self.p(src)).convert("RGB")
         k = max(self.W / bg.width, self.H / bg.height)
         bg = bg.resize((math.ceil(bg.width * k), math.ceil(bg.height * k)), Image.LANCZOS)
-        return bg.crop(((bg.width - self.W) // 2, (bg.height - self.H) // 2, (bg.width - self.W) // 2 + self.W, (bg.height - self.H) // 2 + self.H)).convert("RGBA")
+        x, y = (bg.width - self.W) // 2, (bg.height - self.H) // 2
+        return bg.crop((x, y, x + self.W, y + self.H)).convert("RGBA")
 
     def with_product(self, src, end):
         bg = self.frame_still(src)
         prod = Image.open(self.work / "product.png").convert("RGBA")
-        scale = 0.80 if end else 0.70
-        w = int(self.W * scale); h = int(w * prod.height / prod.width)
-        if h > self.H * 0.42:
-            h = int(self.H * 0.42); w = int(h * prod.width / prod.height)
+        maxh = self.H * (0.46 if end else 0.50)
+        h = int(maxh); w = int(h * prod.width / prod.height)
+        if w > self.W * 0.8:
+            w = int(self.W * 0.8); h = int(w * prod.height / prod.width)
         prod = prod.resize((w, h), Image.LANCZOS)
-        x, y = (self.W - w) // 2, int(self.H * (0.80 if end else 0.79)) - h
+        x, y = (self.W - w) // 2, int(self.H * (0.80 if end else 0.82)) - h
         fx = Image.new("RGBA", bg.size, (0, 0, 0, 0)); d = ImageDraw.Draw(fx)
-        d.ellipse((x - 120, y - 80, x + w + 120, y + h + 60), fill=self.ACC + (55,))
-        bg = Image.alpha_composite(bg, fx.filter(ImageFilter.GaussianBlur(90)))
+        d.ellipse((x - 160, y - 100, x + w + 160, y + h + 80), fill=self.ACC + (60,))
+        bg = Image.alpha_composite(bg, fx.filter(ImageFilter.GaussianBlur(110)))
         sh = Image.new("RGBA", bg.size, (0, 0, 0, 0))
-        ImageDraw.Draw(sh).ellipse((x - 50, y + h - 60, x + w + 50, y + h + 40), fill=(0, 0, 0, 170))
-        bg = Image.alpha_composite(bg, sh.filter(ImageFilter.GaussianBlur(28)))
+        ImageDraw.Draw(sh).ellipse((x - 30, y + h - 50, x + w + 30, y + h + 36), fill=(0, 0, 0, 190))
+        bg = Image.alpha_composite(bg, sh.filter(ImageFilter.GaussianBlur(26)))
         bg.alpha_composite(prod, (x, y))
         return bg
 
     def segment(self, i, sh, dur):
         out = self.work / f"seg{i}.mp4"
-        vf_fit = f"scale={self.W}:{self.H}:force_original_aspect_ratio=increase,crop={self.W}:{self.H},fps={self.fps},setsar=1"
+        fit = f"scale={self.W}:{self.H}:force_original_aspect_ratio=increase,crop={self.W}:{self.H},setsar=1"
+        punch = f"zoompan=z='max(1\\,1.07-0.17*it)':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={self.W}x{self.H}:fps={self.fps}"
+        grade = "eq=contrast=1.06:saturation=1.08,vignette=PI/5"
         if sh["kind"] == "clip":
             src = self.p(sh["src"]); start = float(sh.get("in", 0.2))
             have = duration(src) - start
-            vf = vf_fit + (f",tpad=stop_mode=clone:stop_duration={dur - have + 0.1:.2f}" if dur > have else "")
-            run(["ffmpeg", "-y", "-v", "error", "-ss", f"{start:.2f}", "-i", str(src), "-an", "-t", f"{dur:.3f}", "-vf", vf,
-                 "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", str(out)])
+            pad = f",tpad=stop_mode=clone:stop_duration={dur - have + 0.1:.2f}" if dur > have else ""
+            run(["ffmpeg", "-y", "-v", "error", "-ss", f"{start:.2f}", "-i", str(src), "-an", "-t", f"{dur:.3f}",
+                 "-vf", f"{fit},fps={self.fps}{pad},{punch},{grade}", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", str(out)])
         else:
             img = self.with_product(sh["src"], sh.get("card", {}).get("type") == "end") if sh["kind"] == "product" else self.frame_still(sh["src"])
-            still = self.work / f"still{i}.jpg"; img.convert("RGB").save(still, quality=94)
+            still = self.work / f"still{i}.jpg"; img.convert("RGB").save(still, quality=95)
             n = max(1, int(dur * self.fps))
             run(["ffmpeg", "-y", "-v", "error", "-loop", "1", "-i", str(still), "-t", f"{dur:.3f}", "-vf",
-                 f"scale={self.W * 2}:{self.H * 2},zoompan=z='1+0.05*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s={self.W}x{self.H}:fps={self.fps},setsar=1",
+                 f"scale={self.W * 2}:{self.H * 2},zoompan=z='1.0+0.06*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s={self.W}x{self.H}:fps={self.fps},setsar=1,{grade}",
                  "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", str(out)])
         return out
 
-    # ---------- graphics ----------
+    # ---------- drawing helpers ----------
     def canvas(self):
         return Image.new("RGBA", (self.W, self.H), (0, 0, 0, 0))
 
-    def text_block(self, lines, y, img=None):
-        """lines: [(text, px, colour)] centred from y, with a soft shadow; long lines shrink to fit."""
-        img = img or self.canvas()
-        sh = self.canvas(); d, ds = ImageDraw.Draw(img), ImageDraw.Draw(sh)
-        for t, px, col in lines:
-            f = self.font(px)
-            while f.getlength(t) > self.W * 0.88 and px > 30:
-                px -= 4; f = self.font(px)
-            w = f.getlength(t)
-            ds.text(((self.W - w) / 2 + 4, y + 6), t, font=f, fill=(0, 0, 0, 200))
-            d.text(((self.W - w) / 2, y), t, font=f, fill=col)
-            y += int(px * 1.12)
-        return Image.alpha_composite(sh.filter(ImageFilter.GaussianBlur(8)), img), y
+    def fit(self, text, px, kind, weight, maxw):
+        f = self.font(px, kind, weight)
+        while f.getlength(text) > maxw and px > 28:
+            px -= 4; f = self.font(px, kind, weight)
+        return f, px
+
+    def shadowed(self, draw_fn):
+        img, sh = self.canvas(), self.canvas()
+        draw_fn(ImageDraw.Draw(img), ImageDraw.Draw(sh))
+        return Image.alpha_composite(sh.filter(ImageFilter.GaussianBlur(10)), img)
+
+    def line(self, text, y, px, kind="head", weight=900, col=None, spacing=0):
+        """One centred line on its own canvas (so lines can animate one after another)."""
+        col = col or self.WHITE
+        f, px = self.fit(text, px, kind, weight, self.W * 0.88)
+        def draw(d, ds):
+            if spacing:
+                w = sum(f.getlength(ch) for ch in text) + spacing * (len(text) - 1); x = (self.W - w) / 2
+                for ch in text:
+                    ds.text((x + 3, y + 5), ch, font=f, fill=(0, 0, 0, 170)); d.text((x, y), ch, font=f, fill=col); x += f.getlength(ch) + spacing
+            else:
+                w = f.getlength(text)
+                ds.text(((self.W - w) / 2 + 3, y + 6), text, font=f, fill=(0, 0, 0, 190)); d.text(((self.W - w) / 2, y), text, font=f, fill=col)
+        return self.shadowed(draw), y + int(px * 1.08)
 
     def star(self, d, cx, cy, r, col):
         pts = [(cx + (r if k % 2 == 0 else r * 0.45) * math.sin(k * math.pi / 5), cy - (r if k % 2 == 0 else r * 0.45) * math.cos(k * math.pi / 5)) for k in range(10)]
         d.polygon(pts, fill=col)
 
-    def pill(self, text, y, px=50, stars=0, check=False, fill=None, fg=None):
-        f = self.font(px); fill = fill or self.BG + (235,); fg = fg or self.WHITE
-        icon = stars * int(px * 0.95) + (int(px * 1.1) if check else 0)
-        w, h = int(f.getlength(text)) + icon + 90 + (20 if icon else 0), int(px * 1.9)
+    def chip(self, text, y, px=46, stars=0, check=False, solid=False):
+        """Rounded glass chip: dark translucent panel, thin light border, accent icon."""
+        f = self.font(px, "body", 800)
+        icon = stars * int(px * 0.9) + (int(px * 1.15) if check else 0)
+        w, h = int(f.getlength(text)) + icon + 84 + (18 if icon else 0), int(px * 2.0)
         img = self.canvas(); d = ImageDraw.Draw(img); x0 = (self.W - w) // 2
-        d.rounded_rectangle((x0, y, x0 + w, y + h), radius=h // 2, fill=fill, outline=self.ACC, width=4)
-        x = x0 + 45
+        sh = self.canvas(); ImageDraw.Draw(sh).rounded_rectangle((x0, y + 8, x0 + w, y + h + 8), radius=h // 2, fill=(0, 0, 0, 140))
+        img = Image.alpha_composite(img, sh.filter(ImageFilter.GaussianBlur(12))); d = ImageDraw.Draw(img)
+        if solid:
+            d.rounded_rectangle((x0, y, x0 + w, y + h), radius=h // 2, fill=self.ACC + (255,))
+        else:
+            d.rounded_rectangle((x0, y, x0 + w, y + h), radius=h // 2, fill=self.BG + (205,), outline=(255, 255, 255, 70), width=2)
+        x = x0 + 42
         for _ in range(stars):
-            self.star(d, x + px * 0.42, y + h / 2, px * 0.42, self.ACC); x += int(px * 0.95)
+            self.star(d, x + px * 0.4, y + h / 2, px * 0.4, self.ACC); x += int(px * 0.9)
         if check:
-            r = px * 0.45; d.ellipse((x, y + h / 2 - r, x + 2 * r, y + h / 2 + r), fill=self.ACC)
-            d.line((x + r * 0.5, y + h / 2, x + r * 0.9, y + h / 2 + r * 0.4, x + r * 1.5, y + h / 2 - r * 0.45), fill=self.BG, width=max(3, px // 10))
-            x += int(px * 1.1)
-        if icon: x += 20
-        d.text((x, y + h / 2), text, font=f, fill=fg, anchor="lm")
+            r = px * 0.48; cy = y + h / 2
+            d.ellipse((x, cy - r, x + 2 * r, cy + r), fill=self.ACC)
+            d.line((x + r * 0.52, cy + r * 0.02, x + r * 0.88, cy + r * 0.38, x + r * 1.48, cy - r * 0.42), fill=self.BG, width=max(4, px // 9), joint="curve")
+            x += int(px * 1.15)
+        if icon: x += 18
+        d.text((x, y + h / 2), text, font=f, fill=self.BG if solid else self.WHITE, anchor="lm")
         return img, y + h
 
+    # ---------- cards ----------
     def overlays(self, i, card, s, e):
-        """Returns [(png, start, end, animate)] for one shot's card."""
-        t = card.get("type"); out = []; Y = self.H * 0.085
-        name = lambda k: str(self.work / f"c{i}_{k}.png")
+        """[(png, start, end, animate)] for one shot's card; lines and items enter one after another."""
+        t = card.get("type"); out = []; Y = int(self.H * 0.115)
+        def add(img, k, a, end=None, anim=True):
+            path = str(self.work / f"c{i}_{k}.png"); img.save(path); out.append((path, a, end or e, anim))
+        a0 = s + 0.12
         if t == "headline":
-            img, _ = self.text_block([(card.get("top", ""), 104, self.WHITE), (card.get("accent", ""), 124, self.ACC)], Y)
-            img.save(name("h")); out.append((name("h"), s + 0.15, e, True))
+            y = Y; k = 0
+            if card.get("kicker"):
+                img, y = self.line(card["kicker"].upper(), y, 34, "body", 800, self.ACC, spacing=6); add(img, k, a0); k += 1; y += 14
+            img, y = self.line(card.get("top", ""), y, 108, "head", 900); add(img, k, a0 + 0.12 * k); k += 1
+            img, y = self.line(card.get("accent", ""), y, 118, "head_italic", 800, self.ACC); add(img, k, a0 + 0.12 * k)
         elif t == "number":
-            m = re.match(r"([\d.,]+)", str(card.get("value", "")))
-            target = float(m.group(1).replace(",", ".")) if m else None
-            steps = 12 if target else 1
+            raw = str(card.get("value", "")); m = re.match(r"(\d+)(?:[.,](\d+))?", raw)
+            dec = len(m.group(2)) if m and m.group(2) else 0
+            target = float(f"{m.group(1)}.{m.group(2) or 0}") if m else None
+            sep = "," if "," in raw else "."
+            steps = 14 if target else 1
             for k in range(steps):
-                v = card.get("value", "") if k == steps - 1 or not target else f"{round(target * (k + 1) / steps):g}"
-                img, y = self.text_block([(f"{v} {card.get('unit', '')}".strip(), 210, self.ACC)], Y)
-                img, _ = self.text_block([(card.get("label", ""), 62, self.WHITE)], y, img)
-                img.save(name(f"n{k}"))
-                a = s + 0.2 + k * 0.05
-                out.append((name(f"n{k}"), a, e if k == steps - 1 else a + 0.05, k == 0))
+                v = raw if k == steps - 1 or target is None else f"{target * (k + 1) / steps:.{dec}f}".replace(".", sep)
+                img = self.canvas()
+                fnum = self.font(230, "head", 900); fun = self.font(90, "head", 800)
+                unit = card.get("unit", ""); wn, wu = fnum.getlength(v), (fun.getlength(" " + unit) if unit else 0)
+                x = (self.W - wn - wu) / 2; yb = Y + 220
+                def draw(d, ds, x=x, v=v, unit=unit, wn=wn):
+                    ds.text((x + 4, yb + 7), v, font=fnum, fill=(0, 0, 0, 190), anchor="ls"); d.text((x, yb), v, font=fnum, fill=self.ACC, anchor="ls")
+                    if unit:
+                        ds.text((x + wn + 4, yb + 7), " " + unit, font=fun, fill=(0, 0, 0, 190), anchor="ls"); d.text((x + wn, yb), " " + unit, font=fun, fill=self.WHITE, anchor="ls")
+                    d.line(((self.W - 120) / 2, yb + 34, (self.W + 120) / 2, yb + 34), fill=self.ACC, width=4)
+                img = self.shadowed(draw)
+                lab, _ = self.line(card.get("label", "").upper(), yb + 60, 40, "body", 800, self.WHITE, spacing=5)
+                img = Image.alpha_composite(img, lab)
+                a = a0 + k * 0.045
+                add(img, f"n{k}", a, None if k == steps - 1 else a + 0.045, k == 0)
         elif t in ("pills", "checks"):
-            y = Y + 20
+            y = Y + 10
             for k, item in enumerate(card.get("items", [])[:4]):
-                img, y2 = self.pill(item, int(y), stars=5 if (t == "pills" and card.get("stars") and k == 0) else 0, check=t == "checks")
-                img.save(name(f"p{k}")); out.append((name(f"p{k}"), s + 0.15 + k * 0.35, e, True)); y = y2 + 22
+                img, y2 = self.chip(item, int(y), stars=5 if (t == "pills" and card.get("stars") and k == 0) else 0, check=t == "checks")
+                add(img, f"p{k}", a0 + k * 0.3); y = y2 + 20
         elif t == "end":
-            img, y = self.text_block([(card.get("title", ""), 112, self.WHITE), (card.get("accent", ""), 112, self.ACC)], Y)
-            if card.get("cta"):
-                p, y = self.pill(card["cta"], int(y + 20), px=58, fill=self.ACC + (255,), fg=self.BG)
-                img = Image.alpha_composite(img, p)
+            y = int(self.H * 0.075)
+            logo = self.logo_img(int(self.W * 0.30))
+            if logo:
+                img = self.canvas(); img.alpha_composite(logo, ((self.W - logo.width) // 2, y)); add(img, "logo", a0); y += logo.height + 18
+            else:
+                img, y = self.line(card.get("title", ""), y, 104, "head", 900); add(img, "t", a0)
+            img, y = self.line(card.get("accent", ""), y, 72, "head_italic", 800, self.ACC); add(img, "a", a0 + 0.12)
+            row = y + 18
             if card.get("note"):
-                img, _ = self.text_block([(card["note"], 44, self.WHITE)], y + 16, img)
-            img.save(name("e")); out.append((name("e"), s + 0.1, e, True))
+                img, _ = self.chip(card["note"], row, px=50); add(img, "note", a0 + 0.25); row += int(50 * 2.0) + 16
+            if card.get("cta"):
+                img, _ = self.chip(card["cta"], row, px=50, solid=True); add(img, "cta", a0 + 0.38)
         return out
 
-    def brand_tag(self):
-        if not self.s.get("brand"):
+    def logo_img(self, width):
+        if not self.s.get("logo") or not self.p(self.s["logo"]).exists():
             return None
-        f = self.font(34); t = self.s["brand"]; w = int(f.getlength(t)) + 44
-        img = self.canvas(); d = ImageDraw.Draw(img)
-        d.rounded_rectangle((40, 70, 40 + w, 70 + 62), radius=31, fill=self.BG + (220,), outline=self.ACC, width=3)
-        d.text((40 + w / 2, 70 + 31), t, font=f, fill=self.WHITE, anchor="mm")
+        lg = Image.open(self.p(self.s["logo"])).convert("RGBA")
+        lg = lg.crop(lg.getbbox() or (0, 0, lg.width, lg.height))
+        return lg.resize((width, int(width * lg.height / lg.width)), Image.LANCZOS)
+
+    def brand_tag(self):
+        img = self.canvas(); logo = self.logo_img(120)
+        if logo:
+            img.alpha_composite(logo, (36, 64))
+        elif self.s.get("brand"):
+            f = self.font(32, "body", 800); t = self.s["brand"]; w = int(f.getlength(t)) + 44; d = ImageDraw.Draw(img)
+            d.rounded_rectangle((40, 70, 40 + w, 132), radius=31, fill=self.BG + (210,), outline=(255, 255, 255, 70), width=2)
+            d.text((40 + w / 2, 101), t, font=f, fill=self.WHITE, anchor="mm")
+        else:
+            return None
         path = str(self.work / "brand.png"); img.save(path); return path
 
     def small_line(self, text, key):
-        f = self.font(26); img = self.canvas(); d = ImageDraw.Draw(img)
-        d.multiline_text((self.W / 2, self.H * 0.952), text, font=f, fill=(255, 255, 255, 215), anchor="mm", align="center", spacing=8)
+        f = self.font(26, "body", 600); img = self.canvas(); d = ImageDraw.Draw(img)
+        d.multiline_text((self.W / 2, self.H * 0.955), text, font=f, fill=(255, 255, 255, 215), anchor="mm", align="center", spacing=8)
         path = str(self.work / f"small_{key}.png"); img.save(path); return path
 
     def gradient(self):
-        img = self.canvas(); d = ImageDraw.Draw(img); top, bot = int(self.H * 0.42), int(self.H * 0.66)
+        img = self.canvas(); d = ImageDraw.Draw(img); top, bot = int(self.H * 0.45), int(self.H * 0.64)
+        c = tuple(int(v * 0.35) for v in self.BG)
         for y in range(top):
-            d.line((0, y, self.W, y), fill=(4, 12, 26, int(170 * (1 - y / top) ** 1.4)))
+            d.line((0, y, self.W, y), fill=c + (int(185 * (1 - y / top) ** 1.5),))
         for y in range(bot, self.H):
-            d.line((0, y, self.W, y), fill=(4, 12, 26, int(160 * ((y - bot) / (self.H - bot)) ** 1.5)))
+            d.line((0, y, self.W, y), fill=c + (int(175 * ((y - bot) / (self.H - bot)) ** 1.5),))
         path = str(self.work / "grad.png"); img.save(path); return path
 
     def captions(self):
-        """One PNG per spoken word: the sentence on screen, the current word in the accent colour."""
-        f = self.font(60); out = []; phrase = []
-        sentences, cur = [], []
+        """One PNG per spoken word: the sentence in white, the current word on an accent highlight."""
+        f = self.font(56, "body", 800); out = []; sentences, cur = [], []
         for c in self.caps:
             cur.append(c)
             if c[0][-1] in ".?!": sentences.append(cur); cur = []
         if cur: sentences.append(cur)
+        space = f.getlength(" ")
         for ph in sentences:
             toks = [c[0] for c in ph]; lines, line = [], []
             for k in range(len(toks)):
-                if line and f.getlength(" ".join(toks[j] for j in line + [k])) > self.W * 0.84: lines.append(line); line = []
+                if line and f.getlength(" ".join(toks[j] for j in line + [k])) > self.W * 0.82: lines.append(line); line = []
                 line.append(k)
             lines.append(line)
             for k, c in enumerate(ph):
-                img = self.canvas(); d = ImageDraw.Draw(img); y = self.H * 0.79
+                img = self.canvas(); d = ImageDraw.Draw(img); y = self.H * 0.785
                 for ln in lines:
                     x = (self.W - f.getlength(" ".join(toks[j] for j in ln))) / 2
                     for j in ln:
-                        d.text((x, y), toks[j], font=f, fill=self.ACC if j == k else self.WHITE, stroke_width=6, stroke_fill=(0, 0, 0))
-                        x += f.getlength(toks[j] + " ")
-                    y += 76
+                        w = f.getlength(toks[j])
+                        if j == k:
+                            d.rounded_rectangle((x - 12, y - 6, x + w + 12, y + 70), radius=14, fill=self.ACC + (255,))
+                            d.text((x, y), toks[j], font=f, fill=self.BG)
+                        else:
+                            d.text((x, y), toks[j], font=f, fill=self.WHITE, stroke_width=5, stroke_fill=(0, 0, 0, 220))
+                        x += w + space
+                    y += 80
                 path = str(self.work / f"cap{len(out)}.png"); img.save(path)
-                end = ph[k + 1][1] if k + 1 < len(ph) else c[2] + 0.25
+                end = ph[k + 1][1] if k + 1 < len(ph) else c[2] + 0.3
                 out.append((path, c[1], min(end, self.total)))
         return out
 
@@ -301,17 +372,22 @@ class Ad:
         for path, a, b, anim in ov:
             if anim:
                 inputs += ["-loop", "1", "-framerate", str(self.fps), "-t", f"{T:.2f}", "-i", path]
-                chain.append(f"[{n}:v]format=rgba,fade=t=in:st={a:.2f}:d=0.25:alpha=1[f{n}]")
-                chain.append(f"[{last}][f{n}]overlay=x=0:y='40*max(0\\,1-(t-{a:.2f})/0.25)':enable='between(t,{a:.2f},{b:.2f})'[v{n}]")
+                chain.append(f"[{n}:v]format=rgba,fade=t=in:st={a:.2f}:d=0.28:alpha=1[f{n}]")
+                chain.append(f"[{last}][f{n}]overlay=x=0:y='46*pow(max(0\\,1-(t-{a:.2f})/0.32)\\,2)':enable='between(t,{a:.2f},{b:.2f})'[v{n}]")
             else:
                 inputs += ["-i", path]
                 chain.append(f"[{last}][{n}:v]overlay=0:0:enable='between(t,{a:.2f},{b:.2f})'[v{n}]")
             last = f"v{n}"; n += 1
+        if self.s.get("progress", True):  # thin progress line at the very top
+            chain.append(f"[{last}]drawbox=x=0:y=0:w='iw*t/{T:.2f}':h=8:color=0x{''.join(f'{v:02x}' for v in self.ACC)}@0.95:t=fill[vp]")
+            last = "vp"
         music = self.s.get("music")
         if music:
             inputs += ["-ss", f"{float(music.get('start', 0)):.2f}", "-i", str(self.p(music["src"]))]
-            chain.append(f"[{n}:a]volume={float(music.get('volume', 0.12))},afade=t=out:st={T - 1:.2f}:d=1[m]")
-            chain.append(f"[1:a]apad,atrim=0:{T:.2f}[v0a];[v0a][m]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,atrim=0:{T:.2f}[a]")
+            chain.append(f"[1:a]apad,atrim=0:{T:.2f},asplit=2[vo][key]")
+            chain.append(f"[{n}:a]volume={float(music.get('volume', 0.18))},atrim=0:{T:.2f},afade=t=in:d=0.4,afade=t=out:st={T - 1.2:.2f}:d=1.2[m0]")
+            chain.append("[m0][key]sidechaincompress=threshold=0.02:ratio=6:attack=20:release=350[m]")
+            chain.append(f"[vo][m]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,atrim=0:{T:.2f}[a]")
         else:
             chain.append(f"[1:a]apad,atrim=0:{T:.2f},afade=t=out:st={T - 0.3:.2f}:d=0.3[a]")
         out = self.p(self.s.get("out", "final.mp4"))
