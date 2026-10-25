@@ -137,12 +137,12 @@ class Ad:
     def with_product(self, src, end):
         bg = self.frame_still(src)
         prod = Image.open(self.work / "product.png").convert("RGBA")
-        maxh = self.H * (0.46 if end else 0.50)
+        maxh = self.H * (0.38 if end else 0.50)
         h = int(maxh); w = int(h * prod.width / prod.height)
         if w > self.W * 0.8:
             w = int(self.W * 0.8); h = int(w * prod.height / prod.width)
         prod = prod.resize((w, h), Image.LANCZOS)
-        x, y = (self.W - w) // 2, int(self.H * (0.80 if end else 0.82)) - h
+        x, y = (self.W - w) // 2, int(self.H * (0.84 if end else 0.82)) - h
         fx = Image.new("RGBA", bg.size, (0, 0, 0, 0)); d = ImageDraw.Draw(fx)
         d.ellipse((x - 160, y - 100, x + w + 160, y + h + 80), fill=self.ACC + (60,))
         bg = Image.alpha_composite(bg, fx.filter(ImageFilter.GaussianBlur(110)))
@@ -270,7 +270,7 @@ class Ad:
                 img, y2 = self.chip(item, int(y), stars=5 if (t == "pills" and card.get("stars") and k == 0) else 0, check=t == "checks")
                 add(img, f"p{k}", a0 + k * 0.3); y = y2 + 20
         elif t == "end":
-            y = int(self.H * 0.075)
+            y = int(self.H * 0.06)
             logo = self.logo_img(int(self.W * 0.30))
             if logo:
                 img = self.canvas(); img.alpha_composite(logo, ((self.W - logo.width) // 2, y)); add(img, "logo", a0); y += logo.height + 18
@@ -309,10 +309,10 @@ class Ad:
         path = str(self.work / f"small_{key}.png"); img.save(path); return path
 
     def gradient(self):
-        img = self.canvas(); d = ImageDraw.Draw(img); top, bot = int(self.H * 0.45), int(self.H * 0.64)
+        img = self.canvas(); d = ImageDraw.Draw(img); top, bot = int(self.H * 0.50), int(self.H * 0.64)
         c = tuple(int(v * 0.35) for v in self.BG)
         for y in range(top):
-            d.line((0, y, self.W, y), fill=c + (int(185 * (1 - y / top) ** 1.5),))
+            d.line((0, y, self.W, y), fill=c + (int(215 * (1 - y / top) ** 1.3),))
         for y in range(bot, self.H):
             d.line((0, y, self.W, y), fill=c + (int(175 * ((y - bot) / (self.H - bot)) ** 1.5),))
         path = str(self.work / "grad.png"); img.save(path); return path
