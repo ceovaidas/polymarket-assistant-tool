@@ -64,7 +64,8 @@ claims. If asked for one of these, offer the honest version that gets the same e
 ## Building any new store (Jolly Haul or the next one)
 
 These rules are part of the build, not an afterthought. Before designing, run the buyer-psychology
-analysis for the niche and its main products, then build every part around it:
+analysis for the niche and its main products, then build every part around it. For one-product stores use the clean premium layout in
+`.claude/skills/premium-product-page/SKILL.md` (start from `toetally-store/`):
 
 - **Home page:** hero = the end result / moment (rule 6), one clear "who it's for" line, real social
   proof above the fold, real delivery deadline bar, gift finder or quiz (commitment ladder).
