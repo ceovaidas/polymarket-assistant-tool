@@ -223,6 +223,14 @@ iteration loop and the log of every hook tried); add each new hook and its resul
   identical, replace only the man with the woman from reference 2, keeping her exactly as she is".
 - **Reaction shots:** the wearer does one serious action with a straight face, a witness double-takes
   and laughs. Put the witness's laugh at the end of the clip and keep the wearer's feet still.
+- **Body anatomy in feet shots (toe clogs, user rejected two frames):** a "look down at my feet" POV
+  came out as someone lying down with legs stretched to the horizon, and "feet up on the dashboard"
+  gave legs that belonged to nobody. Write where the body is and how the phone is held: "person
+  STANDING, phone at chest height pointing almost straight down, shins foreshortened from the bottom
+  edge, no knees visible, soles flat on the ground with contact shadows, their own shadow ahead". For
+  feet on furniture, film it as the owner's own POV (legs come from the bottom edge, "legs clearly
+  connected to the camera's body"), and add "floating feet, disconnected legs, legs from nowhere" to
+  the negative.
 - **Never name a third-party brand** (Crocs, Costco) in prompts, packaging, on-screen text or captions,
   and remove their logo badges ("no logo badge anywhere"). Describe the product generically.
 
