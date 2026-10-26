@@ -61,6 +61,14 @@ appearing, objects sliding in, hand on mouth at the start, cut, jump cut, scene 
 | Fancy date | man in black blazer toasts with red wine by candlelight | date looks under the table, laughs into her napkin |
 | Yoga | man with man bun holds warrior II, everyone else barefoot | woman behind loses balance laughing |
 | Rodeo | weathered cowboy with grey moustache tips his hat in the arena dirt | horse sniffs his shoes, bleachers laugh |
+| Fashion runway | model in a black couture gown walks and poses at the end of the runway | front row gasps, laughs, flashes |
+| Surgeon | surgeon in scrubs walks a hospital corridor reading a tablet (clogs are normal there, the toes are not) | two nurses laugh behind him |
+| Courtroom | judge in a robe walks to the bench | lawyers try not to laugh |
+| Golf | golfer in a pink polo swings a driver on the tee | caddie and buddies laugh |
+| Subway | businesswoman in a suit sips coffee holding the pole | commuter lowers his newspaper, student laughs |
+| Red carpet | man in a velvet tux poses at a premiere | photographers aim at his shoes and laugh |
+| Ballet | ballerina in a white tutu holds a pose on stage | corps de ballet breaks formation laughing |
+| Mountain summit | climber raises an ice axe on a snowy peak | partner sits down in the snow laughing |
 
 ## Image prompt skeleton (fill every slot; the product sentence is pasted identically every time)
 ```
