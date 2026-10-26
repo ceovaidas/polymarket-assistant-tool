@@ -99,14 +99,15 @@ Viewers comment "AI 🤖" and stop trusting the product when a frame looks gener
 imperfection each (uneven stubble, a few grey hairs, under-eye bags, acne mark, chipped nail polish,
 wrinkled shirt, a lanyard twisted, a stain on a hoodie); natural off-camera expressions, mid-blink or
 mid-word, not posing for the lens; never "beautiful", "perfect", "model", "flawless".
-**Camera:** "shot on an older iPhone held by a friend", slightly crooked horizon, imperfect framing
-(a head or shoulder cut by the edge, someone partly blocking the view), autofocus on the wrong spot for
-part of the frame, mild motion blur on hands, digital noise in shadows, slightly blown-out window or sky,
-compressed social-media look. Never "cinematic", "8k", "studio lighting", "bokeh", "masterpiece",
+**Camera:** "shot on a new iPhone held by a friend", crisp and sharp, slightly crooked horizon,
+imperfect candid framing (a head or shoulder cut by the edge, someone partly blocking the view), mild
+motion blur only on moving hands. Realism comes from the people, the framing and the place, NOT from bad
+quality: the user rejected "older iPhone / noise / compressed" (Oct 26 2026: "kokybė prastėja, norėtųsi
+šviesių jaukių vaizdų"). Never "cinematic", "8k", "studio lighting", "bokeh", "masterpiece",
 "photorealistic" alone, "ultra detailed".
-**Light:** the place's own mixed light (fluorescent + window, warm lamp + cold phone screen), uneven,
-with one ugly bit (green fluorescent tint, harsh flash shadow, overexposed patch). No rim light, no
-perfectly even skin.
+**Light:** bright, warm and cozy by default (daylight through windows, warm practical lamps, golden
+hour), still the place's own light, not a studio: soft natural falloff, no rim light, no glossy skin.
+Use harsh or greenish light only when the user asks for a gritty look.
 **Places:** lived-in clutter that fits the place (receipts, cables, half-drunk coffee, scuffed floor,
 tape on the wall, a trash bin, a hand sanitizer); real background people doing their own thing, some
 not looking at the subject, partly out of focus or cut by the frame.
