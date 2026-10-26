@@ -49,6 +49,7 @@ def main(dawn_dir):
         for key, values in COLORS.items():
             preset["color_schemes"][key]["settings"].update(values)
         preset.update(kb.GLOBAL_SETTINGS)
+        preset.update({"type_header_font": "poppins_n6", "type_body_font": "inter_n4"})  # cart, policies and other Dawn pages match the landing
         kb.dump_json(build / "config" / "settings_data.json", data)
         schema = kb.load_json(build / "config" / "settings_schema.json")
         schema[0]["theme_name"] = "toetally.extra"

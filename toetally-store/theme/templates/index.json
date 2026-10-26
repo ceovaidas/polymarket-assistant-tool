@@ -203,23 +203,17 @@
         "tier1_qty": 1,
         "tier2_qty": 2,
         "tier3_qty": 4,
-        "combo_qty": 2,
-        "combo_label": "Clogs + 10 toes",
-        "combo_off": "14.98",
-        "combo_badge": "Best deal",
         "combo_variant_note": "Between sizes? Take the bigger one.",
         "combo_handle": "classic-clogs",
-        "combo_note": "1 pair of clogs + 2 toe packs",
-        "combo_variant_label": "Pick your clogs",
         "brand_name": "toetally.extra",
-        "combo_title": "Your combo",
         "style_label": "Toe style",
         "tiles": "smile | Instant double-takes\nsnap | Push in, pop out\ngift | Gag gift of the year",
         "price_note": "5 toes",
         "pack_size": 5,
-        "value_title": "Clogs + toes combo:",
-        "value_cta": "Take the combo",
-        "value_toe_media": 4
+        "addon_title": "Need clogs too? (optional)",
+        "addon_label": "Add clogs",
+        "addon_off": "9.99",
+        "addon_min_packs": 2
       }
     }
   },
