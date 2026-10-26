@@ -3,7 +3,7 @@
 Black + lemon-yellow "sticker" design on the shared one-product landing sections from
 `kinbell-store/theme`. This folder holds the store's templates (copy, bundles), `kb-brand.css`,
 the logo files, its own header, footer and icon snippet, and its own copy of `kb-landing.liquid`
-with a "Clogs + toes" combo card (`te-combo.js` adds both products to the cart in one request).
+with an optional "Add clogs" add-on (`te-combo.js` adds both products to the cart in one request).
 
     python3 build_theme.py /path/to/dawn        # -> dist/toetally-theme.zip
     cd ../kinbell-store/preview && STORE_DIR=../../toetally-store node build.mjs   # preview
@@ -12,12 +12,14 @@ with a "Clogs + toes" combo card (`te-combo.js` adds both products to the cart i
 | Product (handle) | Variants | Price | Supplier cost |
 |---|---|---|---|
 | Toe Charms for Clogs (5-Pack) (`toe-charms`) | Style: Non-hairy / Hairy / Mix | $19.99 per pack | ≈ $10.50 per 5 toes |
-| Classic Clogs (`classic-clogs`) | Color Black/White × EU 36-45 (US sizes in the names) | $19.99 | ≈ $4.40–4.95 |
+| Classic Clogs (`classic-clogs`) | Color Black/White × EU 36-45 (US sizes in the names) | $9.99 (optional add-on) | ≈ $4.40–4.95 |
 
 Page bundles and the automatic discounts that make checkout match them (already created):
 - 2 packs (10 toes) $34.99: "Toes: 2 packs" $4.99 off, min 2 packs.
 - 4 packs (20 toes) $64.99: "Toes: 4 packs" $14.97 off, min 4 packs (Shopify applies the better one).
-- Clogs + 10 toes $44.99: the 2-pack discount + "Combo" Buy 2 toe packs, get 1 pair of clogs $9.99 off.
+- Clogs are an optional add-on under the bundles ("Add clogs": colour, size, pairs) at a flat $9.99 a pair.
+  No clog discount: Shopify gives a cart line only one product discount, and a Buy X get Y on the clogs
+  blocked the toe bundle discount (cart total was higher than the page). The old BXGY is deactivated.
 If you change a price, change the matching discount and the bundle amounts in the theme editor.
 
 ## DSers mapping (do this before the first order)

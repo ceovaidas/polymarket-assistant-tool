@@ -45,7 +45,9 @@
     var full = toeFull + (on ? addFull : 0), off = toeOff + (on ? addOff : 0), total = full - off;
 
     if (addPrice) addPrice.textContent = '+' + fmt(addFull - addOff);
-    if (addHint) addHint.textContent = discPairs > 0
+    if (addHint) addHint.textContent = !offPair
+      ? fmt(cPrice) + ' a pair, the perfect base for your toes'
+      : discPairs > 0
       ? fmt(cPrice - offPair) + ' a pair with your toes (normally ' + fmt(cPrice) + ')'
       : fmt(cPrice) + ' a pair · ' + fmt(cPrice - offPair) + ' with ' + minPacks + '+ toe packs';
     if (addOpts) addOpts.hidden = !on;

@@ -21,7 +21,7 @@
             "eyebrow": "Ready in 30 seconds",
             "title": "From pack to punchline",
             "step1_title": "Grab your clogs",
-            "step1_text": "Any classic clog with round holes on top, or take ours in the combo.",
+            "step1_text": "Any classic clog with round holes on top, or add ours for $9.99 a pair.",
             "step2_title": "Push the toes in",
             "step2_text": "Press each toe's plug into a hole until it sits tight. Five per clog.",
             "step3_title": "Walk into the room",
@@ -51,7 +51,7 @@
           "type": "box",
           "settings": {
             "title": "What's in the pack",
-            "items": "5 toe charms per pack | Take 2 packs for both clogs\nYour style | Non-hairy, hairy or mix\nPush-in plug | For the round holes on top of standard clogs\nClogs (combo only) | Black or white, EU 36-45 with US sizes"
+            "items": "5 toe charms per pack | Take 2 packs for both clogs\nYour style | Non-hairy, hairy or mix\nPush-in plug | For the round holes on top of standard clogs\nClogs (optional) | Black or white, EU 36-45 with US sizes, $9.99 a pair"
           }
         },
         "cmp": {
@@ -68,7 +68,7 @@
           "type": "limits",
           "settings": {
             "title": "Good to know before you buy",
-            "text": "<ul><li><strong>Toe packs don't include clogs.</strong> Clogs come only with the Clogs + 10 toes combo.</li><li>Every charm is the same chunky toe shape (see the close-up photos), sold in packs of 5.</li><li>Made for the round holes on top of standard clogs. Some off-brand clogs have smaller holes, and the toes may not hold there.</li><li>Small parts: not for children under 3.</li><li>They're a joke, not a shoe part: take them off before running, sports or hiking.</li></ul>"
+            "text": "<ul><li><strong>Toe packs don't include clogs.</strong> Add ours for $9.99 a pair, or use your own.</li><li>Every charm is the same chunky toe shape (see the close-up photos), sold in packs of 5.</li><li>Made for the round holes on top of standard clogs. Some off-brand clogs have smaller holes, and the toes may not hold there.</li><li>Small parts: not for children under 3.</li><li>They're a joke, not a shoe part: take them off before running, sports or hiking.</li></ul>"
           }
         },
         "rev": {
@@ -82,14 +82,14 @@
           "type": "faq",
           "settings": {
             "q": "Will they fit my clogs?",
-            "a": "<p>They're made for the round holes on top of standard clogs. If your clogs have the classic holes, they'll fit. Some off-brand clogs have smaller holes where the toes may not hold. Our clogs in the combo fit for sure.</p>"
+            "a": "<p>They're made for the round holes on top of standard clogs. If your clogs have the classic holes, they'll fit. Some off-brand clogs have smaller holes where the toes may not hold. Our clogs (the Add clogs option) fit for sure.</p>"
           }
         },
         "q2": {
           "type": "faq",
           "settings": {
             "q": "Are the clogs included?",
-            "a": "<p>Not with the toe packs: those go on the clogs you already have. Want everything at once? Pick <strong>Clogs + 10 toes</strong>, our black or white clogs with two toe packs, for the best price.</p>"
+            "a": "<p>Not with the toe packs: those go on the clogs you already have. Need clogs too? Tick <strong>Add clogs</strong> under the toe bundles and pick colour, size and how many pairs: $9.99 a pair.</p>"
           }
         },
         "q3": {
@@ -196,7 +196,7 @@
         "tab1_title": "Why people love them",
         "tab1_text": "<p>Because nobody expects toes. They turn plain clogs into the funniest thing in the room, and they make the best photos of the night. Put them on before a wedding, a BBQ or a family dinner and you've got the story everyone tells for years.</p>",
         "tab2_title": "Details & fit",
-        "tab2_text": "<ul><li><strong>In a pack:</strong> 5 toe charms (take 2 packs for both clogs)</li><li><strong>Styles:</strong> Non-hairy, Hairy or Mix (hairy + non-hairy)</li><li><strong>Material:</strong> soft PVC rubber with a push-in plug</li><li><strong>Fits:</strong> the round holes on top of standard clogs</li><li><strong>Clogs:</strong> only in the Clogs + 10 toes combo</li><li><strong>Small parts:</strong> not for children under 3</li></ul>",
+        "tab2_text": "<ul><li><strong>In a pack:</strong> 5 toe charms (take 2 packs for both clogs)</li><li><strong>Styles:</strong> Non-hairy, Hairy or Mix (hairy + non-hairy)</li><li><strong>Material:</strong> soft PVC rubber with a push-in plug</li><li><strong>Fits:</strong> the round holes on top of standard clogs</li><li><strong>Clogs:</strong> not included; add ours for $9.99 a pair</li><li><strong>Small parts:</strong> not for children under 3</li></ul>",
         "tab3_title": "Shipping & returns",
         "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. <strong>For Christmas, order by December 3.</strong> Not funny enough? Send them back within 30 days of delivery for a full refund.</p>",
         "product": "toe-charms",
@@ -212,7 +212,7 @@
         "pack_size": 5,
         "addon_title": "Need clogs too? (optional)",
         "addon_label": "Add clogs",
-        "addon_off": "9.99",
+        "addon_off": "0",
         "addon_min_packs": 2
       }
     }
