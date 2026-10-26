@@ -90,6 +90,47 @@ venue) and add it to the README table.
 Before writing any hook or first shot, read `templates/hooks.md` (hook checklist, skeletons, the
 iteration loop and the log of every hook tried); add each new hook and its result to its log.
 
+### Anti-AI realism kit (default for every image and motion prompt, user rule Oct 26 2026)
+
+Viewers comment "AI 🤖" and stop trusting the product when a frame looks generated. The user's verdict:
+"video atrodo kaip AI, kas kaltas? promptai". Every prompt now carries these, written out, not implied:
+
+**People (the #1 tell):** ordinary, non-model people with real proportions and ages; one specific
+imperfection each (uneven stubble, a few grey hairs, under-eye bags, acne mark, chipped nail polish,
+wrinkled shirt, a lanyard twisted, a stain on a hoodie); natural off-camera expressions, mid-blink or
+mid-word, not posing for the lens; never "beautiful", "perfect", "model", "flawless".
+**Camera:** "shot on an older iPhone held by a friend", slightly crooked horizon, imperfect framing
+(a head or shoulder cut by the edge, someone partly blocking the view), autofocus on the wrong spot for
+part of the frame, mild motion blur on hands, digital noise in shadows, slightly blown-out window or sky,
+compressed social-media look. Never "cinematic", "8k", "studio lighting", "bokeh", "masterpiece",
+"photorealistic" alone, "ultra detailed".
+**Light:** the place's own mixed light (fluorescent + window, warm lamp + cold phone screen), uneven,
+with one ugly bit (green fluorescent tint, harsh flash shadow, overexposed patch). No rim light, no
+perfectly even skin.
+**Places:** lived-in clutter that fits the place (receipts, cables, half-drunk coffee, scuffed floor,
+tape on the wall, a trash bin, a hand sanitizer); real background people doing their own thing, some
+not looking at the subject, partly out of focus or cut by the frame.
+**Motion prompts:** real-time speed, small human hesitations (a glance, a shrug, a half-step back),
+background people keep moving, "handheld phone with tiny natural shake" when a person films, sound line
+with room tone. Keep each clip one action; trim before the end where models drift.
+**Text in frame:** none from the model; texts are added in the edit.
+
+### Product truth lock: toe charms for clogs (toetally.extra)
+Describe the REAL product, not a nicer one (from the supplier photos): every charm is the SAME chunky
+big-toe shape (no small pinky toes), a bit larger than a real toe, matte-to-slightly-shiny skin-tone
+PVC with moulded nail and creases, a small black push-in plug under each one; five of them sit in a row
+across the front holes of a fully closed black clog; the clog's own round holes stay visible around them;
+the hairy version has a few sparse long dark curly hairs on top. The wearer's real foot is inside the
+closed clog: "NOT sandals, NOT real toes". Attach a real product photo (supplier on-feet photo or the
+single-charm close-up) as reference 1. A video that shows a nicer or different product than we ship
+causes refunds and angry comments.
+
+### Story first, then b-roll
+A montage of situations is not a story. Every video gets a "what happens next?" line: a mission
+("wearing toe clogs to places until someone notices, day 3"), a bet, a gift being opened, a reaction
+we wait for, a reveal promised in the hook and paid off at the end. B-roll = 1-2 s cutaways inside that
+story (close-up of the toes stepping, someone's double take, the box, the cart), never the whole video.
+
 ### Lessons from real generations (follow these every time)
 
 - **The start frame decides the physics.** Pose the subject in the image so the motion is short and
