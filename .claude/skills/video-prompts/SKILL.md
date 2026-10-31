@@ -290,6 +290,10 @@ story (close-up of the toes stepping, someone's double take, the box, the cart),
   closed" in the product sentence, and check the feet crop before animating.
 - **Context makes it real:** the version with the police car's blue lights on and the officer filming
   the shoes read as real phone footage; small true details (lights, radio, sunglasses) beat a clean set.
+- **Model pick (user confirmed):** the best, most real-looking clip was made with **Wan 3.0**
+  (30 fps, natural actions, blue lights on, no twin faces). Default to Wan 3.0 for realistic people
+  scenes (also cheaper in Higgsfield: 4 s 720p = 7 credits vs 9 for Kling 4.0); keep Kling 4.0 for start +
+  end frame moves and camera pans. Still check the prop and product crops.
 - **Judge with crops, not the full frame:** check feet, faces and hands crops at 1 s, 3 s and the end.
 
 ## Offer wording in hooks, captions and CTAs
