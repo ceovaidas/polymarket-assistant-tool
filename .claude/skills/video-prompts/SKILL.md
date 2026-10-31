@@ -276,6 +276,22 @@ story (close-up of the toes stepping, someone's double take, the box, the cart),
 - **Never name a third-party brand** (Crocs, Costco) in prompts, packaging, on-screen text or captions,
   and remove their logo badges ("no logo badge anywhere"). Describe the product generically.
 
+## Lessons from same-prompt comparisons (2026-10-31, police scene, 3 clips)
+- **Two people of the same sex need two full, different identity lines** (age, hair colour and length,
+  build, face shape, clothes). With vague people the model gave the driver and the officer the SAME face
+  (AI twins): the first thing viewers notice.
+- **Props morph after ~3 s:** the officer's phone turned into a tablet in both good clips. Name the prop
+  once with its size ("a small black smartphone, held in one hand the whole time") and cut the clip
+  at ~3 s if it still changes.
+- **The product must match the start frame:** a clip generated without the product photo turned the
+  clogs into open slides with one big toe blob. Always attach the product reference / use a start frame.
+- **Toes must read as charms, not real feet:** in close views the toes looked like real toes poking out
+  of an open-toe sandal. Keep "chunky rubber toe charms plugged into the top holes, the clog front
+  closed" in the product sentence, and check the feet crop before animating.
+- **Context makes it real:** the version with the police car's blue lights on and the officer filming
+  the shoes read as real phone footage; small true details (lights, radio, sunglasses) beat a clean set.
+- **Judge with crops, not the full frame:** check feet, faces and hands crops at 1 s, 3 s and the end.
+
 ## Offer wording in hooks, captions and CTAs
 
 Follow the "Offer wording" table in `CLAUDE.md`: "$10 to spend" not "$10 off", "mystery discount" not
