@@ -24,6 +24,9 @@
   `.claude/skills/video-prompts/SKILL.md` exactly: scene breakdown, then a full self-contained image
   prompt and a motion prompt for every scene, then the cost table.
 
+- **Product research:** for product hunting (and the daily 9:00 Vilnius scheduled run) follow
+  `.claude/skills/product-research/SKILL.md`; reports go to `product-research/YYYY-MM-DD.md`.
+
 ## Offer wording (store copy, video hooks, captions, CTAs, pop-ups, emails)
 
 Frame every offer as something the customer gets, never as a cut or a freebie:
