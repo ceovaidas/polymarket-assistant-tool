@@ -38,6 +38,9 @@ status.
 - "This [product] feels illegal 😂" / "Everyone NEEDS this for [situation]"
 - "POV: It's FRIDAY at 4:59 PM" / "POV: I brought this to work"
 - "The idea 🤢" vs "The results" (cheap version fails, product works)
+- "The concept 🤢" → "Vs.." → "The design 🤩" → "Comment \"[KEYWORD]\" if you want one!! 🔥" (seen 2026-10-31 on a
+  dragon LED shower head reel: ugly DIY toy taped to the shower head, plain head, then the product
+  lit up and a man enjoying it; keyword CTA only with a real ManyChat automation)
 - Comment-reply sticker "Where can I get one?" → "You guys keep asking…" (only with a real comment)
 CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never "30% off").
 
@@ -64,3 +67,4 @@ CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never
 | 2026-10-25 | toe charms for clogs | GoPro POV opens a trunk packed with boxes, lifts one (SUV driveway + fishing pickup at a boat ramp) | ✅ proven, user praised it, worked first try | see `gopro-trunk-reveal.md`; end frame edited from the start frame | start frame with no product; end frame edited from it; split into 2 clips if Kling rushes |
 | 2026-10-26 | toe charms for clogs | POV-open variations of the trunk reveal: fridge packed with clogs, garage door rolls up on a mountain of clogs, Christmas stocking tipped out (+ ideas: closet, washer, mailbox, locker, van side door, big box, gift box) | sent, waiting for result | same recipe as `gopro-trunk-reveal.md`: start frame without product, end frame edited from it, one Start/End clip |
 | 2026-10-26 | toe charms for clogs | Unexpected-places montage (summit, subway, golf, judge, surgeon, runway): "Wait for it… look at the feet 👀🦶" / "POV: the clown of your friend group gets a serious job 🤡" / "Nobody noticed for 3 seconds 💀"; CTA keyword "TOES" (only with a ManyChat comment automation, else "Link in bio") | sent, waiting for result | hook promises a hidden detail the viewer spots by 1 s |
+| 2026-10-31 | dragon LED shower head (reference reel, not ours) | "The concept 🤢 / Vs.. / The design 🤩 / Comment KEYWORD" | studied | 4 beats in 14 s: bad version, plain version, product reveal, person enjoying it; product is a Pokémon look-alike, so only remake with an original design |
