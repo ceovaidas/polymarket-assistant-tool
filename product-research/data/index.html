@@ -8,30 +8,36 @@
   .pr-day { display: flex; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .pr-day select { font: inherit; color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); }
   .pr-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
-  .pr-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .pr-sec h2, .pr-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
   .pr-note { margin: var(--cds-gap-xs) 0 var(--cds-gap-md); color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
   .pr-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
-  .pr-top { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); min-height: 9rem; }
-  .pr-top-name { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--cds-gap-sm) var(--cds-gap-md); }
-  .pr-top-name strong { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; }
-  .pr-score { font-variant-numeric: tabular-nums; font-size: var(--cds-font-size-caption); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px var(--cds-pad-sm); color: var(--color-ok); }
-  .pr-kv { display: grid; gap: 2px; min-width: 0; }
-  .pr-kv span { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .02em; }
-  .pr-kv div { overflow-wrap: anywhere; }
-  .pr-kv a { color: inherit; }
-  .pr-hook { font-weight: 600; }
-  .pr-scroll { overflow-x: auto; max-height: 34rem; overflow-y: auto; }
+  .pr-products { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); min-height: 12rem; }
+  .pr-p { display: flex; flex-direction: column; gap: var(--cds-gap-sm); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); min-width: 0; }
+  .pr-p.pr-is-top { border: 2px solid var(--color-ok); }
+  .pr-p-top { display: flex; justify-content: space-between; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .pr-chip { border: 1px solid var(--color-border-line); border-radius: 999px; padding: 1px var(--cds-pad-sm); white-space: nowrap; }
+  .pr-chip.pr-ok { color: var(--color-ok); }
+  .pr-p h3 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-heading); line-height: 1.25; overflow-wrap: anywhere; }
+  .pr-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cds-gap-xs); }
+  .pr-stat { display: grid; gap: 2px; background: var(--color-bg); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); min-width: 0; }
+  .pr-stat span { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .pr .pr-stat b { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-heading); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pr-line { font-size: var(--cds-font-size-caption); overflow-wrap: anywhere; }
+  .pr-line span { color: var(--color-fg-muted); }
+  .pr-hook { font-weight: 600; font-size: var(--cds-font-size-body); }
+  .pr-links { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); margin-top: auto; padding-top: var(--cds-gap-xs); }
+  .pr-links a { font-size: var(--cds-font-size-caption); color: var(--color-fg); text-decoration: none; border: 1px solid var(--color-border-line); border-radius: 999px; padding: var(--cds-pad-xs) var(--cds-pad-sm); }
+  .pr-links a:hover, .pr-links a:focus-visible { border-color: var(--color-fg); }
+  .pr-scroll { overflow-x: auto; max-height: 30rem; overflow-y: auto; }
   .pr-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
   .pr-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
   .pr-table td { padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
   .pr-table td.pr-n { text-align: right; white-space: nowrap; }
-  .pr-bar { display: flex; align-items: center; gap: var(--cds-gap-xs); white-space: nowrap; }
-  .pr-bar i { display: block; height: 6px; border-radius: var(--cds-radius); background: var(--cds-chart-muted); }
-  .pr-bar i.pr-good { background: var(--color-ok); }
   .pr-status { font-size: var(--cds-font-size-caption); white-space: nowrap; }
   .pr-status.pr-watch { color: var(--color-warn); }
   .pr-status.pr-drop { color: var(--color-bad); }
   .pr-cats { min-height: 14rem; position: relative; }
+  .pr-steps { margin: 0; padding-left: 1.2em; display: grid; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-body); }
   .pr-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); min-height: 6rem; }
   .pr-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
@@ -50,30 +56,20 @@
     </label>
   </header>
 
-  <section class="pr-card" id="favoritas">
-    <h2>Favoritas</h2>
-    <p class="pr-note">Produktas, kurį verta testuoti pirmą. Signalas su šaltiniu, „est.“ reiškia įvertinimą.</p>
-    <div class="pr-top" data-draw="top" data-source="products">—</div>
+  <section class="pr-sec" id="favoritas">
+    <h2>Produktai, kuriuos verta testuoti</h2>
+    <p class="pr-note">Pirmas su žalu rėmeliu yra favoritas. Pelnas = kaina − didžiausia tiekėjo kaina, prieš reklamą ir siuntimą. „est.“ reiškia įvertinimą. Mygtukai atidaro tikrus video, tiekėjus ir konkurentų kainas.</p>
+    <div class="pr-products" data-draw="cards" data-source="products margins"></div>
   </section>
 
-  <section class="pr-card" id="tinkami">
-    <h2>Tinkami produktai</h2>
-    <p class="pr-note">Praėjo filtrus: kaina $15–40, savikaina iki 30%, lengvas, „wow“ per 3 s, be prekės ženklų. Balai iš 30 (buyer psychology).</p>
-    <div class="pr-scroll">
-      <table class="pr-table" data-source="products" data-row-key="id">
-        <thead><tr>
-          <th data-field="rank">#</th>
-          <th data-field="name">Produktas</th>
-          <th data-field="score">Balai</th>
-          <th data-field="cost">Savikaina</th>
-          <th data-field="price">Kaina</th>
-          <th data-field="signal" class="pr-hide-narrow">Signalas</th>
-          <th data-field="hook" class="pr-hide-narrow">Hook'as</th>
-          <th data-field="risks" class="pr-hide-narrow">Rizikos</th>
-        </tr></thead>
-        <tbody data-draw="passed"></tbody>
-      </table>
-    </div>
+  <section class="pr-card" id="kaip">
+    <h2>Ką daryti su favoritu</h2>
+    <ol class="pr-steps">
+      <li>Atidaryk „TikTok video“ ir peržiūrėk 5–10 populiariausių: koks hook'as, kiek peržiūrų, ką rašo komentaruose.</li>
+      <li>Atidaryk „AliExpress“, rask tiekėją su 1000+ užsakymų ir užsisakyk 1 pavyzdį kokybei patikrinti.</li>
+      <li>Palygink „Amazon“ kainas: tavo kaina turi būti panaši arba geresnė su rinkiniu (2 vnt.).</li>
+      <li>Parašyk man „darom favoritą“: paruošiu hook'us, video promptus ir vieno produkto parduotuvę.</li>
+    </ol>
   </section>
 
   <div class="pr-grid">
@@ -85,6 +81,7 @@
           <thead><tr>
             <th data-field="status">Būsena</th>
             <th data-field="name">Produktas</th>
+            <th data-field="units">Parduota</th>
             <th data-field="risks">Kodėl</th>
           </tr></thead>
           <tbody data-draw="dropped"></tbody>
@@ -101,7 +98,7 @@
 
   <section class="pr-card" id="istorija">
     <h2>Favoritų istorija</h2>
-    <p class="pr-note">Kiekvienos dienos favoritas. Spausk eilutę, kad atidarytum tos dienos ataskaitą.</p>
+    <p class="pr-note">Kiekvienos dienos favoritas. Spausk eilutę, kad atidarytum tos dienos produktus.</p>
     <div class="pr-scroll">
       <table class="pr-table" data-source="products" data-row-key="id">
         <thead><tr>
@@ -117,6 +114,17 @@
 </div>
 
 <script>
+  dash.calc('margins', {
+    title: 'Profit per sale',
+    description: 'Sale price minus the highest supplier cost, before ads and shipping.',
+    inputs: ['products'],
+    fn: (products) => products
+      .filter((r) => r.price != null && r.cost_high != null)
+      .map((r) => ({ id: r.id, profit: Math.round((Number(r.price) - Number(r.cost_high)) * 100) / 100 })),
+  });
+</script>
+
+<script>
   const P = 'products';
   const ok = () => dash.data(P).status === 'ok';
   const rows = () => (ok() ? dash.data(P).data : []);
@@ -125,10 +133,13 @@
   const ofDay = () => rows().filter((r) => r.date === day());
   const top = () => ofDay().find((r) => r.status === 'Top pick');
   const passed = () => ofDay().filter((r) => r.status === 'Top pick' || r.status === 'Passed').sort((a, b) => a.rank - b.rank);
-  const money = (v) => (v == null || v === '' ? '' : '$' + Number(v).toFixed(2));
+  const money = (v) => (v == null || v === '' ? '—' : '$' + Number(v).toFixed(2));
+  const compact = (v) => (v == null || v === '' ? '—' : Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(v)));
   const safeUrl = (u) => (/^https:\/\//.test(u || '') ? u : null);
   const failed = (el) => { el.replaceChildren(); const f = document.createElement('div'); f.className = 'pr-fail'; f.textContent = 'Failed to load'; el.append(f); };
   const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const mark = (e, src, field, id) => { e.dataset.source = src; e.dataset.field = field; e.dataset.where = 'id=' + encodeURIComponent(id); return e; };
+  const link = (label, href) => { const a = mk('a', null, label); a.href = href; a.target = '_blank'; a.rel = 'noopener'; return a; };
 
   dash.draw('day', (sel) => {
     sel.replaceChildren(...days().map((d) => new Option(d, d)));
@@ -140,40 +151,45 @@
   dash.draw('lead-score', (el) => { const t = top(); el.textContent = t && t.score != null ? String(t.score) : '—'; });
   dash.draw('lead-count', (el) => { el.textContent = ok() ? String(passed().length) : '—'; });
 
-  dash.draw('top', (el) => {
+  dash.draw('cards', (el) => {
     if (dash.data(P).status === 'error') return failed(el);
-    const t = top();
-    if (!t) { el.textContent = '—'; return; }
+    if (!ok()) { el.replaceChildren(); return; }
+    const m = dash.data('margins');
+    const profit = new Map((m.status === 'ok' ? m.data : []).map((r) => [r.id, r.profit]));
     el.replaceChildren();
-    const where = 'id=' + encodeURIComponent(t.id);
-    const cell = (field, text, cls) => { const e = mk('div', cls, text); e.dataset.source = P; e.dataset.field = field; e.dataset.where = where; return e; };
-    const head = mk('div', 'pr-top-name');
-    const nm = mk('strong', null, t.name); nm.dataset.source = P; nm.dataset.field = 'name'; nm.dataset.where = where;
-    const pill = mk('span', 'pr-score'); const sc = mk('span', null, String(t.score)); sc.dataset.source = P; sc.dataset.field = 'score'; sc.dataset.where = where;
-    pill.append(sc, ' / 30 balų');
-    head.append(nm, pill);
-    el.append(head);
-    const kv = (label, node) => { const b = mk('div', 'pr-kv'); b.append(mk('span', null, label), node); el.append(b); };
-    const sig = cell('signal', t.signal);
-    const url = safeUrl(t.source);
-    if (url) { sig.append(' · '); const a = mk('a', null, 'šaltinis'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; sig.append(a); }
-    kv('Kodėl dabar', sig);
-    kv('Savikaina → kaina', (() => { const w = mk('div'); const c = cell('cost', t.cost); const p = cell('price', money(t.price)); c.style.display = p.style.display = 'inline'; w.append(c, ' → ', p); if (t.bundle) w.append(' · ' + t.bundle); return w; })());
-    kv('Kas perka', cell('buyer', t.buyer));
-    kv('Hook\'as', cell('hook', t.hook, 'pr-hook'));
-    kv('Rizikos', cell('risks', t.risks));
-  });
-
-  const maxScore = 30;
-  dash.draw('passed', (tb) => {
-    tb.replaceChildren();
     for (const r of passed()) {
-      const tr = mk('tr'); tr.dataset.key = r.id;
-      const score = mk('td'); const bar = mk('div', 'pr-bar'); const i = mk('i', r.score >= 24 ? 'pr-good' : '');
-      i.style.width = Math.round((r.score / maxScore) * 64) + 'px'; bar.append(i, String(r.score)); score.append(bar);
-      tr.append(mk('td', 'pr-n', String(r.rank)), mk('td', null, r.name), score, mk('td', null, r.cost), mk('td', 'pr-n', money(r.price)),
-        mk('td', 'pr-hide-narrow', r.signal), mk('td', 'pr-hide-narrow', r.hook), mk('td', 'pr-hide-narrow', r.risks));
-      tb.append(tr);
+      const c = mk('article', 'pr-p' + (r.status === 'Top pick' ? ' pr-is-top' : ''));
+      const head = mk('div', 'pr-p-top');
+      const rank = mk('span', null, '#'); rank.append(mark(mk('span', null, String(r.rank)), P, 'rank', r.id));
+      const chip = mk('span', 'pr-chip' + (r.score >= 24 ? ' pr-ok' : ''));
+      chip.append(mark(mk('span', null, String(r.score)), P, 'score', r.id), ' / 30 balų');
+      head.append(rank, r.status === 'Top pick' ? mk('span', 'pr-chip pr-ok', 'Favoritas') : mk('span'), chip);
+      c.append(head, mark(mk('h3', null, r.name), P, 'name', r.id));
+
+      const stats = mk('div', 'pr-stats');
+      const stat = (label, node) => { const s = mk('div', 'pr-stat'); s.append(mk('span', null, label), node); stats.append(s); };
+      stat('Parduota', mark(mk('b', null, compact(r.units)), P, 'units', r.id));
+      stat('Kaina', mark(mk('b', null, money(r.price)), P, 'price', r.id));
+      const pr = mk('b', null, profit.has(r.id) ? money(profit.get(r.id)) : '—');
+      if (profit.has(r.id)) mark(pr, 'margins', 'profit', r.id);
+      stat('Pelnas / vnt', pr);
+      c.append(stats);
+
+      const line = (label, field, cls) => { const p = mk('div', 'pr-line' + (cls ? ' ' + cls : '')); p.append(mk('span', null, label + ': ')); p.append(mark(mk('span', null, r[field] || '—'), P, field, r.id)); return p; };
+      const hook = mark(mk('div', 'pr-hook', '„' + r.hook + '“'), P, 'hook', r.id);
+      c.append(hook, line('Kodėl dabar', 'signal'), line('Tiekėjo kaina', 'cost'), line('Kas perka', 'buyer'), line('Rizikos', 'risks'));
+      if (r.bundle) c.append(line('Rinkinys', 'bundle'));
+
+      const links = mk('div', 'pr-links');
+      const q = encodeURIComponent(r.search || r.name);
+      links.append(
+        link('▶ TikTok video', 'https://www.tiktok.com/search/video?q=' + q),
+        link('AliExpress tiekėjai', 'https://www.aliexpress.com/w/wholesale-' + encodeURIComponent((r.search || r.name).replace(/\s+/g, '-')) + '.html'),
+        link('Amazon kainos', 'https://www.amazon.com/s?k=' + q),
+      );
+      const src = safeUrl(r.source); if (src) links.append(link('Šaltinis', src));
+      c.append(links);
+      el.append(c);
     }
   });
 
@@ -181,7 +197,7 @@
     tb.replaceChildren();
     for (const r of ofDay().filter((x) => x.status === 'Watch' || x.status === 'Dropped')) {
       const tr = mk('tr'); tr.dataset.key = r.id;
-      tr.append(mk('td', 'pr-status ' + (r.status === 'Watch' ? 'pr-watch' : 'pr-drop'), r.status), mk('td', null, r.name), mk('td', null, r.risks));
+      tr.append(mk('td', 'pr-status ' + (r.status === 'Watch' ? 'pr-watch' : 'pr-drop'), r.status), mk('td', null, r.name), mk('td', 'pr-n', compact(r.units)), mk('td', null, r.risks));
       tb.append(tr);
     }
   });
@@ -199,7 +215,7 @@
   dash.draw('cats', (el) => {
     const c = dash.data('categories');
     if (c.status === 'error') return failed(el);
-    if (c.status !== 'ok') { el.textContent = '—'; return; }
+    if (c.status !== 'ok') { el.replaceChildren(); return; }
     const latest = [...new Set(c.data.map((r) => r.date))].sort().reverse()[0];
     const data = c.data.filter((r) => r.date === latest).map((r) => ({ ...r, growth: Number(r.growth) })).sort((a, b) => b.growth - a.growth);
     el.replaceChildren();
@@ -216,7 +232,7 @@
     const g = svg.selectAll('g').data(data).join('g').attr('transform', (d, i) => `translate(0,${i * rowH + 4})`);
     g.append('text').attr('x', labelW).attr('y', rowH / 2).attr('dy', '0.35em').attr('text-anchor', 'end').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').style('font-family', 'var(--font-anthropic-sans)').text((d) => d.category);
     g.append('rect').attr('x', labelW + 8).attr('y', 7).attr('height', rowH - 14).attr('rx', 3).attr('width', (d) => Math.max(2, x(d.growth)))
-      .style('fill', (d, i) => (d.category.startsWith('All of') ? 'var(--cds-chart-muted)' : dash.colors[0]))
+      .style('fill', (d) => (d.category.startsWith('All of') ? 'var(--cds-chart-muted)' : dash.colors[0]))
       .attr('data-source', 'categories').attr('data-field', 'growth').attr('data-where', (d) => 'date=' + encodeURIComponent(d.date) + '&category=' + encodeURIComponent(d.category))
       .on('mousemove', (ev, d) => { const [mx, my] = d3.pointer(ev, el); tip.style('display', 'block').style('left', Math.min(mx + 12, el.clientWidth - 180) + 'px').style('top', (my + 12) + 'px').text(d.category + ': ' + fmt(d.growth)); })
       .on('mouseleave', () => tip.style('display', 'none'));

@@ -14,7 +14,12 @@
    "score": 29,
    "buyer": "Friend or partner, 18-35, gag gift for the funny skier",
    "hook": "DON'T let the clown of your ski trip see this 🤣",
-   "risks": "Copycats; season ends ~Feb; check knit and print on a sample"
+   "risks": "Copycats; season ends ~Feb; check knit and print on a sample",
+   "search": "old man face balaclava ski mask",
+   "units": 5752,
+   "gmv": 69942,
+   "cost_low": 3,
+   "cost_high": 5
   },
   {
    "date": "2026-10-31",
@@ -30,7 +35,12 @@
    "score": 24,
    "buyer": "Home cleaners, 'clean with me' crowd (not a gift)",
    "hook": "POV: you stopped buying paper towels",
-   "risks": "One strong week only; recheck next week"
+   "risks": "One strong week only; recheck next week",
+   "search": "tear off microfiber cleaning cloth roll",
+   "units": 8590,
+   "gmv": null,
+   "cost_low": 2,
+   "cost_high": 4
   },
   {
    "date": "2026-10-31",
@@ -46,7 +56,12 @@
    "score": 23,
    "buyer": "Teens, young adults; gift for a sister or girlfriend",
    "hook": "My room at 9 pm vs my room with this 🌅",
-   "risks": "Second wave of a 2020 trend; electrical (FCC/CE)"
+   "risks": "Second wave of a 2020 trend; electrical (FCC/CE)",
+   "search": "sunset projection lamp",
+   "units": null,
+   "gmv": null,
+   "cost_low": 8,
+   "cost_high": 15
   },
   {
    "date": "2026-10-31",
@@ -62,7 +77,12 @@
    "score": 22,
    "buyer": "Partner or parent buying for a gamer",
    "hook": "Put your cat's face on a speaker 😭",
-   "risks": "Battery shipping; thin margin if cost is $20+"
+   "risks": "Battery shipping; thin margin if cost is $20+",
+   "search": "pixel art bluetooth speaker",
+   "units": null,
+   "gmv": null,
+   "cost_low": 10,
+   "cost_high": 25
   },
   {
    "date": "2026-10-31",
@@ -78,7 +98,12 @@
    "score": 21,
    "buyer": "Self-care buyers; stocking filler",
    "hook": "The 30 seconds my scalp waits for",
-   "risks": "Below $15 alone; no hair-growth claims"
+   "risks": "Below $15 alone; no hair-growth claims",
+   "search": "scalp massager shampoo brush",
+   "units": null,
+   "gmv": null,
+   "cost_low": 1,
+   "cost_high": 3
   },
   {
    "date": "2026-10-31",
@@ -94,7 +119,12 @@
    "score": 20,
    "buyer": "Home organisers, small sellers",
    "hook": "Label everything in 3 seconds",
-   "risks": "Supplier cost unchecked; app-dependent"
+   "risks": "Supplier cost unchecked; app-dependent",
+   "search": "mini thermal label printer",
+   "units": null,
+   "gmv": null,
+   "cost_low": null,
+   "cost_high": null
   },
   {
    "date": "2026-10-31",
@@ -110,7 +140,12 @@
    "score": null,
    "buyer": "",
    "hook": "",
-   "risks": "One-day LIVE spike, not a trend: wait for a second strong week"
+   "risks": "One-day LIVE spike, not a trend: wait for a second strong week",
+   "search": "christmas light gift box",
+   "units": 5422,
+   "gmv": 107627,
+   "cost_low": null,
+   "cost_high": null
   },
   {
    "date": "2026-10-31",
@@ -126,7 +161,12 @@
    "score": null,
    "buyer": "",
    "hook": "",
-   "risks": "Kids' toy: needs US toy certificates (CPSIA); must ship before Dec 1"
+   "risks": "Kids' toy: needs US toy certificates (CPSIA); must ship before Dec 1",
+   "search": "squishy advent calendar",
+   "units": 6313,
+   "gmv": 252457,
+   "cost_low": null,
+   "cost_high": null
   },
   {
    "date": "2026-10-31",
@@ -142,7 +182,12 @@
    "score": null,
    "buyer": "",
    "hook": "",
-   "risks": "Sizing returns; crowded, brand-heavy niche"
+   "risks": "Sizing returns; crowded, brand-heavy niche",
+   "search": "press on nails",
+   "units": 5113,
+   "gmv": 444727,
+   "cost_low": null,
+   "cost_high": null
   },
   {
    "date": "2026-10-31",
@@ -158,7 +203,12 @@
    "score": null,
    "buyer": "",
    "hook": "",
-   "risks": "Brands, skincare claims or high ticket"
+   "risks": "Brands, skincare claims or high ticket",
+   "search": "",
+   "units": null,
+   "gmv": null,
+   "cost_low": null,
+   "cost_high": null
   }
  ]
 }
