@@ -17,6 +17,17 @@ organic AI videos (Higgsfield) on a one-product Shopify store, each with real si
 - Skip: health or medical claims, skincare actives, kids' toys with small parts as the main use,
   weapons, anything needing certificates, glass, big furniture.
 
+## Freshness (the user rejected old products on 2026-10-31)
+- Only products with a sales signal from the last 14 days AND that were not a known viral product
+  before this year. Sunset lamps, scalp brushes, label printers, LED strips, pixel speakers, portable
+  blenders, magnetic mounts, cloud mirrors and similar evergreen "viral" items are OLD: never list them.
+- "Viral list" blog posts and AliExpress roundups are not a signal on their own: they recycle old items.
+  Use them only if a dated sales number (units/GMV in a named week) backs the product.
+- Best fresh source: FastMoss new-products ranking (`https://www.fastmoss.com/e-commerce/newProducts`,
+  products listed in the last days, with 3-day units and GMV). It loads in a headless browser without a
+  login once; repeated hits get blocked (`MSG_SAFE_0001`), so open it once per run.
+- If fewer than 3 fresh products pass, say so plainly instead of filling the list with old ones.
+
 ## Where to look (in this order; what works from the cloud session)
 1. FastMoss blog + public pages: `https://www.fastmoss.com/blog/` (weekly US growth ranking, new
    products ranking with units and GMV). Real numbers, cite them.
