@@ -26,6 +26,8 @@
 
 - **Product research:** for product hunting (and the daily 9:00 Vilnius scheduled run) follow
   `.claude/skills/product-research/SKILL.md`; reports go to `product-research/YYYY-MM-DD.md`.
+- **Instagram growth:** for setting up, warming up and posting on Instagram accounts, and for reading
+  reel numbers or fixing low views, follow `.claude/skills/instagram-growth/SKILL.md`.
 
 ## Offer wording (store copy, video hooks, captions, CTAs, pop-ups, emails)
 
