@@ -73,3 +73,8 @@ bots, bought followers or engagement, suspicious log-ins.
 ## 7. Reply format when the user asks
 Short day-by-day plan with their account name and niche filled in, the targets from section 4, and
 what to send back (the numbers) so we can adjust.
+
+## 8. Our own data (update as results come in)
+| Date | Account | What happened | Lesson |
+|---|---|---|---|
+| 2026-11-01 | new Pokémon-fan shower page, created the day before, no warm-up, ~8 reels on day 1 | "The concept 🤢 vs The design 🤩" reels: 3,954 / 3,416 / 2,853 / 1,873 views; "Pokémon fans I made this for you" 1,535 / 494; "Send this to a REAL Pokémon lover" 206 | A strong format in a hungry niche beats the warm-up rules: start posting if the content is ready, but watch every reel; if views fall under ~100 for a whole day, pause per section 6. The concept-vs-design format wins; double down on it |
