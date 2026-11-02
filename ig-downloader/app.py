@@ -86,6 +86,94 @@ def item_from_post(post, kind):
     }
 
 
+IG_APP_ID = "936619743392459"  # the public id instagram.com's own web app sends
+
+
+def anon_profile(username, limit, what):
+    """No-login path: the same public profile endpoint instagram.com uses. Gives the latest ~12 posts
+    (with view counts and direct video links). Works from home connections; servers get blocked."""
+    s = requests.Session()
+    s.headers.update({"User-Agent": UA, "x-ig-app-id": IG_APP_ID, "Accept": "*/*",
+                      "Referer": f"https://www.instagram.com/{username}/"})
+    r = s.get("https://www.instagram.com/api/v1/users/web_profile_info/",
+              params={"username": username}, timeout=20)
+    if r.status_code == 404:
+        raise RuntimeError(f"Profile @{username} not found.")
+    if r.status_code != 200:
+        raise RuntimeError(f"Instagram answered {r.status_code} without login.")
+    user = (r.json().get("data") or {}).get("user")
+    if not user:
+        raise RuntimeError(f"Profile @{username} not found or private.")
+    if user.get("is_private"):
+        raise RuntimeError(f"@{username} is a private profile.")
+    edges = [e["node"] for e in (user.get("edge_owner_to_timeline_media") or {}).get("edges", [])]
+    edges += [e["node"] for e in (user.get("edge_felix_video_timeline") or {}).get("edges", [])]
+    items, seen = [], set()
+    for n in edges:
+        sc = n.get("shortcode")
+        if not sc or sc in seen:
+            continue
+        seen.add(sc)
+        is_video = bool(n.get("is_video"))
+        if what == "reels" and not is_video:
+            continue
+        if what == "posts" and n.get("product_type") == "clips":
+            continue
+        media = []
+        kids = [k["node"] for k in (n.get("edge_sidecar_to_children") or {}).get("edges", [])]
+        if kids:
+            for i, k in enumerate(kids):
+                media.append({"url": k.get("video_url") if k.get("is_video") else k.get("display_url"),
+                              "video": bool(k.get("is_video")), "name": f"{sc}_{i + 1}"})
+        else:
+            media.append({"url": n.get("video_url") if is_video else n.get("display_url"),
+                          "video": is_video, "name": sc})
+        if any(not m["url"] for m in media):
+            continue  # video link missing in this answer
+        cap_edges = (n.get("edge_media_to_caption") or {}).get("edges", [])
+        caption = cap_edges[0]["node"]["text"] if cap_edges else ""
+        likes = (n.get("edge_liked_by") or n.get("edge_media_preview_like") or {}).get("count")
+        dur = n.get("video_duration")
+        items.append({
+            "id": sc, "kind": "reel" if n.get("product_type") == "clips" or is_video else "post",
+            "type": "carousel" if kids else ("video" if is_video else "photo"),
+            "thumb": n.get("display_url") or n.get("thumbnail_src"),
+            "views": n.get("video_view_count") if is_video else None,
+            "likes": likes if likes and likes > 0 else None,
+            "comments": (n.get("edge_media_to_comment") or {}).get("count"),
+            "date": time.strftime("%Y-%m-%d", time.gmtime(n.get("taken_at_timestamp", 0))),
+            "duration": round(dur, 1) if dur else None,
+            "caption": caption[:300], "link": f"https://www.instagram.com/p/{sc}/", "media": media,
+        })
+        if len(items) >= limit:
+            break
+    info = {"username": user.get("username"), "name": user.get("full_name"),
+            "followers": (user.get("edge_followed_by") or {}).get("count"),
+            "posts": (user.get("edge_owner_to_timeline_media") or {}).get("count"),
+            "pic": user.get("profile_pic_url_hd") or user.get("profile_pic_url")}
+    return info, items
+
+
+def fetch_any(username, limit, what):
+    """Logged in: full list through instaloader. Not logged in: try the no-login path first."""
+    errors = []
+    if not STATE["login_user"]:
+        try:
+            info, items = anon_profile(username, limit, what)
+            info["note"] = ("Loaded without login: Instagram shows only the latest posts this way. "
+                            "Log in (spare account) to load more.") if limit > len(items) else ""
+            return info, items
+        except Exception as e:
+            errors.append(str(e))
+    if instaloader is None:
+        raise RuntimeError(" ".join(errors) or "instaloader is not installed.")
+    try:
+        return fetch_profile(username, limit, what)
+    except Exception as e:
+        errors.append(str(e))
+        raise RuntimeError(" | ".join(errors))
+
+
 def fetch_profile(username, limit, what):
     L = loader()
     profile = instaloader.Profile.from_username(L.context, username)
@@ -189,7 +277,7 @@ def profile():
     limit = max(1, min(int(request.args.get("limit", 30)), 300))
     what = request.args.get("what", "reels")
     try:
-        info, items = (demo_profile if DEMO else fetch_profile)(username, limit, what)
+        info, items = (demo_profile if DEMO else fetch_any)(username, limit, what)
     except Exception as e:
         msg = str(e)
         if "login" in msg.lower() or "401" in msg or "403" in msg or "429" in msg:

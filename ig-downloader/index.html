@@ -131,7 +131,10 @@ let items = [], picked = new Set();
 
 function say(t, cls = '') { const m = $('#msg'); m.textContent = t; m.className = 'msg ' + cls; }
 
+const NOT_RUNNING = 'The app is not running. Close this page, double-click start.bat (Windows) or start.command (Mac), keep the black window open and use the page it opens (http://127.0.0.1:5077).';
+
 async function status() {
+  if (location.protocol === 'file:') { say(NOT_RUNNING, 'err'); return; }
   try {
     const s = await (await fetch('/api/status')).json();
     if (s.demo) say('Demo mode: sample data, no Instagram requests.', 'ok');
@@ -200,8 +203,11 @@ $('#f').addEventListener('submit', async (e) => {
   say('Loading… this takes a few seconds per 10 items.');
   try {
     const q = new URLSearchParams({ u, what: $('#what').value, limit: $('#limit').value });
-    const r = await fetch('/api/profile?' + q);
-    const d = await r.json();
+    if (location.protocol === 'file:') throw new Error(NOT_RUNNING);
+    let r;
+    try { r = await fetch('/api/profile?' + q); } catch (netErr) { throw new Error(NOT_RUNNING); }
+    let d;
+    try { d = await r.json(); } catch (parseErr) { throw new Error('The app answered with an error (' + r.status + '). Look at the black window for details and send me a screenshot.'); }
     if (!r.ok) throw new Error(d.error || 'Could not load.');
     items = d.items; picked = new Set();
     const p = d.profile;
@@ -209,7 +215,7 @@ $('#f').addEventListener('submit', async (e) => {
     $('#pic').src = '/api/thumb?url=' + encodeURIComponent(p.pic);
     $('#pname').textContent = '@' + p.username + (p.name ? ' · ' + p.name : '');
     $('#pstats').textContent = fmt(p.followers) + ' followers · ' + fmt(p.posts) + ' posts · loaded ' + items.length;
-    say('Loaded ' + items.length + ' items. Tick the ones you want.', 'ok');
+    say('Loaded ' + items.length + ' items. Tick the ones you want.' + (p.note ? ' ' + p.note : ''), 'ok');
     update(); render();
   } catch (err) { say(err.message, 'err'); }
   $('#load').disabled = false;
@@ -224,7 +230,8 @@ $('#dl').addEventListener('click', async () => {
   $('#dl').disabled = true;
   say('Downloading ' + picked.size + ' items and building the zip…');
   try {
-    const r = await fetch('/api/zip', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [...picked] }) });
+    let r;
+    try { r = await fetch('/api/zip', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [...picked] }) }); } catch (netErr) { throw new Error(NOT_RUNNING); }
     if (!r.ok) throw new Error((await r.json()).error || 'Download failed.');
     const blob = await r.blob();
     const a = document.createElement('a');
