@@ -125,20 +125,22 @@ with room tone. Keep each clip one action; trim before the end where models drif
 **Text in frame:** none from the model; texts are added in the edit.
 
 ### Product truth lock: shower lash & brow shield (Voilaure)
-The real product (supplier photo): a thin, FULLY TRANSPARENT, flexible plastic crescent about 20 cm wide
-and 10 cm tall, with faint fold lines fanning across it; the inner (concave) edge sticks along the
-forehead under the hairline and the shield curves down in front of the brows, eyes and nose bridge.
-Paste this every time: "clear as glass or cling film, see-through, no colour, NOT white, NOT frosted,
-NOT milky, NO handle, NO stick, not a paddle, not a fan, not goggles, not a mask, no print".
-Lesson 2026-11-02 (Nano Banana 2 start frame): the model drew an opaque white fan with a handle held
-like a paddle, because the prompt also had her holding a phone and the supplier photo is on white.
-Fix: never put another held object in the same frame, keep the product out of the start frame when
-it enters later, and build "worn" frames by editing a good frame of the person. Second miss: the
-model drew it as a horizontal sun-visor brim sticking out over the eyes. Say the orientation: it HANGS
-DOWN VERTICALLY in front of the face, a few centimetres away from the skin, bottom edge at the upper lip,
-NOT sticking out horizontally, NOT a cap brim, NOT a sun visor; attach a frame showing the shield worn
-(shape and position only) as a second reference. Editing a good frame of the person ("add the clear shield
-stuck to her forehead ... keep everything else identical").
+Confirmed by the user's reference photos (2026-11-02). Paste this sentence into every prompt:
+"a clear plastic face shield: a thin, fully transparent, slightly stiff sheet shaped like a wide rounded
+rectangle that wraps around the face from temple to temple like a curved windshield; along its top edge a
+narrow white self-adhesive strip about 1.5 cm tall, gently arched, is pressed flat across the middle of the
+forehead just ABOVE the eyebrows; from that strip the clear sheet drops straight down in front of the face,
+a few millimetres to 2 cm away from the skin, covering the eyebrows, both eyes and the nose, its rounded
+bottom edge ending just above the upper lip; the eyes, lashes, brows and skin are clearly visible through
+it, with one soft vertical glossy highlight on the plastic; water runs down the outside in sheets and drips
+off the bottom edge in front of the lips. NOT a cap brim, NOT a sun visor, NOT sticking out horizontally,
+NOT goggles, NOT a swim mask, NOT white, NOT frosted, no handle, no straps, no print."
+How it is put on (3 steps, from the seller's guide): peel the backing off the adhesive strip, place the
+strip across the forehead above the brows, press it flat with the fingertips.
+Lessons: Nano Banana 2 first drew an opaque white fan with a handle (product held next to a phone, supplier
+photo on white), then a horizontal sun-visor brim. Fixes: never put another held object in the same frame;
+keep the product out of the start frame when it enters later; build "worn" frames by editing a good frame
+of the person and attach a worn-shield photo as a shape-only reference.
 
 ### Product truth lock: toe charms for clogs (toetally.extra)
 Describe the REAL product, not a nicer one (from the supplier photos): every charm is the SAME chunky
