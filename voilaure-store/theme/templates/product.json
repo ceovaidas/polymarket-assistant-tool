@@ -1,0 +1,230 @@
+{
+  "sections": {
+    "main": {
+      "type": "kb-landing",
+      "blocks": {
+        "marq": {
+          "type": "marquee",
+          "settings": {
+            "items": "Wash your hair, keep your lashes | Clear, so you can see | Peel, stick, rinse | Made for lash days | $0 shipping, on us | 30-day returns"
+          }
+        },
+        "ico": {
+          "type": "icons",
+          "settings": {
+            "items": "eye | Clear view | See your shampoo, your razor, everything\ndrop | Spray stays off | The shield sits between the water and your lash line\nclock | 5 seconds on | Peel, stick, step in\ntruck | $0 shipping | On us, with tracking"
+          }
+        },
+        "pain": {
+          "type": "feature",
+          "settings": {
+            "media_index": 2,
+            "eyebrow": "Sound familiar?",
+            "title": "Hair-wash day after a lash appointment is a balancing act",
+            "text": "<ul><li><strong>The head tilt.</strong> Leaning back, one hand over your eyes, shampoo running everywhere.</li><li><strong>Skipping the wash.</strong> Dry shampoo for two days so the new set stays perfect.</li><li><strong>The mascara streaks.</strong> Did your makeup, need a quick rinse, now you're starting over.</li></ul>"
+          }
+        },
+        "how": {
+          "type": "steps",
+          "settings": {
+            "eyebrow": "Ready in 5 seconds",
+            "title": "How it works",
+            "step1_title": "Stick it on",
+            "step1_text": "Peel the strip and press it across your forehead, just above the brows. The clear shield hangs in front of your eyes.",
+            "step2_title": "Wash like always",
+            "step2_text": "Tip your head back, lather and rinse. Water and foam slide down the front of the shield.",
+            "step3_title": "Peel off and toss",
+            "step3_text": "Each shield is single-use, so every shower starts with a clean one."
+          }
+        },
+        "anat": {
+          "type": "anatomy",
+          "settings": {
+            "media_index": 3,
+            "eyebrow": "Up close",
+            "title": "What you actually get",
+            "notes": "eye | Clear, thin sheet | You see through it while you wash\nsparkle | Soft adhesive strip | Sits across your forehead, above the brows\ndrop | Curved shape | Hangs in front of your brows, eyes and nose\ncheck | Single-use | 50 shields in every pack"
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "media_index": 4,
+            "flip": true,
+            "eyebrow": "Made for lash days",
+            "title": "For the first days after your lash appointment",
+            "text": "<p>Most lash artists ask you to keep a fresh lash lift or set of extensions dry for the first 24 to 48 hours. The shield lets you wash your hair in that window without the head tilt.</p><p>Always follow your own lash artist's aftercare advice.</p>"
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "media_index": 5,
+            "eyebrow": "Mascara days",
+            "title": "Already did your makeup? Wash your hair anyway",
+            "text": "<p>Gym after work, a last-minute hair wash before dinner, a morning when the mascara is already on. Stick on a shield, rinse, peel it off and go.</p>"
+          }
+        },
+        "box": {
+          "type": "box",
+          "settings": {
+            "title": "What's in the pack",
+            "items": "50 clear shields | Single-use, one per shower\nAdhesive strip on each | Peel and stick, no straps\nOne size | Wraps temple to temple on most adult faces\nPocket-flat pack | Fits your toiletry bag"
+          }
+        },
+        "cmp": {
+          "type": "compare",
+          "settings": {
+            "eyebrow": "Why a shield",
+            "title": "Better than the head tilt",
+            "them": "Head tilt + one hand",
+            "rows": "Both hands free to wash | yes | no\nYou can see while you rinse | yes | yes\nSpray kept off the lash line | yes | no\nWorks with your normal shower | yes | yes\nKeeps shampoo foam out of your eyes | yes | no",
+            "note": "The head tilt is free. A redo of your lash set is not."
+          }
+        },
+        "lim": {
+          "type": "limits",
+          "settings": {
+            "title": "Good to know before you buy",
+            "text": "<ul><li><strong>Single-use.</strong> The adhesive is made for one shower. Use a fresh shield each time.</li><li>It keeps spray off the front of your face. It is not a swim mask and does not seal around your eyes, so don't dunk your face under water.</li><li>Sensitive skin? Try one shield on your inner arm first. Don't stick it on broken or irritated skin.</li><li>Not for children.</li><li>Your lash artist's aftercare advice always comes first.</li></ul>"
+          }
+        },
+        "rev": {
+          "type": "reviews",
+          "settings": {
+            "title": "From real showers",
+            "note": "Brand new store. Reviews from our customers will appear here, word for word."
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "Will it fit my face?",
+            "a": "<p>It's one size and wraps from temple to temple on most adult faces. The strip sits across your forehead just above the brows, and the shield hangs in front of your eyes and nose.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "Does it touch my lashes?",
+            "a": "<p>No. The curved sheet hangs about 1 cm in front of your face, so your lashes have room.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "Can I reuse a shield?",
+            "a": "<p>No, each shield is single-use: the adhesive is made for one shower. That's why there are 50 in a pack.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Which pack should I choose?",
+            "a": "<p>One pack is about seven weeks of daily showers. Two or three packs cost less per shield and cover you until your next few lash appointments.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "When will it arrive?",
+            "a": "<p>Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. The delivery window for an order placed today is shown next to the order button.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "q": "What if it doesn't work for me?",
+            "a": "<p>Send it back within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "promise": {
+          "type": "promise",
+          "settings": {
+            "title": "30 days to try it",
+            "text": "Use it on hair-wash day. If it isn't for you, send it back within 30 days of delivery for a full refund."
+          }
+        },
+        "final": {
+          "type": "final_cta",
+          "settings": {
+            "title": "Don't skip hair-wash day again",
+            "text": "Your lash set stays perfect, your hair gets washed. 50 shields, $0 shipping, on us."
+          }
+        }
+      },
+      "block_order": [
+        "marq",
+        "ico",
+        "pain",
+        "how",
+        "anat",
+        "f2",
+        "f3",
+        "box",
+        "cmp",
+        "lim",
+        "rev",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "promise",
+        "final"
+      ],
+      "settings": {
+        "eyebrow": "Made for lash lifts, extensions and mascara days",
+        "headline": "Lash Shower Shield",
+        "subhead": "A clear peel-and-stick shield that sits between the shower spray and your lash line. Lather, rinse, peel it off. Your lashes stay out of the water.",
+        "bullets": "Keeps spray off your lash line\nClear, so you can see\nOn in 5 seconds\nA fresh one every shower",
+        "photo_badge": "New",
+        "review_source": "",
+        "tiers_title": "Choose your pack",
+        "default_tier": 2,
+        "tier1_label": "1 pack · 50 shields",
+        "tier1_note": "About 7 weeks of daily showers",
+        "tier1_off": "0",
+        "tier1_badge": "",
+        "tier2_label": "2 packs · 100 shields",
+        "tier2_note": "Until your next few lash appointments",
+        "tier2_off": "9.99",
+        "tier2_badge": "Stock up",
+        "tier3_label": "3 packs · 150 shields",
+        "tier3_note": "One for you, two to share",
+        "tier3_off": "19.98",
+        "tier3_badge": "Best value",
+        "cta": "Add to cart",
+        "sticky_title": "Lash Shower Shield",
+        "ship_min": 7,
+        "ship_max": 14,
+        "ship_note": "$0 shipping, on us",
+        "assure_1": "30-day returns",
+        "assure_2": "Secure checkout",
+        "assure_3": "Tracked delivery",
+        "tab1_title": "Why it works",
+        "tab1_text": "<p>The water that ruins a fresh lash set comes from the front: the spray and the shampoo running down your forehead. The shield sits right there, between the water and your lash line, while your hands stay free to wash.</p>",
+        "tab2_title": "Details",
+        "tab2_text": "<ul><li><strong>In a pack:</strong> 50 single-use shields</li><li><strong>Material:</strong> thin clear plastic sheet with a soft adhesive strip</li><li><strong>Size:</strong> one size, temple to temple on most adult faces</li><li><strong>Use:</strong> one shield per shower</li></ul>",
+        "tab3_title": "Shipping & returns",
+        "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. Not for you? Send it back within 30 days of delivery for a full refund.</p>",
+        "product": "lash-shower-shield",
+        "tier1_qty": 1,
+        "tier2_qty": 2,
+        "tier3_qty": 3,
+        "combo_handle": "",
+        "brand_name": "Voilaure",
+        "style_label": "Style",
+        "tiles": "eye | See while you wash\ndrop | Spray stays off\nclock | On in 5 seconds",
+        "proof_faces": "✨ 💧 👁️",
+        "price_note": "50 shields",
+        "pack_size": 50,
+        "pack_unit": "shields"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

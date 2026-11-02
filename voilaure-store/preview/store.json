@@ -1,0 +1,21 @@
+{
+  "shop": {
+    "name": "Voilaure",
+    "email": "hello@voilaure.com"
+  },
+  "product": {
+    "title": "Lash Shower Shield (50 pcs)",
+    "option": "Title",
+    "price": 2499,
+    "variants": [
+      "Default Title"
+    ]
+  },
+  "header": {
+    "bar": "$0 shipping, on us \u00b7 30-day returns \u00b7 Tracked delivery",
+    "cta": "Shop the shield"
+  },
+  "footer": {
+    "text": "Wash your hair. Keep your lashes."
+  }
+}

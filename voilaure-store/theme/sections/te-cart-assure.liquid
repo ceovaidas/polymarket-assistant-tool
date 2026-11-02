@@ -1,0 +1,22 @@
+{%- comment -%} Reassurance under the cart (real facts only: returns, shipping, delivery window). {%- endcomment -%}
+{%- if cart.item_count > 0 -%}
+  <ul class="te-cart-assure">
+    {%- for i in (1..3) -%}
+      {%- assign ik = 'icon_' | append: i -%}{%- assign tk = 'text_' | append: i -%}
+      {%- if section.settings[tk] != blank -%}<li>{%- render 'kb-icon', name: section.settings[ik] -%}{{ section.settings[tk] }}</li>{%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Cart reassurance",
+  "settings": [
+    { "type": "text", "id": "icon_1", "label": "Icon 1", "default": "shield" },
+    { "type": "text", "id": "text_1", "label": "Text 1", "default": "30-day returns, full refund" },
+    { "type": "text", "id": "icon_2", "label": "Icon 2", "default": "truck" },
+    { "type": "text", "id": "text_2", "label": "Text 2", "default": "$0 shipping, on us · tracked" },
+    { "type": "text", "id": "icon_3", "label": "Icon 3", "default": "check" },
+    { "type": "text", "id": "text_3", "label": "Text 3", "default": "Delivered in 7–14 business days" }
+  ]
+}
+{% endschema %}
