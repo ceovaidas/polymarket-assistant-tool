@@ -28,6 +28,11 @@
   `.claude/skills/product-research/SKILL.md`; reports go to `product-research/YYYY-MM-DD.md`.
 - **Instagram growth:** for setting up, warming up and posting on Instagram accounts, and for reading
   reel numbers or fixing low views, follow `.claude/skills/instagram-growth/SKILL.md`.
+- **Artlist (connected 2026-11-02):** Artlist is the main tool for images, video, music and voice-overs.
+  NEVER start a generation (image, video, music, voice, 3D) without the user's explicit permission for that
+  exact job: write the prompts, name the model and the credit cost (from the cost check), then wait for
+  "generuok"/"taip". Read-only checks (balance, models, cost, catalog music search) are fine. Default video
+  model for realistic people: Wan 3.0 (also on Artlist); Kling 4.0 for start + end frame moves.
 
 ## Offer wording (store copy, video hooks, captions, CTAs, pop-ups, emails)
 
