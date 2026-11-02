@@ -9,12 +9,15 @@ copy, photos and offers are our own, and its fake parts are left out (see "Keep 
     python3 build_theme.py /path/to/dawn        # -> dist/voilaure-theme.zip
     cd ../kinbell-store/preview && STORE_DIR=../../voilaure-store node build.mjs   # preview (photos in preview/img, not committed)
 
-## Product and pricing (planned, set up in Shopify before launch)
+## Product and pricing (set up through the Admin API on 2026-11-02, in the toetally.shop store)
 | Product (handle) | Pack | Price |
 |---|---|---|
 | Lash Shower Shield (50 pcs) (`lash-shower-shield`) | 50 single-use shields | $24.99 a pack |
 
-Bundles on the page and the automatic discounts that must exist so checkout matches them:
+Imported from AliExpress (supplier variants 10/50/100 pcs); kept only the 50 pcs variant (supplier cost $4.19), renamed, new handle, own description and SEO. Jacket and clogs set to draft.
+Theme uploaded as "Voilaure - publish this" (unpublished, the user presses Publish).
+
+Bundles on the page and the automatic discounts that make checkout match them (created):
 - 2 packs (100 shields) $39.99: "Shield: 2 packs" $9.99 off, min 2 packs.
 - 3 packs (150 shields) $54.99: "Shield: 3 packs" $19.98 off, min 3 packs.
 If you change a price, change the matching discount and the bundle amounts in the theme editor.
