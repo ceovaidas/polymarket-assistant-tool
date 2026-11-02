@@ -124,6 +124,22 @@ background people keep moving, "handheld phone with tiny natural shake" when a p
 with room tone. Keep each clip one action; trim before the end where models drift.
 **Text in frame:** none from the model; texts are added in the edit.
 
+### Skin & body detail block (append to every image prompt with people, user request 2026-11-02)
+The user's verdict on a good but soft frame: "kokybė prasta, oda turi būti tikroviška, visos kūno detalės".
+Generate at 2K or higher (or upscale after), and paste:
+"Shot on iPhone 16 Pro main camera, 1x, 24 mm, f/1.78, no portrait mode, no beauty mode, full sharpness on the
+face. Skin rendered at macro detail: visible pores on the nose, cheeks and forehead, fine peach fuzz catching
+the light along the jaw and cheeks, natural uneven tone with slight redness around the nose and chin, a few
+tiny moles and freckles, faint fine lines under the eyes, natural oily sheen on the T-zone, small dry patches,
+tiny visible capillaries on the eyelids, individual eyebrow hairs, individual eyelashes with natural
+clumping, slightly chapped lip texture, fine hair strands and flyaways at the hairline. Body: collarbone and
+shoulder skin with pores, light freckles and a faint tan line, goosebumps from the cool air, real fabric
+fibres on the towel. Lighting shows texture: soft directional window light from one side, no flat front fill."
+Add to the negative: "airbrushed skin, smooth plastic skin, wax skin, porcelain skin, beauty filter,
+skin smoothing, CGI, 3D render, over-sharpened halos, blurry face, soft focus, low resolution".
+If a frame is good but soft, run an edit pass with the same block ("keep everything identical, only add
+detail") and then an image upscale (Higgsfield upscale or Topaz) before using it as a video start frame.
+
 ### Product truth lock: shower lash & brow shield (Voilaure)
 Confirmed by the user's reference photos (2026-11-02). Paste this sentence into every prompt:
 "a clear plastic face shield: a thin, fully transparent, slightly stiff sheet shaped like a wide rounded
