@@ -31,3 +31,4 @@ Formats tried in conversation but not yet confirmed by a finished video (save th
   13 s, *Let It Snow – Dean Martin*):** POV from the sofa, she counts 3-2-1 and kicks a rolled-up item on
   the rug, it unrolls, cut to her wearing it, then feature close-ups and a cozy payoff.
 - **Couple shop drop:** the partner says "stop buying…", an item drops and smashes, the product is bought, then a hero shot.
+- `opener-swap-diy-fail.md`: DIY-fail opener + reused payoff clips (user favourite, ~840 credits per new variant).
