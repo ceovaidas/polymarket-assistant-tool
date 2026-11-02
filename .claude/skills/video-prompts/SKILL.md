@@ -133,7 +133,11 @@ NOT milky, NO handle, NO stick, not a paddle, not a fan, not goggles, not a mask
 Lesson 2026-11-02 (Nano Banana 2 start frame): the model drew an opaque white fan with a handle held
 like a paddle, because the prompt also had her holding a phone and the supplier photo is on white.
 Fix: never put another held object in the same frame, keep the product out of the start frame when
-it enters later, and build "worn" frames by editing a good frame of the person ("add the clear shield
+it enters later, and build "worn" frames by editing a good frame of the person. Second miss: the
+model drew it as a horizontal sun-visor brim sticking out over the eyes. Say the orientation: it HANGS
+DOWN VERTICALLY in front of the face, a few centimetres away from the skin, bottom edge at the upper lip,
+NOT sticking out horizontally, NOT a cap brim, NOT a sun visor; attach a frame showing the shield worn
+(shape and position only) as a second reference. Editing a good frame of the person ("add the clear shield
 stuck to her forehead ... keep everything else identical").
 
 ### Product truth lock: toe charms for clogs (toetally.extra)
