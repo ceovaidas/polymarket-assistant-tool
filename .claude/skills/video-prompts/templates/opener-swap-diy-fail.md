@@ -18,7 +18,7 @@ on Artlist: Nano Banana 2 90 + Wan 3.0 5 s 750). The payoff clips are reused.
   (cups / goggles videos). The user noticed and liked the matching set.
 - **Alternate packs** between consecutive variants so two posts in a row never end with the same clips.
 - **Opener ideas used:** taped takeout lid, cut soda bottle + cling film, plastic cups as goggles,
-  document-sleeve visor with bobby pins, pink swim goggles (raccoon mascara). Rejected: sink rinse (read as
+  document-sleeve visor with bobby pins, pink swim goggles (raccoon mascara), crumpled foil visor ("Me protecting my $150 lash lift 🤡"). Vary the caption too, not only "attempt #N". Rejected: sink rinse (read as
   face washing), umbrella (no "she built it" story), welding helmet (no logic).
 - **Content filter (Wan 3.0):** towel-in-shower frames with chest/shoulders get blocked. Make the start frame
   shoulders-up (face fills the frame); a blocked job costs nothing, re-crop the frame and retry.
