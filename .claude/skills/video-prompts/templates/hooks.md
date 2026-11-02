@@ -42,6 +42,9 @@ status.
   dragon LED shower head reel: ugly DIY toy taped to the shower head, plain head, then the product
   lit up and a man enjoying it; keyword CTA only with a real ManyChat automation)
 - Comment-reply sticker "Where can I get one?" → "You guys keep asking…" (only with a real comment)
+- "The Problem... 😨" → "Vs..." → "The Solution 🤩" ✅ seen (LED horse tack, see `contrast-reveal-formats.md`)
+- "What people think we sell 🤮" → "VS..." → "What we actually sell 😍" ✅ seen (G-wagon shower head)
+- "Wife: \"[mocking quote]\" 🙄 / Me: 😒" → "The [mocked thing]:" ✅ seen (resin lamp)
 CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never "30% off").
 
 ## Opening shots that work
@@ -73,3 +76,4 @@ CTA line at the end: "Link in bio · mystery discount 🤣" (gain framing, never
 | 2026-11-02 | Voilaure shield | new angles proposed: "$150 lash lift vs one shower" (loss aversion), "we tried to ruin her lash lift" torture test, boyfriend "you look like a welder" interruption, full-glam-then-wash-hair, box-dye forehead stain | proposed, waiting for the user's pick | all keep the satisfying foam/water-off-the-shield shot as the middle beat |
 | 2026-11-02 | Voilaure shield | idea batch 2 (proposed): "I installed a sneeze guard on my face" humour; mascara with vs without shield split test; bride on wedding morning; ASMR macro foam loop; lash-tech aftercare POV (B2B bulk angle); objection replies ("does it fog?", "does it fall off?"); 7:00 vs 7:05 before/after; mom/dad reaction; boyfriend tries brow lamination + shield | proposed | kids' hair-wash angle flagged: needs child-safety proof before use |
 | 2026-11-02 | Voilaure shield | Lash-tech POV: client looks in the mirror "they're perfect" → tech hands the shield "for your first shower" (Wan 3.0, 2 clips) | ❌ user: "tragiškai", no hook | calm salon dialogue has no question by 1 s and no satisfying visual; the 11M DryLid reel opened on water/foam hitting the shield. Never open on talking or a reaction without a problem; open on the satisfying product action or a visible risk to the lashes |
+| 2026-11-02 | 5 reference reels (dragon shower, LED horse tack, G-wagon shower, resin lamp, laser-tag robot) | contrast-reveal: bad/fake first → VS → spectacle + person enjoying | studied | see `contrast-reveal-formats.md`; frame 0 is already strange, payoff is visual, no talking |
