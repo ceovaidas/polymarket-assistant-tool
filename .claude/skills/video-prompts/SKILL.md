@@ -82,6 +82,14 @@ Each step uses this exact block:
 Every video prompt starts with the lock line and the product colour lock; every negative includes
 "pink bed, different pattern, different colour, new cat appearing, camera movement, cuts, morphing".
 
+### Motion prompt structure (user-supplied pro prompts, 2026-11-02)
+
+Every motion prompt follows the 12 blocks in `templates/pro-prompt-structure.md`: format line in caps
+(ONE UNBROKEN TAKE ...), reference map (@Image 1 = location, @Image 2 = person, @Image 3 = product), energy
+from frame 0, one camera movement, timed beats with shot sizes, one key secondary element in caps, dialogue
+with tone (audio models only), natural sound, realism + face block, and a negative list written for this
+clip's own failure modes.
+
 ### Template gallery
 
 Check `templates/README.md` first: proven formats with fill-in slots live in `templates/`. When the user

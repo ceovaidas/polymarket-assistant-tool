@@ -4,6 +4,8 @@ Proven formats from the user's projects. Read `hooks.md` before writing any hook
 "clip bank → many variants" method learned from the user's reference reels). Before writing prompts from scratch, check this list. When the
 user says a generated video worked, save it here as a template with slots (`{PRODUCT}`, `{PERSON}`, ...).
 
+**Writing any motion prompt: use the 12-block structure in `pro-prompt-structure.md`.**
+
 | Template | File | Status | Best for |
 |---|---|---|---|
 | 3-2-1 reveal → it goes everywhere | `countdown-reveal-everywhere.md` | ✅ proven (user-approved) | portable products, pet products |
