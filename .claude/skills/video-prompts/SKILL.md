@@ -124,6 +124,18 @@ background people keep moving, "handheld phone with tiny natural shake" when a p
 with room tone. Keep each clip one action; trim before the end where models drift.
 **Text in frame:** none from the model; texts are added in the edit.
 
+### Product truth lock: shower lash & brow shield (Voilaure)
+The real product (supplier photo): a thin, FULLY TRANSPARENT, flexible plastic crescent about 20 cm wide
+and 10 cm tall, with faint fold lines fanning across it; the inner (concave) edge sticks along the
+forehead under the hairline and the shield curves down in front of the brows, eyes and nose bridge.
+Paste this every time: "clear as glass or cling film, see-through, no colour, NOT white, NOT frosted,
+NOT milky, NO handle, NO stick, not a paddle, not a fan, not goggles, not a mask, no print".
+Lesson 2026-11-02 (Nano Banana 2 start frame): the model drew an opaque white fan with a handle held
+like a paddle, because the prompt also had her holding a phone and the supplier photo is on white.
+Fix: never put another held object in the same frame, keep the product out of the start frame when
+it enters later, and build "worn" frames by editing a good frame of the person ("add the clear shield
+stuck to her forehead ... keep everything else identical").
+
 ### Product truth lock: toe charms for clogs (toetally.extra)
 Describe the REAL product, not a nicer one (from the supplier photos): every charm is the SAME chunky
 big-toe shape (no small pinky toes), a bit larger than a real toe, matte-to-slightly-shiny skin-tone
