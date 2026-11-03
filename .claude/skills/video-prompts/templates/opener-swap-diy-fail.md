@@ -13,6 +13,11 @@ on Artlist: Nano Banana 2 90 + Wan 3.0 5 s 750). The payoff clips are reused.
 | (14-16 s) | "Would you try it? 👀" | REUSED: end reaction (optional) |
 
 ## Rules that made it work
+- **Premise check first:** before a new concept, check `hooks.md` (did we do it?) and run web searches
+  (TikTok discover pages, press, shops) for the object + "lash"/"shower". If a big version exists, change
+  the object or the twist. Log findings in a `research-*.md` file in this folder (first one:
+  `research-lash-shower-2026-11-03.md`).
+- **Vary pose, angle and moment** between openers (mid-build, lean-in close-up, mirror), not only the object.
 - **Set packs:** each payoff pack has one look. Keep the opener in the SAME look as the clips it reuses:
   white towel + white marble (bottle / document-sleeve videos) or brown towel + travertine + brass
   (cups / goggles videos). The user noticed and liked the matching set.
