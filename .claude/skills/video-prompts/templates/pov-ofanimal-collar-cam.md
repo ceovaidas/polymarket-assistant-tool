@@ -18,3 +18,5 @@ User-approved format (2026-11-05). One video = 2 new frames + 2 new clips; the P
   the full head. Legs must read as short furry dog legs, never human arms.
 - New pet breed per variant; if reusing POV clips, pick a breed whose paws match them (fawn short fur).
 - Captions Montserrat ExtraBold white with outline; AI label on; DM automation for the comment keyword.
+- Every POV frame in the raw look: flat overcast light, cool muted colours, a little noise, "unedited GoPro".
+- Wan drifts out of POV after ~2 s on action prompts (another dog runs into frame, the dog is shown from outside). Check each clip and trim to the POV part; add "the camera stays on the collar the whole time, never shows the dog from outside" to the motion prompt.
