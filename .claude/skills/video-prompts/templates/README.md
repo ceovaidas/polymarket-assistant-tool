@@ -32,3 +32,4 @@ Formats tried in conversation but not yet confirmed by a finished video (save th
   the rug, it unrolls, cut to her wearing it, then feature close-ups and a cozy payoff.
 - **Couple shop drop:** the partner says "stop buying…", an item drops and smashes, the product is bought, then a hero shot.
 - `opener-swap-diy-fail.md`: DIY-fail opener + reused payoff clips (user favourite, ~840 credits per new variant).
+- `pov-ofanimal-collar-cam.md`: pet collar camera "The Concept → VS → The Result" (random POV order, new American home each time).
