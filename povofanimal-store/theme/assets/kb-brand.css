@@ -145,22 +145,31 @@
 .te-qty input { width: 100%; border: 0; text-align: center; font: 600 16px/1 var(--kb-fd); -moz-appearance: textfield; }
 .te-qty input::-webkit-outer-spin-button, .te-qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* Comparison: two clean cards side by side, our column highlighted in brand yellow */
-.kb-table { max-width: 720px; border: 0; border-radius: 0; background: none; overflow: visible; }
-.kb-tr { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); }
-.kb-tr > span { padding: 16px 14px; border-bottom: 1px solid #ececec; font-size: 15px; color: var(--kb-ink); }
-.kb-tr > span:first-child { font-weight: 500; }
-.kb-tr > span:nth-child(2) { background: #f6efe4; color: var(--kb-ink); border-bottom-color: #e8dccb; border-inline: 2px solid #0f0f0f; }
-.kb-tr:first-child > span:nth-child(2) { border-top: 2px solid #0f0f0f; border-radius: 18px 18px 0 0; }
-.kb-tr:last-child > span:nth-child(2) { border-bottom: 2px solid #0f0f0f; border-radius: 0 0 18px 18px; }
-.kb-tr--head > span { padding-block: 18px; border-bottom: 1px solid #ececec; font: 700 16px/1.2 var(--kb-fd); }
-.kb-tr--head > span:nth-child(2) { background: #0f0f0f; color: var(--te-y); border-bottom-color: #0f0f0f; }
-.kb-tr--head > span:nth-child(3) { color: var(--kb-ink-3); font-weight: 600; }
+/* Comparison: one clean card, our column highlighted as a single continuous pill.
+   Cells stretch to the row height (no gaps when a label wraps) and headers fit at 360px. */
+.kb-table { max-width: 640px; margin-top: 32px; padding: 8px 10px 10px; border: 0; border-radius: 24px; background: var(--te-card); overflow: visible; }
+.kb-tr { grid-template-columns: minmax(0, 1fr) 112px 112px; align-items: stretch; }
+.kb-tr > span { display: flex; align-items: center; min-height: 60px; padding: 14px 16px; border-bottom: 1px solid #e4e4e4; font: 500 15px/1.35 var(--kb-fb); color: var(--kb-ink); }
+.kb-tr > span:nth-child(2), .kb-tr > span:nth-child(3) { justify-content: center; text-align: center; padding-inline: 8px; }
+.kb-tr > span:nth-child(2) { background: #fff; border-bottom-color: #efefef; }
+.kb-tr:first-child > span:nth-child(2) { border-radius: 18px 18px 0 0; }
+.kb-tr:last-child > span:nth-child(2) { border-radius: 0 0 18px 18px; }
 .kb-tr:last-child > span { border-bottom: 0; }
-.kb-tr .is-yes .kb-i { width: 28px; height: 28px; padding: 5px; border-radius: 50%; background: #0f0f0f; color: var(--te-y); }
-.kb-tr > span:nth-child(3).is-yes .kb-i { background: #e6e7e9; color: #0f0f0f; }
-.kb-tr .is-no .kb-i { width: 28px; height: 28px; padding: 6px; border-radius: 50%; background: transparent; color: #c4c5c9; border: 1.5px solid #e1e2e4; }
-@media (max-width: 560px) { .kb-tr > span { padding: 13px 8px; font-size: 13px; } .kb-tr--head > span { font-size: 13px; } }
+.kb-tr--head > span { min-height: 64px; border-bottom-color: #e4e4e4; font: 700 15px/1.2 var(--kb-fd); }
+.kb-tr--head > span:nth-child(2) { color: var(--kb-ink); letter-spacing: -.01em; white-space: nowrap; }
+.kb-tr--head > span:nth-child(3) { color: var(--kb-ink-3); font-weight: 600; font-size: 13px; }
+.kb-tr .is-yes .kb-i { width: 28px; height: 28px; padding: 6px; border-radius: 50%; background: #0f0f0f; color: var(--te-y); }
+.kb-tr > span:nth-child(3).is-yes .kb-i { background: #d9d9db; color: #0f0f0f; }
+.kb-tr .is-no .kb-i { width: 28px; height: 28px; padding: 7px; border-radius: 50%; background: transparent; color: #b9babe; border: 1.5px solid #d9d9db; }
+.kb-compare .kb-note { margin-top: 18px; max-width: 34ch; font-size: 15px; color: var(--kb-ink-3); }
+@media (max-width: 560px) {
+  .kb-table { padding: 6px 6px 8px; border-radius: 20px; }
+  .kb-tr { grid-template-columns: minmax(0, 1fr) 92px 84px; }
+  .kb-tr > span { min-height: 56px; padding: 12px 10px; font-size: 14px; }
+  .kb-tr > span:nth-child(2), .kb-tr > span:nth-child(3) { padding-inline: 4px; }
+  .kb-tr--head > span:nth-child(2) { font-size: 13px; }
+  .kb-tr--head > span:nth-child(3) { font-size: 12px; }
+}
 
 /* Cart page (Dawn's cart sections) in the same style */
 :root { --font-body-family: 'Inter', system-ui, sans-serif; --font-heading-family: 'Poppins', 'Inter', sans-serif; --font-heading-weight: 700; --font-body-weight: 400; }
