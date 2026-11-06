@@ -37,3 +37,4 @@ User-approved format (2026-11-05). One video = 2 new frames + 2 new clips; the P
 - Best pipeline: film 3-4 short raw clips once (hands + tape fail, hands buckle the collar, a few collar POV
   walks) → Genjutsu swap per breed → new captions. Free generations first.
 - GoPro look that worked (user: "much better"): "Screenshot from real GoPro footage, GoPro HERO wide fisheye, ~150 degree FOV, strong barrel distortion, curved edges, everything in sharp deep focus, no bokeh, no cinematic lighting, flat washed-out action-cam colors, compression + noise; camera on the collar at chest height ~25 cm above the floor pointing forward". Words like cozy / warm glow / cinematic pull it back to a movie look.
+- POV lock that fixed the drift: "Locked first-person POV: the camera never leaves the collar, the dog is never seen from outside, no third-person shots, no cuts" + 4 s duration instead of 5.
