@@ -315,3 +315,8 @@ body, .kb, .kb-head, .kb-foot { background: var(--kb-bg); }
   .kb-final { width: auto; margin: 40px 16px; padding: 40px 20px; border-radius: 24px; }
   .kb-tr--head > span:nth-child(2) { font-size: 12.5px; padding-inline: 6px; }
 }
+@media (max-width: 400px) {
+  .kb-head__in { gap: 10px; }
+  .vl-word { font-size: 20px; }
+  .kb-head__cta { padding-inline: 12px; font-size: 12px; }
+}
