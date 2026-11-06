@@ -36,6 +36,18 @@ headings, Inter body; black pill buttons; the brand colour only as an accent (ba
 button). No rotations, no hard offset shadows: soft shadow only on the selected card. 16 px side gutter on
 phones, no horizontal scroll, bundle price rows wrap under the name.
 
+## Spacing and tables (user feedback 2026-11-06: "levai su tarpais")
+
+- Comparison table = one rounded grey card (`--te-card`, radius 24px) with our column as a single white pill.
+  Never border-per-cell outlines: they break into gaps where a row label wraps.
+- Grid rows use `align-items: stretch`; cells are `display:flex; align-items:center` so every cell in a row
+  has the same height. Fixed widths for the two value columns (desktop 140/132px, phone 92/84px), label
+  column `minmax(0,1fr)`.
+- Column headers must fit on one or two lines at 360px: brand wordmark `nowrap` 12px on phones, competitor
+  label 2-3 words max ("Taped-on phone", not "Phone or action cam taped on").
+- Before sending any theme, screenshot every section at 360px, 390px and 1280px and look for: text touching
+  edges, uneven gaps between rows, borders that break, labels wrapping into 3+ lines. Fix, then send.
+
 ## Keep it true (the reference's tricks, and what we use instead)
 | Reference | Our version |
 |---|---|
