@@ -164,7 +164,7 @@
 .kb-compare .kb-note { margin-top: 18px; max-width: 34ch; font-size: 15px; color: var(--kb-ink-3); }
 @media (max-width: 560px) {
   .kb-table { padding: 6px 6px 8px; border-radius: 20px; }
-  .kb-tr { grid-template-columns: minmax(0, 1fr) 92px 84px; }
+  .kb-tr { grid-template-columns: minmax(0, 1fr) 108px 76px; }
   .kb-tr > span { min-height: 56px; padding: 12px 10px; font-size: 14px; }
   .kb-tr > span:nth-child(2), .kb-tr > span:nth-child(3) { padding-inline: 4px; }
   .kb-tr--head > span:nth-child(2) { font-size: 12px; }
@@ -302,3 +302,16 @@ body, .kb, .kb-head, .kb-foot { background: var(--kb-bg); }
 @media (max-width: 640px) { .vl-word { font-size: 20px; } }
 .kb-tier__price, .kb-tier__price *, .kb-tier__save, .te-price, .te-price * { font-family: var(--vl-fs); }
 .kb-tier__name, .kb-tier__main b { font-family: var(--vl-fs); font-weight: 600; }
+
+/* Phone rhythm: one even gap between sections, nothing touching the screen edge, nothing wrapping in the header */
+.kb-head__cta { white-space: nowrap; }
+.kb-bar { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 560px) {
+  .kb-bar { font-size: 11px; letter-spacing: 0; padding-inline: 8px; }
+  .kb-head__cta { padding-inline: 14px; font-size: 13px; }
+  .kb-band, .kb-compare, .kb-reviews, .kb-faq, .kb-feature, .kb-icons, .kb-limits, .te-anatomy { padding-block: 48px; }
+  .kb-steps, .kb-box { padding-block: 48px; }
+  .kb-limits + .kb-reviews, .kb-compare + .kb-limits, .kb-reviews + .kb-faq { padding-top: 8px; }
+  .kb-final { width: auto; margin: 40px 16px; padding: 40px 20px; border-radius: 24px; }
+  .kb-tr--head > span:nth-child(2) { font-size: 12.5px; padding-inline: 6px; }
+}
