@@ -12,7 +12,7 @@
         "ico": {
           "type": "icons",
           "settings": {
-            "items": "eye | Their eye level | The world from 25 cm up\nclock | One button | Press once and let them go\ncheck | Any collar | Clip-on mount, no tools\ntruck | $0 shipping | On us, with tracking"
+            "items": "eye | Their eye level | The world from 25 cm up\nclock | One button | Press and let them go\ncheck | Any collar | Clip-on mount, no tools\ntruck | $0 shipping | On us, with tracking"
           }
         },
         "pain": {
@@ -43,7 +43,7 @@
             "media_index": 3,
             "eyebrow": "Up close",
             "title": "What you actually get",
-            "notes": "eye | Wide lens | Faces forward from under the chin\ncheck | One button | On, record and off\nsparkle | Clip-on mount | Slides onto most collars\nclock | Rechargeable | Charges over USB"
+            "notes": "eye | Wide lens | Faces forward from under the chin\ncheck | Screen on the back | Check the shot before the walk\nsparkle | 1080p video | Plus 3760×2128 photos\nclock | Rechargeable | 350 mAh, charges over USB"
           }
         },
         "f2": {
@@ -69,7 +69,7 @@
           "type": "box",
           "settings": {
             "title": "What's in the box",
-            "items": "POV camera | Small, light, one button\nCollar mount | Clips onto most collars\nUSB cable | For charging\nQuick-start card | Set up in 2 minutes"
+            "items": "POV camera | 1080p, 120° lens, screen on the back\nCollar | Adjustable, with the camera mount\nUSB cable + card reader | Charge it, plug it into your phone\n64GB microSD card | In the card set, or use your own"
           }
         },
         "cmp": {
@@ -86,7 +86,7 @@
           "type": "limits",
           "settings": {
             "title": "Good to know before you buy",
-            "text": "<ul><li>Let your pet get used to the collar and camera at home first, for a few minutes at a time.</li><li>Use it on a well-fitting collar, never on a choke or prong collar. Two fingers should fit under the collar.</li><li>Don't leave your pet unsupervised with it for long periods, and take it off for sleep.</li><li>Not a GPS tracker. It films, it doesn't show where they are live.</li><li>Check the camera's water rating before rain or swimming.</li></ul>"
+            "text": "<ul><li>Let your pet get used to the collar and camera at home first, for a few minutes at a time.</li><li>Use it on a well-fitting collar, never on a choke or prong collar. Two fingers should fit under the collar.</li><li>Don't leave your pet unsupervised with it for long periods, and take it off for sleep.</li><li>Not a GPS tracker. It films, it doesn't show where they are live.</li><li>No official waterproof rating: keep it out of pools, baths and heavy rain.</li></ul>"
           }
         },
         "rev": {
@@ -107,7 +107,7 @@
           "type": "faq",
           "settings": {
             "q": "How do I watch the videos?",
-            "a": "<p>The video is saved on the camera. After the adventure, connect it and watch it on your phone. Full steps are on the quick-start card.</p>"
+            "a": "<p>Video saves to the microSD card in the camera. After the adventure, plug the included card reader into your phone and watch, no app or Wi-Fi needed. The screen on the back lets you check the shot before the walk.</p>"
           }
         },
         "q3": {
@@ -177,8 +177,8 @@
       "settings": {
         "eyebrow": "For dogs & cats · see their day from their height",
         "headline": "POV Pet Collar Camera",
-        "subhead": "A thumb-sized camera that clips under your pet's chin and films the walk, the zoomies and the squirrel they almost caught. Press once, let them go, watch it on your phone later.",
-        "bullets": "Films from their eye level\nClips onto any collar\nOne button, on in 2 seconds\nWatch it on your phone",
+        "subhead": "A matchbox-sized camera that clips under your pet's chin and films the walk, the zoomies and the squirrel they almost caught. Press once, let them go, watch it on your phone later.",
+        "bullets": "Films from their eye level\nClips onto any collar\n1080p, 120° wide lens\nWatch it on your phone",
         "photo_badge": "New",
         "review_source": "",
         "tiers_title": "Choose your set",
@@ -206,7 +206,7 @@
         "tab1_title": "How it films",
         "tab1_text": "<p>The camera sits under your pet's chin, facing forward, so the video shows exactly what they see at their own height: the sidewalk, the other dogs, the fence they always sniff. Press the button once to start, again to stop.</p>",
         "tab2_title": "Details",
-        "tab2_text": "<ul><li><strong>In the box:</strong> camera, collar mount, USB charging cable</li><li><strong>Fits:</strong> clips onto most dog and cat collars</li><li><strong>Video:</strong> saved on the camera, watched on your phone afterwards</li><li><strong>Charging:</strong> over USB</li></ul>",
+        "tab2_text": "<ul><li><strong>In the box:</strong> camera, adjustable collar with mount, USB cable, card reader (64GB microSD card in the card set)</li><li><strong>Video:</strong> 1920×1080, 120° wide lens, screen on the back</li><li><strong>Size:</strong> 64 × 31 × 21 mm</li><li><strong>Watching:</strong> plug the card reader into your phone, no app or Wi-Fi needed</li><li><strong>Battery:</strong> 350 mAh, charges over USB</li></ul>",
         "tab3_title": "Shipping & returns",
         "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. Not for you? Send it back within 30 days of delivery for a full refund.</p>",
         "product": "pet-pov-collar-camera",
@@ -215,7 +215,7 @@
         "tier3_qty": 3,
         "brand_name": "pov.ofanimal",
         "style_label": "Pet",
-        "tiles": "eye | Their POV\nclock | On in 2 seconds\ncheck | Fits most collars",
+        "tiles": "eye | Their POV\nclock | 1080p, 120° lens\ncheck | Fits most collars",
         "proof_faces": "🐶 🐱 📸",
         "price_note": "Camera + collar mount",
         "pack_size": 1,
