@@ -20,3 +20,19 @@ User-approved format (2026-11-05). One video = 2 new frames + 2 new clips; the P
 - Captions Montserrat ExtraBold white with outline; AI label on; DM automation for the comment keyword.
 - Every POV frame in the raw look: flat overcast light, cool muted colours, a little noise, "unedited GoPro".
 - Wan drifts out of POV after ~2 s on action prompts (another dog runs into frame, the dog is shown from outside). Check each clip and trim to the POV part; add "the camera stays on the collar the whole time, never shows the dog from outside" to the motion prompt.
+
+## Genjutsu animal swap (user result 2026-11-06, "the perfect version")
+- Higgsfield Genjutsu / Genjutsu Lite (`hf_mult_motion_control_flash`, Wan 3.0, 720p): a real source video +
+  one photo of the new animal → the same video with the animal replaced. Motion, hands, camera shake, room
+  light and POV paws all stay real, so it looks far more real than image→video generation.
+- Prompt that worked: "Replace the cat in the video with the cat from @Image 1. Keep the exact face, fur
+  color, pattern, eye color and body size of the cat from @Image 1. Copy the original cat's motion, head
+  turns, expressions and timing exactly. Keep the same room, lighting, camera movement, hands and duct
+  tape. Realistic fur, natural lighting match, no blur, no extra animals."
+- The POV paws in the result are swapped too (fur pattern follows the new animal), so the whole video stays
+  consistent.
+- ONLY use source videos we own: the user's own phone footage (any pet, even a plush toy as a stand-in) or
+  our generated clips. Swapping the animal in a competitor's reel is still their video (same room, hands,
+  shots, captions): duplicate-content and copyright risk, never post that.
+- Best pipeline: film 3-4 short raw clips once (hands + tape fail, hands buckle the collar, a few collar POV
+  walks) → Genjutsu swap per breed → new captions. Free generations first.
