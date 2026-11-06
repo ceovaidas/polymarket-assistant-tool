@@ -1,0 +1,229 @@
+{
+  "sections": {
+    "main": {
+      "type": "kb-landing",
+      "blocks": {
+        "marq": {
+          "type": "marquee",
+          "settings": {
+            "items": "See what they see | Films at their eye level | Clips onto any collar | Made for dogs & cats | $0 shipping, on us | 30-day returns"
+          }
+        },
+        "ico": {
+          "type": "icons",
+          "settings": {
+            "items": "eye | Their eye level | The world from 25 cm up\nclock | One button | Press once and let them go\ncheck | Any collar | Clip-on mount, no tools\ntruck | $0 shipping | On us, with tracking"
+          }
+        },
+        "pain": {
+          "type": "feature",
+          "settings": {
+            "media_index": 2,
+            "eyebrow": "Ever wondered?",
+            "title": "Where do they go, and what do they get up to?",
+            "text": "<ul><li><strong>The backyard mystery.</strong> Out for an hour, back with leaves in the fur and no explanation.</li><li><strong>The walk you never see.</strong> Every mailbox, every dog, every squirrel, from their height.</li><li><strong>The \"what did you do?\" moment.</strong> Something got knocked over. Now you can find out who.</li></ul>"
+          }
+        },
+        "how": {
+          "type": "steps",
+          "settings": {
+            "eyebrow": "Ready in 30 seconds",
+            "title": "How it works",
+            "step1_title": "Press once",
+            "step1_text": "Hold the button: the camera switches on and starts recording.",
+            "step2_title": "Clip it on",
+            "step2_text": "Slide the mount onto their collar so the lens sits under the chin, facing forward.",
+            "step3_title": "Watch their day",
+            "step3_text": "When they're back, take it off and watch the video on your phone."
+          }
+        },
+        "anat": {
+          "type": "anatomy",
+          "settings": {
+            "media_index": 3,
+            "eyebrow": "Up close",
+            "title": "What you actually get",
+            "notes": "eye | Wide lens | Faces forward from under the chin\ncheck | One button | On, record and off\nsparkle | Clip-on mount | Slides onto most collars\nclock | Rechargeable | Charges over USB"
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "media_index": 4,
+            "flip": true,
+            "eyebrow": "Made for dogs",
+            "title": "Every walk, from their point of view",
+            "text": "<p>The mailbox they always check, the dog across the street, the puddle they had to step in. Clip it on before the walk and watch the whole thing back tonight.</p>"
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "media_index": 5,
+            "eyebrow": "Made for cats",
+            "title": "The backyard adventures you never see",
+            "text": "<p>Fence walks, bird watching, the neighbour's porch. Small enough for most cats once they're used to a collar. Always check that your cat is comfortable wearing it.</p>"
+          }
+        },
+        "box": {
+          "type": "box",
+          "settings": {
+            "title": "What's in the box",
+            "items": "POV camera | Small, light, one button\nCollar mount | Clips onto most collars\nUSB cable | For charging\nQuick-start card | Set up in 2 minutes"
+          }
+        },
+        "cmp": {
+          "type": "compare",
+          "settings": {
+            "eyebrow": "Why a collar camera",
+            "title": "Better than duct tape",
+            "them": "Phone or action cam taped on",
+            "rows": "Films from their eye level | yes | no\nStays on during zoomies | yes | no\nSmall and light for pets | yes | no\nOne button, no setup | yes | no\nNo tape in the fur | yes | no",
+            "note": "Duct tape is free. Untangling it from their fur is not."
+          }
+        },
+        "lim": {
+          "type": "limits",
+          "settings": {
+            "title": "Good to know before you buy",
+            "text": "<ul><li>Let your pet get used to the collar and camera at home first, for a few minutes at a time.</li><li>Use it on a well-fitting collar, never on a choke or prong collar. Two fingers should fit under the collar.</li><li>Don't leave your pet unsupervised with it for long periods, and take it off for sleep.</li><li>Not a GPS tracker. It films, it doesn't show where they are live.</li><li>Check the camera's water rating before rain or swimming.</li></ul>"
+          }
+        },
+        "rev": {
+          "type": "reviews",
+          "settings": {
+            "title": "From real pets",
+            "note": "Brand new store. Reviews from our customers will appear here, word for word."
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "q": "Will it fit my pet?",
+            "a": "<p>The mount clips onto most standard dog and cat collars. For small cats and puppies, make sure the camera isn't too heavy for them and the collar fits well.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "q": "How do I watch the videos?",
+            "a": "<p>The video is saved on the camera. After the adventure, connect it and watch it on your phone. Full steps are on the quick-start card.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "q": "Is it comfortable for them?",
+            "a": "<p>It's small and light and sits under the chin like a tag. Introduce it slowly at home and take it off if your pet seems bothered.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "q": "Which set should I choose?",
+            "a": "<p>One camera for one pet. Two or three cost less per camera: one for each pet, or one to keep and the others as gifts.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "q": "When will it arrive?",
+            "a": "<p>Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. The delivery window for an order placed today is shown next to the order button.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "q": "What if it doesn't work for me?",
+            "a": "<p>Send it back within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "promise": {
+          "type": "promise",
+          "settings": {
+            "title": "30 days to try it",
+            "text": "Clip it on, go for a walk. If it isn't for you, send it back within 30 days of delivery for a full refund."
+          }
+        },
+        "final": {
+          "type": "final_cta",
+          "settings": {
+            "title": "See what they see",
+            "text": "Their walks, their chaos, their POV. $0 shipping, on us, and 30 days to try it."
+          }
+        }
+      },
+      "block_order": [
+        "marq",
+        "ico",
+        "pain",
+        "how",
+        "anat",
+        "f2",
+        "f3",
+        "box",
+        "cmp",
+        "lim",
+        "rev",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "promise",
+        "final"
+      ],
+      "settings": {
+        "eyebrow": "For dogs & cats · see their day from their height",
+        "headline": "POV Pet Collar Camera",
+        "subhead": "A thumb-sized camera that clips under your pet's chin and films the walk, the zoomies and the squirrel they almost caught. Press once, let them go, watch it on your phone later.",
+        "bullets": "Films from their eye level\nClips onto any collar\nOne button, on in 2 seconds\nWatch it on your phone",
+        "photo_badge": "New",
+        "review_source": "",
+        "tiers_title": "Choose your set",
+        "default_tier": 2,
+        "tier1_label": "1 camera",
+        "tier1_note": "For your one and only",
+        "tier1_off": "0",
+        "tier1_badge": "",
+        "tier2_label": "2 cameras",
+        "tier2_note": "One for each pet, or one to gift",
+        "tier2_off": "9.99",
+        "tier2_badge": "Gift one",
+        "tier3_label": "3 cameras",
+        "tier3_note": "The whole crew, or Christmas sorted",
+        "tier3_off": "24.98",
+        "tier3_badge": "Best value",
+        "cta": "Add to cart",
+        "sticky_title": "POV Pet Collar Camera",
+        "ship_min": 7,
+        "ship_max": 14,
+        "ship_note": "$0 shipping, on us",
+        "assure_1": "30-day returns",
+        "assure_2": "Secure checkout",
+        "assure_3": "Tracked delivery",
+        "tab1_title": "How it films",
+        "tab1_text": "<p>The camera sits under your pet's chin, facing forward, so the video shows exactly what they see at their own height: the sidewalk, the other dogs, the fence they always sniff. Press the button once to start, again to stop.</p>",
+        "tab2_title": "Details",
+        "tab2_text": "<ul><li><strong>In the box:</strong> camera, collar mount, USB charging cable</li><li><strong>Fits:</strong> clips onto most dog and cat collars</li><li><strong>Video:</strong> saved on the camera, watched on your phone afterwards</li><li><strong>Charging:</strong> over USB</li></ul>",
+        "tab3_title": "Shipping & returns",
+        "tab3_text": "<p>$0 shipping, on us. Orders ship within 1–3 business days and arrive in 7–14 business days with tracking. Not for you? Send it back within 30 days of delivery for a full refund.</p>",
+        "product": "pet-pov-collar-camera",
+        "tier1_qty": 1,
+        "tier2_qty": 2,
+        "tier3_qty": 3,
+        "brand_name": "pov.ofanimal",
+        "style_label": "Pet",
+        "tiles": "eye | Their POV\nclock | On in 2 seconds\ncheck | Fits most collars",
+        "proof_faces": "🐶 🐱 📸",
+        "price_note": "Camera + collar mount",
+        "pack_size": 1,
+        "pack_unit": "cameras"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

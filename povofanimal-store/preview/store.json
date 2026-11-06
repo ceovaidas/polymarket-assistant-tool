@@ -1,0 +1,6 @@
+{
+  "shop": { "name": "pov.ofanimal", "email": "hello@povofanimal.com" },
+  "product": { "title": "POV Pet Collar Camera", "option": "Pet", "price": 5499, "variants": ["Dog", "Cat"] },
+  "header": { "bar": "$0 shipping, on us · 30-day returns · Tracked delivery", "cta": "Get the camera" },
+  "footer": { "text": "Their walks. Their chaos. Their POV." }
+}
